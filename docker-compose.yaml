@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  llm-server:
+    build: ./docker
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ./models:/models
+      - ./pipeline:/app
+    ports:
+      - "8080:8080"
+    
+  vectordb:
+    image: chromadb/chroma:latest
+    volumes:
+      - ./vectordb:/chroma/chroma
+    ports:
+      - "8000:8000"
+    
+  web-ui:
+    build: ./web
+    depends_on:
+      - llm-server
+      - vectordb
+    ports:
+      - "3000:3000"
