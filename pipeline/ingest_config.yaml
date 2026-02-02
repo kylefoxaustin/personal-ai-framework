@@ -1,0 +1,31 @@
+# Knowledge Base Ingestion Configuration
+
+# Root folder to scan (relative to project root)
+knowledge_root: "./knowledge"
+
+# File extensions to process
+include_extensions:
+  - .txt
+  - .md
+  - .json
+  - .eml
+  - .pdf
+  - .mbox
+
+# Folders/patterns to skip
+exclude_patterns:
+  - "__pycache__"
+  - ".git"
+  - ".DS_Store"
+  - "*.pyc"
+  - ".ingest_manifest.json"
+
+# Chunking settings
+chunk_size: 512
+chunk_overlap: 50
+
+# LLM server endpoint
+llm_server_url: "http://localhost:8080"
+
+# Manifest file to track ingested files
+manifest_file: "./knowledge/.ingest_manifest.json"

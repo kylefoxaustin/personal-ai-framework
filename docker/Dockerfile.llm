@@ -1,0 +1,31 @@
+FROM nvidia/cuda:12.4.1-devel-ubuntu22.04
+
+RUN apt-get update && apt-get install -y \
+    python3.10 python3-pip git build-essential \
+    cmake ninja-build \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Upgrade pip to avoid dependency resolution bugs
+RUN pip3 install --upgrade pip
+
+# Install Python dependencies
+COPY pipeline/requirements.txt .
+
+# Install llama-cpp-python with CUDA support
+# Symlink stub and use rpath-link for indirect libcuda dependency
+RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/libcuda.so.1 && \
+    CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_EXE_LINKER_FLAGS='-L/usr/local/cuda/lib64/stubs -Wl,-rpath-link,/usr/local/cuda/lib64/stubs'" \
+    pip3 install llama-cpp-python --upgrade --force-reinstall --no-cache-dir
+
+# Install other requirements
+RUN pip3 install -r requirements.txt
+
+# Copy application code
+COPY pipeline/llm_server.py .
+COPY pipeline/rag_service.py .
+COPY config.yaml .
+
+EXPOSE 8080
+CMD ["python3", "llm_server.py"]

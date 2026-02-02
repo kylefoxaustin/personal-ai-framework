@@ -1,0 +1,10 @@
+# llama-cpp-python already installed in Dockerfile
+fastapi==0.108.0
+uvicorn==0.25.0
+pyyaml==6.0.1
+pydantic==2.5.3
+
+# RAG Pipeline
+numpy<2.0
+chromadb>=0.5.0
+httpx==0.26.0

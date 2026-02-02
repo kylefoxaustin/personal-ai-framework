@@ -1,0 +1,42 @@
+# Models (large files - download separately)
+models/mixtral/*.gguf
+
+# Knowledge base (user's private data)
+knowledge/emails/
+knowledge/documents/
+knowledge/writing/
+knowledge/projects/
+knowledge/transcripts/
+knowledge/.ingest_manifest.json
+knowledge/emails/.pst_ingest_manifest.json
+
+# Keep the folder structure
+!knowledge/.gitkeep
+!knowledge/emails/.gitkeep
+!knowledge/documents/.gitkeep
+
+# Vector database (regenerated from knowledge)
+vectordb/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+venv/
+.env
+
+# Node (web UI)
+web/node_modules/
+web/package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Local config overrides
+config.local.yaml

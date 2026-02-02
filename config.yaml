@@ -1,28 +1,73 @@
-# Personal AI Framework Configuration
+# =============================================================================
+# Personal AI Framework - Configuration
+# =============================================================================
+# Copy this file to config.local.yaml and customize for your setup
 
+# -----------------------------------------------------------------------------
+# User Profile (customize this!)
+# -----------------------------------------------------------------------------
+user:
+  name: "Your Name"
+  description: "Brief description of who you are and what this AI should know"
+
+# -----------------------------------------------------------------------------
+# Model Settings
+# -----------------------------------------------------------------------------
 model:
-  base_model: "mixtral-8x7b-instruct"
-  quantization: "Q4_K_M"  # 4-bit quantization
-  context_length: 32768
-  max_new_tokens: 2048
-  
-personalization:
-  lora_rank: 64
-  lora_alpha: 128
-  training_epochs: 3
-  learning_rate: 1e-4
+  name: "mixtral-8x7b-instruct"
+  quantization: "Q4_K_M"
+  path: "/app/models/mixtral/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
+  context_length: 8192      # Reduce if you have less VRAM
+  max_tokens: 512
+  temperature: 0.7
+  gpu_layers: -1            # -1 = all layers on GPU
 
+# -----------------------------------------------------------------------------
+# Knowledge Base / RAG Settings
+# -----------------------------------------------------------------------------
+knowledge:
+  root_folder: "./knowledge"
+  manifest_file: "./knowledge/.ingest_manifest.json"
+  
+  # File types to process
+  include_extensions:
+    - .txt
+    - .md
+    - .json
+    - .eml
+    - .pdf
+    - .mbox
+  
+  # Patterns to skip
+  exclude_patterns:
+    - "__pycache__"
+    - ".git"
+    - ".DS_Store"
+    - "*.pyc"
+    - ".ingest_manifest.json"
+    - "extracted"           # PST extraction folder
+  
+  # Chunking
+  chunk_size: 512           # Words per chunk
+  chunk_overlap: 50         # Overlap between chunks
+
+# -----------------------------------------------------------------------------
+# Vector Database
+# -----------------------------------------------------------------------------
 vectordb:
-  type: "chromadb"
-  embedding_model: "BAAI/bge-large-en-v1.5"
-  chunk_size: 512
-  chunk_overlap: 50
+  host: "vectordb"          # Docker service name
+  port: 8000
+  collection: "personal_knowledge"
 
-pipeline:
-  retrieval_k: 10  # Top K documents to retrieve
-  rerank_k: 3      # Final documents after reranking
-  
+# -----------------------------------------------------------------------------
+# Server Settings
+# -----------------------------------------------------------------------------
 server:
   host: "0.0.0.0"
   port: 8080
-  workers: 4
+  
+# -----------------------------------------------------------------------------
+# Web UI
+# -----------------------------------------------------------------------------
+web:
+  port: 3000

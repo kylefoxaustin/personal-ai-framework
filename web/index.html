@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal AI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: #16213e;
+      border-bottom: 1px solid #0f3460;
+    }
+    header h1 { font-size: 1.5rem; }
+    .stats { display: flex; gap: 1rem; font-size: 0.85rem; }
+    .status { color: #4ade80; }
+    .status.offline { color: #f87171; }
+    .docs { color: #94a3b8; }
+    
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+    .messages { display: flex; flex-direction: column; gap: 1rem; }
+    
+    .welcome {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #94a3b8;
+    }
+    .welcome h2 { color: #eee; margin-bottom: 0.5rem; }
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    .suggestions button {
+      background: #0f3460;
+      border: 1px solid #1a4a7a;
+      color: #eee;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .suggestions button:hover { background: #1a4a7a; }
+    
+    .message {
+      max-width: 85%;
+      padding: 1rem 1.25rem;
+      border-radius: 1rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .message.user {
+      align-self: flex-end;
+      background: #0f3460;
+      border-bottom-right-radius: 0.25rem;
+    }
+    .message.assistant {
+      align-self: flex-start;
+      background: #16213e;
+      border-bottom-left-radius: 0.25rem;
+    }
+    .message .meta {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+    .message details {
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+    .message details summary { cursor: pointer; }
+    .context-item {
+      background: #0d1b2a;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+    }
+    
+    .typing {
+      display: flex;
+      gap: 0.3rem;
+      padding: 1.25rem 1.5rem;
+      background: #16213e;
+      border-radius: 1rem;
+      align-self: flex-start;
+    }
+    .typing span {
+      width: 8px;
+      height: 8px;
+      background: #94a3b8;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+    .typing span:nth-child(1) { animation-delay: -0.32s; }
+    .typing span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+    
+    footer {
+      display: flex;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      background: #16213e;
+      border-top: 1px solid #0f3460;
+    }
+    footer textarea {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid #0f3460;
+      border-radius: 0.5rem;
+      background: #1a1a2e;
+      color: #eee;
+      font-size: 1rem;
+      resize: none;
+      font-family: inherit;
+    }
+    footer textarea:focus { outline: none; border-color: #1a4a7a; }
+    footer button {
+      padding: 0.75rem 1.5rem;
+      background: #e94560;
+      border: none;
+      border-radius: 0.5rem;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    footer button:hover:not(:disabled) { background: #ff6b6b; }
+    footer button:disabled { opacity: 0.5; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🧠 Personal AI</h1>
+    <div class="stats">
+      <span id="status" class="status">● Connecting...</span>
+      <span id="docs" class="docs"></span>
+    </div>
+  </header>
+
+  <main>
+    <div id="messages" class="messages">
+      <div class="welcome">
+        <h2>Welcome!</h2>
+        <p>Ask me anything about your emails, projects, blogs, or transcripts.</p>
+        <div class="suggestions">
+          <button onclick="suggest('What i.MX demonstrations have I done at CES?')">CES demos</button>
+          <button onclick="suggest('What ARM processor projects have I worked on?')">ARM projects</button>
+          <button onclick="suggest('Summarize my podcast topics')">Podcast topics</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <textarea id="input" rows="1" placeholder="Ask your personal AI..." onkeydown="handleKey(event)"></textarea>
+    <button id="send" onclick="sendMessage()">Send</button>
+  </footer>
+
+  <script>
+    const API = 'http://localhost:8080';
+    const messages = document.getElementById('messages');
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('send');
+    let isLoading = false;
+
+    // Check health on load
+    fetch(`${API}/health`)
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('status').textContent = '● Online';
+        document.getElementById('status').className = 'status';
+        document.getElementById('docs').textContent = data.knowledge_base_documents?.toLocaleString() + ' docs';
+      })
+      .catch(() => {
+        document.getElementById('status').textContent = '○ Offline';
+        document.getElementById('status').className = 'status offline';
+      });
+
+    function suggest(text) {
+      input.value = text;
+      sendMessage();
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function addMessage(role, content, context, tokens) {
+      // Remove welcome on first message
+      const welcome = messages.querySelector('.welcome');
+      if (welcome) welcome.remove();
+
+      const div = document.createElement('div');
+      div.className = `message ${role}`;
+      
+      let html = content;
+      
+      if (context && context.length) {
+        html += `<details><summary>📚 Sources (${context.length})</summary>`;
+        context.forEach(c => {
+          html += `<div class="context-item">${c.substring(0, 300)}...</div>`;
+        });
+        html += '</details>';
+      }
+      
+      if (tokens) {
+        html += `<div class="meta">${tokens} tokens</div>`;
+      }
+      
+      div.innerHTML = html;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function showTyping() {
+      const div = document.createElement('div');
+      div.id = 'typing';
+      div.className = 'typing';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function hideTyping() {
+      const typing = document.getElementById('typing');
+      if (typing) typing.remove();
+    }
+
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text || isLoading) return;
+
+      input.value = '';
+      isLoading = true;
+      sendBtn.disabled = true;
+
+      addMessage('user', text);
+      showTyping();
+
+      try {
+        const res = await fetch(`${API}/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: text,
+            max_tokens: 500,
+            use_rag: true,
+            rag_k: 3
+          })
+        });
+
+        const data = await res.json();
+        hideTyping();
+        addMessage('assistant', data.text, data.context_used, data.tokens_used);
+      } catch (err) {
+        hideTyping();
+        addMessage('assistant', `Error: ${err.message}`);
+      }
+
+      isLoading = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  </script>
+</body>
+</html>
