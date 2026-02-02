@@ -3,6 +3,7 @@ RAG Service for Personal AI Framework
 Handles document ingestion, embedding, and retrieval via ChromaDB
 """
 import os
+from smart_chunker import SmartChunker, smart_chunk
 import hashlib
 from typing import List, Optional
 import chromadb
@@ -41,39 +42,33 @@ class RAGService:
     def _generate_id(self, content: str) -> str:
         """Generate a unique ID for a document based on content hash."""
         return hashlib.md5(content.encode()).hexdigest()
-    
-    def _chunk_text(self, text: str, chunk_size: int = 512, overlap: int = 50) -> List[str]:
-        """Split text into overlapping chunks."""
-        words = text.split()
-        chunks = []
-        
-        for i in range(0, len(words), chunk_size - overlap):
-            chunk = " ".join(words[i:i + chunk_size])
-            if chunk:
-                chunks.append(chunk)
-                
-        return chunks if chunks else [text]
-    
+    def _chunk_text(self, text: str, metadata: dict = None) -> List[tuple]:
+        """Smart chunking that respects document structure."""
+        chunker = SmartChunker(target_size=500, max_size=750, min_size=100)
+        chunks = chunker.chunk_text(text, metadata or {})
+        return [(c.text, c.metadata) for c in chunks]
+
     def add_document(self, content: str, metadata: dict = None, chunk: bool = True) -> int:
         """Add a document to the knowledge base."""
         metadata = metadata or {}
         
         if chunk:
-            chunks = self._chunk_text(content)
+            chunk_tuples = self._chunk_text(content, metadata)
         else:
-            chunks = [content]
+            chunk_tuples = [(content, metadata)]
         
         ids = []
         metadatas = []
         documents = []
         
-        for i, chunk_text in enumerate(chunks):
+        for i, (chunk_text, chunk_meta) in enumerate(chunk_tuples):
             doc_id = self._generate_id(chunk_text)
             ids.append(doc_id)
             documents.append(chunk_text)
             
-            chunk_metadata = {**metadata, "chunk_index": i, "total_chunks": len(chunks)}
-            metadatas.append(chunk_metadata)
+            # Merge original metadata with chunk metadata
+            final_metadata = {**metadata, **chunk_meta, "chunk_index": i, "total_chunks": len(chunk_tuples)}
+            metadatas.append(final_metadata)
         
         # Upsert to ChromaDB
         self.collection.upsert(
@@ -82,7 +77,7 @@ class RAGService:
             metadatas=metadatas
         )
         
-        return len(chunks)
+        return len(chunk_tuples)
     
     def add_documents(self, documents: List[Document]) -> int:
         """Add multiple documents to the knowledge base."""
