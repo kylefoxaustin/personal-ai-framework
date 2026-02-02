@@ -16,6 +16,10 @@ from rag_service import get_rag_service, Document
 with open('/app/config.yaml', 'r') as f:
     config = yaml.safe_load(f)
 
+class ConversationMessage(BaseModel):
+    role: str  # "user" or "assistant"
+    content: str
+
 class GenerationRequest(BaseModel):
     prompt: str
     max_tokens: Optional[int] = 512
@@ -24,6 +28,7 @@ class GenerationRequest(BaseModel):
     context: Optional[List[str]] = None  # Manual context override
     use_rag: Optional[bool] = True  # Auto-retrieve context from RAG
     rag_k: Optional[int] = 3  # Number of documents to retrieve
+    conversation_history: Optional[List[ConversationMessage]] = None  # Previous messages
 
 class GenerationResponse(BaseModel):
     text: str
@@ -118,13 +123,23 @@ def generate(request: GenerationRequest):
     
     # Build prompt with RAG context if available
     full_prompt = ""
+    
+    # Add RAG context first
     if context_docs:
         full_prompt = "Use the following context to help answer the query:\n\n"
         for i, doc in enumerate(context_docs[:3], 1):
             full_prompt += f"[{i}] {doc}\n\n"
         full_prompt += "---\n\n"
     
-    full_prompt += f"Query: {request.prompt}\n\nResponse:"
+    # Add conversation history
+    if request.conversation_history:
+        full_prompt += "Previous conversation:\n"
+        for msg in request.conversation_history[-6:]:  # Last 6 messages (3 turns)
+            role = "User" if msg.role == "user" else "Assistant"
+            full_prompt += f"{role}: {msg.content}\n\n"
+        full_prompt += "---\n\n"
+    
+    full_prompt += f"User: {request.prompt}\n\nAssistant:"
     
     # Generate
     response = llm(

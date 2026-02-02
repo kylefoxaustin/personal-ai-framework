@@ -31,7 +31,7 @@
     .status.offline { color: #f87171; }
     .docs { color: #94a3b8; }
     
-    .sync-btn {
+    .header-btn {
       background: #0f3460;
       border: 1px solid #1a4a7a;
       color: #eee;
@@ -44,9 +44,9 @@
       gap: 0.4rem;
       transition: all 0.2s;
     }
-    .sync-btn:hover { background: #1a4a7a; }
-    .sync-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .sync-btn.syncing { animation: pulse 1s infinite; }
+    .header-btn:hover { background: #1a4a7a; }
+    .header-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .header-btn.syncing { animation: pulse 1s infinite; }
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
@@ -199,7 +199,10 @@
   <header>
     <h1>🧠 Personal AI</h1>
     <div class="header-right">
-      <button id="syncBtn" class="sync-btn" onclick="syncNow()">
+      <button id="newChatBtn" class="header-btn" onclick="newChat()">
+        ✨ New Chat
+      </button>
+      <button id="syncBtn" class="header-btn" onclick="syncNow()">
         🔄 Sync
       </button>
       <div class="stats">
@@ -214,6 +217,7 @@
       <div class="welcome">
         <h2>Welcome!</h2>
         <p>Ask me anything about your emails, projects, blogs, or transcripts.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem;">I'll remember our conversation as we chat.</p>
         <div class="suggestions">
           <button onclick="suggest('What i.MX demonstrations have I done at CES?')">CES demos</button>
           <button onclick="suggest('What ARM processor projects have I worked on?')">ARM projects</button>
@@ -232,12 +236,16 @@
 
   <script>
     const API = 'http://localhost:8080';
-    const messages = document.getElementById('messages');
+    const messagesDiv = document.getElementById('messages');
     const input = document.getElementById('input');
     const sendBtn = document.getElementById('send');
     const syncBtn = document.getElementById('syncBtn');
+    
     let isLoading = false;
     let isSyncing = false;
+    
+    // Conversation history - stores {role, content} objects
+    let conversationHistory = [];
 
     // Check health on load
     function checkHealth() {
@@ -255,13 +263,30 @@
     }
     
     checkHealth();
-    setInterval(checkHealth, 30000); // Refresh every 30s
+    setInterval(checkHealth, 30000);
 
     function showToast(message, duration = 3000) {
       const toast = document.getElementById('toast');
       toast.textContent = message;
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), duration);
+    }
+    
+    function newChat() {
+      conversationHistory = [];
+      messagesDiv.innerHTML = `
+        <div class="welcome">
+          <h2>Welcome!</h2>
+          <p>Ask me anything about your emails, projects, blogs, or transcripts.</p>
+          <p style="margin-top: 0.5rem; font-size: 0.85rem;">I'll remember our conversation as we chat.</p>
+          <div class="suggestions">
+            <button onclick="suggest('What i.MX demonstrations have I done at CES?')">CES demos</button>
+            <button onclick="suggest('What ARM processor projects have I worked on?')">ARM projects</button>
+            <button onclick="suggest('Summarize my podcast topics')">Podcast topics</button>
+          </div>
+        </div>
+      `;
+      showToast('✨ New conversation started');
     }
 
     async function syncNow() {
@@ -281,7 +306,7 @@
         if (data.status === 'ok') {
           showToast('✅ Sync complete!');
           addMessage('system', '✅ Knowledge base synced successfully');
-          checkHealth(); // Refresh doc count
+          checkHealth();
         } else {
           showToast('⚠️ Sync had issues');
           addMessage('system', '⚠️ Sync completed with issues: ' + (data.error || 'Unknown error'));
@@ -311,7 +336,7 @@
 
     function addMessage(role, content, context, tokens) {
       // Remove welcome on first message
-      const welcome = messages.querySelector('.welcome');
+      const welcome = messagesDiv.querySelector('.welcome');
       if (welcome) welcome.remove();
 
       const div = document.createElement('div');
@@ -332,8 +357,8 @@
       }
       
       div.innerHTML = html;
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
     function showTyping() {
@@ -341,8 +366,8 @@
       div.id = 'typing';
       div.className = 'typing';
       div.innerHTML = '<span></span><span></span><span></span>';
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
     function hideTyping() {
@@ -358,7 +383,10 @@
       isLoading = true;
       sendBtn.disabled = true;
 
+      // Add user message to UI and history
       addMessage('user', text);
+      conversationHistory.push({ role: 'user', content: text });
+
       showTyping();
 
       try {
@@ -369,13 +397,23 @@
             prompt: text,
             max_tokens: 500,
             use_rag: true,
-            rag_k: 3
+            rag_k: 3,
+            conversation_history: conversationHistory.slice(0, -1)  // Don't include current message
           })
         });
 
         const data = await res.json();
         hideTyping();
+        
+        // Add assistant response to UI and history
         addMessage('assistant', data.text, data.context_used, data.tokens_used);
+        conversationHistory.push({ role: 'assistant', content: data.text });
+        
+        // Trim history if too long (keep last 20 messages)
+        if (conversationHistory.length > 20) {
+          conversationHistory = conversationHistory.slice(-20);
+        }
+        
       } catch (err) {
         hideTyping();
         addMessage('assistant', `Error: ${err.message}`);
