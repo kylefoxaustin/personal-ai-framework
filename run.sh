@@ -83,6 +83,17 @@ case $COMMAND in
         fi
         ;;
         
+        
+    watch)
+        echo "👁️  Starting file watcher..."
+        python3 pipeline/sync_service.py watch --debounce ${2:-300}
+        ;;
+        
+    sync-now)
+        echo "🔄 Forcing immediate sync..."
+        python3 pipeline/sync_service.py full-sync
+        ;;
+        
     help|*)
         echo "Personal AI Framework"
         echo ""
@@ -98,6 +109,8 @@ case $COMMAND in
         echo "  logs            View LLM server logs"
         echo "  shell           Open shell in LLM container"
         echo "  clear-knowledge Clear the knowledge base"
+        echo "  watch           Start file watcher (auto-sync on changes)"
+        echo "  sync-now        Force immediate sync"
         echo "  help            Show this help"
         ;;
 esac

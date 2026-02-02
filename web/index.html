@@ -25,10 +25,32 @@
       border-bottom: 1px solid #0f3460;
     }
     header h1 { font-size: 1.5rem; }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
     .stats { display: flex; gap: 1rem; font-size: 0.85rem; }
     .status { color: #4ade80; }
     .status.offline { color: #f87171; }
     .docs { color: #94a3b8; }
+    
+    .sync-btn {
+      background: #0f3460;
+      border: 1px solid #1a4a7a;
+      color: #eee;
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.4rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+    .sync-btn:hover { background: #1a4a7a; }
+    .sync-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .sync-btn.syncing { animation: pulse 1s infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
     
     main {
       flex: 1;
@@ -77,6 +99,12 @@
       align-self: flex-start;
       background: #16213e;
       border-bottom-left-radius: 0.25rem;
+    }
+    .message.system {
+      align-self: center;
+      background: #1a4a7a;
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
     }
     .message .meta {
       margin-top: 0.5rem;
@@ -149,14 +177,35 @@
     }
     footer button:hover:not(:disabled) { background: #ff6b6b; }
     footer button:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #16213e;
+      border: 1px solid #1a4a7a;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
   <header>
     <h1>🧠 Personal AI</h1>
-    <div class="stats">
-      <span id="status" class="status">● Connecting...</span>
-      <span id="docs" class="docs"></span>
+    <div class="header-right">
+      <button id="syncBtn" class="sync-btn" onclick="syncNow()">
+        🔄 Sync
+      </button>
+      <div class="stats">
+        <span id="status" class="status">● Connecting...</span>
+        <span id="docs" class="docs"></span>
+      </div>
     </div>
   </header>
 
@@ -178,26 +227,75 @@
     <textarea id="input" rows="1" placeholder="Ask your personal AI..." onkeydown="handleKey(event)"></textarea>
     <button id="send" onclick="sendMessage()">Send</button>
   </footer>
+  
+  <div id="toast" class="toast"></div>
 
   <script>
     const API = 'http://localhost:8080';
     const messages = document.getElementById('messages');
     const input = document.getElementById('input');
     const sendBtn = document.getElementById('send');
+    const syncBtn = document.getElementById('syncBtn');
     let isLoading = false;
+    let isSyncing = false;
 
     // Check health on load
-    fetch(`${API}/health`)
-      .then(r => r.json())
-      .then(data => {
-        document.getElementById('status').textContent = '● Online';
-        document.getElementById('status').className = 'status';
-        document.getElementById('docs').textContent = data.knowledge_base_documents?.toLocaleString() + ' docs';
-      })
-      .catch(() => {
-        document.getElementById('status').textContent = '○ Offline';
-        document.getElementById('status').className = 'status offline';
-      });
+    function checkHealth() {
+      fetch(`${API}/health`)
+        .then(r => r.json())
+        .then(data => {
+          document.getElementById('status').textContent = '● Online';
+          document.getElementById('status').className = 'status';
+          document.getElementById('docs').textContent = data.knowledge_base_documents?.toLocaleString() + ' docs';
+        })
+        .catch(() => {
+          document.getElementById('status').textContent = '○ Offline';
+          document.getElementById('status').className = 'status offline';
+        });
+    }
+    
+    checkHealth();
+    setInterval(checkHealth, 30000); // Refresh every 30s
+
+    function showToast(message, duration = 3000) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), duration);
+    }
+
+    async function syncNow() {
+      if (isSyncing) return;
+      
+      isSyncing = true;
+      syncBtn.disabled = true;
+      syncBtn.classList.add('syncing');
+      syncBtn.innerHTML = '🔄 Syncing...';
+      
+      addMessage('system', '🔄 Syncing knowledge base...');
+      
+      try {
+        const res = await fetch(`${API}/sync/now`, { method: 'POST' });
+        const data = await res.json();
+        
+        if (data.status === 'ok') {
+          showToast('✅ Sync complete!');
+          addMessage('system', '✅ Knowledge base synced successfully');
+          checkHealth(); // Refresh doc count
+        } else {
+          showToast('⚠️ Sync had issues');
+          addMessage('system', '⚠️ Sync completed with issues: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        showToast('❌ Sync failed');
+        addMessage('system', '❌ Sync failed: ' + err.message);
+      }
+      
+      isSyncing = false;
+      syncBtn.disabled = false;
+      syncBtn.classList.remove('syncing');
+      syncBtn.innerHTML = '🔄 Sync';
+    }
 
     function suggest(text) {
       input.value = text;

@@ -224,6 +224,52 @@ def health_check():
         "knowledge_base_documents": doc_count
     }
 
+
+# Sync endpoints
+class SyncDeleteRequest(BaseModel):
+    source_file: str
+
+@app.post("/sync/delete")
+def sync_delete(request: SyncDeleteRequest):
+    """Delete all chunks for a source file."""
+    try:
+        rag = get_rag_service()
+        deleted = rag.delete_by_source(request.source_file)
+        return {"status": "ok", "deleted_count": deleted, "source_file": request.source_file}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/sync/sources")
+def sync_sources():
+    """List all source files in the knowledge base."""
+    try:
+        rag = get_rag_service()
+        sources = rag.get_sources()
+        return {"sources": sources, "count": len(sources)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/sync/now")
+def sync_now():
+    """Trigger immediate sync (called from web UI)."""
+    import subprocess
+    try:
+        result = subprocess.run(
+            ['python3', '/app/sync_service.py', 'full-sync'],
+            capture_output=True,
+            text=True,
+            timeout=300
+        )
+        return {
+            "status": "ok" if result.returncode == 0 else "error",
+            "output": result.stdout,
+            "error": result.stderr
+        }
+    except subprocess.TimeoutExpired:
+        return {"status": "error", "error": "Sync timed out"}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8080)

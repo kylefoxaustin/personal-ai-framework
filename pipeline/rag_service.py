@@ -135,6 +135,28 @@ class RAGService:
         )
         return True
 
+    def delete_by_source(self, source_file: str) -> int:
+        """Delete all chunks from a specific source file."""
+        results = self.collection.get(
+            where={"source_file": source_file},
+            include=["metadatas"]
+        )
+        
+        if results and results["ids"]:
+            self.collection.delete(ids=results["ids"])
+            return len(results["ids"])
+        return 0
+
+    def get_sources(self) -> List[str]:
+        """Get list of all source files in the collection."""
+        results = self.collection.get(include=["metadatas"])
+        sources = set()
+        if results and results["metadatas"]:
+            for meta in results["metadatas"]:
+                if meta and "source_file" in meta:
+                    sources.add(meta["source_file"])
+        return list(sources)
+
 
 _rag_service: Optional[RAGService] = None
 
