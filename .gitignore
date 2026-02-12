@@ -40,3 +40,7 @@ Thumbs.db
 
 # Local config overrides
 config.local.yaml
+
+# Training outputs (large files)
+training/output/
+training/data/
