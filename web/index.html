@@ -30,7 +30,6 @@
     .status { color: #4ade80; }
     .status.offline { color: #f87171; }
     .docs { color: #94a3b8; }
-    
     .header-btn {
       background: #0f3460;
       border: 1px solid #1a4a7a;
@@ -39,39 +38,17 @@
       border-radius: 0.4rem;
       cursor: pointer;
       font-size: 0.8rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
       transition: all 0.2s;
     }
     .header-btn:hover { background: #1a4a7a; }
     .header-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .header-btn.syncing { animation: pulse 1s infinite; }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    
-    main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.5rem;
-    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    main { flex: 1; overflow-y: auto; padding: 1.5rem; }
     .messages { display: flex; flex-direction: column; gap: 1rem; }
-    
-    .welcome {
-      text-align: center;
-      padding: 3rem 1rem;
-      color: #94a3b8;
-    }
+    .welcome { text-align: center; padding: 3rem 1rem; color: #94a3b8; }
     .welcome h2 { color: #eee; margin-bottom: 0.5rem; }
-    .suggestions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      justify-content: center;
-      margin-top: 1.5rem;
-    }
+    .suggestions { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1.5rem; }
     .suggestions button {
       background: #0f3460;
       border: 1px solid #1a4a7a;
@@ -82,116 +59,34 @@
       font-size: 0.85rem;
     }
     .suggestions button:hover { background: #1a4a7a; }
-    
-    .message {
-      max-width: 85%;
-      padding: 1rem 1.25rem;
-      border-radius: 1rem;
-      line-height: 1.6;
-      white-space: pre-wrap;
-    }
-    .message.user {
-      align-self: flex-end;
-      background: #0f3460;
-      border-bottom-right-radius: 0.25rem;
-    }
-    .message.assistant {
-      align-self: flex-start;
-      background: #16213e;
-      border-bottom-left-radius: 0.25rem;
-    }
-    .message.system {
-      align-self: center;
-      background: #1a4a7a;
-      font-size: 0.85rem;
-      padding: 0.5rem 1rem;
-    }
-    .message .meta {
-      margin-top: 0.5rem;
-      font-size: 0.75rem;
-      color: #64748b;
-    }
-    .message details {
-      margin-top: 0.75rem;
-      font-size: 0.8rem;
-      color: #94a3b8;
-    }
+    .message { max-width: 85%; padding: 1rem 1.25rem; border-radius: 1rem; line-height: 1.6; white-space: pre-wrap; }
+    .message.user { align-self: flex-end; background: #0f3460; border-bottom-right-radius: 0.25rem; }
+    .message.assistant { align-self: flex-start; background: #16213e; border-bottom-left-radius: 0.25rem; }
+    .message.system { align-self: center; background: #1a4a7a; font-size: 0.85rem; padding: 0.5rem 1rem; }
+    .message .meta { margin-top: 0.5rem; font-size: 0.75rem; color: #64748b; }
+    .message .style-tag { display: inline-block; background: #e94560; color: white; font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 0.25rem; margin-left: 0.5rem; }
+    .message details { margin-top: 0.75rem; font-size: 0.8rem; color: #94a3b8; }
     .message details summary { cursor: pointer; }
-    .context-item {
-      background: #0d1b2a;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border-radius: 0.5rem;
-      font-size: 0.75rem;
-    }
-    
-    .typing {
-      display: flex;
-      gap: 0.3rem;
-      padding: 1.25rem 1.5rem;
-      background: #16213e;
-      border-radius: 1rem;
-      align-self: flex-start;
-    }
-    .typing span {
-      width: 8px;
-      height: 8px;
-      background: #94a3b8;
-      border-radius: 50%;
-      animation: bounce 1.4s infinite ease-in-out;
-    }
+    .context-item { background: #0d1b2a; padding: 0.5rem; margin-top: 0.5rem; border-radius: 0.5rem; font-size: 0.75rem; }
+    .typing { display: flex; gap: 0.3rem; padding: 1.25rem 1.5rem; background: #16213e; border-radius: 1rem; align-self: flex-start; }
+    .typing span { width: 8px; height: 8px; background: #94a3b8; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out; }
     .typing span:nth-child(1) { animation-delay: -0.32s; }
     .typing span:nth-child(2) { animation-delay: -0.16s; }
-    @keyframes bounce {
-      0%, 80%, 100% { transform: scale(0); }
-      40% { transform: scale(1); }
-    }
-    
-    footer {
-      display: flex;
-      gap: 0.75rem;
-      padding: 1rem 1.5rem;
-      background: #16213e;
-      border-top: 1px solid #0f3460;
-    }
-    footer textarea {
-      flex: 1;
-      padding: 0.75rem 1rem;
-      border: 1px solid #0f3460;
-      border-radius: 0.5rem;
-      background: #1a1a2e;
-      color: #eee;
-      font-size: 1rem;
-      resize: none;
-      font-family: inherit;
-    }
+    @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+    footer { display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem 1.5rem; background: #16213e; border-top: 1px solid #0f3460; }
+    .input-row { display: flex; gap: 0.75rem; }
+    .options-row { display: flex; align-items: center; gap: 1rem; font-size: 0.85rem; }
+    .toggle-container { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; user-select: none; }
+    .toggle { position: relative; width: 44px; height: 24px; background: #0f3460; border-radius: 12px; transition: background 0.3s; }
+    .toggle.active { background: #e94560; }
+    .toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: transform 0.3s; }
+    .toggle.active::after { transform: translateX(20px); }
+    footer textarea { flex: 1; padding: 0.75rem 1rem; border: 1px solid #0f3460; border-radius: 0.5rem; background: #1a1a2e; color: #eee; font-size: 1rem; resize: none; font-family: inherit; }
     footer textarea:focus { outline: none; border-color: #1a4a7a; }
-    footer button {
-      padding: 0.75rem 1.5rem;
-      background: #e94560;
-      border: none;
-      border-radius: 0.5rem;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-    }
+    footer button { padding: 0.75rem 1.5rem; background: #e94560; border: none; border-radius: 0.5rem; color: white; font-weight: 600; cursor: pointer; }
     footer button:hover:not(:disabled) { background: #ff6b6b; }
     footer button:disabled { opacity: 0.5; cursor: not-allowed; }
-    
-    .toast {
-      position: fixed;
-      bottom: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #16213e;
-      border: 1px solid #1a4a7a;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      font-size: 0.9rem;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
+    .toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: #16213e; border: 1px solid #1a4a7a; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
     .toast.show { opacity: 1; }
   </style>
 </head>
@@ -199,163 +94,119 @@
   <header>
     <h1>🧠 Personal AI</h1>
     <div class="header-right">
-      <button id="newChatBtn" class="header-btn" onclick="newChat()">
-        ✨ New Chat
-      </button>
-      <button id="syncBtn" class="header-btn" onclick="syncNow()">
-        🔄 Sync
-      </button>
+      <button class="header-btn" onclick="newChat()">✨ New</button>
+      <button id="syncBtn" class="header-btn" onclick="syncNow()">🔄 Sync</button>
       <div class="stats">
         <span id="status" class="status">● Connecting...</span>
         <span id="docs" class="docs"></span>
       </div>
     </div>
   </header>
-
   <main>
     <div id="messages" class="messages">
       <div class="welcome">
         <h2>Welcome!</h2>
         <p>Ask me anything about your emails, projects, blogs, or transcripts.</p>
-        <p style="margin-top: 0.5rem; font-size: 0.85rem;">I'll remember our conversation as we chat.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem;">Toggle "Write like me" for emails in your personal style.</p>
         <div class="suggestions">
-          <button onclick="suggest('What i.MX demonstrations have I done at CES?')">CES demos</button>
-          <button onclick="suggest('What ARM processor projects have I worked on?')">ARM projects</button>
-          <button onclick="suggest('Summarize my podcast topics')">Podcast topics</button>
+          <button onclick="suggest('Write an email about the i.MX demo status')">i.MX demo email</button>
+          <button onclick="suggest('What ARM projects have I worked on?')">ARM projects</button>
+          <button onclick="suggest('Draft an email about project delays')">Delay email</button>
         </div>
       </div>
     </div>
   </main>
-
   <footer>
-    <textarea id="input" rows="1" placeholder="Ask your personal AI..." onkeydown="handleKey(event)"></textarea>
-    <button id="send" onclick="sendMessage()">Send</button>
+    <div class="options-row">
+      <div class="toggle-container" onclick="toggleWriteStyle()">
+        <div id="styleToggle" class="toggle active"></div>
+        <span>✍️ Write like me</span>
+      </div>
+      <span id="styleHint" style="color: #94a3b8; font-size: 0.75rem;">Responses use your personal style</span>
+    </div>
+    <div class="input-row">
+      <textarea id="input" rows="1" placeholder="Ask your personal AI..." onkeydown="handleKey(event)"></textarea>
+      <button id="send" onclick="sendMessage()">Send</button>
+    </div>
   </footer>
-  
   <div id="toast" class="toast"></div>
-
   <script>
     const API = 'http://localhost:8080';
     const messagesDiv = document.getElementById('messages');
     const input = document.getElementById('input');
     const sendBtn = document.getElementById('send');
     const syncBtn = document.getElementById('syncBtn');
-    
-    let isLoading = false;
-    let isSyncing = false;
-    
-    // Conversation history - stores {role, content} objects
+    let isLoading = false, isSyncing = false, writeStyleEnabled = true;
     let conversationHistory = [];
 
-    // Check health on load
     function checkHealth() {
-      fetch(`${API}/health`)
-        .then(r => r.json())
-        .then(data => {
-          document.getElementById('status').textContent = '● Online';
-          document.getElementById('status').className = 'status';
-          document.getElementById('docs').textContent = data.knowledge_base_documents?.toLocaleString() + ' docs';
-        })
-        .catch(() => {
-          document.getElementById('status').textContent = '○ Offline';
-          document.getElementById('status').className = 'status offline';
-        });
+      fetch(`${API}/health`).then(r => r.json()).then(data => {
+        document.getElementById('status').textContent = '● Online';
+        document.getElementById('status').className = 'status';
+        document.getElementById('docs').textContent = data.knowledge_base_documents?.toLocaleString() + ' docs';
+      }).catch(() => {
+        document.getElementById('status').textContent = '○ Offline';
+        document.getElementById('status').className = 'status offline';
+      });
     }
-    
     checkHealth();
     setInterval(checkHealth, 30000);
 
-    function showToast(message, duration = 3000) {
+    function showToast(msg, duration = 3000) {
       const toast = document.getElementById('toast');
-      toast.textContent = message;
+      toast.textContent = msg;
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), duration);
     }
-    
+
+    function toggleWriteStyle() {
+      writeStyleEnabled = !writeStyleEnabled;
+      document.getElementById('styleToggle').classList.toggle('active', writeStyleEnabled);
+      document.getElementById('styleHint').textContent = writeStyleEnabled ? "Responses use your personal style" : "Responses will be more generic";
+      showToast(writeStyleEnabled ? '✍️ Personal style ON' : '📝 Generic style');
+    }
+
     function newChat() {
       conversationHistory = [];
-      messagesDiv.innerHTML = `
-        <div class="welcome">
-          <h2>Welcome!</h2>
-          <p>Ask me anything about your emails, projects, blogs, or transcripts.</p>
-          <p style="margin-top: 0.5rem; font-size: 0.85rem;">I'll remember our conversation as we chat.</p>
-          <div class="suggestions">
-            <button onclick="suggest('What i.MX demonstrations have I done at CES?')">CES demos</button>
-            <button onclick="suggest('What ARM processor projects have I worked on?')">ARM projects</button>
-            <button onclick="suggest('Summarize my podcast topics')">Podcast topics</button>
-          </div>
-        </div>
-      `;
+      messagesDiv.innerHTML = `<div class="welcome"><h2>Welcome!</h2><p>Ask me anything about your emails, projects, blogs, or transcripts.</p><p style="margin-top: 0.5rem; font-size: 0.85rem;">Toggle "Write like me" for emails in your personal style.</p><div class="suggestions"><button onclick="suggest('Write an email about the i.MX demo status')">i.MX demo email</button><button onclick="suggest('What ARM projects have I worked on?')">ARM projects</button><button onclick="suggest('Draft an email about project delays')">Delay email</button></div></div>`;
       showToast('✨ New conversation started');
     }
 
     async function syncNow() {
       if (isSyncing) return;
-      
       isSyncing = true;
       syncBtn.disabled = true;
       syncBtn.classList.add('syncing');
-      syncBtn.innerHTML = '🔄 Syncing...';
-      
+      syncBtn.innerHTML = '🔄...';
       addMessage('system', '🔄 Syncing knowledge base...');
-      
       try {
         const res = await fetch(`${API}/sync/now`, { method: 'POST' });
         const data = await res.json();
-        
-        if (data.status === 'ok') {
-          showToast('✅ Sync complete!');
-          addMessage('system', '✅ Knowledge base synced successfully');
-          checkHealth();
-        } else {
-          showToast('⚠️ Sync had issues');
-          addMessage('system', '⚠️ Sync completed with issues: ' + (data.error || 'Unknown error'));
-        }
-      } catch (err) {
-        showToast('❌ Sync failed');
-        addMessage('system', '❌ Sync failed: ' + err.message);
-      }
-      
+        if (data.status === 'ok') { showToast('✅ Sync complete!'); addMessage('system', '✅ Synced!'); checkHealth(); }
+        else { showToast('⚠️ Issues'); addMessage('system', '⚠️ ' + (data.error || 'Error')); }
+      } catch (err) { showToast('❌ Failed'); addMessage('system', '❌ ' + err.message); }
       isSyncing = false;
       syncBtn.disabled = false;
       syncBtn.classList.remove('syncing');
       syncBtn.innerHTML = '🔄 Sync';
     }
 
-    function suggest(text) {
-      input.value = text;
-      sendMessage();
-    }
+    function suggest(text) { input.value = text; sendMessage(); }
+    function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
 
-    function handleKey(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    }
-
-    function addMessage(role, content, context, tokens) {
-      // Remove welcome on first message
+    function addMessage(role, content, context, tokens, usedStyle) {
       const welcome = messagesDiv.querySelector('.welcome');
       if (welcome) welcome.remove();
-
       const div = document.createElement('div');
       div.className = `message ${role}`;
-      
       let html = content;
-      
+      if (usedStyle && role === 'assistant') html += `<span class="style-tag">✍️ Your style</span>`;
       if (context && context.length) {
         html += `<details><summary>📚 Sources (${context.length})</summary>`;
-        context.forEach(c => {
-          html += `<div class="context-item">${c.substring(0, 300)}...</div>`;
-        });
+        context.forEach(c => { html += `<div class="context-item">${c.substring(0, 300)}...</div>`; });
         html += '</details>';
       }
-      
-      if (tokens) {
-        html += `<div class="meta">${tokens} tokens</div>`;
-      }
-      
+      if (tokens) html += `<div class="meta">${tokens} tokens</div>`;
       div.innerHTML = html;
       messagesDiv.appendChild(div);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -369,56 +220,42 @@
       messagesDiv.appendChild(div);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
-
-    function hideTyping() {
-      const typing = document.getElementById('typing');
-      if (typing) typing.remove();
-    }
+    function hideTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
 
     async function sendMessage() {
       const text = input.value.trim();
       if (!text || isLoading) return;
-
       input.value = '';
       isLoading = true;
       sendBtn.disabled = true;
-
-      // Add user message to UI and history
       addMessage('user', text);
       conversationHistory.push({ role: 'user', content: text });
-
       showTyping();
-
       try {
+        const isWriteRequest = /email|draft|write|message to/i.test(text);
+        let prompt = text;
+        if (writeStyleEnabled && isWriteRequest) {
+          prompt = `### Instruction:\n${text}\n\n### Response:\n`;
+        }
         const res = await fetch(`${API}/generate`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            prompt: text,
+            prompt: prompt,
             max_tokens: 500,
             use_rag: true,
             rag_k: 3,
-            conversation_history: conversationHistory.slice(0, -1)  // Don't include current message
+            conversation_history: conversationHistory.slice(0, -1)
           })
         });
-
         const data = await res.json();
         hideTyping();
-        
-        // Add assistant response to UI and history
-        addMessage('assistant', data.text, data.context_used, data.tokens_used);
-        conversationHistory.push({ role: 'assistant', content: data.text });
-        
-        // Trim history if too long (keep last 20 messages)
-        if (conversationHistory.length > 20) {
-          conversationHistory = conversationHistory.slice(-20);
-        }
-        
-      } catch (err) {
-        hideTyping();
-        addMessage('assistant', `Error: ${err.message}`);
-      }
-
+        let responseText = data.text.replace(/^### Response:\s*/i, '').replace(/### Instruction:[\s\S]*$/i, '').trim();
+        const usedPersonalStyle = writeStyleEnabled && isWriteRequest;
+        addMessage('assistant', responseText, data.context_used, data.tokens_used, usedPersonalStyle);
+        conversationHistory.push({ role: 'assistant', content: responseText });
+        if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-20);
+      } catch (err) { hideTyping(); addMessage('assistant', `Error: ${err.message}`); }
       isLoading = false;
       sendBtn.disabled = false;
       input.focus();

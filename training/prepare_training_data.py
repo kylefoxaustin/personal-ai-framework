@@ -12,6 +12,14 @@ from typing import List, Dict
 from datetime import datetime
 import re
 
+# Senders to exclude from training data (case-insensitive)
+EXCLUDE_SENDERS = [
+    "janelle",
+    "femmetastics", 
+    "femmestastics",
+    # Add more names/emails to exclude here
+]
+
 class TrainingDataPreparator:
     """Extract training examples from sent emails."""
     
@@ -19,6 +27,17 @@ class TrainingDataPreparator:
         self.emails_dir = Path(emails_dir)
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
+        self.exclude_senders = EXCLUDE_SENDERS
+    
+    def should_include_email(self, email_data: Dict) -> bool:
+        """Check if email should be included (not from excluded sender)."""
+        if not email_data:
+            return False
+        from_addr = email_data.get('from', '').lower()
+        for excluded in self.exclude_senders:
+            if excluded.lower() in from_addr:
+                return False
+        return True
         
     def extract_email_content(self, filepath: Path) -> Dict:
         """Parse an email file and extract relevant fields."""
@@ -179,7 +198,10 @@ class TrainingDataPreparator:
                         if email_file.is_file() and not email_file.name.startswith('.'):
                             email_data = self.extract_email_content(email_file)
                             if email_data and email_data.get('body'):
-                                emails.append(email_data)
+                                if self.should_include_email(email_data):
+                                    emails.append(email_data)
+                                else:
+                                    pass  # Filtered out
         
         print(f"Found {len(emails)} emails with content")
         return emails
