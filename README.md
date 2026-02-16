@@ -125,10 +125,20 @@ python3 training/merge_lora.py
 - [ChromaDB](https://www.trychroma.com/) - Vector database
 - [PEFT](https://github.com/huggingface/peft) - LoRA fine-tuning
 - [Mistral](https://mistral.ai/) - Base model
+## Maintainer
 
-## 📄 License
+**Kyle** - [@kylefoxaustin](https://github.com/kylefoxaustin)
 
-MIT License - use it however you want!
+- ARM SoC Development
+- Embedded Systems & AI/ML
+- Austin, Texas
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+```
+MIT License
 
 ---
 
