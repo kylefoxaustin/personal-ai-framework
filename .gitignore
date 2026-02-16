@@ -44,3 +44,4 @@ config.local.yaml
 # Training outputs (large files)
 training/output/
 training/data/
+models/kyle-*.gguf
