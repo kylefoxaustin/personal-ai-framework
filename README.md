@@ -1,141 +1,135 @@
 # 🧠 Personal AI Framework
 
-A local, private AI assistant trained on YOUR data - emails, documents, notes, and writing samples. Runs entirely on your hardware with no data leaving your machine.
+A private, local AI assistant that knows your work and writes like you.
 
-## Features
+![Status](https://img.shields.io/badge/status-working-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
-- **100% Local & Private** - Your data never leaves your machine
-- **RAG-Powered** - Retrieves relevant context from your personal knowledge base
-- **54K+ Document Support** - Handles large email archives, PDFs, and more
-- **Web Chat Interface** - Easy-to-use browser-based UI
-- **Extensible** - Add new document types, customize chunking, fine-tune with LoRA
+## ✨ Features
 
-## Requirements
+- **📚 Knowledge Base** - Ingest your emails, documents, and notes
+- **🔍 Smart Search** - RAG-powered retrieval finds relevant context
+- **✍️ Your Voice** - Fine-tune to write emails in your style
+- **💬 Chat Memory** - Multi-turn conversations with context
+- **🔄 Auto Sync** - Detects file changes automatically
+- **🔒 100% Local** - No cloud, no data sharing, no API keys
 
-- **GPU**: NVIDIA GPU with 24GB+ VRAM (RTX 3090, 4090, 5090, or similar)
-- **RAM**: 32GB+ system memory recommended
-- **Storage**: 50GB+ for model and knowledge base
-- **OS**: Ubuntu 22.04+ (or similar Linux)
-- **Software**: Docker, NVIDIA Container Toolkit
-
-## Quick Start
+## 🚀 Quick Start
 ```bash
-# 1. Clone the repository
-git clone https://github.com/yourusername/personal-ai-framework.git
+# Clone and setup
+git clone https://github.com/YOUR_USERNAME/personal-ai-framework.git
 cd personal-ai-framework
-
-# 2. Run setup
 ./setup.sh
 
-# 3. Add your documents to knowledge/ folder
-cp -r ~/my-documents/* knowledge/documents/
-cp ~/mail-export.mbox knowledge/emails/
+# Add your documents
+cp ~/Documents/*.pdf knowledge/documents/
+cp ~/emails/*.eml knowledge/emails/
 
-# 4. Start services
+# Start and ingest
 ./run.sh start
-
-# 5. Ingest your knowledge base
 ./run.sh ingest
 
-# 6. Open web UI
-# Navigate to http://localhost:3000
+# Open web UI
+cd web && python3 -m http.server 3000
+# Visit http://localhost:3000
 ```
 
-## Directory Structure
+## 📋 Requirements
+
+| Component | Requirement |
+|-----------|-------------|
+| GPU | NVIDIA 12GB+ VRAM |
+| RAM | 32GB+ |
+| OS | Ubuntu 22.04+ / WSL2 |
+| Docker | With nvidia-container-toolkit |
+
+## 📁 Project Structure
 ```
 personal-ai-framework/
-├── knowledge/              # YOUR DATA GOES HERE
-│   ├── emails/            # Email exports (.mbox, .eml, .pst)
-│   ├── documents/         # PDFs, Word docs, text files
-│   ├── writing/           # Your writing samples
-│   ├── projects/          # Project notes and docs
-│   └── transcripts/       # Meeting/video transcripts
-├── models/                # AI models (downloaded automatically)
-├── pipeline/              # Processing scripts
-├── vectordb/              # Vector database storage
-├── web/                   # Web chat interface
-├── config.yaml            # Configuration
-├── setup.sh              # First-time setup
-└── run.sh                # Daily operations
+├── knowledge/          # Your documents (gitignored)
+│   ├── emails/         # Email exports
+│   ├── documents/      # PDFs, docs
+│   ├── writing/        # Your blog posts, articles
+│   └── projects/       # Code, READMEs
+├── models/             # AI models
+├── pipeline/           # Core services
+├── training/           # LoRA fine-tuning
+├── web/                # Chat interface
+├── config.yaml         # Configuration
+├── setup.sh            # First-time setup
+└── run.sh              # Daily operations
 ```
 
-## Supported File Types
+## 🎯 Commands
 
-| Type | Extensions | Notes |
-|------|------------|-------|
-| Text | `.txt`, `.md` | Direct ingestion |
-| Email | `.eml`, `.mbox` | Parsed with headers |
-| PDF | `.pdf` | Text extraction |
-| JSON | `.json` | Content field extraction |
-| Outlook | `.pst` | Requires extraction step |
+| Command | Description |
+|---------|-------------|
+| `./run.sh start` | Start all services |
+| `./run.sh stop` | Stop all services |
+| `./run.sh ingest` | Add documents to knowledge base |
+| `./run.sh sync-now` | Sync file changes |
+| `./run.sh watch` | Auto-sync on file changes |
+| `./run.sh logs` | View server logs |
+| `./run.sh status` | Check service health |
 
-## Commands
+## 🎨 Web Interface
+
+Access at `http://localhost:3000` after starting services.
+
+Features:
+- **New Chat** - Start fresh conversation
+- **Sync** - Update knowledge base
+- **Write Like Me** - Toggle your personal writing style
+
+## 📖 Documentation
+
+- **[Quick Start](docs/QUICKSTART.md)** - Get running in 15 minutes
+- **[Full Install Guide](docs/FRESH_INSTALL_GUIDE.md)** - Detailed setup instructions
+- **[FAQ](docs/FAQ.md)** - Common questions answered
+- **[Architecture](docs/ARCHITECTURE.md)** - Technical details
+
+## 🔧 Training Your Writing Style
+
+Make the AI write like you:
 ```bash
-./run.sh start           # Start all services
-./run.sh stop            # Stop all services
-./run.sh status          # Check service health
-./run.sh ingest          # Ingest knowledge base
-./run.sh ingest-emails   # Ingest extracted PST emails
-./run.sh logs            # View server logs
-./run.sh clear-knowledge # Reset knowledge base
+# Prepare data from sent emails
+python3 training/prepare_training_data.py
+
+# Train (~3 hours on RTX 4090)
+docker compose stop llm-server
+python3 training/train_lora.py
+
+# Deploy trained model
+python3 training/merge_lora.py
+# See docs for quantization steps
 ```
 
-## Extracting PST Files
+## 📊 Performance
 
-Outlook PST files need to be extracted before ingestion:
-```bash
-# Install pst-utils
-sudo apt install pst-utils
+| GPU | Inference | Training (10K examples) |
+|-----|-----------|-------------------------|
+| RTX 3090 | ~80 tok/s | ~4 hours |
+| RTX 4090 | ~120 tok/s | ~2.5 hours |
+| RTX 5090 | ~150 tok/s | ~2 hours |
 
-# Extract PSTs
-cd knowledge/emails
-python3 ../../pipeline/extract_psts.py
+## 🔒 Privacy
 
-# Ingest extracted emails
-cd ../..
-./run.sh ingest-emails --sent-only  # Start with sent items
-./run.sh ingest-emails              # Then all emails
-```
+- All data stays on your machine
+- No cloud services or API keys required
+- Models run 100% locally
+- Knowledge base is gitignored
 
-## Configuration
+## 🙏 Built With
 
-Edit `config.yaml` to customize:
+- [llama-cpp-python](https://github.com/abetlen/llama-cpp-python) - LLM inference
+- [ChromaDB](https://www.trychroma.com/) - Vector database
+- [PEFT](https://github.com/huggingface/peft) - LoRA fine-tuning
+- [Mistral](https://mistral.ai/) - Base model
 
-- Model settings (context length, temperature)
-- Chunking parameters
-- File type filters
-- Server ports
+## 📄 License
 
-## Hardware Tested
+MIT License - use it however you want!
 
-| GPU | VRAM | Performance |
-|-----|------|-------------|
-| RTX 5090 | 32GB | ~147 tok/s |
-| RTX 4090 | 24GB | ~100 tok/s |
-| RTX 3090 | 24GB | ~60 tok/s |
+---
 
-## Troubleshooting
-
-**"NVIDIA driver mismatch"**
-```bash
-sudo reboot  # Reload NVIDIA modules
-```
-
-**"Connection refused" on web UI**
-```bash
-./run.sh status  # Check if services are running
-./run.sh restart # Restart services
-```
-
-**Slow first query**
-- First query after start caches the model - subsequent queries are faster
-
-## License
-
-MIT License - See LICENSE file
-
-## Acknowledgments
-
-- Mixtral 8x7B by Mistral AI
-- llama.cpp for efficient inference
-- ChromaDB for vector storage
+**Trust the Awesomeness!** 🚀
