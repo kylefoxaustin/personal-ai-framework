@@ -17,7 +17,7 @@ A private, local AI assistant that knows your work and writes like you.
 ## 🚀 Quick Start
 ```bash
 # Clone and setup
-git clone https://github.com/YOUR_USERNAME/personal-ai-framework.git
+git clone https://github.com/kylefoxaustin/personal-ai-framework.git
 cd personal-ai-framework
 ./setup.sh
 
