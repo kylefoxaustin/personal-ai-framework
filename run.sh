@@ -111,6 +111,13 @@ case $COMMAND in
         echo "  clear-knowledge Clear the knowledge base"
         echo "  watch           Start file watcher (auto-sync on changes)"
         echo "  sync-now        Force immediate sync"
+        echo "  summarize       Transcribe and summarize a meeting recording"
         echo "  help            Show this help"
         ;;
 esac
+
+    summarize)
+        shift
+        echo "🎤 Meeting Summarizer"
+        python3 pipeline/meeting_summarizer.py "$@"
+        ;;
