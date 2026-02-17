@@ -194,14 +194,26 @@
     function suggest(text) { input.value = text; sendMessage(); }
     function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
 
-    function addMessage(role, content, context, tokens, usedStyle) {
+    function addMessage(role, content, context, tokens, usedStyle, citations) {
       const welcome = messagesDiv.querySelector('.welcome');
       if (welcome) welcome.remove();
       const div = document.createElement('div');
       div.className = `message ${role}`;
       let html = content;
       if (usedStyle && role === 'assistant') html += `<span class="style-tag">✍️ Your style</span>`;
-      if (context && context.length) {
+      if (citations && citations.length) {
+        html += `<details><summary>📚 Sources (${citations.length})</summary>`;
+        citations.forEach(c => { 
+          const score = c.final_score ? (c.final_score * 100).toFixed(0) : '?';
+          const source = c.source_file ? c.source_file.split('/').pop() : 'unknown';
+          html += `<div class="context-item">
+            <strong>[${c.id}]</strong> ${source} 
+            <span style="color:#4ade80;margin-left:0.5rem;">${score}% match</span>
+            ${context && context[c.id-1] ? '<br><small>' + context[c.id-1].substring(0, 200) + '...</small>' : ''}
+          </div>`; 
+        });
+        html += '</details>';
+      } else if (context && context.length) {
         html += `<details><summary>📚 Sources (${context.length})</summary>`;
         context.forEach(c => { html += `<div class="context-item">${c.substring(0, 300)}...</div>`; });
         html += '</details>';
@@ -252,7 +264,7 @@
         hideTyping();
         let responseText = data.text.replace(/^### Response:\s*/i, '').replace(/### Instruction:[\s\S]*$/i, '').trim();
         const usedPersonalStyle = writeStyleEnabled && isWriteRequest;
-        addMessage('assistant', responseText, data.context_used, data.tokens_used, usedPersonalStyle);
+        addMessage('assistant', responseText, data.context_used, data.tokens_used, usedPersonalStyle, data.citations);
         conversationHistory.push({ role: 'assistant', content: responseText });
         if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-20);
       } catch (err) { hideTyping(); addMessage('assistant', `Error: ${err.message}`); }

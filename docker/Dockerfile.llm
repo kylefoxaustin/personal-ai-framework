@@ -26,6 +26,7 @@ COPY pipeline/llm_server.py .
 COPY pipeline/rag_service.py .
 COPY pipeline/smart_chunker.py .
 COPY pipeline/sync_service.py .
+COPY pipeline/advanced_rag.py .
 COPY pipeline/config.yaml .
 
 EXPOSE 8080
