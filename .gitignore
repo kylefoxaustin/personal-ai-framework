@@ -48,3 +48,5 @@ models/kyle-*.gguf
 pipeline/config.yaml
 knowledge/recordings/
 training/*.log
+knowledge/datasheets/**/*.pdf
+knowledge/datasheets/.datasheet_manifest.json
