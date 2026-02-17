@@ -91,6 +91,11 @@ case $COMMAND in
         python3 pipeline/sync_service.py full-sync
         ;;
 
+    generate)
+        shift
+        echo "📄 Document Generator"
+        python3 pipeline/doc_generator.py "$@"
+        ;;
     summarize)
         shift
         echo "🎤 Meeting Summarizer"
@@ -114,6 +119,7 @@ case $COMMAND in
         echo "  clear-knowledge Clear the knowledge base"
         echo "  watch           Start file watcher (auto-sync on changes)"
         echo "  sync-now        Force immediate sync"
+        echo "  generate        Generate a document (spec, proposal, report, etc.)"
         echo "  summarize       Transcribe and summarize a meeting recording"
         echo "  help            Show this help"
         ;;
