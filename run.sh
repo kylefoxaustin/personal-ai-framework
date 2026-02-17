@@ -2,9 +2,7 @@
 # =============================================================================
 # Personal AI Framework - Run Script
 # =============================================================================
-
 COMMAND=${1:-help}
-
 case $COMMAND in
     start)
         echo "🚀 Starting Personal AI services..."
@@ -83,7 +81,6 @@ case $COMMAND in
         fi
         ;;
         
-        
     watch)
         echo "👁️  Starting file watcher..."
         python3 pipeline/sync_service.py watch --debounce ${2:-300}
@@ -92,6 +89,12 @@ case $COMMAND in
     sync-now)
         echo "🔄 Forcing immediate sync..."
         python3 pipeline/sync_service.py full-sync
+        ;;
+
+    summarize)
+        shift
+        echo "🎤 Meeting Summarizer"
+        python3 pipeline/meeting_summarizer.py "$@"
         ;;
         
     help|*)
@@ -115,9 +118,3 @@ case $COMMAND in
         echo "  help            Show this help"
         ;;
 esac
-
-    summarize)
-        shift
-        echo "🎤 Meeting Summarizer"
-        python3 pipeline/meeting_summarizer.py "$@"
-        ;;
