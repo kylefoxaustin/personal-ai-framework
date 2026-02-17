@@ -102,6 +102,12 @@ case $COMMAND in
         echo "📄 Document Generator"
         python3 pipeline/doc_generator.py "$@"
         ;;
+    digest)
+        shift
+        echo "🧠 Daily Digest"
+        python3 pipeline/daily_digest.py "$@"
+        ;;
+
     email)
         shift
         echo "📧 Email Service"
@@ -132,6 +138,7 @@ case $COMMAND in
         echo "  clear-knowledge Clear the knowledge base"
         echo "  watch           Start file watcher (auto-sync on changes)"
         echo "  sync-now        Force immediate sync"
+        echo "  digest          Generate daily digest summary"
         echo "  email         Draft and send emails (gmail/outlook)"
         echo "  generate        Generate a document (spec, proposal, report, etc.)"
         echo "  summarize       Transcribe and summarize a meeting recording"
