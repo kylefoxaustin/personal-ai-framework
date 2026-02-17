@@ -16,7 +16,7 @@ user:
 model:
   name: "mixtral-8x7b-instruct"
   quantization: "Q4_K_M"
-  path: "/app/models/kyle-7b-q4_k_m.gguf"
+  path: "/app/models/kyle-7b-v2-q4_k_m.gguf"
   context_length: 8192      # Reduce if you have less VRAM
   max_tokens: 512
   temperature: 0.7
