@@ -1,73 +1,28 @@
-# =============================================================================
-# Personal AI Framework - Configuration
-# =============================================================================
-# Copy this file to config.local.yaml and customize for your setup
-
-# -----------------------------------------------------------------------------
-# User Profile (customize this!)
-# -----------------------------------------------------------------------------
+# Kyle's personal config
 user:
-  name: "Your Name"
-  description: "Brief description of who you are and what this AI should know"
+  name: "Kyle Fox"
+  description: "Hardware engineer, ARM SoC developer"
 
-# -----------------------------------------------------------------------------
-# Model Settings
-# -----------------------------------------------------------------------------
 model:
-  name: "mixtral-8x7b-instruct"
-  quantization: "Q4_K_M"
   path: "/app/models/kyle-7b-v2-q4_k_m.gguf"
-  context_length: 8192      # Reduce if you have less VRAM
+  context_length: 16384
   max_tokens: 512
   temperature: 0.7
-  gpu_layers: -1            # -1 = all layers on GPU
+  gpu_layers: -1
 
-# -----------------------------------------------------------------------------
-# Knowledge Base / RAG Settings
-# -----------------------------------------------------------------------------
 knowledge:
   root_folder: "./knowledge"
   manifest_file: "./knowledge/.ingest_manifest.json"
-  
-  # File types to process
-  include_extensions:
-    - .txt
-    - .md
-    - .json
-    - .eml
-    - .pdf
-    - .mbox
-  
-  # Patterns to skip
-  exclude_patterns:
-    - "__pycache__"
-    - ".git"
-    - ".DS_Store"
-    - "*.pyc"
-    - ".ingest_manifest.json"
-    - "extracted"           # PST extraction folder
-  
-  # Chunking
-  chunk_size: 512           # Words per chunk
-  chunk_overlap: 50         # Overlap between chunks
+  include_extensions: [.txt, .md, .json, .eml, .pdf, .mbox]
+  exclude_patterns: ["__pycache__", ".git", ".DS_Store", "*.pyc", ".ingest_manifest.json", "extracted"]
+  chunk_size: 512
+  chunk_overlap: 50
 
-# -----------------------------------------------------------------------------
-# Vector Database
-# -----------------------------------------------------------------------------
 vectordb:
-  host: "vectordb"          # Docker service name
+  host: "vectordb"
   port: 8000
   collection: "personal_knowledge"
 
-# -----------------------------------------------------------------------------
-# Server Settings
-# -----------------------------------------------------------------------------
 server:
   host: "0.0.0.0"
   port: 8080
-  
-# -----------------------------------------------------------------------------
-# Web UI
-# -----------------------------------------------------------------------------
-web:
-  port: 3000
