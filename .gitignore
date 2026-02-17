@@ -45,3 +45,4 @@ config.local.yaml
 training/output/
 training/data/
 models/kyle-*.gguf
+pipeline/config.yaml

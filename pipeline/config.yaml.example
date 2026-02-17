@@ -1,7 +1,6 @@
 # =============================================================================
 # Personal AI Framework - Configuration
 # =============================================================================
-# Copy this file to config.local.yaml and customize for your setup
 
 # -----------------------------------------------------------------------------
 # User Profile (customize this!)
@@ -14,9 +13,11 @@ user:
 # Model Settings
 # -----------------------------------------------------------------------------
 model:
-  name: "mixtral-8x7b-instruct"
-  quantization: "Q4_K_M"
-  path: "/app/models/mixtral/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
+  # Default model - change this after running setup.sh
+  # Mistral 7B: /app/models/mistral-7b-instruct-v0.2.Q4_K_M.gguf
+  # Mixtral 8x7B: /app/models/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf
+  # Personal (after training): /app/models/personal-7b-q4_k_m.gguf
+  path: "/app/models/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
   context_length: 8192      # Reduce if you have less VRAM
   max_tokens: 512
   temperature: 0.7
@@ -45,8 +46,8 @@ knowledge:
     - ".DS_Store"
     - "*.pyc"
     - ".ingest_manifest.json"
-    - "extracted"           # PST extraction folder
-  
+    - "extracted"
+
   # Chunking
   chunk_size: 512           # Words per chunk
   chunk_overlap: 50         # Overlap between chunks
@@ -55,7 +56,7 @@ knowledge:
 # Vector Database
 # -----------------------------------------------------------------------------
 vectordb:
-  host: "vectordb"          # Docker service name
+  host: "vectordb"
   port: 8000
   collection: "personal_knowledge"
 
@@ -65,9 +66,3 @@ vectordb:
 server:
   host: "0.0.0.0"
   port: 8080
-  
-# -----------------------------------------------------------------------------
-# Web UI
-# -----------------------------------------------------------------------------
-web:
-  port: 3000
