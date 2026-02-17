@@ -46,3 +46,5 @@ training/output/
 training/data/
 models/kyle-*.gguf
 pipeline/config.yaml
+knowledge/recordings/
+training/*.log
