@@ -76,6 +76,15 @@ touch knowledge/transcripts/.gitkeep
 
 echo -e "${GREEN}✅ Directories created${NC}"
 
+# Setup config file
+if [ ! -f "pipeline/config.yaml" ]; then
+    echo "📄 Creating config from template..."
+    cp pipeline/config.yaml.example pipeline/config.yaml
+    echo -e "${GREEN}✅ Config created - edit pipeline/config.yaml to customize${NC}"
+else
+    echo -e "${GREEN}✅ Config file exists${NC}"
+fi
+
 # Install Python dependencies for training (optional)
 echo ""
 read -p "Install Python dependencies for training/development? [y/N] " -n 1 -r
