@@ -11,6 +11,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from llama_cpp import Llama
 from rag_service import get_rag_service, Document
+from advanced_rag import AdvancedRAG
+
+# Global advanced RAG instance
+_advanced_rag = None
+
+def get_advanced_rag():
+    global _advanced_rag
+    if _advanced_rag is None:
+        rag = get_rag_service()
+        if rag:
+            _advanced_rag = AdvancedRAG(rag)
+    return _advanced_rag
 
 # Load configuration
 with open('/app/config.yaml', 'r') as f:
@@ -35,6 +47,7 @@ class GenerationResponse(BaseModel):
     tokens_used: int
     model: str
     context_used: Optional[List[str]] = None
+    citations: Optional[List[dict]] = None  # Source citations with scores
 
 class IngestRequest(BaseModel):
     content: str
@@ -113,10 +126,19 @@ def generate(request: GenerationRequest):
     context_docs = request.context
     
     # Auto-retrieve context from RAG if enabled and no manual context provided
+    citations = None
     if request.use_rag and not context_docs:
         try:
-            rag = get_rag_service()
-            context_docs = rag.get_context(request.prompt, k=request.rag_k)
+            advanced_rag = get_advanced_rag()
+            if advanced_rag:
+                # Use hybrid search with reranking
+                context_docs, citations = advanced_rag.get_context_with_citations(
+                    request.prompt, k=request.rag_k
+                )
+            else:
+                # Fallback to basic RAG
+                rag = get_rag_service()
+                context_docs = rag.get_context(request.prompt, k=request.rag_k)
         except Exception as e:
             print(f"RAG retrieval failed: {e}")
             context_docs = []
@@ -155,7 +177,8 @@ def generate(request: GenerationRequest):
         text=response['choices'][0]['text'].strip(),
         tokens_used=response['usage']['total_tokens'],
         model="mixtral-8x7b",
-        context_used=context_docs if context_docs else None
+        context_used=context_docs if context_docs else None,
+        citations=citations
     )
 
 @app.post("/ingest")
