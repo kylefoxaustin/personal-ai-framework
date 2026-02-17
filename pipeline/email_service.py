@@ -86,9 +86,10 @@ def copy_to_clipboard(text: str) -> bool:
 
 
 def open_url(url: str) -> bool:
+    """Open URL in default browser/app (background, suppress warnings)."""
     """Open URL in default browser/app."""
     try:
-        subprocess.run(['xdg-open', url], check=True, capture_output=True)
+        subprocess.run(['xdg-open', url], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         return True
     except (FileNotFoundError, subprocess.CalledProcessError):
         return False
