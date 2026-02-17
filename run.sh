@@ -57,6 +57,12 @@ case $COMMAND in
         python3 pipeline/ingest_knowledge.py
         ;;
         
+    ingest-datasheets)
+        shift
+        echo "📄 Ingesting datasheets..."
+        python3 pipeline/ingest_datasheets.py "$@"
+        ;;
+
     ingest-emails)
         echo "📧 Ingesting PST emails..."
         python3 pipeline/ingest_pst_emails.py "$@"
@@ -119,6 +125,7 @@ case $COMMAND in
         echo "  restart         Restart all services"
         echo "  status          Show service status"
         echo "  ingest          Ingest documents from knowledge/ folder"
+        echo "  ingest-datasheets  Ingest PDF datasheets and reference manuals"
         echo "  ingest-emails   Ingest extracted PST emails"
         echo "  logs            View LLM server logs"
         echo "  shell           Open shell in LLM container"
