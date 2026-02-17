@@ -8,6 +8,9 @@ import yaml
 from typing import Optional, List
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+import json
+import asyncio
 from pydantic import BaseModel
 from llama_cpp import Llama
 from rag_service import get_rag_service, Document
@@ -48,6 +51,16 @@ class GenerationResponse(BaseModel):
     model: str
     context_used: Optional[List[str]] = None
     citations: Optional[List[dict]] = None  # Source citations with scores
+class StreamingRequest(BaseModel):
+    prompt: str
+    max_tokens: Optional[int] = 512
+    temperature: Optional[float] = 0.7
+    top_p: Optional[float] = 0.9
+    context: Optional[List[str]] = None
+    use_rag: Optional[bool] = True
+    rag_k: Optional[int] = 3
+    conversation_history: Optional[List[ConversationMessage]] = None
+
 
 class IngestRequest(BaseModel):
     content: str
@@ -179,6 +192,87 @@ def generate(request: GenerationRequest):
         model="mixtral-8x7b",
         context_used=context_docs if context_docs else None,
         citations=citations
+    )
+
+
+@app.post("/generate/stream")
+def generate_stream(request: StreamingRequest):
+    """Generate text with streaming response (Server-Sent Events)"""
+    
+    if llm is None:
+        raise HTTPException(status_code=503, detail="Model not loaded")
+    
+    context_docs = request.context
+    citations = None
+    
+    # Auto-retrieve context from RAG if enabled
+    if request.use_rag and not context_docs:
+        try:
+            advanced_rag = get_advanced_rag()
+            if advanced_rag:
+                context_docs, citations = advanced_rag.get_context_with_citations(
+                    request.prompt, k=request.rag_k
+                )
+            else:
+                rag = get_rag_service()
+                context_docs = rag.get_context(request.prompt, k=request.rag_k)
+        except Exception as e:
+            print(f"RAG retrieval failed: {e}")
+            context_docs = []
+    
+    # Build prompt with RAG context
+    full_prompt = ""
+    
+    if context_docs:
+        full_prompt = "Use the following context to help answer the query:\n\n"
+        for i, doc in enumerate(context_docs[:3], 1):
+            full_prompt += f"[{i}] {doc}\n\n"
+        full_prompt += "---\n\n"
+    
+    if request.conversation_history:
+        full_prompt += "Previous conversation:\n"
+        for msg in request.conversation_history[-6:]:
+            role = "User" if msg.role == "user" else "Assistant"
+            full_prompt += f"{role}: {msg.content}\n\n"
+        full_prompt += "---\n\n"
+    
+    full_prompt += f"User: {request.prompt}\n\nAssistant:"
+    
+    def generate_tokens():
+        # Send initial metadata (context, citations)
+        meta = {
+            "type": "meta",
+            "context_used": context_docs if context_docs else None,
+            "citations": citations
+        }
+        yield f"data: {json.dumps(meta)}\n\n"
+        
+        # Stream tokens
+        full_response = ""
+        for output in llm(
+            full_prompt,
+            max_tokens=request.max_tokens,
+            temperature=request.temperature,
+            top_p=request.top_p,
+            stop=["</s>", "\n\n\n"],
+            echo=False,
+            stream=True
+        ):
+            token = output["choices"][0]["text"]
+            full_response += token
+            yield f"data: {json.dumps({'type': 'token', 'token': token})}\n\n"
+        
+        # Send completion signal with stats
+        yield f"data: {json.dumps({'type': 'done', 'text': full_response.strip()})}\n\n"
+    
+    return StreamingResponse(
+        generate_tokens(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
     )
 
 @app.post("/ingest")

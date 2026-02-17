@@ -89,6 +89,19 @@
     .toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: #16213e; border: 1px solid #1a4a7a; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100; }
     .toast.show { opacity: 1; }
     
+    /* Streaming cursor */
+    .cursor {
+      animation: blink 1s infinite;
+      color: #e94560;
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+    .message.streaming {
+      min-height: 2rem;
+    }
+    
     /* Email action buttons */
     .email-actions {
       display: flex;
@@ -430,14 +443,21 @@
       sendBtn.disabled = true;
       addMessage('user', text);
       conversationHistory.push({ role: 'user', content: text });
-      showTyping();
+      
+      const isWriteRequest = /email|draft|write|message to/i.test(text);
+      let prompt = text;
+      if (writeStyleEnabled && isWriteRequest) {
+        prompt = `### Instruction:\n${text}\n\nInclude a subject line at the start in the format 'Subject: ...'\n\n### Response:\n`;
+      }
+      
+      // Create streaming message placeholder
+      const msgDiv = createStreamingMessage();
+      let fullText = '';
+      let contextUsed = null;
+      let citations = null;
+      
       try {
-        const isWriteRequest = /email|draft|write|message to/i.test(text);
-        let prompt = text;
-        if (writeStyleEnabled && isWriteRequest) {
-          prompt = `### Instruction:\n${text}\n\nInclude a subject line at the start in the format 'Subject: ...'\n\n### Response:\n`;
-        }
-        const res = await fetch(`${API}/generate`, {
+        const response = await fetch(`${API}/generate/stream`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -448,17 +468,107 @@
             conversation_history: conversationHistory.slice(0, -1)
           })
         });
-        const data = await res.json();
-        hideTyping();
-        let responseText = data.text.replace(/^### Response:\s*/i, '').replace(/### Instruction:[\s\S]*$/i, '').trim();
+        
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n');
+          
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6));
+                
+                if (data.type === 'meta') {
+                  contextUsed = data.context_used;
+                  citations = data.citations;
+                } else if (data.type === 'token') {
+                  fullText += data.token;
+                  updateStreamingMessage(msgDiv, fullText);
+                } else if (data.type === 'done') {
+                  fullText = data.text;
+                }
+              } catch (e) { /* ignore parse errors */ }
+            }
+          }
+        }
+        
+        // Finalize the message
+        let responseText = fullText.replace(/^### Response:\s*/i, '').replace(/### Instruction:[\s\S]*$/i, '').trim();
         const usedPersonalStyle = writeStyleEnabled && isWriteRequest;
-        addMessage('assistant', responseText, data.context_used, data.tokens_used, usedPersonalStyle, data.citations);
+        finalizeStreamingMessage(msgDiv, responseText, contextUsed, citations, usedPersonalStyle);
         conversationHistory.push({ role: 'assistant', content: responseText });
         if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-20);
-      } catch (err) { hideTyping(); addMessage('assistant', `Error: ${err.message}`); }
+        
+      } catch (err) {
+        msgDiv.innerHTML = `Error: ${err.message}`;
+      }
+      
       isLoading = false;
       sendBtn.disabled = false;
       input.focus();
+    }
+    
+    function createStreamingMessage() {
+      const welcome = messagesDiv.querySelector('.welcome');
+      if (welcome) welcome.remove();
+      const div = document.createElement('div');
+      div.className = 'message assistant streaming';
+      div.innerHTML = '<span class="cursor">▊</span>';
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      return div;
+    }
+    
+    function updateStreamingMessage(div, text) {
+      div.innerHTML = text.replace(/\n/g, '<br>') + '<span class="cursor">▊</span>';
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+    
+    function finalizeStreamingMessage(div, content, context, citations, usedStyle) {
+      div.classList.remove('streaming');
+      let html = content;
+      if (usedStyle) html += `<span class="style-tag">✍️ Your style</span>`;
+      
+      // Check if this is an email response
+      const isEmail = isEmailResponse(content);
+      
+      if (citations && citations.length) {
+        html += `<details><summary>📚 Sources (${citations.length})</summary>`;
+        citations.forEach(c => { 
+          const score = c.final_score ? (c.final_score * 100).toFixed(0) : '?';
+          const source = c.source_file ? c.source_file.split('/').pop() : 'unknown';
+          html += `<div class="context-item">
+            <strong>[${c.id}]</strong> ${source} 
+            <span style="color:#4ade80;margin-left:0.5rem;">${score}% match</span>
+          </div>`; 
+        });
+        html += '</details>';
+      } else if (context && context.length) {
+        html += `<details><summary>📚 Sources (${context.length})</summary>`;
+        context.forEach(c => { html += `<div class="context-item">${c.substring(0, 300)}...</div>`; });
+        html += '</details>';
+      }
+      
+      // Add email action buttons if this is an email
+      if (isEmail) {
+        const escapedContent = content.replace(/'/g, "\\'").replace(/\n/g, "\\n");
+        html += `
+          <div class="email-actions">
+            <button onclick="copyEmail(this, '${escapedContent}')">📋 Copy</button>
+            <button onclick="saveEmail('${escapedContent}')">💾 Save</button>
+            <button onclick="showEmailModal('${escapedContent}')">📧 Open in Email</button>
+          </div>
+        `;
+      }
+      
+      div.innerHTML = html;
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
     
     // Close modal on escape
