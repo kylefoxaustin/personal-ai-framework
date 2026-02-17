@@ -86,8 +86,76 @@
     footer button { padding: 0.75rem 1.5rem; background: #e94560; border: none; border-radius: 0.5rem; color: white; font-weight: 600; cursor: pointer; }
     footer button:hover:not(:disabled) { background: #ff6b6b; }
     footer button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: #16213e; border: 1px solid #1a4a7a; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: #16213e; border: 1px solid #1a4a7a; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100; }
     .toast.show { opacity: 1; }
+    
+    /* Email action buttons */
+    .email-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #0f3460;
+    }
+    .email-actions button {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.4rem 0.8rem;
+      background: #0f3460;
+      border: 1px solid #1a4a7a;
+      border-radius: 0.4rem;
+      color: #eee;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .email-actions button:hover { background: #1a4a7a; }
+    .email-actions button.success { background: #166534; border-color: #22c55e; }
+    
+    /* Email recipient input modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: #16213e;
+      border: 1px solid #0f3460;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 400px;
+    }
+    .modal h3 { margin-bottom: 1rem; }
+    .modal input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #0f3460;
+      border-radius: 0.5rem;
+      background: #1a1a2e;
+      color: #eee;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    .modal input:focus { outline: none; border-color: #1a4a7a; }
+    .modal-buttons { display: flex; gap: 0.5rem; justify-content: flex-end; }
+    .modal-buttons button {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .modal-buttons .cancel { background: #0f3460; border: 1px solid #1a4a7a; color: #eee; }
+    .modal-buttons .confirm { background: #e94560; border: none; color: white; }
   </style>
 </head>
 <body>
@@ -109,9 +177,9 @@
         <p>Ask me anything about your emails, projects, blogs, or transcripts.</p>
         <p style="margin-top: 0.5rem; font-size: 0.85rem;">Toggle "Write like me" for emails in your personal style.</p>
         <div class="suggestions">
-          <button onclick="suggest('Write an email about the i.MX demo status')">i.MX demo email</button>
-          <button onclick="suggest('What ARM projects have I worked on?')">ARM projects</button>
-          <button onclick="suggest('Draft an email about project delays')">Delay email</button>
+          <button onclick="suggest('Draft an email about the i.MX demo status')">📧 i.MX demo email</button>
+          <button onclick="suggest('What ARM projects have I worked on?')">🔍 ARM projects</button>
+          <button onclick="suggest('Write an email following up on project delays')">📧 Delay follow-up</button>
         </div>
       </div>
     </div>
@@ -125,11 +193,24 @@
       <span id="styleHint" style="color: #94a3b8; font-size: 0.75rem;">Responses use your personal style</span>
     </div>
     <div class="input-row">
-      <textarea id="input" rows="1" placeholder="Ask your personal AI..." onkeydown="handleKey(event)"></textarea>
+      <textarea id="input" rows="1" placeholder="Ask your personal AI... (try 'Draft an email about...')" onkeydown="handleKey(event)"></textarea>
       <button id="send" onclick="sendMessage()">Send</button>
     </div>
   </footer>
   <div id="toast" class="toast"></div>
+  
+  <!-- Email recipient modal -->
+  <div id="emailModal" class="modal-overlay">
+    <div class="modal">
+      <h3>📧 Open in Email Client</h3>
+      <input type="email" id="recipientInput" placeholder="Enter recipient email address">
+      <div class="modal-buttons">
+        <button class="cancel" onclick="closeModal()">Cancel</button>
+        <button class="confirm" onclick="openEmailClient()">Open Email</button>
+      </div>
+    </div>
+  </div>
+  
   <script>
     const API = 'http://localhost:8080';
     const messagesDiv = document.getElementById('messages');
@@ -138,6 +219,7 @@
     const syncBtn = document.getElementById('syncBtn');
     let isLoading = false, isSyncing = false, writeStyleEnabled = true;
     let conversationHistory = [];
+    let currentEmailContent = null;
 
     function checkHealth() {
       fetch(`${API}/health`).then(r => r.json()).then(data => {
@@ -168,7 +250,7 @@
 
     function newChat() {
       conversationHistory = [];
-      messagesDiv.innerHTML = `<div class="welcome"><h2>Welcome!</h2><p>Ask me anything about your emails, projects, blogs, or transcripts.</p><p style="margin-top: 0.5rem; font-size: 0.85rem;">Toggle "Write like me" for emails in your personal style.</p><div class="suggestions"><button onclick="suggest('Write an email about the i.MX demo status')">i.MX demo email</button><button onclick="suggest('What ARM projects have I worked on?')">ARM projects</button><button onclick="suggest('Draft an email about project delays')">Delay email</button></div></div>`;
+      messagesDiv.innerHTML = `<div class="welcome"><h2>Welcome!</h2><p>Ask me anything about your emails, projects, blogs, or transcripts.</p><p style="margin-top: 0.5rem; font-size: 0.85rem;">Toggle "Write like me" for emails in your personal style.</p><div class="suggestions"><button onclick="suggest('Draft an email about the i.MX demo status')">📧 i.MX demo email</button><button onclick="suggest('What ARM projects have I worked on?')">🔍 ARM projects</button><button onclick="suggest('Write an email following up on project delays')">📧 Delay follow-up</button></div></div>`;
       showToast('✨ New conversation started');
     }
 
@@ -194,6 +276,95 @@
     function suggest(text) { input.value = text; sendMessage(); }
     function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
 
+    // Check if response looks like an email
+    function isEmailResponse(text) {
+      const emailIndicators = [
+        /^subject:/im,
+        /^dear\s+/im,
+        /^hi\s+\w+,/im,
+        /^hello\s+\w+,/im,
+        /best regards,?$/im,
+        /sincerely,?$/im,
+        /\[your name\]/im,
+        /\[your position\]/im
+      ];
+      return emailIndicators.some(pattern => pattern.test(text));
+    }
+
+    // Parse email content to extract subject and body
+    function parseEmail(text) {
+      let subject = '';
+      let body = text;
+      
+      const subjectMatch = text.match(/^subject:\s*(.+)$/im);
+      if (subjectMatch) {
+        subject = subjectMatch[1].trim();
+        body = text.replace(/^subject:\s*.+\n*/im, '').trim();
+      }
+      
+      return { subject, body };
+    }
+
+    // Copy email to clipboard
+    async function copyEmail(btn, content) {
+      try {
+        await navigator.clipboard.writeText(content);
+        btn.classList.add('success');
+        btn.innerHTML = '✓ Copied!';
+        showToast('📋 Copied to clipboard');
+        setTimeout(() => {
+          btn.classList.remove('success');
+          btn.innerHTML = '📋 Copy';
+        }, 2000);
+      } catch (err) {
+        showToast('❌ Failed to copy');
+      }
+    }
+
+    // Save email as file
+    function saveEmail(content) {
+      const { subject, body } = parseEmail(content);
+      const filename = subject ? subject.replace(/[^a-z0-9]/gi, '_').substring(0, 50) + '.txt' : 'email_draft.txt';
+      const fullContent = subject ? `Subject: ${subject}\n\n${body}` : content;
+      
+      const blob = new Blob([fullContent], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('💾 Saved as ' + filename);
+    }
+
+    // Show modal to get recipient
+    function showEmailModal(content) {
+      currentEmailContent = content;
+      document.getElementById('emailModal').classList.add('show');
+      document.getElementById('recipientInput').focus();
+    }
+
+    function closeModal() {
+      document.getElementById('emailModal').classList.remove('show');
+      currentEmailContent = null;
+    }
+
+    // Open in email client via mailto
+    function openEmailClient() {
+      const recipient = document.getElementById('recipientInput').value.trim();
+      const { subject, body } = parseEmail(currentEmailContent);
+      
+      const params = new URLSearchParams();
+      if (subject) params.set('subject', subject);
+      params.set('body', body);
+      
+      const mailto = `mailto:${recipient}?${params.toString()}`;
+      window.open(mailto, '_blank');
+      
+      closeModal();
+      showToast('📧 Opened in email client');
+    }
+
     function addMessage(role, content, context, tokens, usedStyle, citations) {
       const welcome = messagesDiv.querySelector('.welcome');
       if (welcome) welcome.remove();
@@ -201,6 +372,10 @@
       div.className = `message ${role}`;
       let html = content;
       if (usedStyle && role === 'assistant') html += `<span class="style-tag">✍️ Your style</span>`;
+      
+      // Check if this is an email response
+      const isEmail = role === 'assistant' && isEmailResponse(content);
+      
       if (citations && citations.length) {
         html += `<details><summary>📚 Sources (${citations.length})</summary>`;
         citations.forEach(c => { 
@@ -219,11 +394,24 @@
         html += '</details>';
       }
       if (tokens) html += `<div class="meta">${tokens} tokens</div>`;
+      
+      // Add email action buttons if this is an email
+      if (isEmail) {
+        const escapedContent = content.replace(/'/g, "\\'").replace(/\n/g, "\\n");
+        html += `
+          <div class="email-actions">
+            <button onclick="copyEmail(this, '${escapedContent}')">📋 Copy</button>
+            <button onclick="saveEmail('${escapedContent}')">💾 Save</button>
+            <button onclick="showEmailModal('${escapedContent}')">📧 Open in Email</button>
+          </div>
+        `;
+      }
+      
       div.innerHTML = html;
       messagesDiv.appendChild(div);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
-
+    
     function showTyping() {
       const div = document.createElement('div');
       div.id = 'typing';
@@ -233,7 +421,7 @@
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
     function hideTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
-
+    
     async function sendMessage() {
       const text = input.value.trim();
       if (!text || isLoading) return;
@@ -247,14 +435,14 @@
         const isWriteRequest = /email|draft|write|message to/i.test(text);
         let prompt = text;
         if (writeStyleEnabled && isWriteRequest) {
-          prompt = `### Instruction:\n${text}\n\n### Response:\n`;
+          prompt = `### Instruction:\n${text}\n\nInclude a subject line at the start in the format 'Subject: ...'\n\n### Response:\n`;
         }
         const res = await fetch(`${API}/generate`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             prompt: prompt,
-            max_tokens: 500,
+            max_tokens: 800,
             use_rag: true,
             rag_k: 3,
             conversation_history: conversationHistory.slice(0, -1)
@@ -272,6 +460,21 @@
       sendBtn.disabled = false;
       input.focus();
     }
+    
+    // Close modal on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+    
+    // Close modal on overlay click
+    document.getElementById('emailModal').addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) closeModal();
+    });
+    
+    // Enter to confirm in modal
+    document.getElementById('recipientInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') openEmailClient();
+    });
   </script>
 </body>
 </html>
