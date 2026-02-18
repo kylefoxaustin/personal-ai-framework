@@ -1,144 +1,171 @@
 # 🧠 Personal AI Framework
 
-A private, local AI assistant that knows your work and writes like you.
+Your private AI assistant that knows your emails, projects, writing style, and technical documents. Runs 100% locally on your hardware.
 
-![Status](https://img.shields.io/badge/status-working-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
+![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
 
-- **📚 Knowledge Base** - Ingest your emails, documents, and notes
-- **🔍 Smart Search** - RAG-powered retrieval finds relevant context
-- **✍️ Your Voice** - Fine-tune to write emails in your style
-- **💬 Chat Memory** - Multi-turn conversations with context
-- **🔄 Auto Sync** - Detects file changes automatically
-- **🔒 100% Local** - No cloud, no data sharing, no API keys
+| Feature | Description |
+|---------|-------------|
+| **Personal Knowledge Base** | 61,000+ documents from emails, transcripts, blogs, datasheets |
+| **Your Writing Style** | LoRA fine-tuned on your emails - writes like you |
+| **Streaming Responses** | Real-time word-by-word output |
+| **Hybrid RAG Search** | BM25 + semantic + reranking for best results |
+| **Email Drafting** | Generate emails with one-click open in Gmail/Outlook |
+| **Meeting Summarizer** | Transcribe audio/video with Whisper + summarize |
+| **Document Generator** | Create specs, proposals, reports from your knowledge |
+| **Datasheet Ingestion** | Ingest PDFs - reference manuals, app notes |
+| **Daily Digest** | Automated morning summary of your AI activity |
+| **Web UI** | Clean interface with settings panel |
+
+## 🖥️ Requirements
+
+- **GPU**: NVIDIA RTX 3080+ (16GB+ VRAM recommended)
+- **RAM**: 32GB+
+- **Storage**: 50GB+ for models and knowledge base
+- **OS**: Ubuntu 22.04+ (or similar Linux)
 
 ## 🚀 Quick Start
 ```bash
-# Clone and setup
+# Clone the repo
 git clone https://github.com/kylefoxaustin/personal-ai-framework.git
 cd personal-ai-framework
+
+# Run setup (installs dependencies, creates config)
 ./setup.sh
 
-# Add your documents
-cp ~/Documents/*.pdf knowledge/documents/
-cp ~/emails/*.eml knowledge/emails/
+# Download model (Mixtral 8x7B Q4)
+./run.sh download-model
 
-# Start and ingest
+# Start services
 ./run.sh start
-./run.sh ingest
 
 # Open web UI
-cd web && python3 -m http.server 3000
-# Visit http://localhost:3000
+xdg-open http://localhost:3000
 ```
-
-## 📋 Requirements
-
-| Component | Requirement |
-|-----------|-------------|
-| GPU | NVIDIA 12GB+ VRAM |
-| RAM | 32GB+ |
-| OS | Ubuntu 22.04+ / WSL2 |
-| Docker | With nvidia-container-toolkit |
 
 ## 📁 Project Structure
 ```
 personal-ai-framework/
-├── knowledge/          # Your documents (gitignored)
-│   ├── emails/         # Email exports
-│   ├── documents/      # PDFs, docs
-│   ├── writing/        # Your blog posts, articles
-│   └── projects/       # Code, READMEs
-├── models/             # AI models
-├── pipeline/           # Core services
-├── training/           # LoRA fine-tuning
-├── web/                # Chat interface
-├── config.yaml         # Configuration
-├── setup.sh            # First-time setup
-└── run.sh              # Daily operations
+├── docker/                 # Docker configurations
+├── knowledge/              # Your knowledge base
+│   ├── documents/          # General documents
+│   ├── emails/             # Exported emails (.eml, .mbox)
+│   ├── transcripts/        # Meeting/video transcripts
+│   ├── datasheets/         # PDF datasheets & manuals
+│   └── writing/            # Your blog posts, articles
+├── pipeline/               # Core Python services
+│   ├── llm_server.py       # FastAPI LLM server
+│   ├── rag_service.py      # ChromaDB RAG
+│   ├── advanced_rag.py     # Hybrid search + reranking
+│   ├── meeting_summarizer.py
+│   ├── doc_generator.py
+│   ├── email_service.py
+│   ├── daily_digest.py
+│   └── settings_manager.py
+├── web/                    # Web UI
+├── training/               # LoRA fine-tuning
+└── run.sh                  # Main CLI
 ```
 
-## 🎯 Commands
+## 🛠️ Commands
 
-| Command | Description |
-|---------|-------------|
-| `./run.sh start` | Start all services |
-| `./run.sh stop` | Stop all services |
-| `./run.sh ingest` | Add documents to knowledge base |
-| `./run.sh sync-now` | Sync file changes |
-| `./run.sh watch` | Auto-sync on file changes |
-| `./run.sh logs` | View server logs |
-| `./run.sh status` | Check service health |
-
-## 🎨 Web Interface
-
-Access at `http://localhost:3000` after starting services.
-
-Features:
-- **New Chat** - Start fresh conversation
-- **Sync** - Update knowledge base
-- **Write Like Me** - Toggle your personal writing style
-
-## 📖 Documentation
-
-- **[Quick Start](docs/QUICKSTART.md)** - Get running in 15 minutes
-- **[Full Install Guide](docs/FRESH_INSTALL_GUIDE.md)** - Detailed setup instructions
-- **[FAQ](docs/FAQ.md)** - Common questions answered
-- **[Architecture](docs/ARCHITECTURE.md)** - Technical details
-
-## 🔧 Training Your Writing Style
-
-Make the AI write like you:
+### Basic Operations
 ```bash
-# Prepare data from sent emails
-python3 training/prepare_training_data.py
-
-# Train (~3 hours on RTX 4090)
-docker compose stop llm-server
-python3 training/train_lora.py
-
-# Deploy trained model
-python3 training/merge_lora.py
-# See docs for quantization steps
+./run.sh start              # Start all services
+./run.sh stop               # Stop all services
+./run.sh status             # Check service status
+./run.sh logs               # View logs
 ```
 
-## 📊 Performance
+### Knowledge Base
+```bash
+./run.sh sync               # Sync knowledge base
+./run.sh ingest-datasheets  # Ingest PDF datasheets
+./run.sh ingest-emails      # Ingest email exports
+```
 
-| GPU | Inference | Training (10K examples) |
-|-----|-----------|-------------------------|
-| RTX 3090 | ~80 tok/s | ~4 hours |
-| RTX 4090 | ~120 tok/s | ~2.5 hours |
-| RTX 5090 | ~150 tok/s | ~2 hours |
+### AI Features
+```bash
+# Email drafting
+./run.sh email draft "project status update" -t recipient@email.com
+./run.sh email draft "follow up on meeting" --open  # Opens in email client
 
-## 🔒 Privacy
+# Document generation
+./run.sh generate technical_spec "i.MX display system"
+./run.sh generate project_proposal "embedded AI project"
+./run.sh generate status_report "Q1 development progress"
 
-- All data stays on your machine
-- No cloud services or API keys required
-- Models run 100% locally
-- Knowledge base is gitignored
+# Meeting summarization
+./run.sh summarize recording.mp4 -t "Team Meeting" --add-to-kb
 
-## 🙏 Built With
+# Daily digest
+./run.sh digest                          # Print digest
+./run.sh digest -m mailto -t you@email.com  # Open in email client
+./run.sh digest --schedule 08:00 -t you@email.com  # Schedule daily
+```
 
-- [llama-cpp-python](https://github.com/abetlen/llama-cpp-python) - LLM inference
+## 🌐 Web UI
+
+Access at `http://localhost:3000`
+
+- **Chat**: Ask questions, get answers from your knowledge base
+- **Email Drafting**: Type "Draft an email about..." → Copy/Save/Open buttons
+- **Streaming**: Responses appear word-by-word in real-time
+- **Settings** (⚙️): Configure digest, sync, view email provider status
+
+## 📊 Architecture
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Web UI    │────▶│  LLM Server │────▶│  Mixtral    │
+│  :3000      │     │  :8080      │     │  8x7B Q4    │
+└─────────────┘     └──────┬──────┘     └─────────────┘
+                          │
+                          ▼
+                   ┌─────────────┐
+                   │  ChromaDB   │
+                   │  (RAG)      │
+                   │  61K+ docs  │
+                   └─────────────┘
+```
+
+## 🔧 Configuration
+
+Settings are stored in `~/.personal-ai/settings.json` and can be configured via:
+- Web UI Settings panel (⚙️ button)
+- CLI commands
+- Direct file editing
+
+Key settings:
+- **Daily Digest**: Enable, time, email address
+- **Auto-Sync**: Enable, interval (1/4/12/24 hours)
+- **Context Window**: 8K/16K/32K tokens
+
+## 📈 Performance
+
+Tested on RTX 5090 (32GB VRAM):
+- **Inference**: ~30 tokens/sec
+- **Context**: 16K tokens default (32K max)
+- **Knowledge Base**: 61,500 documents
+- **Datasheet Ingestion**: 37 PDFs (6,129 chunks) in ~5 min
+
+## 🏷️ Versions
+
+- **v2.0.0** - Advanced Features (streaming, settings UI, daily digest, datasheets)
+- **v1.0.0** - Initial Release (RAG, email drafting, LoRA training)
+
+## 📝 License
+
+MIT License - Use freely for personal projects.
+
+## 🙏 Acknowledgments
+
+- [Mixtral 8x7B](https://mistral.ai/) - Base model
+- [llama.cpp](https://github.com/ggerganov/llama.cpp) - Efficient inference
 - [ChromaDB](https://www.trychroma.com/) - Vector database
-- [PEFT](https://github.com/huggingface/peft) - LoRA fine-tuning
-- [Mistral](https://mistral.ai/) - Base model
-## Maintainer
-
-**Kyle** - [@kylefoxaustin](https://github.com/kylefoxaustin)
-
-- ARM SoC Development
-- Embedded Systems & AI/ML
-- Austin, Texas
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-```
-MIT License
+- [OpenAI Whisper](https://github.com/openai/whisper) - Audio transcription
 
 ---
 
