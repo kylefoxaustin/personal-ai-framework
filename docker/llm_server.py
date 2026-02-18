@@ -15,6 +15,7 @@ from pydantic import BaseModel
 from llama_cpp import Llama
 from rag_service import get_rag_service, Document
 from advanced_rag import AdvancedRAG
+from settings_manager import get_all_settings, apply_settings, load_settings, save_settings
 
 # Global advanced RAG instance
 _advanced_rag = None
@@ -402,6 +403,97 @@ def sync_now():
     except Exception as e:
         return {"status": "error", "error": str(e)}
 
+# Settings endpoints
+class SettingsUpdate(BaseModel):
+    digest: Optional[dict] = None
+    sync: Optional[dict] = None
+    model: Optional[dict] = None
+
+@app.get("/settings")
+def get_settings():
+    """Get all settings"""
+    return get_all_settings()
+
+@app.post("/settings")
+def update_settings(settings: SettingsUpdate):
+    """Update settings"""
+    current = load_settings()
+    
+    if settings.digest:
+        current["digest"].update(settings.digest)
+    if settings.sync:
+        current["sync"].update(settings.sync)
+    if settings.model:
+        current["model"].update(settings.model)
+    
+    result = apply_settings(current)
+    return {
+        "status": "ok" if result["saved"] else "error",
+        "result": result,
+        "settings": get_all_settings()
+    }
+
+@app.post("/settings/sync-now")
+def trigger_sync():
+    """Trigger immediate sync"""
+    import subprocess
+    try:
+        result = subprocess.run(
+            ['python3', '/app/sync_service.py', '--once'],
+            capture_output=True,
+            text=True,
+            timeout=300
+        )
+        return {"status": "ok", "output": result.stdout}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8080)
+
+# Settings endpoints
+
+class SettingsUpdate(BaseModel):
+    digest: Optional[dict] = None
+    sync: Optional[dict] = None
+    model: Optional[dict] = None
+
+@app.get("/settings")
+def get_settings():
+    """Get all settings"""
+    return get_all_settings()
+
+@app.post("/settings")
+def update_settings(settings: SettingsUpdate):
+    """Update settings"""
+    current = load_settings()
+    
+    if settings.digest:
+        current["digest"].update(settings.digest)
+    if settings.sync:
+        current["sync"].update(settings.sync)
+    if settings.model:
+        current["model"].update(settings.model)
+    
+    result = apply_settings(current)
+    return {
+        "status": "ok" if result["saved"] else "error",
+        "result": result,
+        "settings": get_all_settings()
+    }
+
+@app.post("/settings/sync-now")
+def trigger_sync():
+    """Trigger immediate sync"""
+    import subprocess
+    try:
+        result = subprocess.run(
+            ['python3', '/app/sync_service.py', '--once'],
+            capture_output=True,
+            text=True,
+            timeout=300
+        )
+        return {"status": "ok", "output": result.stdout}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}

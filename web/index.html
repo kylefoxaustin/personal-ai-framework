@@ -89,6 +89,142 @@
     .toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: #16213e; border: 1px solid #1a4a7a; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100; }
     .toast.show { opacity: 1; }
     
+    /* Settings panel */
+    .settings-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+    }
+    .settings-overlay.show { display: flex; }
+    .settings-panel {
+      background: #16213e;
+      border: 1px solid #0f3460;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .settings-panel h2 {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .settings-panel h2 button {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .settings-section {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #0f3460;
+    }
+    .settings-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    .settings-section h3 {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .setting-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .setting-row label {
+      flex: 1;
+      font-size: 0.9rem;
+    }
+    .setting-row input[type="text"],
+    .setting-row input[type="email"],
+    .setting-row input[type="time"],
+    .setting-row select {
+      padding: 0.5rem;
+      border: 1px solid #0f3460;
+      border-radius: 0.4rem;
+      background: #1a1a2e;
+      color: #eee;
+      font-size: 0.9rem;
+      width: 150px;
+    }
+    .setting-row input:focus,
+    .setting-row select:focus {
+      outline: none;
+      border-color: #e94560;
+    }
+    .toggle-small {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: #0f3460;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .toggle-small.active { background: #e94560; }
+    .toggle-small::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    .toggle-small.active::after { transform: translateX(20px); }
+    .status-badge {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 1rem;
+    }
+    .status-badge.connected { background: #166534; color: #4ade80; }
+    .status-badge.disconnected { background: #7f1d1d; color: #fca5a5; }
+    .settings-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    .settings-actions button {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .btn-primary {
+      background: #e94560;
+      border: none;
+      color: white;
+    }
+    .btn-primary:hover { background: #ff6b6b; }
+    .btn-secondary {
+      background: #0f3460;
+      border: 1px solid #1a4a7a;
+      color: #eee;
+    }
+    .btn-secondary:hover { background: #1a4a7a; }
+    
     /* Streaming cursor */
     .cursor {
       animation: blink 1s infinite;
@@ -177,6 +313,7 @@
     <div class="header-right">
       <button class="header-btn" onclick="newChat()">✨ New</button>
       <button id="syncBtn" class="header-btn" onclick="syncNow()">🔄 Sync</button>
+      <button class="header-btn" onclick="openSettings()">⚙️</button>
       <div class="stats">
         <span id="status" class="status">● Connecting...</span>
         <span id="docs" class="docs"></span>
@@ -224,6 +361,75 @@
     </div>
   </div>
   
+
+  <!-- Settings Panel -->
+  <div id="settingsOverlay" class="settings-overlay">
+    <div class="settings-panel">
+      <h2>
+        ⚙️ Settings
+        <button onclick="closeSettings()">✕</button>
+      </h2>
+      
+      <div class="settings-section">
+        <h3>📬 Daily Digest</h3>
+        <div class="setting-row">
+          <label>Enable daily digest</label>
+          <div id="digestToggle" class="toggle-small" onclick="toggleSetting('digest')"></div>
+        </div>
+        <div class="setting-row">
+          <label>Send time</label>
+          <input type="time" id="digestTime" value="08:00">
+        </div>
+        <div class="setting-row">
+          <label>Email address</label>
+          <input type="email" id="digestEmail" placeholder="you@email.com">
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <h3>🔄 Knowledge Base Sync</h3>
+        <div class="setting-row">
+          <label>Auto-sync enabled</label>
+          <div id="syncToggle" class="toggle-small" onclick="toggleSetting('sync')"></div>
+        </div>
+        <div class="setting-row">
+          <label>Sync interval</label>
+          <select id="syncInterval">
+            <option value="1">Every hour</option>
+            <option value="4">Every 4 hours</option>
+            <option value="12">Every 12 hours</option>
+            <option value="24">Once daily</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <button class="btn-secondary" onclick="triggerSync()" style="flex:none;width:auto;padding:0.5rem 1rem;">
+            🔄 Sync Now
+          </button>
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <h3>📧 Email Providers</h3>
+        <div class="setting-row">
+          <label>Gmail</label>
+          <span id="gmailStatus" class="status-badge disconnected">Not configured</span>
+        </div>
+        <div class="setting-row">
+          <label>Outlook</label>
+          <span id="outlookStatus" class="status-badge disconnected">Not configured</span>
+        </div>
+        <div class="setting-row" style="color:#94a3b8;font-size:0.8rem;">
+          Configure via CLI: ./run.sh email setup gmail
+        </div>
+      </div>
+      
+      <div class="settings-actions">
+        <button class="btn-secondary" onclick="closeSettings()">Cancel</button>
+        <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const API = 'http://localhost:8080';
     const messagesDiv = document.getElementById('messages');
@@ -584,6 +790,132 @@
     // Enter to confirm in modal
     document.getElementById('recipientInput').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') openEmailClient();
+    });
+
+    // Settings management
+    let currentSettings = {};
+    
+    async function openSettings() {
+      document.getElementById('settingsOverlay').classList.add('show');
+      await loadSettings();
+    }
+    
+    function closeSettings() {
+      document.getElementById('settingsOverlay').classList.remove('show');
+    }
+    
+    async function loadSettings() {
+      try {
+        const res = await fetch(`${API}/settings`);
+        currentSettings = await res.json();
+        
+        // Digest settings
+        document.getElementById('digestToggle').classList.toggle('active', currentSettings.digest?.enabled);
+        document.getElementById('digestTime').value = currentSettings.digest?.time || '08:00';
+        document.getElementById('digestEmail').value = currentSettings.digest?.email || '';
+        
+        // Sync settings
+        document.getElementById('syncToggle').classList.toggle('active', currentSettings.sync?.auto_enabled);
+        document.getElementById('syncInterval').value = currentSettings.sync?.interval_hours || '1';
+        
+        // Email provider status
+        const gmail = currentSettings.email_providers?.gmail;
+        const outlook = currentSettings.email_providers?.outlook;
+        
+        const gmailStatus = document.getElementById('gmailStatus');
+        if (gmail?.authenticated) {
+          gmailStatus.textContent = 'Connected';
+          gmailStatus.className = 'status-badge connected';
+        } else if (gmail?.configured) {
+          gmailStatus.textContent = 'Needs auth';
+          gmailStatus.className = 'status-badge disconnected';
+        } else {
+          gmailStatus.textContent = 'Not configured';
+          gmailStatus.className = 'status-badge disconnected';
+        }
+        
+        const outlookStatus = document.getElementById('outlookStatus');
+        if (outlook?.authenticated) {
+          outlookStatus.textContent = 'Connected';
+          outlookStatus.className = 'status-badge connected';
+        } else if (outlook?.configured) {
+          outlookStatus.textContent = 'Needs auth';
+          outlookStatus.className = 'status-badge disconnected';
+        } else {
+          outlookStatus.textContent = 'Not configured';
+          outlookStatus.className = 'status-badge disconnected';
+        }
+      } catch (err) {
+        console.error('Failed to load settings:', err);
+        showToast('❌ Failed to load settings');
+      }
+    }
+    
+    function toggleSetting(type) {
+      const toggle = document.getElementById(type + 'Toggle');
+      toggle.classList.toggle('active');
+    }
+    
+    async function saveSettings() {
+      const settings = {
+        digest: {
+          enabled: document.getElementById('digestToggle').classList.contains('active'),
+          time: document.getElementById('digestTime').value,
+          email: document.getElementById('digestEmail').value
+        },
+        sync: {
+          auto_enabled: document.getElementById('syncToggle').classList.contains('active'),
+          interval_hours: parseInt(document.getElementById('syncInterval').value)
+        }
+      };
+      
+      try {
+        const res = await fetch(`${API}/settings`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(settings)
+        });
+        const result = await res.json();
+        
+        if (result.status === 'ok') {
+          showToast('✅ Settings saved!');
+          closeSettings();
+        } else {
+          showToast('❌ Failed to save settings');
+        }
+      } catch (err) {
+        console.error('Failed to save settings:', err);
+        showToast('❌ Failed to save settings');
+      }
+    }
+    
+    async function triggerSync() {
+      showToast('🔄 Syncing...');
+      try {
+        const res = await fetch(`${API}/settings/sync-now`, { method: 'POST' });
+        const result = await res.json();
+        if (result.status === 'ok') {
+          showToast('✅ Sync complete!');
+          checkHealth();
+        } else {
+          showToast('⚠️ Sync had issues');
+        }
+      } catch (err) {
+        showToast('❌ Sync failed');
+      }
+    }
+    
+    // Close settings on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeSettings();
+        closeModal();
+      }
+    });
+    
+    // Close on overlay click
+    document.getElementById('settingsOverlay').addEventListener('click', (e) => {
+      if (e.target.classList.contains('settings-overlay')) closeSettings();
     });
   </script>
 </body>
