@@ -9,7 +9,7 @@ Your private AI assistant that knows your emails, projects, writing style, and t
 
 | Feature | Description |
 |---------|-------------|
-| **Personal Knowledge Base** | 61,000+ documents from emails, transcripts, blogs, datasheets |
+| **Personal Knowledge Base** | Your documents -- emails, transcripts, blogs, audio recordings, datasheets |
 | **Your Writing Style** | LoRA fine-tuned on your emails - writes like you |
 | **Streaming Responses** | Real-time word-by-word output |
 | **Hybrid RAG Search** | BM25 + semantic + reranking for best results |
@@ -155,6 +155,10 @@ Tested on RTX 5090 (32GB VRAM):
 
 - **v2.0.0** - Advanced Features (streaming, settings UI, daily digest, datasheets)
 - **v1.0.0** - Initial Release (RAG, email drafting, LoRA training)
+
+## Author
+
+**Kyle Fox** - [GitHub](https://github.com/kylefoxaustin)
 
 ## 📝 License
 
