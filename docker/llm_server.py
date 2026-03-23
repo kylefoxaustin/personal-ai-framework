@@ -18,6 +18,8 @@ from llama_cpp import Llama
 from rag_service import get_rag_service, Document
 from advanced_rag import AdvancedRAG
 from settings_manager import get_all_settings, apply_settings, load_settings, save_settings
+from conversation_store import get_conversation_store
+from memory_service import get_memory_service
 
 # Global advanced RAG instance
 _advanced_rag = None
@@ -150,8 +152,21 @@ def generate(request: GenerationRequest):
     
     # Auto-retrieve context from RAG if enabled and no manual context provided
     citations = None
+    memory_context = []
+    
     if request.use_rag and not context_docs:
         try:
+            # Search conversation memory first
+            try:
+                memory = get_memory_service()
+                memory_docs, memory_citations = memory.get_memory_context(request.prompt, k=2)
+                if memory_docs:
+                    memory_context = memory_docs
+                    print(f"Found {len(memory_docs)} relevant past conversations")
+            except Exception as e:
+                print(f"Memory search failed (ok if empty): {e}")
+            
+            # Then search knowledge base
             advanced_rag = get_advanced_rag()
             if advanced_rag:
                 # Use hybrid search with reranking
@@ -166,12 +181,19 @@ def generate(request: GenerationRequest):
             print(f"RAG retrieval failed: {e}")
             context_docs = []
     
-    # Build prompt with RAG context if available
+    # Build prompt with memory and RAG context
     full_prompt = ""
     
-    # Add RAG context first
+    # Add memory context (past conversations) first
+    if memory_context:
+        full_prompt = "From our previous conversations:\n\n"
+        for doc in memory_context:
+            full_prompt += f"{doc}\n\n"
+        full_prompt += "---\n\n"
+    
+    # Add RAG context (knowledge base)
     if context_docs:
-        full_prompt = "Use the following context to help answer the query:\n\n"
+        full_prompt += "Relevant information from your knowledge base:\n\n"
         for i, doc in enumerate(context_docs[:3], 1):
             full_prompt += f"[{i}] {doc}\n\n"
         full_prompt += "---\n\n"
@@ -216,8 +238,21 @@ def generate_stream(request: StreamingRequest):
     citations = None
     
     # Auto-retrieve context from RAG if enabled
+    memory_context = []
+    
     if request.use_rag and not context_docs:
         try:
+            # Search conversation memory first
+            try:
+                memory = get_memory_service()
+                memory_docs, memory_citations = memory.get_memory_context(request.prompt, k=2)
+                if memory_docs:
+                    memory_context = memory_docs
+                    print(f"Found {len(memory_docs)} relevant past conversations")
+            except Exception as e:
+                print(f"Memory search failed (ok if empty): {e}")
+            
+            # Then search knowledge base
             advanced_rag = get_advanced_rag()
             if advanced_rag:
                 context_docs, citations = advanced_rag.get_context_with_citations(
@@ -230,11 +265,19 @@ def generate_stream(request: StreamingRequest):
             print(f"RAG retrieval failed: {e}")
             context_docs = []
     
-    # Build prompt with RAG context
+    # Build prompt with memory and RAG context
     full_prompt = ""
     
+    # Add memory context (past conversations) first
+    if memory_context:
+        full_prompt = "From our previous conversations:\n\n"
+        for doc in memory_context:
+            full_prompt += f"{doc}\n\n"
+        full_prompt += "---\n\n"
+    
+    # Add RAG context (knowledge base)
     if context_docs:
-        full_prompt = "Use the following context to help answer the query:\n\n"
+        full_prompt += "Relevant information from your knowledge base:\n\n"
         for i, doc in enumerate(context_docs[:3], 1):
             full_prompt += f"[{i}] {doc}\n\n"
         full_prompt += "---\n\n"
@@ -767,6 +810,74 @@ def create_draft(request: EmailRequest):
         return {"status": "draft_created", "draft_id": draft_id, "url": gmail_url}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+# Conversation History Endpoints
+@app.post("/conversations")
+def create_conversation(title: str = None):
+    """Create a new conversation"""
+    store = get_conversation_store()
+    conv_id = store.create_conversation(title)
+    return {"id": conv_id, "title": title}
+
+
+@app.get("/conversations")
+def list_conversations(limit: int = 50, offset: int = 0):
+    """List recent conversations"""
+    store = get_conversation_store()
+    return {"conversations": store.list_conversations(limit, offset)}
+
+
+@app.get("/conversations/{conv_id}")
+def get_conversation(conv_id: str):
+    """Get full conversation with messages"""
+    store = get_conversation_store()
+    conv = store.get_conversation(conv_id)
+    if not conv:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    return conv
+
+
+@app.post("/conversations/{conv_id}/messages")
+def add_message(conv_id: str, role: str, content: str, tokens_used: int = None):
+    """Add message to conversation"""
+    store = get_conversation_store()
+    store.add_message(conv_id, role, content, tokens_used)
+    return {"status": "ok"}
+
+
+@app.delete("/conversations/{conv_id}")
+def delete_conversation(conv_id: str):
+    """Delete a conversation"""
+    store = get_conversation_store()
+    store.delete_conversation(conv_id)
+    return {"status": "deleted"}
+
+
+@app.post("/conversations/{conv_id}/ingest")
+def ingest_conversation(conv_id: str):
+    """Ingest conversation to memory (RAG)"""
+    memory = get_memory_service()
+    chunks = memory.ingest_conversation(conv_id)
+    return {"status": "ingested", "chunks_added": chunks}
+
+
+@app.post("/memory/ingest-all")
+def ingest_all_conversations():
+    """Ingest all pending conversations to memory"""
+    memory = get_memory_service()
+    result = memory.ingest_all_pending()
+    return result
+
+
+@app.get("/memory/search")
+def search_memory(query: str, k: int = 3):
+    """Search conversation memory"""
+    memory = get_memory_service()
+    results = memory.search_memory(query, k)
+    return {"results": results}
 
 
 if __name__ == "__main__":
