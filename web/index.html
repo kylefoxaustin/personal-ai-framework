@@ -701,8 +701,8 @@
         html += `
           <div class="email-actions">
             <button onclick="copyEmail(this, '${escapedContent}')">📋 Copy</button>
-            <button onclick="saveEmail('${escapedContent}')">💾 Save</button>
-            <button onclick="showEmailModal('${escapedContent}')">📧 Open in Email</button>
+            <button onclick="sendEmailDirect(this, '${escapedContent}')">📧 Send</button>
+            <button onclick="createDraft(this, '${escapedContent}')">📝 Draft</button>
           </div>
         `;
       }
@@ -848,8 +848,8 @@
         html += `
           <div class="email-actions">
             <button onclick="copyEmail(this, '${escapedContent}')">📋 Copy</button>
-            <button onclick="saveEmail('${escapedContent}')">💾 Save</button>
-            <button onclick="showEmailModal('${escapedContent}')">📧 Open in Email</button>
+            <button onclick="sendEmailDirect(this, '${escapedContent}')">📧 Send</button>
+            <button onclick="createDraft(this, '${escapedContent}')">📝 Draft</button>
           </div>
         `;
       }
@@ -1166,6 +1166,86 @@
     document.getElementById('emailSetupOverlay').addEventListener('click', (e) => {
       if (e.target.classList.contains('settings-overlay')) closeEmailSetup();
     });
+
+
+    // Send email directly via Gmail API
+    async function sendEmailDirect(btn, content) {
+      const recipient = prompt('Enter recipient email address:');
+      if (!recipient) return;
+      
+      const { subject, body } = parseEmail(content.replace(/\\n/g, '\n').replace(/\\'/g, "'"));
+      
+      btn.disabled = true;
+      btn.innerHTML = '⏳ Sending...';
+      
+      try {
+        const response = await fetch(`${API}/email/send`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ to: recipient, subject: subject || 'Message from Personal AI', body: body })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+          btn.classList.add('success');
+          btn.innerHTML = '✓ Sent!';
+          showToast('📧 Email sent to ' + recipient);
+          setTimeout(() => {
+            btn.classList.remove('success');
+            btn.innerHTML = '📧 Send';
+            btn.disabled = false;
+          }, 3000);
+        } else {
+          throw new Error(result.detail || 'Send failed');
+        }
+      } catch (err) {
+        btn.innerHTML = '📧 Send';
+        btn.disabled = false;
+        showToast('❌ ' + err.message);
+      }
+    }
+    
+    // Create draft and open in Gmail
+    async function createDraft(btn, content) {
+      const recipient = prompt('Enter recipient email address (or leave blank):') || '';
+      
+      const { subject, body } = parseEmail(content.replace(/\\n/g, '\n').replace(/\\'/g, "'"));
+      
+      btn.disabled = true;
+      btn.innerHTML = '⏳ Creating...';
+      
+      try {
+        const response = await fetch(`${API}/email/draft`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ to: recipient, subject: subject || 'Draft from Personal AI', body: body })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+          btn.classList.add('success');
+          btn.innerHTML = '✓ Draft created!';
+          showToast('📝 Draft created - opening Gmail...');
+          
+          // Open Gmail to the draft
+          window.open(result.url, '_blank');
+          
+          setTimeout(() => {
+            btn.classList.remove('success');
+            btn.innerHTML = '📝 Draft';
+            btn.disabled = false;
+          }, 3000);
+        } else {
+          throw new Error(result.detail || 'Draft creation failed');
+        }
+      } catch (err) {
+        btn.innerHTML = '📝 Draft';
+        btn.disabled = false;
+        showToast('❌ ' + err.message);
+      }
+    }
 
   </script>
 </body>
