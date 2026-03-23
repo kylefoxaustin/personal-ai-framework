@@ -692,6 +692,83 @@ def disconnect_email(provider: str):
 
 
 # This must be at the very end
+
+from pydantic import BaseModel as PydanticBaseModel
+
+class EmailRequest(PydanticBaseModel):
+    to: str
+    subject: str
+    body: str
+
+
+@app.post("/email/send")
+def send_email(request: EmailRequest):
+    """Send email directly via Gmail API"""
+    import pickle
+    import base64
+    from email.mime.text import MIMEText
+    from googleapiclient.discovery import build
+    
+    token_file = EMAIL_CONFIG_DIR / "gmail_token.pickle"
+    if not token_file.exists():
+        raise HTTPException(status_code=400, detail="Gmail not connected")
+    
+    with open(token_file, 'rb') as f:
+        creds = pickle.load(f)
+    
+    service = build('gmail', 'v1', credentials=creds)
+    
+    message = MIMEText(request.body)
+    message['to'] = request.to
+    message['subject'] = request.subject
+    raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
+    
+    try:
+        service.users().messages().send(userId='me', body={'raw': raw}).execute()
+        return {"status": "sent", "to": request.to}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/email/draft")
+def create_draft(request: EmailRequest):
+    """Create Gmail draft and return URL to open it"""
+    import pickle
+    import base64
+    from email.mime.text import MIMEText
+    from googleapiclient.discovery import build
+    
+    token_file = EMAIL_CONFIG_DIR / "gmail_token.pickle"
+    if not token_file.exists():
+        raise HTTPException(status_code=400, detail="Gmail not connected")
+    
+    with open(token_file, 'rb') as f:
+        creds = pickle.load(f)
+    
+    service = build('gmail', 'v1', credentials=creds)
+    
+    message = MIMEText(request.body)
+    message['to'] = request.to
+    message['subject'] = request.subject
+    raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
+    
+    try:
+        draft = service.users().drafts().create(
+            userId='me', 
+            body={'message': {'raw': raw}}
+        ).execute()
+        
+        draft_id = draft['id']
+        message_id = draft.get('message', {}).get('id', '')
+        
+        # Gmail URL to open the draft for editing
+        gmail_url = f"https://mail.google.com/mail/u/0/#drafts?compose={message_id}"
+        
+        return {"status": "draft_created", "draft_id": draft_id, "url": gmail_url}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8080)
