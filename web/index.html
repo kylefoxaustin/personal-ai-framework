@@ -224,6 +224,40 @@
       color: #eee;
     }
     .btn-secondary:hover { background: #1a4a7a; }
+    .btn-small {
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+      border-radius: 0.3rem;
+      background: #0f3460;
+      border: 1px solid #1a4a7a;
+      color: #eee;
+      cursor: pointer;
+    }
+    .btn-small:hover { background: #1a4a7a; }
+    .btn-small.disconnect { background: #7f1d1d; border-color: #991b1b; }
+    .btn-small.disconnect:hover { background: #991b1b; }
+    
+    /* Setup steps */
+    .setup-steps { margin-bottom: 1rem; }
+    .setup-step {
+      margin-bottom: 1.25rem;
+      padding: 1rem;
+      background: #1a1a2e;
+      border-radius: 0.5rem;
+      border-left: 3px solid #0f3460;
+    }
+    .setup-step h4 {
+      margin: 0 0 0.75rem 0;
+      font-size: 0.9rem;
+      color: #e94560;
+    }
+    .step-content {
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+    .step-content p { margin: 0 0 0.5rem 0; line-height: 1.5; }
+    .step-content ul { margin: 0.5rem 0; padding-left: 1.25rem; }
+    .step-content li { margin-bottom: 0.3rem; }
     
     /* Streaming cursor */
     .cursor {
@@ -413,13 +447,12 @@
         <div class="setting-row">
           <label>Gmail</label>
           <span id="gmailStatus" class="status-badge disconnected">Not configured</span>
+          <button class="btn-small" onclick="openEmailSetup('gmail')" id="gmailSetupBtn">Setup</button>
         </div>
         <div class="setting-row">
           <label>Outlook</label>
           <span id="outlookStatus" class="status-badge disconnected">Not configured</span>
-        </div>
-        <div class="setting-row" style="color:#94a3b8;font-size:0.8rem;">
-          Configure via CLI: ./run.sh email setup gmail
+          <button class="btn-small" onclick="openEmailSetup('outlook')" id="outlookSetupBtn">Setup</button>
         </div>
       </div>
       
@@ -429,6 +462,54 @@
       </div>
     </div>
   </div>
+
+  <!-- Email Setup Modal -->
+  <div id="emailSetupOverlay" class="settings-overlay">
+    <div class="settings-panel" style="max-width: 550px;">
+      <h2>
+        <span id="emailSetupTitle">📧 Setup Gmail</span>
+        <button onclick="closeEmailSetup()">✕</button>
+      </h2>
+      
+      <div class="setup-steps">
+        <div class="setup-step">
+          <h4>Step 1: Create OAuth Credentials</h4>
+          <div class="step-content">
+            <p id="setupInstructions">Loading instructions...</p>
+            <a id="consoleLink" href="#" target="_blank" class="btn-secondary" style="display:inline-block;margin-top:0.5rem;text-decoration:none;text-align:center;">
+              Open Console →
+            </a>
+          </div>
+        </div>
+        
+        <div class="setup-step">
+          <h4>Step 2: Upload Credentials File</h4>
+          <div class="step-content">
+            <input type="file" id="credentialsFile" accept=".json" style="display:none;" onchange="handleCredentialsUpload(event)">
+            <button class="btn-secondary" onclick="document.getElementById('credentialsFile').click()">
+              📁 Choose JSON File
+            </button>
+            <span id="uploadStatus" style="margin-left:0.5rem;font-size:0.85rem;"></span>
+          </div>
+        </div>
+        
+        <div class="setup-step">
+          <h4>Step 3: Connect Your Account</h4>
+          <div class="step-content">
+            <button id="connectBtn" class="btn-primary" onclick="startOAuth()" disabled>
+              🔐 Connect Account
+            </button>
+            <span id="connectStatus" style="margin-left:0.5rem;font-size:0.85rem;"></span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="settings-actions">
+        <button class="btn-secondary" onclick="closeEmailSetup()">Close</button>
+      </div>
+    </div>
+  </div>
+
 
   <script>
     const API = 'http://localhost:8080';
@@ -917,6 +998,175 @@
     document.getElementById('settingsOverlay').addEventListener('click', (e) => {
       if (e.target.classList.contains('settings-overlay')) closeSettings();
     });
+
+    // Email Setup
+    let currentEmailProvider = null;
+    
+    const emailInstructions = {
+      gmail: {
+        title: "📧 Setup Gmail",
+        consoleUrl: "https://console.cloud.google.com/apis/credentials",
+        instructions: `
+          <ul>
+            <li>Go to Google Cloud Console</li>
+            <li>Create a new project (or select existing)</li>
+            <li>Enable the <strong>Gmail API</strong></li>
+            <li>Go to Credentials → Create Credentials → OAuth client ID</li>
+            <li>Choose "Desktop app" as application type</li>
+            <li>Download the JSON file</li>
+          </ul>
+        `
+      },
+      outlook: {
+        title: "📧 Setup Outlook",
+        consoleUrl: "https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade",
+        instructions: `
+          <ul>
+            <li>Go to Azure Portal → App Registrations</li>
+            <li>Click "New registration"</li>
+            <li>Name it (e.g., "Personal AI")</li>
+            <li>Set redirect URI: <code>http://localhost:8080/email/oauth-callback/outlook</code></li>
+            <li>Go to Certificates & secrets → New client secret</li>
+            <li>Create a JSON file with client_id and client_secret</li>
+          </ul>
+        `
+      }
+    };
+    
+    function openEmailSetup(provider) {
+      currentEmailProvider = provider;
+      const info = emailInstructions[provider];
+      
+      document.getElementById('emailSetupTitle').textContent = info.title;
+      document.getElementById('consoleLink').href = info.consoleUrl;
+      document.getElementById('setupInstructions').innerHTML = info.instructions;
+      document.getElementById('uploadStatus').textContent = '';
+      document.getElementById('connectStatus').textContent = '';
+      document.getElementById('connectBtn').disabled = true;
+      document.getElementById('credentialsFile').value = '';
+      
+      document.getElementById('emailSetupOverlay').classList.add('show');
+    }
+    
+    function closeEmailSetup() {
+      document.getElementById('emailSetupOverlay').classList.remove('show');
+      currentEmailProvider = null;
+      loadSettings(); // Refresh status
+    }
+    
+    async function handleCredentialsUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const statusEl = document.getElementById('uploadStatus');
+      statusEl.textContent = '⏳ Uploading...';
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const res = await fetch(`${API}/email/upload-credentials/${currentEmailProvider}`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (res.ok) {
+          statusEl.textContent = '✅ Uploaded!';
+          statusEl.style.color = '#4ade80';
+          document.getElementById('connectBtn').disabled = false;
+        } else {
+          const err = await res.json();
+          statusEl.textContent = '❌ ' + (err.detail || 'Upload failed');
+          statusEl.style.color = '#f87171';
+        }
+      } catch (err) {
+        statusEl.textContent = '❌ Upload failed';
+        statusEl.style.color = '#f87171';
+      }
+    }
+    
+    async function startOAuth() {
+      const statusEl = document.getElementById('connectStatus');
+      statusEl.textContent = '⏳ Getting auth URL...';
+      
+      try {
+        const res = await fetch(`${API}/email/auth-url/${currentEmailProvider}`);
+        const data = await res.json();
+        
+        if (data.auth_url) {
+          statusEl.textContent = '🔐 Complete login in popup...';
+          
+          // Open OAuth popup
+          const popup = window.open(data.auth_url, 'oauth', 'width=500,height=600');
+          
+          // Listen for completion message
+          window.addEventListener('message', function handler(event) {
+            if (event.data.type === 'oauth-success' && event.data.provider === currentEmailProvider) {
+              statusEl.textContent = '✅ Connected!';
+              statusEl.style.color = '#4ade80';
+              window.removeEventListener('message', handler);
+              setTimeout(() => closeEmailSetup(), 1500);
+            }
+          });
+        } else {
+          statusEl.textContent = '❌ ' + (data.detail || 'Failed to get auth URL');
+          statusEl.style.color = '#f87171';
+        }
+      } catch (err) {
+        statusEl.textContent = '❌ Failed to start OAuth';
+        statusEl.style.color = '#f87171';
+      }
+    }
+    
+    // Update loadSettings to show connect/disconnect buttons
+    const originalLoadSettings = loadSettings;
+    loadSettings = async function() {
+      await originalLoadSettings();
+      
+      // Update Gmail button
+      const gmailBtn = document.getElementById('gmailSetupBtn');
+      const gmail = currentSettings.email_providers?.gmail;
+      if (gmail?.authenticated) {
+        gmailBtn.textContent = 'Disconnect';
+        gmailBtn.className = 'btn-small disconnect';
+        gmailBtn.onclick = () => disconnectEmail('gmail');
+      } else {
+        gmailBtn.textContent = 'Setup';
+        gmailBtn.className = 'btn-small';
+        gmailBtn.onclick = () => openEmailSetup('gmail');
+      }
+      
+      // Update Outlook button
+      const outlookBtn = document.getElementById('outlookSetupBtn');
+      const outlook = currentSettings.email_providers?.outlook;
+      if (outlook?.authenticated) {
+        outlookBtn.textContent = 'Disconnect';
+        outlookBtn.className = 'btn-small disconnect';
+        outlookBtn.onclick = () => disconnectEmail('outlook');
+      } else {
+        outlookBtn.textContent = 'Setup';
+        outlookBtn.className = 'btn-small';
+        outlookBtn.onclick = () => openEmailSetup('outlook');
+      }
+    };
+    
+    async function disconnectEmail(provider) {
+      if (!confirm(`Disconnect ${provider}? You will need to set it up again.`)) return;
+      
+      try {
+        await fetch(`${API}/email/disconnect/${provider}`, { method: 'DELETE' });
+        showToast(`✅ ${provider} disconnected`);
+        loadSettings();
+      } catch (err) {
+        showToast('❌ Failed to disconnect');
+      }
+    }
+    
+    // Close email setup on escape
+    document.getElementById('emailSetupOverlay').addEventListener('click', (e) => {
+      if (e.target.classList.contains('settings-overlay')) closeEmailSetup();
+    });
+
   </script>
 </body>
 </html>
