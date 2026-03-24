@@ -880,6 +880,48 @@ def search_memory(query: str, k: int = 3):
     return {"results": results}
 
 
+
+
+@app.delete("/memory/clear-all")
+def clear_all_memory():
+    """Delete all conversations and memory - nuclear option"""
+    store = get_conversation_store()
+    
+    # Get all conversations
+    convs = store.list_conversations(limit=1000)
+    deleted_count = len(convs)
+    
+    # Delete each one
+    for conv in convs:
+        store.delete_conversation(conv["id"])
+    
+    return {
+        "status": "cleared",
+        "conversations_deleted": deleted_count,
+        "message": "All conversations and memory have been cleared"
+    }
+
+
+@app.post("/memory/auto-ingest/{conv_id}")
+def auto_ingest_conversation(conv_id: str):
+    """Auto-ingest a conversation (called after each message if enabled)"""
+    try:
+        memory = get_memory_service()
+        # Re-ingest (will update chunks)
+        store = get_conversation_store()
+        
+        # Mark as not ingested first so we can re-ingest
+        conn = store.get_db()
+        conn.execute("UPDATE conversations SET ingested_to_rag = FALSE WHERE id = ?", (conv_id,))
+        conn.commit()
+        conn.close()
+        
+        chunks = memory.ingest_conversation(conv_id)
+        return {"status": "ok", "chunks": chunks}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8080)
