@@ -429,7 +429,10 @@
   <aside class="sidebar">
     <div class="sidebar-header">
       <h3>💬 Conversations</h3>
-      <button onclick="newConversation()">+ New</button>
+      <div style="display: flex; gap: 0.5rem;">
+        <button onclick="newConversation()">+ New</button>
+        <button onclick="clearAllMemory()" style="background: #dc2626;" title="Clear all memory">🗑️</button>
+      </div>
     </div>
     <div class="conversation-list" id="conversationList">
       <div class="no-conversations">No conversations yet</div>
@@ -471,6 +474,10 @@
         <span>✍️ Write like me</span>
       </div>
       <span id="styleHint" style="color: #94a3b8; font-size: 0.75rem;">Responses use your personal style</span>
+      <div class="toggle-container" onclick="toggleAutoRemember()" style="margin-left: 2rem;">
+        <div id="autoRememberToggle" class="toggle"></div>
+        <span>🧠 Auto-remember</span>
+      </div>
     </div>
     <div class="input-row">
       <textarea id="input" rows="1" placeholder="Ask your personal AI... (try 'Draft an email about...')" onkeydown="handleKey(event)"></textarea>
@@ -757,7 +764,57 @@
     }
     
     // Initialize
-    document.addEventListener('DOMContentLoaded', loadConversations);
+    document.addEventListener('DOMContentLoaded', () => {
+      loadConversations();
+      // Load auto-remember preference
+      autoRememberEnabled = localStorage.getItem('autoRemember') === 'true';
+      if (autoRememberEnabled) {
+        document.getElementById('autoRememberToggle').classList.add('active');
+      }
+    });
+    
+    // Auto-remember state
+    let autoRememberEnabled = false;
+    
+    function toggleAutoRemember() {
+      autoRememberEnabled = !autoRememberEnabled;
+      const toggle = document.getElementById('autoRememberToggle');
+      toggle.classList.toggle('active', autoRememberEnabled);
+      localStorage.setItem('autoRemember', autoRememberEnabled);
+      showToast(autoRememberEnabled ? '🧠 Auto-remember ON' : '🧠 Auto-remember OFF');
+    }
+    
+    async function clearAllMemory() {
+      const confirmed = confirm(
+        '⚠️ DELETE ALL CONVERSATIONS?\n\n' +
+        'This will permanently delete:\n' +
+        '• All saved conversations\n' +
+        '• All memories Skippy has learned\n\n' +
+        'This cannot be undone. Are you sure?'
+      );
+      
+      if (!confirmed) return;
+      
+      // Double-confirm for safety
+      const doubleConfirm = confirm('🚨 FINAL WARNING: Skippy will forget EVERYTHING. Continue?');
+      if (!doubleConfirm) return;
+      
+      try {
+        const resp = await fetch(`${API}/memory/clear-all`, { method: 'DELETE' });
+        const data = await resp.json();
+        
+        showToast(`🗑️ Cleared ${data.conversations_deleted} conversations`);
+        
+        // Reset UI
+        currentConversationId = null;
+        conversationHistory = [];
+        await loadConversations();
+        newConversation();
+      } catch (err) {
+        console.error('Failed to clear memory:', err);
+        showToast('❌ Failed to clear memory');
+      }
+    }
     const messagesDiv = document.getElementById('messages');
     const input = document.getElementById('input');
     const sendBtn = document.getElementById('send');
