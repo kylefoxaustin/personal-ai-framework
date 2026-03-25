@@ -1,24 +1,28 @@
 # 🧠 Personal AI Framework
 
-Your private AI assistant that knows your emails, projects, writing style, and technical documents. Runs 100% locally on your hardware.
+Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![Version](https://img.shields.io/badge/version-3.2.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
 
 | Feature | Description |
 |---------|-------------|
+| **Conversation Memory** | AI remembers past conversations - learns your name, preferences, context |
+| **Customizable Personality** | Name your AI, set its personality and traits |
 | **Personal Knowledge Base** | 61,000+ documents from emails, transcripts, blogs, datasheets |
 | **Your Writing Style** | LoRA fine-tuned on your emails - writes like you |
+| **Performance Metrics** | TTFT, tokens/sec, and total time on every response |
+| **Gmail Integration** | OAuth-based Send & Draft buttons - email directly from the UI |
 | **Streaming Responses** | Real-time word-by-word output |
 | **Hybrid RAG Search** | BM25 + semantic + reranking for best results |
-| **Email Drafting** | Generate emails with one-click open in Gmail/Outlook |
+| **Auto-Remember** | Toggle to automatically save conversations to memory |
 | **Meeting Summarizer** | Transcribe audio/video with Whisper + summarize |
 | **Document Generator** | Create specs, proposals, reports from your knowledge |
 | **Datasheet Ingestion** | Ingest PDFs - reference manuals, app notes |
 | **Daily Digest** | Automated morning summary of your AI activity |
-| **Web UI** | Clean interface with settings panel |
+| **Web UI** | Clean interface with settings panel and conversation sidebar |
 
 ## 🖥️ Requirements
 
@@ -46,6 +50,26 @@ cd personal-ai-framework
 xdg-open http://localhost:3000
 ```
 
+## 🎭 AI Personality
+
+Give your AI a name and personality! Click ⚙️ Settings in the web UI:
+
+- **AI Name**: "Skippy", "Jarvis", "Friday", or whatever you want
+- **Personality Prompt**: "You are Skippy, a sarcastic but helpful AI who loves sci-fi references..."
+
+The personality is injected into every prompt automatically.
+
+## 🧠 Conversation Memory
+
+Your AI remembers past conversations:
+
+- **Auto-Remember**: Toggle to automatically save all chats to memory
+- **Manual Save**: Click 🧠 on any conversation to save it
+- **Clear Memory**: 🗑️ button to wipe all memories (with confirmation)
+- **Memory Search**: AI searches past conversations when answering
+
+Ask "What's my name?" or "What did we discuss about X?" - the AI remembers!
+
 ## 📁 Project Structure
 ```
 personal-ai-framework/
@@ -60,6 +84,8 @@ personal-ai-framework/
 │   ├── llm_server.py       # FastAPI LLM server
 │   ├── rag_service.py      # ChromaDB RAG
 │   ├── advanced_rag.py     # Hybrid search + reranking
+│   ├── conversation_store.py  # SQLite conversation storage
+│   ├── memory_service.py   # Memory ingestion & search
 │   ├── meeting_summarizer.py
 │   ├── doc_generator.py
 │   ├── email_service.py
@@ -111,10 +137,22 @@ personal-ai-framework/
 
 Access at `http://localhost:3000`
 
+### Main Features
+- **Conversation Sidebar**: All your chats, with save/delete options
 - **Chat**: Ask questions, get answers from your knowledge base
-- **Email Drafting**: Type "Draft an email about..." → Copy/Save/Open buttons
+- **Email Drafting**: Type "Draft an email about..." → Copy/Send/Draft buttons
 - **Streaming**: Responses appear word-by-word in real-time
-- **Settings** (⚙️): Configure digest, sync, view email provider status
+- **Performance Metrics**: See TTFT, tok/s, and total time on every response
+
+### Toggles
+- **✍️ Write like me**: Use your personal writing style
+- **🧠 Auto-remember**: Automatically save conversations to memory
+
+### Settings (⚙️)
+- **AI Personality**: Name and personality prompt
+- **Email Providers**: Gmail OAuth connection
+- **Daily Digest**: Schedule and email settings
+- **Auto-Sync**: Knowledge base sync interval
 
 ## 📊 Architecture
 ```
@@ -123,12 +161,13 @@ Access at `http://localhost:3000`
 │  :3000      │     │  :8080      │     │  8x7B Q4    │
 └─────────────┘     └──────┬──────┘     └─────────────┘
                           │
-                          ▼
-                   ┌─────────────┐
-                   │  ChromaDB   │
-                   │  (RAG)      │
-                   │  61K+ docs  │
-                   └─────────────┘
+              ┌───────────┼───────────┐
+              ▼           ▼           ▼
+       ┌───────────┐ ┌─────────┐ ┌─────────┐
+       │ ChromaDB  │ │ SQLite  │ │  Gmail  │
+       │  (RAG)    │ │ (Chats) │ │  API    │
+       │ 61K docs  │ │ Memory  │ │         │
+       └───────────┘ └─────────┘ └─────────┘
 ```
 
 ## 🔧 Configuration
@@ -139,6 +178,7 @@ Settings are stored in `~/.personal-ai/settings.json` and can be configured via:
 - Direct file editing
 
 Key settings:
+- **AI Personality**: Name and system prompt
 - **Daily Digest**: Enable, time, email address
 - **Auto-Sync**: Enable, interval (1/4/12/24 hours)
 - **Context Window**: 8K/16K/32K tokens
@@ -146,15 +186,22 @@ Key settings:
 ## 📈 Performance
 
 Tested on RTX 5090 (32GB VRAM):
-- **Inference**: ~30 tokens/sec
+- **TTFT**: ~0.08-0.17s (time to first token)
+- **Throughput**: 85-135 tokens/sec
 - **Context**: 16K tokens default (32K max)
-- **Knowledge Base**: 61,500 documents
+- **Knowledge Base**: 61,500+ documents
 - **Datasheet Ingestion**: 37 PDFs (6,129 chunks) in ~5 min
 
 ## 🏷️ Versions
 
-- **v2.0.0** - Advanced Features (streaming, settings UI, daily digest, datasheets)
-- **v1.0.0** - Initial Release (RAG, email drafting, LoRA training)
+| Version | Highlights |
+|---------|------------|
+| **v3.2.0** | AI Personality (custom name/prompt), Performance metrics (TTFT, tok/s) |
+| **v3.1.0** | Auto-remember toggle, Clear memory button |
+| **v3.0.0** | Conversation Memory - AI remembers past chats! |
+| **v2.1.0** | Gmail OAuth, Send/Draft email buttons |
+| **v2.0.0** | Streaming, Settings UI, Daily Digest, Datasheet ingestion |
+| **v1.0.0** | Initial Release (RAG, email drafting, LoRA training) |
 
 ## 📝 License
 
