@@ -12,6 +12,11 @@ CONFIG_DIR = Path.home() / ".personal-ai"
 SETTINGS_FILE = CONFIG_DIR / "settings.json"
 
 DEFAULT_SETTINGS = {
+    "personality": {
+        "name": "Assistant",
+        "prompt": "You are a helpful AI assistant.",
+        "traits": []
+    },
     "digest": {
         "enabled": False,
         "time": "08:00",
