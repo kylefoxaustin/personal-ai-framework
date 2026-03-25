@@ -947,11 +947,10 @@ def auto_ingest_conversation(conv_id: str):
     """Auto-ingest a conversation (called after each message if enabled)"""
     try:
         memory = get_memory_service()
-        # Re-ingest (will update chunks)
-        store = get_conversation_store()
         
         # Mark as not ingested first so we can re-ingest
-        conn = store.get_db()
+        from conversation_store import get_db
+        conn = get_db()
         conn.execute("UPDATE conversations SET ingested_to_rag = FALSE WHERE id = ?", (conv_id,))
         conn.commit()
         conn.close()
@@ -960,6 +959,79 @@ def auto_ingest_conversation(conv_id: str):
         return {"status": "ok", "chunks": chunks}
     except Exception as e:
         return {"status": "error", "error": str(e)}
+
+
+
+
+@app.get("/memory/list")
+def list_memories(limit: int = 100, offset: int = 0):
+    """List all memories stored in ChromaDB"""
+    try:
+        from rag_service import get_rag_service
+        rag = get_rag_service()
+        
+        # Query ChromaDB for conversation memories
+        results = rag.collection.get(
+            where={"source_type": "conversation_memory"},
+            limit=limit,
+            offset=offset,
+            include=["documents", "metadatas"]
+        )
+        
+        memories = []
+        if results and results['ids']:
+            for i, id in enumerate(results['ids']):
+                memories.append({
+                    "id": id,
+                    "content": results['documents'][i][:500] if results['documents'] else "",
+                    "metadata": results['metadatas'][i] if results['metadatas'] else {}
+                })
+        
+        return {"memories": memories, "count": len(memories)}
+    except Exception as e:
+        return {"error": str(e), "memories": [], "count": 0}
+
+
+@app.delete("/memory/item/{memory_id}")
+def delete_memory_item(memory_id: str):
+    """Delete a specific memory entry from ChromaDB"""
+    try:
+        from rag_service import get_rag_service
+        rag = get_rag_service()
+        
+        # Delete from ChromaDB
+        rag.collection.delete(ids=[memory_id])
+        
+        return {"status": "deleted", "id": memory_id}
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/memory/stats")
+def memory_stats():
+    """Get memory statistics"""
+    try:
+        from rag_service import get_rag_service
+        rag = get_rag_service()
+        
+        # Count conversation memories
+        results = rag.collection.get(
+            where={"source_type": "conversation_memory"},
+            include=[]
+        )
+        memory_count = len(results['ids']) if results and results['ids'] else 0
+        
+        # Get conversation count from SQLite
+        store = get_conversation_store()
+        convs = store.list_conversations(limit=1000)
+        
+        return {
+            "memory_chunks": memory_count,
+            "conversations": len(convs),
+            "total_knowledge_docs": rag.collection.count()
+        }
+    except Exception as e:
+        return {"error": str(e)}
 
 
 if __name__ == "__main__":

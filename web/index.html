@@ -446,6 +446,7 @@
     <div class="header-right">
       <button class="header-btn" onclick="newChat()">✨ New</button>
       <button id="syncBtn" class="header-btn" onclick="syncNow()">🔄 Sync</button>
+      <button class="header-btn" onclick="openMemoryViewer()" title="Memory Viewer">🧠</button>
       <button class="header-btn" onclick="openSettings()">⚙️</button>
       <div class="stats">
         <span id="status" class="status">● Connecting...</span>
@@ -624,7 +625,32 @@
   </div>
 
 
-  <script>
+  
+    <!-- Memory Viewer Overlay -->
+    <div id="memoryOverlay" class="settings-overlay">
+      <div class="settings-panel" style="max-width: 800px;">
+        <div class="settings-header">
+          <h2>🧠 Memory Viewer</h2>
+          <button onclick="closeMemoryViewer()" style="background: #dc2626; border: none; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; font-size: 1rem;">✕ Close</button>
+        </div>
+        <div class="settings-content">
+          <div id="memoryStats" style="margin-bottom: 1rem; padding: 1rem; background: #1a1a2e; border-radius: 0.5rem;">
+            Loading stats...
+          </div>
+          
+          <h3>💭 Stored Memories</h3>
+          <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1rem;">
+            These are conversation snippets Skippy remembers. Click 🗑️ to forget specific memories.
+          </p>
+          
+          <div id="memoryList" style="max-height: 400px; overflow-y: auto;">
+            Loading memories...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
     const API = 'http://localhost:8080';
     
     // Conversation state
@@ -996,7 +1022,7 @@
           html += `<div class="context-item">
             <strong>[${c.id}]</strong> ${source} 
             <span style="color:#4ade80;margin-left:0.5rem;">${score}% match</span>
-            ${context && context[c.id-1] ? '<br><small>' + context[c.id-1].substring(0, 200) + '...</small>' : ''}
+            ${context && context[c.id-1] ? '<br><small>' + context[c.id-1].substring(0, 400) + '...</small>' : ''}
           </div>`; 
         });
         html += '</details>';
@@ -1109,7 +1135,23 @@
         let responseText = fullText.replace(/^### Response:\s*/i, '').replace(/### Instruction:[\s\S]*$/i, '').trim();
         const usedPersonalStyle = writeStyleEnabled && isWriteRequest;
         finalizeStreamingMessage(msgDiv, responseText, contextUsed, citations, usedPersonalStyle, metricsData);
+        // Save assistant message to database
+        saveMessage('assistant', responseText);
         conversationHistory.push({ role: 'assistant', content: responseText });
+        
+        // Auto-ingest to memory if enabled
+        if (autoRememberEnabled && currentConversationId) {
+          fetch(`${API}/memory/auto-ingest/${currentConversationId}`, { method: 'POST' })
+            .then(r => r.json())
+            .then(data => {
+              if (data.chunks > 0) {
+                console.log('Auto-ingested ' + data.chunks + ' chunks to memory');
+                // Reload conversation list to update icons
+                loadConversations();
+              }
+            })
+            .catch(err => console.error('Auto-ingest failed:', err));
+        }
         if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-20);
         
       } catch (err) {
@@ -1201,6 +1243,88 @@
     // Settings management
     let currentSettings = {};
     
+    
+    // Memory Viewer Functions
+    async function openMemoryViewer() {
+      document.getElementById('memoryOverlay').classList.add('show');
+      await loadMemoryStats();
+      await loadMemories();
+    }
+    
+    function closeMemoryViewer() {
+      document.getElementById('memoryOverlay').classList.remove('show');
+    }
+    
+    async function loadMemoryStats() {
+      try {
+        const resp = await fetch(`${API}/memory/stats`);
+        const stats = await resp.json();
+        
+        document.getElementById('memoryStats').innerHTML = `
+          <div style="display: flex; gap: 2rem;">
+            <div>
+              <div style="font-size: 1.5rem; font-weight: bold; color: #4ade80;">${stats.memory_chunks || 0}</div>
+              <div style="color: #94a3b8; font-size: 0.8rem;">Memory Chunks</div>
+            </div>
+            <div>
+              <div style="font-size: 1.5rem; font-weight: bold; color: #60a5fa;">${stats.conversations || 0}</div>
+              <div style="color: #94a3b8; font-size: 0.8rem;">Conversations</div>
+            </div>
+            <div>
+              <div style="font-size: 1.5rem; font-weight: bold; color: #f472b6;">${stats.total_knowledge_docs || 0}</div>
+              <div style="color: #94a3b8; font-size: 0.8rem;">Total Knowledge Docs</div>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        document.getElementById('memoryStats').innerHTML = '<span style="color: #f87171;">Failed to load stats</span>';
+      }
+    }
+    
+    async function loadMemories() {
+      try {
+        const resp = await fetch(`${API}/memory/list?limit=50`);
+        const data = await resp.json();
+        
+        if (!data.memories || data.memories.length === 0) {
+          document.getElementById('memoryList').innerHTML = '<p style="color: #94a3b8;">No memories yet. Start chatting and save conversations!</p>';
+          return;
+        }
+        
+        let html = '';
+        data.memories.forEach(mem => {
+          const preview = mem.content.substring(0, 400) + (mem.content.length > 200 ? '...' : '');
+          const convTitle = mem.metadata?.conversation_title || 'Unknown conversation';
+          const timestamp = mem.metadata?.timestamp ? new Date(mem.metadata.timestamp).toLocaleDateString() : '';
+          
+          html += `
+            <div class="memory-item" style="background: #1a1a2e; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 0.5rem; position: relative;">
+              <div style="font-size: 0.75rem; color: #60a5fa; margin-bottom: 0.25rem;">${convTitle} ${timestamp ? '• ' + timestamp : ''}</div>
+              <div style="font-size: 0.85rem; color: #e2e8f0;">${preview}</div>
+              <button onclick="deleteMemory('${mem.id}')" style="position: absolute; top: 0.5rem; right: 0.5rem; background: #dc2626; border: none; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; cursor: pointer; font-size: 0.7rem;">🗑️</button>
+            </div>
+          `;
+        });
+        
+        document.getElementById('memoryList').innerHTML = html;
+      } catch (err) {
+        document.getElementById('memoryList').innerHTML = '<span style="color: #f87171;">Failed to load memories</span>';
+      }
+    }
+    
+    async function deleteMemory(memoryId) {
+      if (!confirm('Delete this memory?')) return;
+      
+      try {
+        await fetch(`${API}/memory/item/${memoryId}`, { method: 'DELETE' });
+        showToast('🗑️ Memory deleted');
+        await loadMemoryStats();
+        await loadMemories();
+      } catch (err) {
+        showToast('❌ Failed to delete');
+      }
+    }
+
     async function openSettings() {
       document.getElementById('settingsOverlay').classList.add('show');
       await loadSettings();
