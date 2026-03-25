@@ -314,6 +314,8 @@ def generate_stream(request: StreamingRequest):
     full_prompt += f"User: {request.prompt}\n\nAssistant:"
     
     def generate_tokens():
+        import time
+        
         # Send initial metadata (context, citations)
         meta = {
             "type": "meta",
@@ -322,8 +324,12 @@ def generate_stream(request: StreamingRequest):
         }
         yield f"data: {json.dumps(meta)}\n\n"
         
-        # Stream tokens
+        # Stream tokens with timing
         full_response = ""
+        token_count = 0
+        start_time = time.time()
+        first_token_time = None
+        
         for output in llm(
             full_prompt,
             max_tokens=request.max_tokens,
@@ -335,10 +341,22 @@ def generate_stream(request: StreamingRequest):
         ):
             token = output["choices"][0]["text"]
             full_response += token
+            token_count += 1
+            
+            # Record time to first token
+            if first_token_time is None:
+                first_token_time = time.time()
+            
             yield f"data: {json.dumps({'type': 'token', 'token': token})}\n\n"
         
-        # Send completion signal with stats
-        yield f"data: {json.dumps({'type': 'done', 'text': full_response.strip()})}\n\n"
+        # Calculate metrics
+        end_time = time.time()
+        total_time = end_time - start_time
+        ttft = (first_token_time - start_time) if first_token_time else 0
+        throughput = token_count / total_time if total_time > 0 else 0
+        
+        # Send completion signal with stats and metrics
+        yield f"data: {json.dumps({'type': 'done', 'text': full_response.strip(), 'metrics': {'ttft': round(ttft, 2), 'tokens': token_count, 'total_time': round(total_time, 2), 'throughput': round(throughput, 1)}})}\n\n"
     
     return StreamingResponse(
         generate_tokens(),

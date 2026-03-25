@@ -1060,6 +1060,7 @@
       let fullText = '';
       let contextUsed = null;
       let citations = null;
+      let metricsData = {};
       
       try {
         const response = await fetch(`${API}/generate/stream`, {
@@ -1097,6 +1098,7 @@
                   updateStreamingMessage(msgDiv, fullText);
                 } else if (data.type === 'done') {
                   fullText = data.text;
+                  metricsData = data.metrics || {};
                 }
               } catch (e) { /* ignore parse errors */ }
             }
@@ -1106,7 +1108,7 @@
         // Finalize the message
         let responseText = fullText.replace(/^### Response:\s*/i, '').replace(/### Instruction:[\s\S]*$/i, '').trim();
         const usedPersonalStyle = writeStyleEnabled && isWriteRequest;
-        finalizeStreamingMessage(msgDiv, responseText, contextUsed, citations, usedPersonalStyle);
+        finalizeStreamingMessage(msgDiv, responseText, contextUsed, citations, usedPersonalStyle, metricsData);
         conversationHistory.push({ role: 'assistant', content: responseText });
         if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-20);
         
@@ -1135,7 +1137,7 @@
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
     
-    function finalizeStreamingMessage(div, content, context, citations, usedStyle) {
+    function finalizeStreamingMessage(div, content, context, citations, usedStyle, metrics = {}) {
       div.classList.remove('streaming');
       let html = content;
       if (usedStyle) html += `<span class="style-tag">✍️ Your style</span>`;
@@ -1158,6 +1160,11 @@
         html += `<details><summary>📚 Sources (${context.length})</summary>`;
         context.forEach(c => { html += `<div class="context-item">${c.substring(0, 300)}...</div>`; });
         html += '</details>';
+      }
+      
+      // Add performance metrics
+      if (metrics && metrics.ttft !== undefined) {
+        html += '<div class="meta" style="color: #4ade80; margin-top: 0.5rem;">⚡ TTFT: ' + metrics.ttft + 's | ' + metrics.throughput + ' tok/s | ' + metrics.total_time + 's total</div>';
       }
       
       // Add email action buttons if this is an email
