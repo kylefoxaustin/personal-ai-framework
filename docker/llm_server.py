@@ -184,6 +184,17 @@ def generate(request: GenerationRequest):
     # Build prompt with memory and RAG context
     full_prompt = ""
     
+    # Add personality/system prompt
+    try:
+        settings = load_settings()
+        personality = settings.get("personality", {})
+        ai_name = personality.get("name", "Assistant")
+        system_prompt = personality.get("prompt", "You are a helpful AI assistant.")
+        
+        full_prompt = f"Your name is {ai_name}. {system_prompt}\n\n"
+    except:
+        full_prompt = ""
+    
     # Add memory context (past conversations) first
     if memory_context:
         full_prompt = "From our previous conversations:\n\n"
@@ -267,6 +278,17 @@ def generate_stream(request: StreamingRequest):
     
     # Build prompt with memory and RAG context
     full_prompt = ""
+    
+    # Add personality/system prompt
+    try:
+        settings = load_settings()
+        personality = settings.get("personality", {})
+        ai_name = personality.get("name", "Assistant")
+        system_prompt = personality.get("prompt", "You are a helpful AI assistant.")
+        
+        full_prompt = f"Your name is {ai_name}. {system_prompt}\n\n"
+    except:
+        full_prompt = ""
     
     # Add memory context (past conversations) first
     if memory_context:

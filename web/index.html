@@ -546,6 +546,16 @@
       </div>
       
       <div class="settings-section">
+        <h3>🤖 AI Personality</h3>
+        <div class="setting-row">
+          <label>AI Name</label>
+          <input type="text" id="aiName" placeholder="Skippy" style="width: 200px;">
+        </div>
+        <div class="setting-row">
+          <label>Personality</label>
+          <textarea id="aiPersonality" rows="3" style="width: 100%; background: #1a1a2e; border: 1px solid #0f3460; border-radius: 0.4rem; color: #eee; padding: 0.5rem; font-family: inherit;" placeholder="You are a helpful AI assistant who is slightly sarcastic and loves beer references..."></textarea>
+        </div>
+        
         <h3>📧 Email Providers</h3>
         <div class="setting-row">
           <label>Gmail</label>
@@ -1247,6 +1257,10 @@
     
     async function saveSettings() {
       const settings = {
+        personality: {
+          name: document.getElementById('aiName').value || 'Assistant',
+          prompt: document.getElementById('aiPersonality').value || 'You are a helpful AI assistant.'
+        },
         digest: {
           enabled: document.getElementById('digestToggle').classList.contains('active'),
           time: document.getElementById('digestTime').value,
