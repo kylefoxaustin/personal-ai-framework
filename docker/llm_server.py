@@ -1034,6 +1034,108 @@ def memory_stats():
         return {"error": str(e)}
 
 
+
+
+@app.get("/export/conversations")
+def export_conversations():
+    """Export all conversations as JSON"""
+    import json
+    from datetime import datetime
+    
+    store = get_conversation_store()
+    convs = store.list_conversations(limit=1000)
+    
+    export_data = {
+        "export_date": datetime.now().isoformat(),
+        "version": "3.3.1",
+        "conversations": []
+    }
+    
+    for conv in convs:
+        full_conv = store.get_conversation(conv["id"])
+        export_data["conversations"].append(full_conv)
+    
+    return export_data
+
+
+@app.get("/export/full")
+def export_full_backup():
+    """Export conversations + settings as full backup"""
+    import json
+    from datetime import datetime
+    
+    store = get_conversation_store()
+    convs = store.list_conversations(limit=1000)
+    
+    export_data = {
+        "export_date": datetime.now().isoformat(),
+        "version": "3.3.1",
+        "type": "full_backup",
+        "conversations": [],
+        "settings": load_settings()
+    }
+    
+    for conv in convs:
+        full_conv = store.get_conversation(conv["id"])
+        export_data["conversations"].append(full_conv)
+    
+    return export_data
+
+
+class ImportData(BaseModel):
+    conversations: List[dict] = []
+    settings: dict = None
+
+
+@app.post("/import/conversations")
+def import_conversations(data: ImportData):
+    """Import conversations from JSON backup"""
+    store = get_conversation_store()
+    imported = 0
+    skipped = 0
+    
+    for conv in data.conversations:
+        try:
+            # Check if conversation already exists
+            existing = store.get_conversation(conv.get("id", ""))
+            if existing:
+                skipped += 1
+                continue
+            
+            # Create new conversation
+            conv_id = store.create_conversation(conv.get("title", "Imported conversation"))
+            
+            # Add messages
+            for msg in conv.get("messages", []):
+                store.add_message(
+                    conv_id,
+                    msg.get("role", "user"),
+                    msg.get("content", ""),
+                    msg.get("tokens_used")
+                )
+            
+            imported += 1
+        except Exception as e:
+            print(f"Failed to import conversation: {e}")
+            skipped += 1
+    
+    # Import settings if provided
+    settings_imported = False
+    if data.settings:
+        try:
+            save_settings(data.settings)
+            settings_imported = True
+        except:
+            pass
+    
+    return {
+        "status": "ok",
+        "imported": imported,
+        "skipped": skipped,
+        "settings_imported": settings_imported
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8080)
