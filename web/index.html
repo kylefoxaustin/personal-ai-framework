@@ -557,6 +557,23 @@
           <textarea id="aiPersonality" rows="3" style="width: 100%; background: #1a1a2e; border: 1px solid #0f3460; border-radius: 0.4rem; color: #eee; padding: 0.5rem; font-family: inherit;" placeholder="You are a helpful AI assistant who is slightly sarcastic and loves beer references..."></textarea>
         </div>
         
+        <h3>💾 Backup & Restore</h3>
+        <div class="setting-row" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <button onclick="exportConversations()" style="background: #0f3460; border: 1px solid #4ade80; color: #4ade80; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
+            📤 Export Conversations
+          </button>
+          <button onclick="exportFullBackup()" style="background: #0f3460; border: 1px solid #60a5fa; color: #60a5fa; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
+            💾 Full Backup
+          </button>
+          <label style="background: #0f3460; border: 1px solid #f472b6; color: #f472b6; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
+            📥 Import Backup
+            <input type="file" accept=".json" onchange="importBackup(event)" style="display: none;">
+          </label>
+        </div>
+        <p style="color: #64748b; font-size: 0.8rem; margin-top: 0.5rem;">
+          Export saves all conversations and settings. Import restores from a backup file.
+        </p>
+        
         <h3>📧 Email Providers</h3>
         <div class="setting-row">
           <label>Gmail</label>
@@ -1244,6 +1261,86 @@
     let currentSettings = {};
     
     
+    
+    // Export/Import Functions
+    async function exportConversations() {
+      try {
+        const resp = await fetch(`${API}/export/conversations`);
+        const data = await resp.json();
+        downloadJson(data, 'skippy-conversations-' + new Date().toISOString().slice(0,10) + '.json');
+        showToast('📤 Conversations exported!');
+      } catch (err) {
+        showToast('❌ Export failed');
+        console.error(err);
+      }
+    }
+    
+    async function exportFullBackup() {
+      try {
+        const resp = await fetch(`${API}/export/full`);
+        const data = await resp.json();
+        downloadJson(data, 'skippy-full-backup-' + new Date().toISOString().slice(0,10) + '.json');
+        showToast('💾 Full backup exported!');
+      } catch (err) {
+        showToast('❌ Export failed');
+        console.error(err);
+      }
+    }
+    
+    function downloadJson(data, filename) {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    
+    async function importBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        
+        const confirmed = confirm(
+          '📥 Import Backup\n\n' +
+          'This will import:\n' +
+          '• ' + (data.conversations?.length || 0) + ' conversations\n' +
+          '• ' + (data.settings ? 'Settings included' : 'No settings') + '\n\n' +
+          'Existing conversations will NOT be overwritten.\n' +
+          'Continue?'
+        );
+        
+        if (!confirmed) {
+          event.target.value = '';
+          return;
+        }
+        
+        const resp = await fetch(`${API}/import/conversations`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await resp.json();
+        showToast(`📥 Imported ${result.imported} conversations (${result.skipped} skipped)`);
+        
+        // Reload conversations list
+        await loadConversations();
+        
+        event.target.value = '';
+      } catch (err) {
+        showToast('❌ Import failed - invalid file');
+        console.error(err);
+        event.target.value = '';
+      }
+    }
+
     // Memory Viewer Functions
     async function openMemoryViewer() {
       document.getElementById('memoryOverlay').classList.add('show');
