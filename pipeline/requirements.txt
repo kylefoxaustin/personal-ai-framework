@@ -12,3 +12,4 @@ watchdog>=3.0.0
 python-multipart
 google-auth-oauthlib
 google-api-python-client
+PyMuPDF
