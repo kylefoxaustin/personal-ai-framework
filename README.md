@@ -256,3 +256,9 @@ MIT License - Use freely for personal projects.
 ---
 
 **Trust the Awesomeness!** 🚀
+
+## 👤 Maintainer
+
+**Kyle Fox** - [@kylefoxaustin](https://github.com/kylefoxaustin)
+
+Built with ❤️ and lots of 🍺 in Austin, Texas.
