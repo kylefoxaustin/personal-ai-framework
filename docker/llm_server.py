@@ -9,7 +9,7 @@ import shutil
 import subprocess
 from typing import Optional, List
 from pathlib import Path
-from fastapi import FastAPI, HTTPException, File, UploadFile
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, HTMLResponse
 import json
@@ -1134,6 +1134,96 @@ def import_conversations(data: ImportData):
         "skipped": skipped,
         "settings_imported": settings_imported
     }
+
+
+
+
+@app.post("/upload/document")
+async def upload_document(file: UploadFile = File(...), doc_type: str = "document"):
+    """Upload a document and ingest it to the knowledge base"""
+    import os
+    from pathlib import Path
+    
+    # Determine destination directory
+    base_path = Path.home() / "knowledge"
+    if doc_type == "datasheet":
+        dest_dir = base_path / "datasheets"
+    elif doc_type == "email":
+        dest_dir = base_path / "emails"
+    elif doc_type == "transcript":
+        dest_dir = base_path / "transcripts"
+    else:
+        dest_dir = base_path / "documents"
+    
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Save file
+    file_path = dest_dir / file.filename
+    with open(file_path, "wb") as f:
+        content = await file.read()
+        f.write(content)
+    
+    # Ingest to RAG
+    try:
+        from rag_service import get_rag_service
+        rag = get_rag_service()
+        
+        # Read and ingest based on file type
+        chunks_added = 0
+        if file.filename.lower().endswith('.pdf'):
+            # Use PyPDF2 or similar for PDF
+            try:
+                import fitz  # PyMuPDF
+                doc = fitz.open(str(file_path))
+                text = ""
+                for page in doc:
+                    text += page.get_text()
+                doc.close()
+                
+                # Chunk the text
+                chunk_size = 1000
+                for i in range(0, len(text), chunk_size):
+                    chunk = text[i:i+chunk_size]
+                    if chunk.strip():
+                        rag.add_document(
+                            content=chunk,
+                            metadata={
+                                "source_type": "uploaded_document",
+                                "source_file": file.filename,
+                                "doc_type": doc_type,
+                                "chunk_index": i // chunk_size
+                            }
+                        )
+                        chunks_added += 1
+            except ImportError:
+                return {"status": "error", "error": "PDF support not installed (PyMuPDF)"}
+        else:
+            # Plain text files
+            text = file_path.read_text(errors='ignore')
+            chunk_size = 1000
+            for i in range(0, len(text), chunk_size):
+                chunk = text[i:i+chunk_size]
+                if chunk.strip():
+                    rag.add_document(
+                        content=chunk,
+                        metadata={
+                            "source_type": "uploaded_document",
+                            "source_file": file.filename,
+                            "doc_type": doc_type,
+                            "chunk_index": i // chunk_size
+                        }
+                    )
+                    chunks_added += 1
+        
+        return {
+            "status": "ok",
+            "filename": file.filename,
+            "path": str(file_path),
+            "chunks_added": chunks_added,
+            "doc_type": doc_type
+        }
+    except Exception as e:
+        return {"status": "error", "error": str(e), "filename": file.filename}
 
 
 if __name__ == "__main__":

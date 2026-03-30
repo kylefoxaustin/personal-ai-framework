@@ -10,6 +10,7 @@ services:
       - ./models:/app/models
       - ./pipeline:/app
       - ./pipeline/config.yaml:/app/config.yaml:ro
+      - ./knowledge:/root/knowledge
     ports:
       - "8080:8080"
 

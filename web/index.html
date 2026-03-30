@@ -574,6 +574,26 @@
           Export saves all conversations and settings. Import restores from a backup file.
         </p>
         
+        <h3>📄 Upload Documents</h3>
+        <div class="setting-row">
+          <label>Document Type</label>
+          <select id="uploadDocType" style="background: #1a1a2e; border: 1px solid #0f3460; color: #eee; padding: 0.5rem; border-radius: 0.25rem;">
+            <option value="document">📄 General Document</option>
+            <option value="datasheet">📊 Datasheet/PDF</option>
+            <option value="transcript">🎤 Transcript</option>
+            <option value="email">📧 Email Export</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <div id="uploadDropZone" style="border: 2px dashed #0f3460; border-radius: 0.5rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📁</div>
+            <div style="color: #94a3b8;">Drag & drop files here or click to browse</div>
+            <div style="color: #64748b; font-size: 0.8rem; margin-top: 0.5rem;">Supports PDF, TXT, MD files</div>
+            <input type="file" id="uploadFileInput" multiple accept=".pdf,.txt,.md,.eml,.mbox" style="display: none;">
+          </div>
+        </div>
+        <div id="uploadStatus" style="margin-top: 0.5rem; font-size: 0.85rem;"></div>
+        
         <h3>📧 Email Providers</h3>
         <div class="setting-row">
           <label>Gmail</label>
@@ -1262,6 +1282,82 @@
     
     
     
+    
+    // Document Upload Functions
+    function initUploadDropZone() {
+      // Clear previous status
+      const statusDiv = document.getElementById('uploadStatus');
+      if (statusDiv) statusDiv.innerHTML = '';
+      const dropZone = document.getElementById('uploadDropZone');
+      const fileInput = document.getElementById('uploadFileInput');
+      
+      if (!dropZone || !fileInput) return;
+      
+      dropZone.addEventListener('click', () => fileInput.click());
+      
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#4ade80';
+        dropZone.style.background = 'rgba(74, 222, 128, 0.1)';
+      });
+      
+      dropZone.addEventListener('dragleave', () => {
+        dropZone.style.borderColor = '#0f3460';
+        dropZone.style.background = 'transparent';
+      });
+      
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#0f3460';
+        dropZone.style.background = 'transparent';
+        handleFiles(e.dataTransfer.files);
+      });
+      
+      fileInput.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+        e.target.value = '';
+      });
+    }
+    
+    async function handleFiles(files) {
+      const docType = document.getElementById('uploadDocType').value;
+      const statusDiv = document.getElementById('uploadStatus');
+      
+      for (const file of files) {
+        statusDiv.innerHTML = `<span style="color: #60a5fa;">⏳ Uploading ${file.name}...</span>`;
+        
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          
+          const resp = await fetch(`${API}/upload/document?doc_type=${docType}`, {
+            method: 'POST',
+            body: formData
+          });
+          
+          const result = await resp.json();
+          
+          if (result.status === 'ok') {
+            statusDiv.innerHTML = `<span style="color: #4ade80;">✅ ${file.name} uploaded (${result.chunks_added} chunks added)</span>`;
+            // Update doc count in header
+            checkHealth();
+          } else {
+            statusDiv.innerHTML = `<span style="color: #f87171;">❌ ${file.name}: ${result.error}</span>`;
+          }
+        } catch (err) {
+          statusDiv.innerHTML = `<span style="color: #f87171;">❌ Failed to upload ${file.name}</span>`;
+          console.error(err);
+        }
+      }
+    }
+    
+    // Initialize upload zone when settings opens
+    const origOpenSettings = openSettings;
+    openSettings = async function() {
+      await origOpenSettings();
+      setTimeout(initUploadDropZone, 100);
+    };
+
     // Export/Import Functions
     async function exportConversations() {
       try {
