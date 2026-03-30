@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-3.2.0-blue)
+![Version](https://img.shields.io/badge/version-3.4.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
@@ -10,7 +10,9 @@ Your private AI assistant that knows your emails, projects, writing style, and *
 | Feature | Description |
 |---------|-------------|
 | **Conversation Memory** | AI remembers past conversations - learns your name, preferences, context |
+| **Memory Viewer** | Browse, search, and delete specific memories |
 | **Customizable Personality** | Name your AI, set its personality and traits |
+| **Export/Import** | Backup and restore all conversations and settings |
 | **Personal Knowledge Base** | 61,000+ documents from emails, transcripts, blogs, datasheets |
 | **Your Writing Style** | LoRA fine-tuned on your emails - writes like you |
 | **Performance Metrics** | TTFT, tokens/sec, and total time on every response |
@@ -64,11 +66,22 @@ The personality is injected into every prompt automatically.
 Your AI remembers past conversations:
 
 - **Auto-Remember**: Toggle to automatically save all chats to memory
-- **Manual Save**: Click 🧠 on any conversation to save it
+- **Manual Save**: Click 💾 on any conversation to save it (turns to 🧠 when saved)
+- **Memory Viewer**: Click 🧠 in header to browse/delete specific memories
 - **Clear Memory**: 🗑️ button to wipe all memories (with confirmation)
 - **Memory Search**: AI searches past conversations when answering
 
 Ask "What's my name?" or "What did we discuss about X?" - the AI remembers!
+
+## 💾 Backup & Restore
+
+Never lose your AI's memories:
+
+- **📤 Export Conversations**: Download all chats as JSON
+- **💾 Full Backup**: Export conversations + settings in one file
+- **📥 Import Backup**: Restore from any backup file
+
+Find these in ⚙️ Settings → Backup & Restore
 
 ## 📁 Project Structure
 ```
@@ -144,12 +157,19 @@ Access at `http://localhost:3000`
 - **Streaming**: Responses appear word-by-word in real-time
 - **Performance Metrics**: See TTFT, tok/s, and total time on every response
 
+### Header Buttons
+- **✨ New**: Start a new conversation
+- **🔄 Sync**: Sync knowledge base
+- **🧠 Memory**: View/delete stored memories
+- **⚙️ Settings**: Personality, email, backup, and more
+
 ### Toggles
 - **✍️ Write like me**: Use your personal writing style
 - **🧠 Auto-remember**: Automatically save conversations to memory
 
 ### Settings (⚙️)
 - **AI Personality**: Name and personality prompt
+- **Backup & Restore**: Export/import conversations and settings
 - **Email Providers**: Gmail OAuth connection
 - **Daily Digest**: Schedule and email settings
 - **Auto-Sync**: Knowledge base sync interval
@@ -186,8 +206,8 @@ Key settings:
 ## 📈 Performance
 
 Tested on RTX 5090 (32GB VRAM):
-- **TTFT**: ~0.08-0.17s (time to first token)
-- **Throughput**: 85-135 tokens/sec
+- **TTFT**: ~0.04-0.17s (time to first token)
+- **Throughput**: 85-140 tokens/sec
 - **Context**: 16K tokens default (32K max)
 - **Knowledge Base**: 61,500+ documents
 - **Datasheet Ingestion**: 37 PDFs (6,129 chunks) in ~5 min
@@ -196,6 +216,9 @@ Tested on RTX 5090 (32GB VRAM):
 
 | Version | Highlights |
 |---------|------------|
+| **v3.4.0** | Export/Import - backup & restore conversations and settings |
+| **v3.3.1** | Bug fixes: auto-remember, assistant message saving |
+| **v3.3.0** | Memory Viewer - browse and delete specific memories |
 | **v3.2.0** | AI Personality (custom name/prompt), Performance metrics (TTFT, tok/s) |
 | **v3.1.0** | Auto-remember toggle, Clear memory button |
 | **v3.0.0** | Conversation Memory - AI remembers past chats! |
