@@ -629,6 +629,15 @@
         </div>
         <div id="ocrStatus" style="margin-top: 0.5rem; font-size: 0.85rem;"></div>
         
+        <h3>🌐 Web Search</h3>
+        <div class="setting-row" style="display: flex; align-items: center; gap: 0.5rem;">
+          <input type="checkbox" id="webSearchEnabled" style="width: 18px; height: 18px; accent-color: #60a5fa;">
+          <label for="webSearchEnabled" style="cursor: pointer;">Enable web search (lets Skippy search the internet for current info)</label>
+        </div>
+        <div id="webSearchStatus" style="margin-top: 0.5rem; font-size: 0.85rem; color: #94a3b8;">
+          When enabled, type "search: your question" to search the web
+        </div>
+        
         <h3>📧 Email Providers</h3>
         <div class="setting-row">
           <label>Gmail</label>
@@ -1132,9 +1141,62 @@
     }
     function hideTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
     
+    
+    async function performWebSearch(query) {
+      const input = document.querySelector('input[type="text"]');
+      input.value = '';
+      
+      // Add user message
+      addMessage('user', 'search: ' + query);
+      
+      // Add thinking indicator
+      const thinkingDiv = document.createElement('div');
+      thinkingDiv.className = 'message assistant';
+      thinkingDiv.innerHTML = '<div style="display: flex; align-items: center; gap: 0.5rem;">' +
+        '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #60a5fa; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
+        '<span>🌐 Searching the web...</span></div>';
+      document.getElementById('messages').appendChild(thinkingDiv);
+      document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+      
+      try {
+        const resp = await fetch(`${API}/chat/search?query=${encodeURIComponent(query)}`, {
+            method: 'POST'
+          });
+        const result = await resp.json();
+        
+        thinkingDiv.remove();
+        
+        if (result.status === 'ok') {
+          let sourcesHtml = '';
+          if (result.sources && result.sources.length > 0) {
+            sourcesHtml = '<details style="margin-top: 0.5rem;"><summary style="cursor: pointer; color: #60a5fa; font-size: 0.85rem;">📚 Sources</summary>' +
+              '<div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.5rem;">' + 
+              result.sources.map(s => s.substring(0, 200) + '...').join('<hr style="border-color: #333; margin: 0.5rem 0;">') + 
+              '</div></details>';
+          }
+          addMessage('assistant', result.answer + sourcesHtml);
+        } else {
+          addMessage('assistant', '❌ ' + result.error);
+        }
+      } catch (err) {
+        thinkingDiv.remove();
+        addMessage('assistant', '❌ Web search failed: ' + err.message);
+      }
+    }
+
     async function sendMessage() {
       const text = input.value.trim();
       if (!text || isLoading) return;
+      
+      // Check for web search prefix
+      if (text.toLowerCase().startsWith('search:')) {
+        const query = text.substring(7).trim();
+        if (query) {
+          input.value = '';
+          performWebSearch(query);
+          return;
+        }
+      }
       input.value = '';
       isLoading = true;
       sendBtn.disabled = true;
@@ -1807,6 +1869,9 @@
         sync: {
           auto_enabled: document.getElementById('syncToggle').classList.contains('active'),
           interval_hours: parseInt(document.getElementById('syncInterval').value)
+        },
+        web_search: {
+          enabled: document.getElementById('webSearchEnabled').checked
         }
       };
       

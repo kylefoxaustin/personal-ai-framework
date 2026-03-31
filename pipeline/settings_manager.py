@@ -28,6 +28,9 @@ DEFAULT_SETTINGS = {
         "interval_hours": 1,
         "last_sync": None
     },
+    "web_search": {
+        "enabled": False
+    },
     "email_providers": {
         "gmail": {
             "configured": False,
