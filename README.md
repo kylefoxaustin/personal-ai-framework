@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-3.9.0-blue)
+![Version](https://img.shields.io/badge/version-4.0.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
