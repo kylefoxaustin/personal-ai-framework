@@ -600,6 +600,10 @@
           <label>Recording Title</label>
           <input type="text" id="transcribeTitle" placeholder="Team Meeting 2024-03-30" style="width: 100%; background: #1a1a2e; border: 1px solid #0f3460; color: #eee; padding: 0.5rem; border-radius: 0.25rem;">
         </div>
+        <div class="setting-row" style="display: flex; align-items: center; gap: 0.5rem;">
+          <input type="checkbox" id="transcribeSummarize" checked style="width: 18px; height: 18px; accent-color: #4ade80;">
+          <label for="transcribeSummarize" style="cursor: pointer;">📋 Generate meeting summary (key points, action items, decisions)</label>
+        </div>
         <div class="setting-row">
           <div id="transcribeDropZone" style="border: 2px dashed #0f3460; border-radius: 0.5rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s;">
             <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎬</div>
@@ -1448,7 +1452,8 @@
           const formData = new FormData();
           formData.append('file', file);
           
-          const resp = await fetch(API + '/upload/transcribe?title=' + encodeURIComponent(title), {
+          const summarize = document.getElementById('transcribeSummarize').checked;
+          const resp = await fetch(API + '/upload/transcribe?title=' + encodeURIComponent(title) + '&summarize=' + summarize, {
             method: 'POST',
             body: formData
           });
@@ -1456,7 +1461,21 @@
           const result = await resp.json();
           
           if (result.status === 'ok') {
+            let summaryHtml = '';
+            if (result.summary && !result.summary.error) {
+              summaryHtml = '<div style="background: #1a2e1a; border: 1px solid #4ade80; border-radius: 0.5rem; padding: 1rem; margin-top: 0.5rem;">' +
+                '<div style="font-weight: bold; color: #4ade80; margin-bottom: 0.5rem;">📋 Meeting Summary</div>' +
+                '<div style="margin-bottom: 0.5rem;">' + result.summary.summary + '</div>' +
+                '<details style="margin-bottom: 0.5rem;"><summary style="cursor: pointer; color: #60a5fa;">🎯 Key Points</summary>' +
+                '<ul style="margin: 0.5rem 0; padding-left: 1.5rem;">' + (result.summary.key_points || []).map(p => '<li>' + p + '</li>').join('') + '</ul></details>' +
+                '<details style="margin-bottom: 0.5rem;"><summary style="cursor: pointer; color: #f472b6;">✅ Action Items</summary>' +
+                '<ul style="margin: 0.5rem 0; padding-left: 1.5rem;">' + (result.summary.action_items || []).map(a => '<li>' + a + '</li>').join('') + '</ul></details>' +
+                '<details><summary style="cursor: pointer; color: #fbbf24;">📌 Decisions</summary>' +
+                '<ul style="margin: 0.5rem 0; padding-left: 1.5rem;">' + (result.summary.decisions || []).map(d => '<li>' + d + '</li>').join('') + '</ul></details>' +
+                '</div>';
+            }
             statusDiv.innerHTML = '<span style="color: #4ade80;">✅ ' + file.name + ' transcribed (' + result.chunks_added + ' chunks added)</span>' +
+              summaryHtml +
               '<details style="margin-top: 0.5rem;"><summary style="cursor: pointer; color: #60a5fa;">Preview transcript</summary>' +
               '<div style="background: #1a1a2e; padding: 0.5rem; border-radius: 0.25rem; margin-top: 0.5rem; max-height: 200px; overflow-y: auto; font-size: 0.8rem;">' + 
               result.transcript_preview + '</div></details>';
