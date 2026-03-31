@@ -16,3 +16,4 @@ PyMuPDF
 openai-whisper
 pytesseract
 Pillow
+duckduckgo-search

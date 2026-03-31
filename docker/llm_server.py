@@ -1436,6 +1436,84 @@ async def upload_and_ocr(file: UploadFile = File(...), title: str = "Screenshot"
         return {"status": "error", "error": str(e)}
 
 
+
+
+@app.get("/search/web")
+def web_search(query: str, max_results: int = 5):
+    """Search the web using DuckDuckGo"""
+    from settings_manager import load_settings
+    
+    settings = load_settings()
+    if not settings.get("web_search", {}).get("enabled", False):
+        return {"status": "error", "error": "Web search is disabled. Enable it in Settings."}
+    
+    try:
+        from duckduckgo_search import DDGS
+        
+        results = []
+        with DDGS() as ddgs:
+            for r in ddgs.text(query, max_results=max_results):
+                results.append({
+                    "title": r.get("title", ""),
+                    "url": r.get("href", ""),
+                    "snippet": r.get("body", "")
+                })
+        
+        return {"status": "ok", "query": query, "results": results}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
+@app.post("/chat/search")
+def chat_with_search(query: str):
+    """Answer a question using web search + LLM"""
+    from settings_manager import load_settings
+    
+    settings = load_settings()
+    if not settings.get("web_search", {}).get("enabled", False):
+        return {"status": "error", "error": "Web search is disabled. Enable it in Settings."}
+    
+    try:
+        from duckduckgo_search import DDGS
+        
+        # Search the web
+        search_results = []
+        with DDGS() as ddgs:
+            for r in ddgs.text(query, max_results=5):
+                search_results.append(f"Title: {r.get('title', '')}\nSnippet: {r.get('body', '')}")
+        
+        context = "\n\n".join(search_results)
+        
+        # Get personality
+        personality = settings.get("personality", {})
+        ai_name = personality.get("name", "Assistant")
+        system_prompt = personality.get("prompt", "You are a helpful AI assistant.")
+        
+        prompt = f"""Your name is {ai_name}. {system_prompt}
+
+Based on the following web search results, answer the user's question.
+Cite your sources when possible.
+
+Web Search Results:
+{context}
+
+User Question: {query}
+
+Answer:"""
+        
+        response = llm(prompt, max_tokens=1000, temperature=0.7)
+        answer = response["choices"][0]["text"].strip()
+        
+        return {
+            "status": "ok",
+            "query": query,
+            "answer": answer,
+            "sources": search_results[:3]
+        }
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8080)
