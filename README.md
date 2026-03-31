@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-3.5.0-blue)
+![Version](https://img.shields.io/badge/version-3.6.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
@@ -13,6 +13,7 @@ Your private AI assistant that knows your emails, projects, writing style, and *
 | **Memory Viewer** | Browse, search, and delete specific memories |
 | **Customizable Personality** | Name your AI, set its personality and traits |
 | **Document Upload** | Drag & drop PDFs, TXT, MD files directly in the web UI |
+| **Audio/Video Transcription** | Upload MP4, MP3, WAV files - transcribed with Whisper |
 | **Export/Import** | Backup and restore all conversations and settings |
 | **Personal Knowledge Base** | 61,000+ documents from emails, transcripts, blogs, datasheets |
 | **Your Writing Style** | LoRA fine-tuned on your emails - writes like you |
@@ -85,6 +86,21 @@ Add documents to your knowledge base without touching the command line:
 5. Files are automatically chunked and indexed in ChromaDB
 
 **Supported formats**: PDF, TXT, MD
+
+## 🎤 Audio/Video Transcription
+
+Transcribe recordings directly from the web UI:
+
+1. Click ⚙️ Settings
+2. Scroll to "Transcribe Audio/Video"
+3. Enter a recording title (optional)
+4. Drag & drop your audio/video file
+5. Wait for Whisper to transcribe (uses CPU to avoid VRAM conflicts)
+6. Transcript is auto-ingested to ChromaDB
+
+**Supported formats**: MP4, MP3, WAV, M4A, WEBM, MKV, MOV, AVI, OGG, FLAC
+
+Transcripts are saved to `~/knowledge/transcripts/` and searchable by Skippy!
 
 ## 💾 Backup & Restore
 
@@ -230,6 +246,7 @@ Tested on RTX 5090 (32GB VRAM):
 
 | Version | Highlights |
 |---------|------------|
+| **v3.6.0** | Audio/Video Transcription - Whisper-powered web upload |
 | **v3.5.0** | Document Upload - drag & drop PDFs/TXT/MD in web UI |
 | **v3.4.0** | Export/Import - backup & restore conversations and settings |
 | **v3.3.1** | Bug fixes: auto-remember, assistant message saving |
