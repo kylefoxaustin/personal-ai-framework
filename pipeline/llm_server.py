@@ -1228,8 +1228,39 @@ async def upload_document(file: UploadFile = File(...), doc_type: str = "documen
 
 
 
+
+def summarize_transcript_direct(transcript: str, title: str = "Meeting") -> dict:
+    """Summarize transcript using the already-loaded LLM directly"""
+    prompt = f"""Analyze this meeting transcript and provide a JSON response with:
+1. A brief 2-3 sentence summary
+2. Key points discussed (list)
+3. Action items with owners if mentioned (list)  
+4. Decisions made (list)
+
+Meeting: {title}
+
+Transcript:
+{transcript[:6000]}
+
+Respond ONLY with valid JSON in this exact format, no other text:
+{{"summary": "...", "key_points": ["..."], "action_items": ["..."], "decisions": ["..."]}}"""
+
+    try:
+        response = llm(prompt, max_tokens=1000, temperature=0.3)
+        text = response["choices"][0]["text"].strip()
+        
+        # Try to parse JSON from response
+        import re
+        json_match = re.search(r'\{.*\}', text, re.DOTALL)
+        if json_match:
+            return json.loads(json_match.group())
+        else:
+            return {"summary": text, "key_points": [], "action_items": [], "decisions": []}
+    except Exception as e:
+        return {"error": str(e)}
+
 @app.post("/upload/transcribe")
-async def upload_and_transcribe(file: UploadFile = File(...), title: str = "Untitled Recording"):
+async def upload_and_transcribe(file: UploadFile = File(...), title: str = "Untitled Recording", summarize: bool = False):
     """Upload audio/video and transcribe with Whisper"""
     import tempfile
     from pathlib import Path
@@ -1290,13 +1321,22 @@ async def upload_and_transcribe(file: UploadFile = File(...), title: str = "Unti
         # Clean up temp file
         os.unlink(tmp_path)
         
+        # Summarize if requested
+        summary_data = None
+        if summarize:
+            try:
+                summary_data = summarize_transcript_direct(transcript_text, title)
+            except Exception as e:
+                summary_data = {"error": str(e)}
+        
         return {
             "status": "ok",
             "filename": file.filename,
             "title": title,
             "transcript_length": len(transcript_text),
             "chunks_added": chunks_added,
-            "transcript_preview": transcript_text[:500] + "..." if len(transcript_text) > 500 else transcript_text
+            "transcript_preview": transcript_text[:500] + "..." if len(transcript_text) > 500 else transcript_text,
+            "summary": summary_data
         }
         
     except Exception as e:
