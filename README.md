@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-3.7.0-blue)
+![Version](https://img.shields.io/badge/version-3.8.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
@@ -14,6 +14,7 @@ Your private AI assistant that knows your emails, projects, writing style, and *
 | **Customizable Personality** | Name your AI, set its personality and traits |
 | **Document Upload** | Drag & drop PDFs, TXT, MD files directly in the web UI |
 | **Audio/Video Transcription** | Upload MP4, MP3, WAV files - transcribed with Whisper |
+| **Meeting Summarization** | Auto-extract key points, action items, decisions from transcripts |
 | **Image/Screenshot OCR** | Extract text from images with Tesseract OCR |
 | **Export/Import** | Backup and restore all conversations and settings |
 | **Personal Knowledge Base** | 61,000+ documents from emails, transcripts, blogs, datasheets |
@@ -262,6 +263,7 @@ Tested on RTX 5090 (32GB VRAM):
 
 | Version | Highlights |
 |---------|------------|
+| **v3.8.0** | Meeting Summarization - key points, action items, decisions |
 | **v3.7.0** | Image/Screenshot OCR - Tesseract text extraction |
 | **v3.6.0** | Audio/Video Transcription - Whisper-powered web upload |
 | **v3.5.0** | Document Upload - drag & drop PDFs/TXT/MD in web UI |
