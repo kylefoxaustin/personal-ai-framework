@@ -610,6 +610,21 @@
         </div>
         <div id="transcribeStatus" style="margin-top: 0.5rem; font-size: 0.85rem;"></div>
         
+        <h3>📷 Screenshot/Image OCR</h3>
+        <div class="setting-row">
+          <label>Image Title</label>
+          <input type="text" id="ocrTitle" placeholder="Meeting Whiteboard" style="width: 100%; background: #1a1a2e; border: 1px solid #0f3460; color: #eee; padding: 0.5rem; border-radius: 0.25rem;">
+        </div>
+        <div class="setting-row">
+          <div id="ocrDropZone" style="border: 2px dashed #0f3460; border-radius: 0.5rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📷</div>
+            <div style="color: #94a3b8;">Drag & drop images here or click to browse</div>
+            <div style="color: #64748b; font-size: 0.8rem; margin-top: 0.5rem;">Supports PNG, JPG, GIF, BMP, TIFF, WEBP</div>
+            <input type="file" id="ocrFileInput" accept="image/*,.png,.jpg,.jpeg,.gif,.bmp,.tiff,.webp" style="display: none;">
+          </div>
+        </div>
+        <div id="ocrStatus" style="margin-top: 0.5rem; font-size: 0.85rem;"></div>
+        
         <h3>📧 Email Providers</h3>
         <div class="setting-row">
           <label>Gmail</label>
@@ -1300,6 +1315,87 @@
     
     
     
+    
+    // OCR Functions
+    function initOcrDropZone() {
+      const dropZone = document.getElementById('ocrDropZone');
+      const fileInput = document.getElementById('ocrFileInput');
+      
+      if (!dropZone || !fileInput) return;
+      
+      dropZone.addEventListener('click', () => fileInput.click());
+      
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#60a5fa';
+        dropZone.style.background = 'rgba(96, 165, 250, 0.1)';
+      });
+      
+      dropZone.addEventListener('dragleave', () => {
+        dropZone.style.borderColor = '#0f3460';
+        dropZone.style.background = 'transparent';
+      });
+      
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#0f3460';
+        dropZone.style.background = 'transparent';
+        handleOcrFiles(e.dataTransfer.files);
+      });
+      
+      fileInput.addEventListener('change', (e) => {
+        handleOcrFiles(e.target.files);
+        e.target.value = '';
+      });
+    }
+    
+    async function handleOcrFiles(files) {
+      const titleInput = document.getElementById('ocrTitle');
+      const statusDiv = document.getElementById('ocrStatus');
+      
+      for (const file of files) {
+        const title = titleInput.value || file.name.replace(/\.[^/.]+$/, '');
+        
+        statusDiv.innerHTML = '<div style="color: #60a5fa;">' +
+          '<div style="display: flex; align-items: center; gap: 0.5rem;">' +
+          '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #60a5fa; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
+          '<span>📷 Extracting text from ' + file.name + '...</span>' +
+          '</div></div>';
+        
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          
+          const resp = await fetch(API + '/upload/ocr?title=' + encodeURIComponent(title), {
+            method: 'POST',
+            body: formData
+          });
+          
+          const result = await resp.json();
+          
+          if (result.status === 'ok') {
+            statusDiv.innerHTML = '<span style="color: #4ade80;">✅ ' + file.name + ' - extracted ' + result.text_length + ' chars (' + result.chunks_added + ' chunks)</span>' +
+              '<details style="margin-top: 0.5rem;"><summary style="cursor: pointer; color: #60a5fa;">Preview extracted text</summary>' +
+              '<div style="background: #1a1a2e; padding: 0.5rem; border-radius: 0.25rem; margin-top: 0.5rem; max-height: 200px; overflow-y: auto; font-size: 0.8rem; white-space: pre-wrap;">' + 
+              result.text_preview + '</div></details>';
+            checkHealth();
+          } else {
+            statusDiv.innerHTML = '<span style="color: #f87171;">❌ ' + file.name + ': ' + result.error + '</span>';
+          }
+        } catch (err) {
+          statusDiv.innerHTML = '<span style="color: #f87171;">❌ Failed to process ' + file.name + '</span>';
+          console.error(err);
+        }
+      }
+    }
+    
+    // Update init to include OCR zone
+    const origInitTranscribe = initUploadDropZone;
+    initUploadDropZone = function() {
+      origInitTranscribe();
+      initOcrDropZone();
+    };
+
     // Transcription Functions
     function initTranscribeDropZone() {
       const dropZone = document.getElementById('transcribeDropZone');

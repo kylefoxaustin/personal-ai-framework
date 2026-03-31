@@ -1308,6 +1308,94 @@ async def upload_and_transcribe(file: UploadFile = File(...), title: str = "Unti
         return {"status": "error", "error": str(e)}
 
 
+
+
+@app.post("/upload/ocr")
+async def upload_and_ocr(file: UploadFile = File(...), title: str = "Screenshot"):
+    """Upload image and extract text with OCR"""
+    import tempfile
+    from pathlib import Path
+    
+    # Check file type
+    suffix = Path(file.filename).suffix.lower()
+    image_formats = {'.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', '.webp'}
+    
+    if suffix not in image_formats:
+        return {"status": "error", "error": f"Unsupported format: {suffix}. Supported: {', '.join(sorted(image_formats))}"}
+    
+    # Save to temp file
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
+        content_bytes = await file.read()
+        tmp.write(content_bytes)
+        tmp_path = tmp.name
+    
+    try:
+        # OCR with pytesseract
+        import pytesseract
+        from PIL import Image
+        
+        img = Image.open(tmp_path)
+        extracted_text = pytesseract.image_to_string(img)
+        
+        if not extracted_text.strip():
+            os.unlink(tmp_path)
+            return {"status": "error", "error": "No text found in image"}
+        
+        # Save to knowledge base
+        docs_dir = Path.home() / "knowledge" / "documents"
+        docs_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Save as text file
+        safe_title = "".join(c for c in title if c.isalnum() or c in " -_").strip()
+        text_file = docs_dir / f"{safe_title}.txt"
+        text_file.write_text(extracted_text)
+        
+        # Also save original image
+        img_dir = Path.home() / "knowledge" / "images"
+        img_dir.mkdir(parents=True, exist_ok=True)
+        import shutil
+        shutil.copy(tmp_path, img_dir / f"{safe_title}{suffix}")
+        
+        # Ingest to RAG
+        from rag_service import get_rag_service
+        rag = get_rag_service()
+        
+        chunk_size = 1000
+        chunks_added = 0
+        for i in range(0, len(extracted_text), chunk_size):
+            chunk = extracted_text[i:i+chunk_size]
+            if chunk.strip():
+                rag.add_document(
+                    content=chunk,
+                    metadata={
+                        "source_type": "ocr",
+                        "source_file": file.filename,
+                        "title": title,
+                        "chunk_index": i // chunk_size
+                    }
+                )
+                chunks_added += 1
+        
+        # Clean up temp file
+        os.unlink(tmp_path)
+        
+        return {
+            "status": "ok",
+            "filename": file.filename,
+            "title": title,
+            "text_length": len(extracted_text),
+            "chunks_added": chunks_added,
+            "text_preview": extracted_text[:500] + "..." if len(extracted_text) > 500 else extracted_text
+        }
+        
+    except Exception as e:
+        try:
+            os.unlink(tmp_path)
+        except:
+            pass
+        return {"status": "error", "error": str(e)}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8080)
