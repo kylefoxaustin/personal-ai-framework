@@ -50,3 +50,4 @@ knowledge/recordings/
 training/*.log
 knowledge/datasheets/**/*.pdf
 knowledge/datasheets/.datasheet_manifest.json
+knowledge/images/

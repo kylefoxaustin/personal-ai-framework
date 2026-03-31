@@ -1,5 +1,5 @@
 FROM nvidia/cuda:12.4.1-devel-ubuntu22.04
-RUN apt-get update && apt-get install -y ffmpeg \
+RUN apt-get update && apt-get install -y ffmpeg tesseract-ocr \
     python3.10 python3-pip git build-essential \
     cmake ninja-build \
     && rm -rf /var/lib/apt/lists/*
