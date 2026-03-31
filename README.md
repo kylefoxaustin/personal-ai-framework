@@ -78,47 +78,31 @@ Your AI remembers past conversations:
 
 Ask "What's my name?" or "What did we discuss about X?" - the AI remembers!
 
-## 📄 Document Upload
+## 📤 Upload Panel
 
-Add documents to your knowledge base without touching the command line:
+Upload documents, audio/video, and images to your knowledge base from a single dedicated panel:
 
-1. Click ⚙️ Settings
-2. Scroll to "Upload Documents"
-3. Select document type (General, Datasheet, Transcript, Email)
-4. Drag & drop files or click to browse
-5. Files are automatically chunked and indexed in ChromaDB
+1. Click **📤 Upload** in the header
+2. Choose a tab: **📄 Documents**, **🎤 Audio/Video**, or **📷 Images**
+3. Drag & drop files or click to browse
+4. Files are automatically processed and indexed in ChromaDB
 
-**Supported formats**: PDF, TXT, MD
+### 📄 Documents
+- Select document type (General, Datasheet, Transcript, Email)
+- **Supported formats**: PDF, TXT, MD
 
-## 🎤 Audio/Video Transcription
+### 🎤 Audio/Video Transcription
+- Enter a recording title (optional)
+- Toggle meeting summary generation (key points, action items, decisions)
+- Whisper transcribes using CPU to avoid VRAM conflicts
+- Transcripts saved to `~/knowledge/transcripts/` and searchable by Skippy!
+- **Supported formats**: MP4, MP3, WAV, M4A, WEBM, MKV, MOV, AVI, OGG, FLAC
 
-Transcribe recordings directly from the web UI:
-
-1. Click ⚙️ Settings
-2. Scroll to "Transcribe Audio/Video"
-3. Enter a recording title (optional)
-4. Drag & drop your audio/video file
-5. Wait for Whisper to transcribe (uses CPU to avoid VRAM conflicts)
-6. Transcript is auto-ingested to ChromaDB
-
-**Supported formats**: MP4, MP3, WAV, M4A, WEBM, MKV, MOV, AVI, OGG, FLAC
-
-Transcripts are saved to `~/knowledge/transcripts/` and searchable by Skippy!
-
-## 📷 Image/Screenshot OCR
-
-Extract text from images directly in the web UI:
-
-1. Click ⚙️ Settings
-2. Scroll to "Screenshot/Image OCR"
-3. Enter an image title (optional)
-4. Drag & drop your image
-5. Tesseract extracts the text
-6. Text is auto-ingested to ChromaDB
-
-**Supported formats**: PNG, JPG, GIF, BMP, TIFF, WEBP
-
-Perfect for whiteboard photos, screenshots, scanned docs, or book pages!
+### 📷 Image/Screenshot OCR
+- Enter an image title (optional)
+- Tesseract extracts text and auto-ingests to ChromaDB
+- Perfect for whiteboard photos, screenshots, scanned docs, or book pages!
+- **Supported formats**: PNG, JPG, GIF, BMP, TIFF, WEBP
 
 ## 💾 Backup & Restore
 
@@ -206,9 +190,10 @@ Access at `http://localhost:3000`
 
 ### Header Buttons
 - **✨ New**: Start a new conversation
+- **📤 Upload**: Upload documents, audio/video, and images
 - **🔄 Sync**: Sync knowledge base
 - **🧠 Memory**: View/delete stored memories
-- **⚙️ Settings**: Personality, upload, backup, and more
+- **⚙️ Settings**: Personality, backup, and more
 
 ### Toggles
 - **✍️ Write like me**: Use your personal writing style
@@ -217,7 +202,7 @@ Access at `http://localhost:3000`
 ### Settings (⚙️)
 - **AI Personality**: Name and personality prompt
 - **Backup & Restore**: Export/import conversations and settings
-- **Upload Documents**: Drag & drop files to add to knowledge base
+- **Web Search**: Toggle DuckDuckGo search
 - **Email Providers**: Gmail OAuth connection
 - **Daily Digest**: Schedule and email settings
 - **Auto-Sync**: Knowledge base sync interval
@@ -264,6 +249,7 @@ Tested on RTX 5090 (32GB VRAM):
 
 | Version | Highlights |
 |---------|------------|
+| **v4.0.0** | UI Refactor - Dedicated Upload panel with tabbed Documents/Audio/Images |
 | **v3.9.0** | Web Search - DuckDuckGo integration with privacy toggle |
 | **v3.8.0** | Meeting Summarization - key points, action items, decisions |
 | **v3.7.0** | Image/Screenshot OCR - Tesseract text extraction |
