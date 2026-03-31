@@ -1226,6 +1226,88 @@ async def upload_document(file: UploadFile = File(...), doc_type: str = "documen
         return {"status": "error", "error": str(e), "filename": file.filename}
 
 
+
+
+@app.post("/upload/transcribe")
+async def upload_and_transcribe(file: UploadFile = File(...), title: str = "Untitled Recording"):
+    """Upload audio/video and transcribe with Whisper"""
+    import tempfile
+    from pathlib import Path
+    
+    # Check file type
+    suffix = Path(file.filename).suffix.lower()
+    audio_formats = {'.mp3', '.m4a', '.wav', '.ogg', '.flac', '.wma', '.amr', '.aac'}
+    video_formats = {'.mp4', '.webm', '.mkv', '.mov', '.avi'}
+    supported = audio_formats | video_formats
+    
+    if suffix not in supported:
+        return {"status": "error", "error": f"Unsupported format: {suffix}. Supported: {', '.join(sorted(supported))}"}
+    
+    # Save to temp file
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
+        content_bytes = await file.read()
+        tmp.write(content_bytes)
+        tmp_path = tmp.name
+    
+    try:
+        # Import and use meeting summarizer
+        from meeting_summarizer import MeetingSummarizer
+        
+        summarizer = MeetingSummarizer(whisper_model="base", device="cpu")
+        
+        # Transcribe
+        transcript_text, segments = summarizer.transcribe(tmp_path)
+        
+        # Save transcript to knowledge base
+        transcript_dir = Path.home() / "knowledge" / "transcripts"
+        transcript_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Save as text file
+        safe_title = "".join(c for c in title if c.isalnum() or c in " -_").strip()
+        transcript_file = transcript_dir / f"{safe_title}.txt"
+        transcript_file.write_text(transcript_text)
+        
+        # Ingest to RAG
+        from rag_service import get_rag_service
+        rag = get_rag_service()
+        
+        chunk_size = 1000
+        chunks_added = 0
+        for i in range(0, len(transcript_text), chunk_size):
+            chunk = transcript_text[i:i+chunk_size]
+            if chunk.strip():
+                rag.add_document(
+                    content=chunk,
+                    metadata={
+                        "source_type": "transcript",
+                        "source_file": file.filename,
+                        "title": title,
+                        "chunk_index": i // chunk_size
+                    }
+                )
+                chunks_added += 1
+        
+        # Clean up temp file
+        os.unlink(tmp_path)
+        
+        return {
+            "status": "ok",
+            "filename": file.filename,
+            "title": title,
+            "transcript_length": len(transcript_text),
+            "chunks_added": chunks_added,
+            "transcript_preview": transcript_text[:500] + "..." if len(transcript_text) > 500 else transcript_text
+        }
+        
+    except Exception as e:
+        # Clean up temp file on error
+        try:
+            os.unlink(tmp_path)
+        except:
+            pass
+        return {"status": "error", "error": str(e)}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8080)

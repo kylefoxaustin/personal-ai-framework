@@ -422,6 +422,7 @@
     }
     .modal-buttons .cancel { background: #0f3460; border: 1px solid #1a4a7a; color: #eee; }
     .modal-buttons .confirm { background: #e94560; border: none; color: white; }
+      @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -593,6 +594,21 @@
           </div>
         </div>
         <div id="uploadStatus" style="margin-top: 0.5rem; font-size: 0.85rem;"></div>
+        
+        <h3>🎤 Transcribe Audio/Video</h3>
+        <div class="setting-row">
+          <label>Recording Title</label>
+          <input type="text" id="transcribeTitle" placeholder="Team Meeting 2024-03-30" style="width: 100%; background: #1a1a2e; border: 1px solid #0f3460; color: #eee; padding: 0.5rem; border-radius: 0.25rem;">
+        </div>
+        <div class="setting-row">
+          <div id="transcribeDropZone" style="border: 2px dashed #0f3460; border-radius: 0.5rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎬</div>
+            <div style="color: #94a3b8;">Drag & drop audio/video here or click to browse</div>
+            <div style="color: #64748b; font-size: 0.8rem; margin-top: 0.5rem;">Supports MP4, MP3, WAV, M4A, WEBM, MKV, MOV</div>
+            <input type="file" id="transcribeFileInput" accept="audio/*,video/*,.mp4,.mp3,.wav,.m4a,.webm,.mkv,.mov,.avi,.ogg,.flac" style="display: none;">
+          </div>
+        </div>
+        <div id="transcribeStatus" style="margin-top: 0.5rem; font-size: 0.85rem;"></div>
         
         <h3>📧 Email Providers</h3>
         <div class="setting-row">
@@ -1283,6 +1299,89 @@
     
     
     
+    
+    // Transcription Functions
+    function initTranscribeDropZone() {
+      const dropZone = document.getElementById('transcribeDropZone');
+      const fileInput = document.getElementById('transcribeFileInput');
+      
+      if (!dropZone || !fileInput) return;
+      
+      dropZone.addEventListener('click', () => fileInput.click());
+      
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#f472b6';
+        dropZone.style.background = 'rgba(244, 114, 182, 0.1)';
+      });
+      
+      dropZone.addEventListener('dragleave', () => {
+        dropZone.style.borderColor = '#0f3460';
+        dropZone.style.background = 'transparent';
+      });
+      
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#0f3460';
+        dropZone.style.background = 'transparent';
+        handleTranscribeFiles(e.dataTransfer.files);
+      });
+      
+      fileInput.addEventListener('change', (e) => {
+        handleTranscribeFiles(e.target.files);
+        e.target.value = '';
+      });
+    }
+    
+    async function handleTranscribeFiles(files) {
+      const titleInput = document.getElementById('transcribeTitle');
+      const statusDiv = document.getElementById('transcribeStatus');
+      
+      for (const file of files) {
+        const title = titleInput.value || file.name.replace(/\.[^/.]+$/, '');
+        
+        statusDiv.innerHTML = '<div style="color: #f472b6;">' +
+          '<div style="display: flex; align-items: center; gap: 0.5rem;">' +
+          '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #f472b6; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
+          '<span>🎤 Transcribing ' + file.name + '...</span>' +
+          '</div>' +
+          '<div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.5rem;">This may take several minutes for longer recordings</div>' +
+          '</div>';
+        
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          
+          const resp = await fetch(API + '/upload/transcribe?title=' + encodeURIComponent(title), {
+            method: 'POST',
+            body: formData
+          });
+          
+          const result = await resp.json();
+          
+          if (result.status === 'ok') {
+            statusDiv.innerHTML = '<span style="color: #4ade80;">✅ ' + file.name + ' transcribed (' + result.chunks_added + ' chunks added)</span>' +
+              '<details style="margin-top: 0.5rem;"><summary style="cursor: pointer; color: #60a5fa;">Preview transcript</summary>' +
+              '<div style="background: #1a1a2e; padding: 0.5rem; border-radius: 0.25rem; margin-top: 0.5rem; max-height: 200px; overflow-y: auto; font-size: 0.8rem;">' + 
+              result.transcript_preview + '</div></details>';
+            checkHealth();
+          } else {
+            statusDiv.innerHTML = '<span style="color: #f87171;">❌ ' + file.name + ': ' + result.error + '</span>';
+          }
+        } catch (err) {
+          statusDiv.innerHTML = '<span style="color: #f87171;">❌ Failed to transcribe ' + file.name + '</span>';
+          console.error(err);
+        }
+      }
+    }
+    
+    // Update init to include transcribe zone
+    const origInitUpload = initUploadDropZone;
+    initUploadDropZone = function() {
+      origInitUpload();
+      initTranscribeDropZone();
+    };
+
     // Document Upload Functions
     function initUploadDropZone() {
       // Clear previous status
