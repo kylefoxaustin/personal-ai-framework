@@ -106,16 +106,18 @@ class MeetingSummary:
 class MeetingSummarizer:
     """Transcribe and summarize meetings."""
     
-    def __init__(self, whisper_model: str = "base", llm_url: str = "http://localhost:8080"):
+    def __init__(self, whisper_model: str = "base", llm_url: str = "http://localhost:8080", device: str = "cuda"):
         """
         Initialize the meeting summarizer.
         
         Args:
             whisper_model: Whisper model size (tiny, base, small, medium, large)
             llm_url: URL of the LLM server for summarization
+            device: Device to run Whisper on (cuda or cpu)
         """
         self.whisper_model = whisper_model
         self.llm_url = llm_url
+        self.device = device
         self._whisper = None
     
     def _load_whisper(self):
@@ -124,7 +126,7 @@ class MeetingSummarizer:
             try:
                 import whisper
                 print(f"📥 Loading Whisper model: {self.whisper_model}")
-                self._whisper = whisper.load_model(self.whisper_model)
+                self._whisper = whisper.load_model(self.whisper_model, device=self.device)
                 print("✅ Whisper loaded")
             except ImportError:
                 raise ImportError(
