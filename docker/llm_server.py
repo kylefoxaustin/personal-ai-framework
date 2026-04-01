@@ -1163,8 +1163,9 @@ async def upload_document(file: UploadFile = File(...), doc_type: str = "documen
     
     dest_dir.mkdir(parents=True, exist_ok=True)
     
-    # Save file
+    # Save file (create subdirs if filename includes a path from folder upload)
     file_path = dest_dir / file.filename
+    file_path.parent.mkdir(parents=True, exist_ok=True)
     with open(file_path, "wb") as f:
         content = await file.read()
         f.write(content)
