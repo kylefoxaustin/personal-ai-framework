@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
   <title>Personal AI</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -126,6 +127,19 @@
     .header-btn:hover { background: #1a4a7a; }
     .header-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .header-btn.syncing { animation: pulse 1s infinite; }
+    .header-btn.active { background: #166534; border-color: #22c55e; color: #4ade80; }
+    .header-btn .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #64748b;
+      display: inline-block;
+      position: absolute;
+      top: 4px;
+      right: 4px;
+    }
+    .header-btn .status-dot.on { background: #4ade80; }
+    .header-btn { position: relative; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     main { flex: 1; overflow-y: auto; padding: 1.5rem; }
     .messages { display: flex; flex-direction: column; gap: 1rem; }
@@ -467,6 +481,52 @@
       justify-content: center;
     }
     .upload-panel h2 button:hover { background: #ff6b6b; }
+    .transcribe-results {
+      background: #1a2e1a;
+      border: 1px solid #4ade80;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-top: 0.75rem;
+    }
+    .transcribe-results h4 { color: #4ade80; margin: 0.75rem 0 0.25rem 0; }
+    .transcribe-results h4:first-child { margin-top: 0; }
+    .transcribe-results ul { padding-left: 1.25rem; margin: 0.25rem 0; }
+    .transcribe-results li { margin: 0.25rem 0; color: #ccc; }
+    .transcribe-results p { color: #ccc; margin: 0.25rem 0; }
+    .transcribe-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #0f3460;
+    }
+    .transcribe-actions button {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.4rem 0.8rem;
+      background: #0f3460;
+      border: 1px solid #1a4a7a;
+      border-radius: 0.5rem;
+      color: #eee;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .transcribe-actions button:hover { background: #1a4a7a; }
+    .transcribe-actions button.success { background: #166534; border-color: #22c55e; }
+    .transcript-full {
+      max-height: 300px;
+      overflow-y: auto;
+      background: #1a1a2e;
+      padding: 0.75rem;
+      border-radius: 0.25rem;
+      white-space: pre-wrap;
+      font-size: 0.8rem;
+      color: #ccc;
+      margin-top: 0.5rem;
+    }
     .upload-tabs {
       display: flex;
       gap: 0.5rem;
@@ -543,11 +603,12 @@
   <header>
     <h1>🧠 Personal AI</h1>
     <div class="header-right">
-      <button class="header-btn" onclick="newChat()"><span class="icon">✨</span> New</button>
-      <button class="header-btn upload-btn" onclick="openUploadPanel()"><span class="icon">📤</span> Upload</button>
-      <button id="syncBtn" class="header-btn" onclick="syncNow()"><span class="icon">🔄</span> Sync</button>
-      <button class="header-btn" onclick="openMemoryViewer()" title="Memory Viewer"><span class="icon">🧠</span> Memory</button>
-      <button class="header-btn" onclick="openSettings()"><span class="icon">⚙️</span> Settings</button>
+      <button class="header-btn" onclick="newChat()" title="Start a new conversation"><span class="icon">✨</span> New</button>
+      <button class="header-btn upload-btn" onclick="openUploadPanel()" title="Upload documents, audio/video, or images to knowledge base"><span class="icon">📤</span> Upload</button>
+      <button id="syncBtn" class="header-btn" onclick="syncNow()" title="Sync knowledge base (manual)"><span class="icon">🔄</span> Sync<span id="syncStatusDot" class="status-dot"></span></button>
+      <button class="header-btn" onclick="openMemoryViewer()" title="Browse and manage stored memories"><span class="icon">🧠</span> Memory</button>
+      <button id="webSearchBtn" class="header-btn active" onclick="toggleWebSearch()" title="Enable web search — type 'search: your question' to search the internet"><span class="icon">🌐</span> Web</button>
+      <button class="header-btn" onclick="openSettings()" title="AI personality, backup, email providers, and more"><span class="icon">⚙️</span> Settings</button>
       <div class="stats">
         <span id="status" class="status">● Connecting...</span>
         <span id="docs" class="docs"></span>
@@ -647,6 +708,10 @@
           <label>Image Title</label>
           <input type="text" id="ocrTitle2" placeholder="Meeting Whiteboard" style="width: 100%; background: #1a1a2e; border: 1px solid #0f3460; color: #eee; padding: 0.5rem; border-radius: 0.25rem;">
         </div>
+        <div class="setting-row" style="display: flex; align-items: center; gap: 0.5rem; margin: 0.5rem 0;">
+          <input type="checkbox" id="ocrSummarize2" style="width: 18px; height: 18px; accent-color: #60a5fa;">
+          <label for="ocrSummarize2" style="cursor: pointer;">📋 Summarize extracted text</label>
+        </div>
         <div class="upload-dropzone" id="ocrDropzone2">
           <div class="icon">📷</div>
           <div class="title">Drag & drop images here or click to browse</div>
@@ -745,15 +810,6 @@
           Export saves all conversations and settings. Import restores from a backup file.
         </p>
 
-        <h3>🌐 Web Search</h3>
-        <div class="setting-row" style="display: flex; align-items: center; gap: 0.5rem;">
-          <input type="checkbox" id="webSearchEnabled" style="width: 18px; height: 18px; accent-color: #60a5fa;">
-          <label for="webSearchEnabled" style="cursor: pointer;">Enable web search (lets Skippy search the internet for current info)</label>
-        </div>
-        <div id="webSearchStatus" style="margin-top: 0.5rem; font-size: 0.85rem; color: #94a3b8;">
-          When enabled, type "search: your question" to search the web
-        </div>
-        
         <h3>📧 Email Providers</h3>
         <div class="setting-row">
           <label>Gmail</label>
@@ -1004,6 +1060,18 @@
       if (autoRememberEnabled) {
         document.getElementById('autoRememberToggle').classList.add('active');
       }
+      // Load web search preference (default: enabled)
+      const savedWebSearch = localStorage.getItem('webSearch');
+      webSearchEnabled = savedWebSearch === null ? true : savedWebSearch === 'true';
+      document.getElementById('webSearchBtn').classList.toggle('active', webSearchEnabled);
+      // Sync settings on load (web search + sync dot)
+      fetch(`${API}/settings`).then(r => r.json()).then(settings => {
+        updateSyncDot(!!settings.sync?.auto_enabled);
+        if (settings.web_search?.enabled !== webSearchEnabled) {
+          settings.web_search = { enabled: webSearchEnabled };
+          fetch(`${API}/settings`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(settings) });
+        }
+      }).catch(() => {});
     });
     
     // Auto-remember state
@@ -1015,6 +1083,21 @@
       toggle.classList.toggle('active', autoRememberEnabled);
       localStorage.setItem('autoRemember', autoRememberEnabled);
       showToast(autoRememberEnabled ? '🧠 Auto-remember ON' : '🧠 Auto-remember OFF');
+    }
+
+    let webSearchEnabled = true;
+
+    async function toggleWebSearch() {
+      webSearchEnabled = !webSearchEnabled;
+      document.getElementById('webSearchBtn').classList.toggle('active', webSearchEnabled);
+      localStorage.setItem('webSearch', webSearchEnabled);
+      try {
+        const res = await fetch(`${API}/settings`);
+        const settings = await res.json();
+        settings.web_search = { enabled: webSearchEnabled };
+        await fetch(`${API}/settings`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(settings) });
+      } catch (err) { console.error('Failed to save web search setting:', err); }
+      showToast(webSearchEnabled ? '🌐 Web search ON' : '🌐 Web search OFF');
     }
     
     async function clearAllMemory() {
@@ -1087,6 +1170,13 @@
       conversationHistory = [];
       messagesDiv.innerHTML = `<div class="welcome"><h2>Welcome!</h2><p>Ask me anything about your emails, projects, blogs, or transcripts.</p><p style="margin-top: 0.5rem; font-size: 0.85rem;">Toggle "Write like me" for emails in your personal style.</p><div class="suggestions"><button onclick="suggest('Draft an email about the i.MX demo status')">📧 i.MX demo email</button><button onclick="suggest('What ARM projects have I worked on?')">🔍 ARM projects</button><button onclick="suggest('Write an email following up on project delays')">📧 Delay follow-up</button></div></div>`;
       showToast('✨ New conversation started');
+    }
+
+    function updateSyncDot(autoEnabled) {
+      const dot = document.getElementById('syncStatusDot');
+      const btn = document.getElementById('syncBtn');
+      if (dot) dot.classList.toggle('on', autoEnabled);
+      if (btn) btn.title = autoEnabled ? 'Sync knowledge base (auto-sync enabled)' : 'Sync knowledge base (manual)';
     }
 
     async function syncNow() {
@@ -1481,7 +1571,7 @@
     });
     
     // Close modal on overlay click
-    document.getElementById('emailModal').addEventListener('click', (e) => {
+    document.getElementById('emailModal')?.addEventListener('click', (e) => {
       if (e.target.classList.contains('modal-overlay')) closeModal();
     });
     
@@ -1492,264 +1582,6 @@
 
     // Settings management
     let currentSettings = {};
-    
-    
-    
-    
-    
-    
-    // OCR Functions
-    function initOcrDropZone() {
-      const dropZone = document.getElementById('ocrDropZone');
-      const fileInput = document.getElementById('ocrFileInput');
-      
-      if (!dropZone || !fileInput) return;
-      
-      dropZone.addEventListener('click', () => fileInput.click());
-      
-      dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.style.borderColor = '#60a5fa';
-        dropZone.style.background = 'rgba(96, 165, 250, 0.1)';
-      });
-      
-      dropZone.addEventListener('dragleave', () => {
-        dropZone.style.borderColor = '#0f3460';
-        dropZone.style.background = 'transparent';
-      });
-      
-      dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.style.borderColor = '#0f3460';
-        dropZone.style.background = 'transparent';
-        handleOcrFiles(e.dataTransfer.files);
-      });
-      
-      fileInput.addEventListener('change', (e) => {
-        handleOcrFiles(e.target.files);
-        e.target.value = '';
-      });
-    }
-    
-    async function handleOcrFiles(files) {
-      const titleInput = document.getElementById('ocrTitle');
-      const statusDiv = document.getElementById('ocrStatus');
-      
-      for (const file of files) {
-        const title = titleInput.value || file.name.replace(/\.[^/.]+$/, '');
-        
-        statusDiv.innerHTML = '<div style="color: #60a5fa;">' +
-          '<div style="display: flex; align-items: center; gap: 0.5rem;">' +
-          '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #60a5fa; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
-          '<span>📷 Extracting text from ' + file.name + '...</span>' +
-          '</div></div>';
-        
-        try {
-          const formData = new FormData();
-          formData.append('file', file);
-          
-          const resp = await fetch(API + '/upload/ocr?title=' + encodeURIComponent(title), {
-            method: 'POST',
-            body: formData
-          });
-          
-          const result = await resp.json();
-          
-          if (result.status === 'ok') {
-            statusDiv.innerHTML = '<span style="color: #4ade80;">✅ ' + file.name + ' - extracted ' + result.text_length + ' chars (' + result.chunks_added + ' chunks)</span>' +
-              '<details style="margin-top: 0.5rem;"><summary style="cursor: pointer; color: #60a5fa;">Preview extracted text</summary>' +
-              '<div style="background: #1a1a2e; padding: 0.5rem; border-radius: 0.25rem; margin-top: 0.5rem; max-height: 200px; overflow-y: auto; font-size: 0.8rem; white-space: pre-wrap;">' + 
-              result.text_preview + '</div></details>';
-            checkHealth();
-          } else {
-            statusDiv.innerHTML = '<span style="color: #f87171;">❌ ' + file.name + ': ' + result.error + '</span>';
-          }
-        } catch (err) {
-          statusDiv.innerHTML = '<span style="color: #f87171;">❌ Failed to process ' + file.name + '</span>';
-          console.error(err);
-        }
-      }
-    }
-    
-    // Update init to include OCR zone
-    const origInitTranscribe = initUploadDropZone;
-    initUploadDropZone = function() {
-      origInitTranscribe();
-      initOcrDropZone();
-    };
-
-    // Transcription Functions
-    function initTranscribeDropZone() {
-      const dropZone = document.getElementById('transcribeDropZone');
-      const fileInput = document.getElementById('transcribeFileInput');
-      
-      if (!dropZone || !fileInput) return;
-      
-      dropZone.addEventListener('click', () => fileInput.click());
-      
-      dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.style.borderColor = '#f472b6';
-        dropZone.style.background = 'rgba(244, 114, 182, 0.1)';
-      });
-      
-      dropZone.addEventListener('dragleave', () => {
-        dropZone.style.borderColor = '#0f3460';
-        dropZone.style.background = 'transparent';
-      });
-      
-      dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.style.borderColor = '#0f3460';
-        dropZone.style.background = 'transparent';
-        handleTranscribeFiles(e.dataTransfer.files);
-      });
-      
-      fileInput.addEventListener('change', (e) => {
-        handleTranscribeFiles(e.target.files);
-        e.target.value = '';
-      });
-    }
-    
-    async function handleTranscribeFiles(files) {
-      const titleInput = document.getElementById('transcribeTitle');
-      const statusDiv = document.getElementById('transcribeStatus');
-      
-      for (const file of files) {
-        const title = titleInput.value || file.name.replace(/\.[^/.]+$/, '');
-        
-        statusDiv.innerHTML = '<div style="color: #f472b6;">' +
-          '<div style="display: flex; align-items: center; gap: 0.5rem;">' +
-          '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #f472b6; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
-          '<span>🎤 Transcribing ' + file.name + '...</span>' +
-          '</div>' +
-          '<div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.5rem;">This may take several minutes for longer recordings</div>' +
-          '</div>';
-        
-        try {
-          const formData = new FormData();
-          formData.append('file', file);
-          
-          const summarize = document.getElementById('transcribeSummarize').checked;
-          const resp = await fetch(API + '/upload/transcribe?title=' + encodeURIComponent(title) + '&summarize=' + summarize, {
-            method: 'POST',
-            body: formData
-          });
-          
-          const result = await resp.json();
-          
-          if (result.status === 'ok') {
-            let summaryHtml = '';
-            if (result.summary && !result.summary.error) {
-              summaryHtml = '<div style="background: #1a2e1a; border: 1px solid #4ade80; border-radius: 0.5rem; padding: 1rem; margin-top: 0.5rem;">' +
-                '<div style="font-weight: bold; color: #4ade80; margin-bottom: 0.5rem;">📋 Meeting Summary</div>' +
-                '<div style="margin-bottom: 0.5rem;">' + result.summary.summary + '</div>' +
-                '<details style="margin-bottom: 0.5rem;"><summary style="cursor: pointer; color: #60a5fa;">🎯 Key Points</summary>' +
-                '<ul style="margin: 0.5rem 0; padding-left: 1.5rem;">' + (result.summary.key_points || []).map(p => '<li>' + p + '</li>').join('') + '</ul></details>' +
-                '<details style="margin-bottom: 0.5rem;"><summary style="cursor: pointer; color: #f472b6;">✅ Action Items</summary>' +
-                '<ul style="margin: 0.5rem 0; padding-left: 1.5rem;">' + (result.summary.action_items || []).map(a => '<li>' + a + '</li>').join('') + '</ul></details>' +
-                '<details><summary style="cursor: pointer; color: #fbbf24;">📌 Decisions</summary>' +
-                '<ul style="margin: 0.5rem 0; padding-left: 1.5rem;">' + (result.summary.decisions || []).map(d => '<li>' + d + '</li>').join('') + '</ul></details>' +
-                '</div>';
-            }
-            statusDiv.innerHTML = '<span style="color: #4ade80;">✅ ' + file.name + ' transcribed (' + result.chunks_added + ' chunks added)</span>' +
-              summaryHtml +
-              '<details style="margin-top: 0.5rem;"><summary style="cursor: pointer; color: #60a5fa;">Preview transcript</summary>' +
-              '<div style="background: #1a1a2e; padding: 0.5rem; border-radius: 0.25rem; margin-top: 0.5rem; max-height: 200px; overflow-y: auto; font-size: 0.8rem;">' + 
-              result.transcript_preview + '</div></details>';
-            checkHealth();
-          } else {
-            statusDiv.innerHTML = '<span style="color: #f87171;">❌ ' + file.name + ': ' + result.error + '</span>';
-          }
-        } catch (err) {
-          statusDiv.innerHTML = '<span style="color: #f87171;">❌ Failed to transcribe ' + file.name + '</span>';
-          console.error(err);
-        }
-      }
-    }
-    
-    // Update init to include transcribe zone
-    const origInitUpload = initUploadDropZone;
-    initUploadDropZone = function() {
-      origInitUpload();
-      initTranscribeDropZone();
-    };
-
-    // Document Upload Functions
-    function initUploadDropZone() {
-      // Clear previous status
-      const statusDiv = document.getElementById('uploadStatus');
-      if (statusDiv) statusDiv.innerHTML = '';
-      const dropZone = document.getElementById('uploadDropZone');
-      const fileInput = document.getElementById('uploadFileInput');
-      
-      if (!dropZone || !fileInput) return;
-      
-      dropZone.addEventListener('click', () => fileInput.click());
-      
-      dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.style.borderColor = '#4ade80';
-        dropZone.style.background = 'rgba(74, 222, 128, 0.1)';
-      });
-      
-      dropZone.addEventListener('dragleave', () => {
-        dropZone.style.borderColor = '#0f3460';
-        dropZone.style.background = 'transparent';
-      });
-      
-      dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.style.borderColor = '#0f3460';
-        dropZone.style.background = 'transparent';
-        handleFiles(e.dataTransfer.files);
-      });
-      
-      fileInput.addEventListener('change', (e) => {
-        handleFiles(e.target.files);
-        e.target.value = '';
-      });
-    }
-    
-    async function handleFiles(files) {
-      const docType = document.getElementById('uploadDocType').value;
-      const statusDiv = document.getElementById('uploadStatus');
-      
-      for (const file of files) {
-        statusDiv.innerHTML = `<span style="color: #60a5fa;">⏳ Uploading ${file.name}...</span>`;
-        
-        try {
-          const formData = new FormData();
-          formData.append('file', file);
-          
-          const resp = await fetch(`${API}/upload/document?doc_type=${docType}`, {
-            method: 'POST',
-            body: formData
-          });
-          
-          const result = await resp.json();
-          
-          if (result.status === 'ok') {
-            statusDiv.innerHTML = `<span style="color: #4ade80;">✅ ${file.name} uploaded (${result.chunks_added} chunks added)</span>`;
-            // Update doc count in header
-            checkHealth();
-          } else {
-            statusDiv.innerHTML = `<span style="color: #f87171;">❌ ${file.name}: ${result.error}</span>`;
-          }
-        } catch (err) {
-          statusDiv.innerHTML = `<span style="color: #f87171;">❌ Failed to upload ${file.name}</span>`;
-          console.error(err);
-        }
-      }
-    }
-    
-    // Initialize upload zone when settings opens
-    const origOpenSettings = openSettings;
-    openSettings = async function() {
-      await origOpenSettings();
-      setTimeout(initUploadDropZone, 100);
-    };
-
     // Export/Import Functions
     async function exportConversations() {
       try {
@@ -1995,11 +1827,115 @@
       }
     }
     
+    let lastTranscribeResult = null;
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function buildTranscribeResults(filename, result) {
+      lastTranscribeResult = result;
+      let html = '<span style="color: #4ade80;">✅ ' + escapeHtml(filename) + ' transcribed (' + result.chunks_added + ' chunks)</span>';
+      html += '<div class="transcribe-results">';
+
+      if (result.summary && !result.summary.error) {
+        html += '<h4>📋 Summary</h4><p>' + escapeHtml(result.summary.summary) + '</p>';
+        if (result.summary.key_points && result.summary.key_points.length > 0) {
+          html += '<h4>Key Points</h4><ul>' + result.summary.key_points.map(p => '<li>' + escapeHtml(p) + '</li>').join('') + '</ul>';
+        }
+        if (result.summary.action_items && result.summary.action_items.length > 0) {
+          html += '<h4>Action Items</h4><ul>' + result.summary.action_items.map(a => '<li>' + escapeHtml(a) + '</li>').join('') + '</ul>';
+        }
+        if (result.summary.decisions && result.summary.decisions.length > 0) {
+          html += '<h4>Decisions</h4><ul>' + result.summary.decisions.map(d => '<li>' + escapeHtml(d) + '</li>').join('') + '</ul>';
+        }
+      }
+
+      html += '<div class="transcribe-actions">';
+      if (result.summary && !result.summary.error) {
+        html += '<button onclick="copyTranscriptSummary(this)">📋 Copy Summary</button>';
+      }
+      if (result.full_transcript) {
+        html += '<button onclick="copyTranscriptFull(this)">📄 Copy Transcript</button>';
+      }
+      html += '<button onclick="sendTranscriptEmail(this)">📧 Send</button>';
+      html += '<button onclick="draftTranscriptEmail(this)">📝 Draft</button>';
+      html += '</div>';
+
+      if (result.full_transcript) {
+        html += '<details style="margin-top: 0.75rem;"><summary style="color: #f472b6; cursor: pointer; font-size: 0.85rem;">Show Full Transcript</summary>';
+        html += '<div class="transcript-full">' + escapeHtml(result.full_transcript) + '</div></details>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    function formatTranscriptSummaryText() {
+      const r = lastTranscribeResult;
+      if (!r) return '';
+      let text = '';
+      if (r.summary && !r.summary.error) {
+        text += 'Summary: ' + r.summary.summary + '\n';
+        if (r.summary.key_points && r.summary.key_points.length > 0) {
+          text += '\nKey Points:\n' + r.summary.key_points.map(p => '- ' + p).join('\n') + '\n';
+        }
+        if (r.summary.action_items && r.summary.action_items.length > 0) {
+          text += '\nAction Items:\n' + r.summary.action_items.map(a => '- ' + a).join('\n') + '\n';
+        }
+        if (r.summary.decisions && r.summary.decisions.length > 0) {
+          text += '\nDecisions:\n' + r.summary.decisions.map(d => '- ' + d).join('\n') + '\n';
+        }
+      }
+      return text.trim();
+    }
+
+    async function copyTranscriptSummary(btn) {
+      try {
+        await navigator.clipboard.writeText(formatTranscriptSummaryText());
+        btn.classList.add('success');
+        btn.innerHTML = '✓ Copied!';
+        showToast('📋 Summary copied to clipboard');
+        setTimeout(() => { btn.classList.remove('success'); btn.innerHTML = '📋 Copy Summary'; }, 2000);
+      } catch (err) { showToast('❌ Failed to copy'); }
+    }
+
+    async function copyTranscriptFull(btn) {
+      try {
+        await navigator.clipboard.writeText(lastTranscribeResult.full_transcript);
+        btn.classList.add('success');
+        btn.innerHTML = '✓ Copied!';
+        showToast('📋 Transcript copied to clipboard');
+        setTimeout(() => { btn.classList.remove('success'); btn.innerHTML = '📄 Copy Transcript'; }, 2000);
+      } catch (err) { showToast('❌ Failed to copy'); }
+    }
+
+    function formatTranscribeEmail() {
+      const r = lastTranscribeResult;
+      if (!r) return '';
+      let text = 'Subject: ' + (r.title || 'Recording') + ' - Transcript & Summary\n\n';
+      text += formatTranscriptSummaryText();
+      if (r.full_transcript) {
+        text += '\n\n---\n\nFull Transcript:\n\n' + r.full_transcript;
+      }
+      return text;
+    }
+
+    async function sendTranscriptEmail(btn) {
+      await sendEmailDirect(btn, formatTranscribeEmail());
+    }
+
+    async function draftTranscriptEmail(btn) {
+      await createDraft(btn, formatTranscribeEmail());
+    }
+
     async function handleTranscribeUpload2(files) {
       const title = document.getElementById('transcribeTitle2').value || files[0]?.name?.replace(/\.[^/.]+$/, '') || 'Recording';
       const summarize = document.getElementById('transcribeSummarize2').checked;
       const statusDiv = document.getElementById('transcribeUploadStatus2');
-      
+
       for (const file of files) {
         statusDiv.innerHTML = '<div style="color: #f472b6; display: flex; align-items: center; gap: 0.5rem;">' +
           '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #f472b6; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
@@ -2010,12 +1946,7 @@
           const resp = await fetch(API + '/upload/transcribe?title=' + encodeURIComponent(title) + '&summarize=' + summarize, { method: 'POST', body: formData });
           const result = await resp.json();
           if (result.status === 'ok') {
-            let html = '<span style="color: #4ade80;">✅ ' + file.name + ' transcribed (' + result.chunks_added + ' chunks)</span>';
-            if (result.summary && !result.summary.error) {
-              html += '<div style="background: #1a2e1a; border: 1px solid #4ade80; border-radius: 0.5rem; padding: 1rem; margin-top: 0.5rem;">' +
-                '<strong style="color: #4ade80;">📋 Summary:</strong> ' + result.summary.summary + '</div>';
-            }
-            statusDiv.innerHTML = html;
+            statusDiv.innerHTML = buildTranscribeResults(file.name, result);
             checkHealth();
           } else {
             statusDiv.innerHTML = '<span style="color: #f87171;">❌ ' + file.name + ': ' + result.error + '</span>';
@@ -2026,10 +1957,88 @@
       }
     }
     
+    let lastOcrResult = null;
+
+    function buildOcrResults(filename, result) {
+      lastOcrResult = result;
+      let html = '<span style="color: #4ade80;">✅ ' + escapeHtml(filename) + ' - ' + result.text_length + ' chars extracted (' + result.chunks_added + ' chunks)</span>';
+      html += '<div class="transcribe-results">';
+
+      if (result.summary && !result.summary.error) {
+        html += '<h4>📋 Summary</h4><p>' + escapeHtml(result.summary.summary) + '</p>';
+        if (result.summary.key_points && result.summary.key_points.length > 0) {
+          html += '<h4>Key Points</h4><ul>' + result.summary.key_points.map(p => '<li>' + escapeHtml(p) + '</li>').join('') + '</ul>';
+        }
+      }
+
+      html += '<details style="margin-top: 0.75rem;"><summary style="color: #60a5fa; cursor: pointer; font-size: 0.85rem;">Show Extracted Text</summary>';
+      html += '<div class="transcript-full" style="max-height: 200px;">' + escapeHtml(result.full_text || result.text_preview) + '</div></details>';
+
+      html += '<div class="transcribe-actions">';
+      if (result.summary && !result.summary.error) {
+        html += '<button onclick="copyOcrSummary(this)">📋 Copy Summary</button>';
+      }
+      html += '<button onclick="copyOcrText(this)">📄 Copy Text</button>';
+      html += '<button onclick="sendOcrEmail(this)">📧 Send</button>';
+      html += '<button onclick="draftOcrEmail(this)">📝 Draft</button>';
+      html += '</div>';
+      html += '</div>';
+      return html;
+    }
+
+    async function copyOcrSummary(btn) {
+      try {
+        const r = lastOcrResult;
+        let text = r.summary.summary;
+        if (r.summary.key_points && r.summary.key_points.length > 0) {
+          text += '\n\nKey Points:\n' + r.summary.key_points.map(p => '- ' + p).join('\n');
+        }
+        await navigator.clipboard.writeText(text);
+        btn.classList.add('success');
+        btn.innerHTML = '✓ Copied!';
+        showToast('📋 Summary copied to clipboard');
+        setTimeout(() => { btn.classList.remove('success'); btn.innerHTML = '📋 Copy Summary'; }, 2000);
+      } catch (err) { showToast('❌ Failed to copy'); }
+    }
+
+    async function copyOcrText(btn) {
+      try {
+        await navigator.clipboard.writeText(lastOcrResult.full_text || lastOcrResult.text_preview);
+        btn.classList.add('success');
+        btn.innerHTML = '✓ Copied!';
+        showToast('📋 OCR text copied to clipboard');
+        setTimeout(() => { btn.classList.remove('success'); btn.innerHTML = '📋 Copy Text'; }, 2000);
+      } catch (err) { showToast('❌ Failed to copy'); }
+    }
+
+    function formatOcrEmail() {
+      const r = lastOcrResult;
+      if (!r) return '';
+      let text = 'Subject: ' + (r.title || 'Image') + ' - OCR Extracted Text\n\n';
+      if (r.summary && !r.summary.error) {
+        text += 'Summary: ' + r.summary.summary + '\n';
+        if (r.summary.key_points && r.summary.key_points.length > 0) {
+          text += '\nKey Points:\n' + r.summary.key_points.map(p => '- ' + p).join('\n') + '\n';
+        }
+        text += '\n---\n\n';
+      }
+      text += 'Extracted Text:\n\n' + (r.full_text || r.text_preview);
+      return text;
+    }
+
+    async function sendOcrEmail(btn) {
+      await sendEmailDirect(btn, formatOcrEmail());
+    }
+
+    async function draftOcrEmail(btn) {
+      await createDraft(btn, formatOcrEmail());
+    }
+
     async function handleOcrUpload2(files) {
       const title = document.getElementById('ocrTitle2').value || files[0]?.name?.replace(/\.[^/.]+$/, '') || 'Image';
+      const summarize = document.getElementById('ocrSummarize2').checked;
       const statusDiv = document.getElementById('ocrUploadStatus2');
-      
+
       for (const file of files) {
         statusDiv.innerHTML = '<div style="color: #60a5fa; display: flex; align-items: center; gap: 0.5rem;">' +
           '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #60a5fa; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
@@ -2037,13 +2046,10 @@
         try {
           const formData = new FormData();
           formData.append('file', file);
-          const resp = await fetch(API + '/upload/ocr?title=' + encodeURIComponent(title), { method: 'POST', body: formData });
+          const resp = await fetch(API + '/upload/ocr?title=' + encodeURIComponent(title) + '&summarize=' + summarize, { method: 'POST', body: formData });
           const result = await resp.json();
           if (result.status === 'ok') {
-            statusDiv.innerHTML = '<span style="color: #4ade80;">✅ ' + file.name + ' - ' + result.text_length + ' chars extracted (' + result.chunks_added + ' chunks)</span>' +
-              '<details style="margin-top: 0.5rem;"><summary style="cursor: pointer; color: #60a5fa;">Preview</summary>' +
-              '<div style="background: #1a1a2e; padding: 0.5rem; border-radius: 0.25rem; margin-top: 0.5rem; max-height: 150px; overflow-y: auto; font-size: 0.8rem; white-space: pre-wrap;">' + 
-              result.text_preview + '</div></details>';
+            statusDiv.innerHTML = buildOcrResults(file.name, result);
             checkHealth();
           } else {
             statusDiv.innerHTML = '<span style="color: #f87171;">❌ ' + file.name + ': ' + result.error + '</span>';
@@ -2068,42 +2074,52 @@
       try {
         const res = await fetch(`${API}/settings`);
         currentSettings = await res.json();
-        
+
         // Digest settings
-        document.getElementById('digestToggle').classList.toggle('active', currentSettings.digest?.enabled);
-        document.getElementById('digestTime').value = currentSettings.digest?.time || '08:00';
-        document.getElementById('digestEmail').value = currentSettings.digest?.email || '';
-        
+        const digestToggle = document.getElementById('digestToggle');
+        const digestTime = document.getElementById('digestTime');
+        const digestEmail = document.getElementById('digestEmail');
+        if (digestToggle) digestToggle.classList.toggle('active', currentSettings.digest?.enabled);
+        if (digestTime) digestTime.value = currentSettings.digest?.time || '08:00';
+        if (digestEmail) digestEmail.value = currentSettings.digest?.email || '';
+
         // Sync settings
-        document.getElementById('syncToggle').classList.toggle('active', currentSettings.sync?.auto_enabled);
-        document.getElementById('syncInterval').value = currentSettings.sync?.interval_hours || '1';
+        const syncToggle = document.getElementById('syncToggle');
+        const syncInterval = document.getElementById('syncInterval');
+        if (syncToggle) syncToggle.classList.toggle('active', currentSettings.sync?.auto_enabled);
+        if (syncInterval) syncInterval.value = currentSettings.sync?.interval_hours || '1';
+        updateSyncDot(!!currentSettings.sync?.auto_enabled);
         
         // Email provider status
         const gmail = currentSettings.email_providers?.gmail;
         const outlook = currentSettings.email_providers?.outlook;
         
         const gmailStatus = document.getElementById('gmailStatus');
-        if (gmail?.authenticated) {
-          gmailStatus.textContent = 'Connected';
-          gmailStatus.className = 'status-badge connected';
-        } else if (gmail?.configured) {
-          gmailStatus.textContent = 'Needs auth';
-          gmailStatus.className = 'status-badge disconnected';
-        } else {
-          gmailStatus.textContent = 'Not configured';
-          gmailStatus.className = 'status-badge disconnected';
+        if (gmailStatus) {
+          if (gmail?.authenticated) {
+            gmailStatus.textContent = 'Connected';
+            gmailStatus.className = 'status-badge connected';
+          } else if (gmail?.configured) {
+            gmailStatus.textContent = 'Needs auth';
+            gmailStatus.className = 'status-badge disconnected';
+          } else {
+            gmailStatus.textContent = 'Not configured';
+            gmailStatus.className = 'status-badge disconnected';
+          }
         }
-        
+
         const outlookStatus = document.getElementById('outlookStatus');
-        if (outlook?.authenticated) {
-          outlookStatus.textContent = 'Connected';
-          outlookStatus.className = 'status-badge connected';
-        } else if (outlook?.configured) {
-          outlookStatus.textContent = 'Needs auth';
-          outlookStatus.className = 'status-badge disconnected';
-        } else {
-          outlookStatus.textContent = 'Not configured';
-          outlookStatus.className = 'status-badge disconnected';
+        if (outlookStatus) {
+          if (outlook?.authenticated) {
+            outlookStatus.textContent = 'Connected';
+            outlookStatus.className = 'status-badge connected';
+          } else if (outlook?.configured) {
+            outlookStatus.textContent = 'Needs auth';
+            outlookStatus.className = 'status-badge disconnected';
+          } else {
+            outlookStatus.textContent = 'Not configured';
+            outlookStatus.className = 'status-badge disconnected';
+          }
         }
       } catch (err) {
         console.error('Failed to load settings:', err);
@@ -2132,7 +2148,7 @@
           interval_hours: parseInt(document.getElementById('syncInterval').value)
         },
         web_search: {
-          enabled: document.getElementById('webSearchEnabled').checked
+          enabled: webSearchEnabled
         }
       };
       
@@ -2145,6 +2161,7 @@
         const result = await res.json();
         
         if (result.status === 'ok') {
+          updateSyncDot(settings.sync.auto_enabled);
           showToast('✅ Settings saved!');
           closeSettings();
         } else {
@@ -2181,7 +2198,7 @@
     });
     
     // Close on overlay click
-    document.getElementById('settingsOverlay').addEventListener('click', (e) => {
+    document.getElementById('settingsOverlay')?.addEventListener('click', (e) => {
       if (e.target.classList.contains('settings-overlay')) closeSettings();
     });
 
@@ -2312,27 +2329,31 @@
       // Update Gmail button
       const gmailBtn = document.getElementById('gmailSetupBtn');
       const gmail = currentSettings.email_providers?.gmail;
-      if (gmail?.authenticated) {
-        gmailBtn.textContent = 'Disconnect';
-        gmailBtn.className = 'btn-small disconnect';
-        gmailBtn.onclick = () => disconnectEmail('gmail');
-      } else {
-        gmailBtn.textContent = 'Setup';
-        gmailBtn.className = 'btn-small';
-        gmailBtn.onclick = () => openEmailSetup('gmail');
+      if (gmailBtn) {
+        if (gmail?.authenticated) {
+          gmailBtn.textContent = 'Disconnect';
+          gmailBtn.className = 'btn-small disconnect';
+          gmailBtn.onclick = () => disconnectEmail('gmail');
+        } else {
+          gmailBtn.textContent = 'Setup';
+          gmailBtn.className = 'btn-small';
+          gmailBtn.onclick = () => openEmailSetup('gmail');
+        }
       }
-      
+
       // Update Outlook button
       const outlookBtn = document.getElementById('outlookSetupBtn');
       const outlook = currentSettings.email_providers?.outlook;
-      if (outlook?.authenticated) {
-        outlookBtn.textContent = 'Disconnect';
-        outlookBtn.className = 'btn-small disconnect';
-        outlookBtn.onclick = () => disconnectEmail('outlook');
-      } else {
-        outlookBtn.textContent = 'Setup';
-        outlookBtn.className = 'btn-small';
-        outlookBtn.onclick = () => openEmailSetup('outlook');
+      if (outlookBtn) {
+        if (outlook?.authenticated) {
+          outlookBtn.textContent = 'Disconnect';
+          outlookBtn.className = 'btn-small disconnect';
+          outlookBtn.onclick = () => disconnectEmail('outlook');
+        } else {
+          outlookBtn.textContent = 'Setup';
+          outlookBtn.className = 'btn-small';
+          outlookBtn.onclick = () => openEmailSetup('outlook');
+        }
       }
     };
     
@@ -2349,7 +2370,7 @@
     }
     
     // Close email setup on escape
-    document.getElementById('emailSetupOverlay').addEventListener('click', (e) => {
+    document.getElementById('emailSetupOverlay')?.addEventListener('click', (e) => {
       if (e.target.classList.contains('settings-overlay')) closeEmailSetup();
     });
 
