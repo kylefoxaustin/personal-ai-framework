@@ -481,6 +481,38 @@
       justify-content: center;
     }
     .upload-panel h2 button:hover { background: #ff6b6b; }
+    .folder-btn {
+      background: #0f3460;
+      border: 1px solid #1a4a7a;
+      color: #94a3b8;
+      padding: 0.4rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .folder-btn:hover { background: #1a4a7a; color: #eee; }
+    .bulk-progress {
+      background: #1a1a2e;
+      border: 1px solid #0f3460;
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .bulk-progress-bar {
+      height: 6px;
+      background: #0f3460;
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+    .bulk-progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4ade80, #22c55e);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    .bulk-result { padding: 0.25rem 0; font-size: 0.85rem; }
     .transcribe-results {
       background: #1a2e1a;
       border: 1px solid #4ade80;
@@ -649,6 +681,9 @@
   <div id="toast" class="toast"></div>
   
   
+  <!-- Folder upload fallback for Firefox -->
+  <input type="file" id="folderInputFallback" webkitdirectory style="display: none;">
+
   <!-- Upload Panel -->
   <div id="uploadPanel" class="upload-panel">
     <div class="upload-panel-content">
@@ -680,6 +715,9 @@
           <div class="subtitle">Supports PDF, TXT, MD files</div>
           <input type="file" id="docFileInput2" multiple accept=".pdf,.txt,.md,.eml,.mbox" style="display: none;">
         </div>
+        <div style="text-align: center; margin-top: 0.5rem;">
+          <button class="folder-btn" onclick="pickFolderAndUpload(DOC_EXTS, handleDocUpload2)">📂 Upload Folder</button>
+        </div>
         <div id="docUploadStatus2" style="font-size: 0.85rem;"></div>
       </div>
       
@@ -697,7 +735,10 @@
           <div class="icon">🎬</div>
           <div class="title">Drag & drop audio/video here or click to browse</div>
           <div class="subtitle">Supports MP4, MP3, WAV, M4A, WEBM, MKV, MOV</div>
-          <input type="file" id="transcribeFileInput2" accept="audio/*,video/*,.mp4,.mp3,.wav,.m4a,.webm,.mkv,.mov,.avi,.ogg,.flac" style="display: none;">
+          <input type="file" id="transcribeFileInput2" multiple accept="audio/*,video/*,.mp4,.mp3,.wav,.m4a,.webm,.mkv,.mov,.avi,.ogg,.flac" style="display: none;">
+        </div>
+        <div style="text-align: center; margin-top: 0.5rem;">
+          <button class="folder-btn" onclick="pickFolderAndUpload(AUDIO_EXTS, handleTranscribeUpload2)">📂 Upload Folder</button>
         </div>
         <div id="transcribeUploadStatus2" style="font-size: 0.85rem;"></div>
       </div>
@@ -716,7 +757,10 @@
           <div class="icon">📷</div>
           <div class="title">Drag & drop images here or click to browse</div>
           <div class="subtitle">Supports PNG, JPG, GIF, BMP, TIFF, WEBP</div>
-          <input type="file" id="ocrFileInput2" accept="image/*,.png,.jpg,.jpeg,.gif,.bmp,.tiff,.webp" style="display: none;">
+          <input type="file" id="ocrFileInput2" multiple accept="image/*,.png,.jpg,.jpeg,.gif,.bmp,.tiff,.webp" style="display: none;">
+        </div>
+        <div style="text-align: center; margin-top: 0.5rem;">
+          <button class="folder-btn" onclick="pickFolderAndUpload(IMAGE_EXTS, handleOcrUpload2)">📂 Upload Folder</button>
         </div>
         <div id="ocrUploadStatus2" style="font-size: 0.85rem;"></div>
       </div>
@@ -1072,6 +1116,14 @@
           fetch(`${API}/settings`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(settings) });
         }
       }).catch(() => {});
+      // Folder upload fallback handler
+      document.getElementById('folderInputFallback').onchange = (e) => {
+        if (_folderUploadHandler && _folderUploadExts) {
+          const filtered = filterFiles(e.target.files, _folderUploadExts);
+          if (filtered.length > 0) _folderUploadHandler(filtered);
+          e.target.value = '';
+        }
+      };
     });
     
     // Auto-remember state
@@ -1773,7 +1825,7 @@
         docDrop.onclick = () => docInput.click();
         docDrop.ondragover = (e) => { e.preventDefault(); docDrop.style.borderColor = '#4ade80'; };
         docDrop.ondragleave = () => { docDrop.style.borderColor = '#0f3460'; };
-        docDrop.ondrop = (e) => { e.preventDefault(); docDrop.style.borderColor = '#0f3460'; handleDocUpload2(e.dataTransfer.files); };
+        docDrop.ondrop = (e) => { e.preventDefault(); docDrop.style.borderColor = '#0f3460'; handleDocUpload2(filterFiles(e.dataTransfer.files, DOC_EXTS)); };
         docInput.onchange = (e) => { handleDocUpload2(e.target.files); e.target.value = ''; };
       }
       
@@ -1786,7 +1838,7 @@
         transDrop.onclick = () => transInput.click();
         transDrop.ondragover = (e) => { e.preventDefault(); transDrop.style.borderColor = '#f472b6'; };
         transDrop.ondragleave = () => { transDrop.style.borderColor = '#0f3460'; };
-        transDrop.ondrop = (e) => { e.preventDefault(); transDrop.style.borderColor = '#0f3460'; handleTranscribeUpload2(e.dataTransfer.files); };
+        transDrop.ondrop = (e) => { e.preventDefault(); transDrop.style.borderColor = '#0f3460'; handleTranscribeUpload2(filterFiles(e.dataTransfer.files, AUDIO_EXTS)); };
         transInput.onchange = (e) => { handleTranscribeUpload2(e.target.files); e.target.value = ''; };
       }
       
@@ -1799,32 +1851,124 @@
         ocrDrop.onclick = () => ocrInput.click();
         ocrDrop.ondragover = (e) => { e.preventDefault(); ocrDrop.style.borderColor = '#60a5fa'; };
         ocrDrop.ondragleave = () => { ocrDrop.style.borderColor = '#0f3460'; };
-        ocrDrop.ondrop = (e) => { e.preventDefault(); ocrDrop.style.borderColor = '#0f3460'; handleOcrUpload2(e.dataTransfer.files); };
+        ocrDrop.ondrop = (e) => { e.preventDefault(); ocrDrop.style.borderColor = '#0f3460'; handleOcrUpload2(filterFiles(e.dataTransfer.files, IMAGE_EXTS)); };
         ocrInput.onchange = (e) => { handleOcrUpload2(e.target.files); e.target.value = ''; };
       }
     }
     
+    const DOC_EXTS = ['.pdf', '.txt', '.md', '.eml', '.mbox'];
+    const AUDIO_EXTS = ['.mp4', '.mp3', '.wav', '.m4a', '.webm', '.mkv', '.mov', '.avi', '.ogg', '.flac'];
+    const IMAGE_EXTS = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', '.webp'];
+
+    function filterFiles(fileList, exts) {
+      const filtered = [];
+      for (const file of fileList) {
+        const ext = '.' + file.name.split('.').pop().toLowerCase();
+        if (exts.includes(ext)) filtered.push(file);
+      }
+      if (filtered.length < fileList.length) {
+        showToast('Filtered ' + (fileList.length - filtered.length) + ' unsupported files');
+      }
+      return filtered;
+    }
+
+    let _folderUploadExts = null;
+    let _folderUploadHandler = null;
+
+    async function pickFolderAndUpload(exts, handler) {
+      if (window.showDirectoryPicker) {
+        try {
+          const dirHandle = await window.showDirectoryPicker();
+          showToast('📂 Scanning folder...');
+          const files = await collectFilesFromDir(dirHandle, exts);
+          if (files.length === 0) {
+            showToast('No supported files found in folder');
+            return;
+          }
+          showToast('Found ' + files.length + ' files');
+          handler(files);
+        } catch (err) {
+          if (err.name !== 'AbortError') showToast('❌ ' + err.message);
+        }
+      } else {
+        // Fallback for Firefox: use webkitdirectory input
+        _folderUploadExts = exts;
+        _folderUploadHandler = handler;
+        const input = document.getElementById('folderInputFallback');
+        input.value = '';
+        input.click();
+      }
+    }
+
+    async function collectFilesFromDir(dirHandle, exts) {
+      const files = [];
+      for await (const entry of dirHandle.values()) {
+        if (entry.kind === 'file') {
+          const ext = '.' + entry.name.split('.').pop().toLowerCase();
+          if (exts.includes(ext)) {
+            const file = await entry.getFile();
+            files.push(file);
+          }
+        } else if (entry.kind === 'directory') {
+          const subFiles = await collectFilesFromDir(entry, exts);
+          files.push(...subFiles);
+        }
+      }
+      return files;
+    }
+
+    function bulkProgressHtml(current, total, filename, results) {
+      const pct = Math.round((current / total) * 100);
+      let html = '<div class="bulk-progress">';
+      html += '<div style="display: flex; justify-content: space-between; font-size: 0.85rem;">';
+      html += '<span style="color: #94a3b8;">Processing ' + current + ' of ' + total + '</span>';
+      html += '<span style="color: #60a5fa;">' + pct + '%</span></div>';
+      html += '<div class="bulk-progress-bar"><div class="bulk-progress-bar-fill" style="width: ' + pct + '%"></div></div>';
+      if (filename) {
+        html += '<div style="color: #94a3b8; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">' +
+          '<div class="spinner" style="width: 14px; height: 14px; border: 2px solid #60a5fa; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
+          escapeHtml(filename) + '</div>';
+      }
+      for (const r of results) { html += '<div class="bulk-result">' + r + '</div>'; }
+      html += '</div>';
+      return html;
+    }
+
     async function handleDocUpload2(files) {
       const docType = document.getElementById('uploadDocType2').value;
       const statusDiv = document.getElementById('docUploadStatus2');
-      
-      for (const file of files) {
-        statusDiv.innerHTML = '<span style="color: #60a5fa;">⏳ Uploading ' + file.name + '...</span>';
+      const fileArr = Array.from(files);
+      if (fileArr.length === 0) return;
+      const isBulk = fileArr.length > 1;
+      const results = [];
+
+      for (let i = 0; i < fileArr.length; i++) {
+        const file = fileArr[i];
+        if (isBulk) {
+          statusDiv.innerHTML = bulkProgressHtml(i, fileArr.length, file.name, results);
+        } else {
+          statusDiv.innerHTML = '<span style="color: #60a5fa;">⏳ Uploading ' + escapeHtml(file.name) + '...</span>';
+        }
         try {
           const formData = new FormData();
           formData.append('file', file);
           const resp = await fetch(API + '/upload/document?doc_type=' + docType, { method: 'POST', body: formData });
           const result = await resp.json();
           if (result.status === 'ok') {
-            statusDiv.innerHTML = '<span style="color: #4ade80;">✅ ' + file.name + ' uploaded (' + result.chunks_added + ' chunks)</span>';
-            checkHealth();
+            results.push('<span style="color: #4ade80;">✅ ' + escapeHtml(file.name) + ' (' + result.chunks_added + ' chunks)</span>');
           } else {
-            statusDiv.innerHTML = '<span style="color: #f87171;">❌ ' + file.name + ': ' + result.error + '</span>';
+            results.push('<span style="color: #f87171;">❌ ' + escapeHtml(file.name) + ': ' + escapeHtml(result.error) + '</span>');
           }
         } catch (err) {
-          statusDiv.innerHTML = '<span style="color: #f87171;">❌ Upload failed</span>';
+          results.push('<span style="color: #f87171;">❌ ' + escapeHtml(file.name) + ': Upload failed</span>');
         }
       }
+      if (isBulk) {
+        statusDiv.innerHTML = bulkProgressHtml(fileArr.length, fileArr.length, null, results);
+      } else {
+        statusDiv.innerHTML = results[0];
+      }
+      checkHealth();
     }
     
     let lastTranscribeResult = null;
@@ -1932,29 +2076,45 @@
     }
 
     async function handleTranscribeUpload2(files) {
-      const title = document.getElementById('transcribeTitle2').value || files[0]?.name?.replace(/\.[^/.]+$/, '') || 'Recording';
       const summarize = document.getElementById('transcribeSummarize2').checked;
       const statusDiv = document.getElementById('transcribeUploadStatus2');
+      const fileArr = Array.from(files);
+      if (fileArr.length === 0) return;
+      const isBulk = fileArr.length > 1;
+      const results = [];
 
-      for (const file of files) {
-        statusDiv.innerHTML = '<div style="color: #f472b6; display: flex; align-items: center; gap: 0.5rem;">' +
-          '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #f472b6; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
-          '<span>🎤 Transcribing ' + file.name + '...</span></div>';
+      for (let i = 0; i < fileArr.length; i++) {
+        const file = fileArr[i];
+        const title = document.getElementById('transcribeTitle2').value || file.name.replace(/\.[^/.]+$/, '') || 'Recording';
+        if (isBulk) {
+          statusDiv.innerHTML = bulkProgressHtml(i, fileArr.length, '🎤 ' + file.name, results);
+        } else {
+          statusDiv.innerHTML = '<div style="color: #f472b6; display: flex; align-items: center; gap: 0.5rem;">' +
+            '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #f472b6; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
+            '<span>🎤 Transcribing ' + escapeHtml(file.name) + '...</span></div>';
+        }
         try {
           const formData = new FormData();
           formData.append('file', file);
           const resp = await fetch(API + '/upload/transcribe?title=' + encodeURIComponent(title) + '&summarize=' + summarize, { method: 'POST', body: formData });
           const result = await resp.json();
           if (result.status === 'ok') {
-            statusDiv.innerHTML = buildTranscribeResults(file.name, result);
-            checkHealth();
+            if (isBulk) {
+              results.push('<span style="color: #4ade80;">✅ ' + escapeHtml(file.name) + ' (' + result.chunks_added + ' chunks)</span>');
+            } else {
+              statusDiv.innerHTML = buildTranscribeResults(file.name, result);
+            }
           } else {
-            statusDiv.innerHTML = '<span style="color: #f87171;">❌ ' + file.name + ': ' + result.error + '</span>';
+            results.push('<span style="color: #f87171;">❌ ' + escapeHtml(file.name) + ': ' + escapeHtml(result.error) + '</span>');
           }
         } catch (err) {
-          statusDiv.innerHTML = '<span style="color: #f87171;">❌ Transcription failed</span>';
+          results.push('<span style="color: #f87171;">❌ ' + escapeHtml(file.name) + ': Transcription failed</span>');
         }
       }
+      if (isBulk) {
+        statusDiv.innerHTML = bulkProgressHtml(fileArr.length, fileArr.length, null, results);
+      }
+      checkHealth();
     }
     
     let lastOcrResult = null;
@@ -2035,29 +2195,45 @@
     }
 
     async function handleOcrUpload2(files) {
-      const title = document.getElementById('ocrTitle2').value || files[0]?.name?.replace(/\.[^/.]+$/, '') || 'Image';
       const summarize = document.getElementById('ocrSummarize2').checked;
       const statusDiv = document.getElementById('ocrUploadStatus2');
+      const fileArr = Array.from(files);
+      if (fileArr.length === 0) return;
+      const isBulk = fileArr.length > 1;
+      const results = [];
 
-      for (const file of files) {
-        statusDiv.innerHTML = '<div style="color: #60a5fa; display: flex; align-items: center; gap: 0.5rem;">' +
-          '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #60a5fa; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
-          '<span>📷 Extracting text...</span></div>';
+      for (let i = 0; i < fileArr.length; i++) {
+        const file = fileArr[i];
+        const title = document.getElementById('ocrTitle2').value || file.name.replace(/\.[^/.]+$/, '') || 'Image';
+        if (isBulk) {
+          statusDiv.innerHTML = bulkProgressHtml(i, fileArr.length, '📷 ' + file.name, results);
+        } else {
+          statusDiv.innerHTML = '<div style="color: #60a5fa; display: flex; align-items: center; gap: 0.5rem;">' +
+            '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #60a5fa; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
+            '<span>📷 Extracting text from ' + escapeHtml(file.name) + '...</span></div>';
+        }
         try {
           const formData = new FormData();
           formData.append('file', file);
           const resp = await fetch(API + '/upload/ocr?title=' + encodeURIComponent(title) + '&summarize=' + summarize, { method: 'POST', body: formData });
           const result = await resp.json();
           if (result.status === 'ok') {
-            statusDiv.innerHTML = buildOcrResults(file.name, result);
-            checkHealth();
+            if (isBulk) {
+              results.push('<span style="color: #4ade80;">✅ ' + escapeHtml(file.name) + ' (' + result.text_length + ' chars, ' + result.chunks_added + ' chunks)</span>');
+            } else {
+              statusDiv.innerHTML = buildOcrResults(file.name, result);
+            }
           } else {
-            statusDiv.innerHTML = '<span style="color: #f87171;">❌ ' + file.name + ': ' + result.error + '</span>';
+            results.push('<span style="color: #f87171;">❌ ' + escapeHtml(file.name) + ': ' + escapeHtml(result.error) + '</span>');
           }
         } catch (err) {
-          statusDiv.innerHTML = '<span style="color: #f87171;">❌ OCR failed</span>';
+          results.push('<span style="color: #f87171;">❌ ' + escapeHtml(file.name) + ': OCR failed</span>');
         }
       }
+      if (isBulk) {
+        statusDiv.innerHTML = bulkProgressHtml(fileArr.length, fileArr.length, null, results);
+      }
+      checkHealth();
     }
 
 

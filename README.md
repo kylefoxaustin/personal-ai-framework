@@ -84,8 +84,9 @@ Upload documents, audio/video, and images to your knowledge base from a single d
 
 1. Click **📤 Upload** in the header
 2. Choose a tab: **📄 Documents**, **🎤 Audio/Video**, or **📷 Images**
-3. Drag & drop files or click to browse
-4. Files are automatically processed and indexed in ChromaDB
+3. Drag & drop files, click to browse, or use **📂 Upload Folder** to select an entire folder
+4. Multi-file and folder uploads show a progress bar with per-file results
+5. Files are automatically processed and indexed in ChromaDB
 
 ### 📄 Documents
 - Select document type (General, Datasheet, Transcript, Email)
@@ -255,7 +256,7 @@ Tested on RTX 5090 (32GB VRAM):
 
 | Version | Highlights |
 |---------|------------|
-| **v4.1.0** | Enhanced results UI (copy/email/summary), web search toggle in toolbar, auto-sync indicator, tooltips |
+| **v4.1.0** | Bulk upload (multi-file + folder), enhanced results UI (copy/email/summary), web search toggle, auto-sync indicator, tooltips |
 | **v4.0.0** | UI Refactor - Dedicated Upload panel with tabbed Documents/Audio/Images |
 | **v3.9.0** | Web Search - DuckDuckGo integration with privacy toggle |
 | **v3.8.0** | Meeting Summarization - key points, action items, decisions |
