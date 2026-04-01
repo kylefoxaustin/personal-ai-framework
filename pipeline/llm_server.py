@@ -3,10 +3,12 @@ LLM Inference Server for Mixtral 8x7B
 Uses llama-cpp-python for efficient GGUF model serving
 Integrates with RAG pipeline for context-aware generation
 """
+import gc
 import os
 import yaml
 import shutil
 import subprocess
+from datetime import datetime
 from typing import Optional, List
 from pathlib import Path
 from fastapi import FastAPI, File, UploadFile
@@ -87,6 +89,7 @@ class SettingsUpdate(BaseModel):
     model: Optional[dict] = None
     personality: Optional[dict] = None
     web_search: Optional[dict] = None
+    training: Optional[dict] = None
 
 # Initialize FastAPI
 app = FastAPI(title="Personal AI LLM Server")
@@ -101,19 +104,21 @@ app.add_middleware(
 
 # Global model instance
 llm = None
+_maintenance_mode = False
+_current_model_path = None
 
-def load_model():
-    """Load Mixtral model with GPU acceleration"""
-    global llm
-    
-    model_path = "/app/models/mixtral/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
-    
+def load_model(model_path_override=None):
+    """Load model with GPU acceleration"""
+    global llm, _current_model_path
+
+    model_path = model_path_override or "/app/models/mixtral/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
+
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Model not found at {model_path}")
-    
-    print(f"Loading Mixtral 8x7B from {model_path}")
+
+    print(f"Loading model from {model_path}")
     print(f"Using GPU: NVIDIA RTX 5090")
-    
+
     llm = Llama(
         model_path=model_path,
         n_ctx=config.get('model', {}).get('context_length', 16384),
@@ -121,9 +126,19 @@ def load_model():
         n_gpu_layers=-1,
         verbose=True
     )
-    
+
+    _current_model_path = model_path
     print("✅ Model loaded successfully!")
     return llm
+
+def unload_model():
+    """Unload model to free GPU memory for training."""
+    global llm
+    if llm is not None:
+        del llm
+        llm = None
+        gc.collect()
+        print("✅ Model unloaded, GPU memory freed")
 
 @app.on_event("startup")
 async def startup_event():
@@ -146,7 +161,9 @@ def read_root():
 @app.post("/generate", response_model=GenerationResponse)
 def generate(request: GenerationRequest):
     """Generate text based on prompt and context"""
-    
+
+    if _maintenance_mode:
+        raise HTTPException(status_code=503, detail="Model is retraining. Please wait — this usually takes ~2.5 hours.")
     if llm is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
     
@@ -243,7 +260,9 @@ def generate(request: GenerationRequest):
 @app.post("/generate/stream")
 def generate_stream(request: StreamingRequest):
     """Generate text with streaming response (Server-Sent Events)"""
-    
+
+    if _maintenance_mode:
+        raise HTTPException(status_code=503, detail="Model is retraining. Please wait — this usually takes ~2.5 hours.")
     if llm is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
     
@@ -518,13 +537,72 @@ def update_settings(settings: SettingsUpdate):
         current["personality"] = settings.personality
     if settings.web_search:
         current["web_search"] = settings.web_search
-    
+    if settings.training:
+        current.setdefault("training", {}).update(settings.training)
+
     result = apply_settings(current)
     return {
         "status": "ok" if result["saved"] else "error",
         "result": result,
         "settings": get_all_settings()
     }
+
+
+# ---- Training Coordination Endpoints ----
+
+TRAINING_STATE_FILE = Path.home() / ".personal-ai" / "training_state.json"
+TRAINING_TRIGGER_FILE = Path.home() / ".personal-ai" / "training_trigger.json"
+
+@app.get("/training/status")
+def training_status():
+    """Get current training pipeline status."""
+    try:
+        if TRAINING_STATE_FILE.exists():
+            with open(TRAINING_STATE_FILE, "r") as f:
+                return json.load(f)
+    except (json.JSONDecodeError, IOError):
+        pass
+    return {"status": "idle", "progress_pct": 0}
+
+@app.post("/training/trigger")
+def training_trigger():
+    """Trigger a training run by writing a trigger file for the host-side watcher."""
+    if _maintenance_mode:
+        return {"status": "error", "error": "Training already in progress"}
+    TRAINING_TRIGGER_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(TRAINING_TRIGGER_FILE, "w") as f:
+        json.dump({"action": "start", "timestamp": str(datetime.now())}, f)
+    return {"status": "ok", "message": "Training triggered"}
+
+@app.post("/training/prepare")
+def training_prepare():
+    """Unload the model and enter maintenance mode to free GPU for training."""
+    global _maintenance_mode
+    unload_model()
+    _maintenance_mode = True
+    return {"status": "ready_for_training", "previous_model": _current_model_path}
+
+@app.post("/training/complete")
+def training_complete(model_path: str = None):
+    """Load a new (or the previous) model and exit maintenance mode."""
+    global _maintenance_mode
+    path = model_path or _current_model_path or "/app/models/mixtral/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
+    load_model(path)
+    _maintenance_mode = False
+    return {"status": "ok", "model_loaded": path}
+
+@app.post("/training/interrupt")
+def training_interrupt():
+    """Signal the training orchestrator to stop."""
+    TRAINING_TRIGGER_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(TRAINING_TRIGGER_FILE, "w") as f:
+        json.dump({"action": "interrupt", "timestamp": str(datetime.now())}, f)
+    return {"status": "ok", "message": "Interrupt signal sent"}
+
+@app.get("/training/maintenance")
+def training_maintenance_status():
+    """Check if server is in maintenance mode."""
+    return {"maintenance_mode": _maintenance_mode}
 
 
 @app.post("/settings/sync-now")

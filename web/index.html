@@ -648,6 +648,11 @@
     </div>
   </header>
   <main>
+    <div id="maintenanceBanner" style="display: none; background: #7f1d1d; border: 1px solid #ef4444; border-radius: 0.5rem; padding: 1rem; margin: 0.5rem; text-align: center;">
+      <div style="font-size: 1.2rem; margin-bottom: 0.25rem;">🏋️ Skippy is retraining</div>
+      <div style="color: #fca5a5; font-size: 0.85rem;">This usually takes ~2.5 hours. Chat will resume automatically when done.</div>
+      <div id="maintenanceProgress" style="color: #fca5a5; font-size: 0.8rem; margin-top: 0.25rem;"></div>
+    </div>
     <div id="messages" class="messages">
       <div class="welcome">
         <h2>Welcome!</h2>
@@ -825,7 +830,44 @@
           </button>
         </div>
       </div>
-      
+
+      <div class="settings-section">
+        <h3>🏋️ LoRA Training</h3>
+        <div id="trainingStatusDisplay" style="margin-bottom: 1rem;">
+          <div style="color: #94a3b8; font-size: 0.85rem;" id="trainingLastRun">Last trained: Never</div>
+          <div style="color: #94a3b8; font-size: 0.85rem;" id="trainingLastStatus"></div>
+        </div>
+        <div id="trainingProgressSection" style="display: none; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.25rem;">
+            <span id="trainingStepLabel" style="color: #f472b6;">Preparing...</span>
+            <span id="trainingProgressPct" style="color: #60a5fa;">0%</span>
+          </div>
+          <div class="bulk-progress-bar">
+            <div id="trainingProgressBar" class="bulk-progress-bar-fill" style="width: 0%"></div>
+          </div>
+          <div id="trainingDetail" style="color: #94a3b8; font-size: 0.8rem; margin-top: 0.25rem;"></div>
+        </div>
+        <div class="setting-row">
+          <label>Min. new examples to train</label>
+          <input type="number" id="trainingMinExamples" value="50" min="1" max="10000" style="width: 80px; background: #1a1a2e; border: 1px solid #0f3460; color: #eee; padding: 0.5rem; border-radius: 0.25rem;">
+        </div>
+        <div class="setting-row">
+          <label>Epochs</label>
+          <input type="number" id="trainingEpochs" value="3" min="1" max="10" style="width: 80px; background: #1a1a2e; border: 1px solid #0f3460; color: #eee; padding: 0.5rem; border-radius: 0.25rem;">
+        </div>
+        <div class="setting-row" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <button id="trainNowBtn" onclick="triggerTraining()" style="background: #166534; border: 1px solid #22c55e; color: #4ade80; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
+            🏋️ Train Now
+          </button>
+          <button id="cancelTrainingBtn" onclick="cancelTraining()" style="display: none; background: #7f1d1d; border: 1px solid #ef4444; color: #f87171; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
+            ✋ Cancel Training
+          </button>
+        </div>
+        <p style="color: #64748b; font-size: 0.8rem; margin-top: 0.5rem;">
+          Training collects new conversation data, retrains the model, and deploys it. Takes ~2.5 hours. Skippy will be unavailable during training.
+        </p>
+      </div>
+
       <div class="settings-section">
         <h3>🤖 AI Personality</h3>
         <div class="setting-row">
@@ -1115,6 +1157,13 @@
           settings.web_search = { enabled: webSearchEnabled };
           fetch(`${API}/settings`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(settings) });
         }
+      }).catch(() => {});
+      // Check if training is active on page load
+      fetch(`${API}/training/status`).then(r => r.json()).then(state => {
+        if (state.status && !['idle', 'complete', 'failed', 'interrupted'].includes(state.status)) {
+          startTrainingPoll();
+        }
+        updateTrainingUI(state);
       }).catch(() => {});
       // Folder upload fallback handler
       document.getElementById('folderInputFallback').onchange = (e) => {
@@ -2245,6 +2294,114 @@
     function closeSettings() {
       document.getElementById('settingsOverlay').classList.remove('show');
     }
+
+    // ---- Training UI Functions ----
+    let _trainingPollInterval = null;
+
+    async function triggerTraining() {
+      if (!confirm('Start LoRA retraining?\n\nSkippy will be unavailable for ~2.5 hours during training.\n\nMake sure the training watcher is running:\n  ./run.sh training-watch')) return;
+      try {
+        const resp = await fetch(`${API}/training/trigger`, { method: 'POST' });
+        const result = await resp.json();
+        if (result.status === 'ok') {
+          showToast('🏋️ Training triggered! Watcher will start the pipeline.');
+          startTrainingPoll();
+        } else {
+          showToast('❌ ' + (result.error || 'Failed to trigger training'));
+        }
+      } catch (err) {
+        showToast('❌ Failed to trigger training');
+      }
+    }
+
+    async function cancelTraining() {
+      if (!confirm('Cancel the current training run?')) return;
+      try {
+        await fetch(`${API}/training/interrupt`, { method: 'POST' });
+        showToast('⚠️ Cancel signal sent');
+      } catch (err) {
+        showToast('❌ Failed to send cancel signal');
+      }
+    }
+
+    function startTrainingPoll() {
+      if (_trainingPollInterval) return;
+      _trainingPollInterval = setInterval(pollTrainingStatus, 5000);
+      pollTrainingStatus();
+    }
+
+    function stopTrainingPoll() {
+      if (_trainingPollInterval) {
+        clearInterval(_trainingPollInterval);
+        _trainingPollInterval = null;
+      }
+    }
+
+    async function pollTrainingStatus() {
+      try {
+        const resp = await fetch(`${API}/training/status`);
+        const state = await resp.json();
+        updateTrainingUI(state);
+      } catch (err) {}
+    }
+
+    function updateTrainingUI(state) {
+      const status = state.status || 'idle';
+      const isActive = !['idle', 'complete', 'failed', 'interrupted'].includes(status);
+      const progressSection = document.getElementById('trainingProgressSection');
+      const trainBtn = document.getElementById('trainNowBtn');
+      const cancelBtn = document.getElementById('cancelTrainingBtn');
+      const banner = document.getElementById('maintenanceBanner');
+      const bannerProgress = document.getElementById('maintenanceProgress');
+
+      // Progress section in settings
+      if (progressSection) {
+        progressSection.style.display = isActive ? 'block' : 'none';
+        if (isActive) {
+          const label = document.getElementById('trainingStepLabel');
+          const pct = document.getElementById('trainingProgressPct');
+          const bar = document.getElementById('trainingProgressBar');
+          const detail = document.getElementById('trainingDetail');
+          if (label) label.textContent = state.step_detail || state.step || status;
+          if (pct) pct.textContent = (state.progress_pct || 0) + '%';
+          if (bar) bar.style.width = (state.progress_pct || 0) + '%';
+          if (detail) detail.textContent = state.data_examples ? state.data_examples + ' training examples' : '';
+        }
+      }
+
+      // Buttons
+      if (trainBtn) trainBtn.style.display = isActive ? 'none' : '';
+      if (cancelBtn) cancelBtn.style.display = isActive ? '' : 'none';
+
+      // Maintenance banner on main chat
+      if (banner) {
+        banner.style.display = isActive ? 'block' : 'none';
+        if (bannerProgress && isActive) {
+          bannerProgress.textContent = (state.step_detail || state.step || '') + ' — ' + (state.progress_pct || 0) + '%';
+        }
+      }
+
+      // Update last run info
+      if (state.completed_at) {
+        const el = document.getElementById('trainingLastRun');
+        if (el) el.textContent = 'Last trained: ' + new Date(state.completed_at).toLocaleString();
+      }
+      if (state.status === 'failed' || state.status === 'interrupted') {
+        const el = document.getElementById('trainingLastStatus');
+        if (el) {
+          el.textContent = state.status === 'failed' ? '❌ ' + (state.error || 'Failed') : '⚠️ Interrupted';
+          el.style.color = '#f87171';
+        }
+      } else if (state.status === 'complete') {
+        const el = document.getElementById('trainingLastStatus');
+        if (el) { el.textContent = '✅ Success'; el.style.color = '#4ade80'; }
+      }
+
+      // Stop polling when done
+      if (!isActive && _trainingPollInterval) {
+        stopTrainingPoll();
+      }
+    }
     
     async function loadSettings() {
       try {
@@ -2265,7 +2422,19 @@
         if (syncToggle) syncToggle.classList.toggle('active', currentSettings.sync?.auto_enabled);
         if (syncInterval) syncInterval.value = currentSettings.sync?.interval_hours || '1';
         updateSyncDot(!!currentSettings.sync?.auto_enabled);
-        
+
+        // Training settings
+        const trainingMinEx = document.getElementById('trainingMinExamples');
+        const trainingEpochs = document.getElementById('trainingEpochs');
+        if (trainingMinEx) trainingMinEx.value = currentSettings.training?.min_new_examples || 50;
+        if (trainingEpochs) trainingEpochs.value = currentSettings.training?.epochs || 3;
+        if (currentSettings.training?.last_run) {
+          const el = document.getElementById('trainingLastRun');
+          if (el) el.textContent = 'Last trained: ' + new Date(currentSettings.training.last_run).toLocaleString();
+        }
+        // Check if training is active and start polling
+        pollTrainingStatus();
+
         // Email provider status
         const gmail = currentSettings.email_providers?.gmail;
         const outlook = currentSettings.email_providers?.outlook;
@@ -2325,6 +2494,10 @@
         },
         web_search: {
           enabled: webSearchEnabled
+        },
+        training: {
+          min_new_examples: parseInt(document.getElementById('trainingMinExamples').value) || 50,
+          epochs: parseInt(document.getElementById('trainingEpochs').value) || 3
         }
       };
       
