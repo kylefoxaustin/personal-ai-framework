@@ -85,6 +85,8 @@ class SettingsUpdate(BaseModel):
     digest: Optional[dict] = None
     sync: Optional[dict] = None
     model: Optional[dict] = None
+    personality: Optional[dict] = None
+    web_search: Optional[dict] = None
 
 # Initialize FastAPI
 app = FastAPI(title="Personal AI LLM Server")
@@ -512,6 +514,10 @@ def update_settings(settings: SettingsUpdate):
         current["sync"].update(settings.sync)
     if settings.model:
         current["model"].update(settings.model)
+    if settings.personality:
+        current["personality"] = settings.personality
+    if settings.web_search:
+        current["web_search"] = settings.web_search
     
     result = apply_settings(current)
     return {
@@ -1259,6 +1265,33 @@ Respond ONLY with valid JSON in this exact format, no other text:
     except Exception as e:
         return {"error": str(e)}
 
+def summarize_ocr_direct(text: str, title: str = "Image") -> dict:
+    """Summarize OCR-extracted text using the already-loaded LLM directly"""
+    prompt = f"""Analyze this text extracted from an image and provide a JSON response with:
+1. A brief 2-3 sentence summary of what this text contains
+2. Key points or information found (list)
+
+Image: {title}
+
+Extracted text:
+{text[:6000]}
+
+Respond ONLY with valid JSON in this exact format, no other text:
+{{"summary": "...", "key_points": ["..."]}}"""
+
+    try:
+        response = llm(prompt, max_tokens=1000, temperature=0.3)
+        text_resp = response["choices"][0]["text"].strip()
+
+        import re
+        json_match = re.search(r'\{.*\}', text_resp, re.DOTALL)
+        if json_match:
+            return json.loads(json_match.group())
+        else:
+            return {"summary": text_resp, "key_points": []}
+    except Exception as e:
+        return {"error": str(e)}
+
 @app.post("/upload/transcribe")
 async def upload_and_transcribe(file: UploadFile = File(...), title: str = "Untitled Recording", summarize: bool = False):
     """Upload audio/video and transcribe with Whisper"""
@@ -1336,6 +1369,7 @@ async def upload_and_transcribe(file: UploadFile = File(...), title: str = "Unti
             "transcript_length": len(transcript_text),
             "chunks_added": chunks_added,
             "transcript_preview": transcript_text[:500] + "..." if len(transcript_text) > 500 else transcript_text,
+            "full_transcript": transcript_text,
             "summary": summary_data
         }
         
@@ -1351,7 +1385,7 @@ async def upload_and_transcribe(file: UploadFile = File(...), title: str = "Unti
 
 
 @app.post("/upload/ocr")
-async def upload_and_ocr(file: UploadFile = File(...), title: str = "Screenshot"):
+async def upload_and_ocr(file: UploadFile = File(...), title: str = "Screenshot", summarize: bool = False):
     """Upload image and extract text with OCR"""
     import tempfile
     from pathlib import Path
@@ -1419,13 +1453,23 @@ async def upload_and_ocr(file: UploadFile = File(...), title: str = "Screenshot"
         # Clean up temp file
         os.unlink(tmp_path)
         
+        # Optional summarization
+        summary_data = None
+        if summarize:
+            try:
+                summary_data = summarize_ocr_direct(extracted_text, title)
+            except Exception as e:
+                summary_data = {"error": str(e)}
+
         return {
             "status": "ok",
             "filename": file.filename,
             "title": title,
             "text_length": len(extracted_text),
             "chunks_added": chunks_added,
-            "text_preview": extracted_text[:500] + "..." if len(extracted_text) > 500 else extracted_text
+            "text_preview": extracted_text[:500] + "..." if len(extracted_text) > 500 else extracted_text,
+            "full_text": extracted_text,
+            "summary": summary_data
         }
         
     except Exception as e:

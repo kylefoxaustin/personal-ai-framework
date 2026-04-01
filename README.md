@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-4.0.0-blue)
+![Version](https://img.shields.io/badge/version-4.1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
@@ -95,12 +95,17 @@ Upload documents, audio/video, and images to your knowledge base from a single d
 - Enter a recording title (optional)
 - Toggle meeting summary generation (key points, action items, decisions)
 - Whisper transcribes using CPU to avoid VRAM conflicts
+- Results show full summary, key points, action items, and decisions
+- Copy Summary / Copy Transcript / Send Email / Save Draft buttons
+- Collapsible full transcript view
 - Transcripts saved to `~/knowledge/transcripts/` and searchable by Skippy!
 - **Supported formats**: MP4, MP3, WAV, M4A, WEBM, MKV, MOV, AVI, OGG, FLAC
 
 ### 📷 Image/Screenshot OCR
 - Enter an image title (optional)
+- Optional summarization of extracted text (checkbox)
 - Tesseract extracts text and auto-ingests to ChromaDB
+- Copy Text / Copy Summary / Send Email / Save Draft buttons
 - Perfect for whiteboard photos, screenshots, scanned docs, or book pages!
 - **Supported formats**: PNG, JPG, GIF, BMP, TIFF, WEBP
 
@@ -191,9 +196,11 @@ Access at `http://localhost:3000`
 ### Header Buttons
 - **✨ New**: Start a new conversation
 - **📤 Upload**: Upload documents, audio/video, and images
-- **🔄 Sync**: Sync knowledge base
+- **🔄 Sync**: Sync knowledge base (green dot = auto-sync enabled)
 - **🧠 Memory**: View/delete stored memories
+- **🌐 Web**: Toggle web search on/off (green = enabled)
 - **⚙️ Settings**: Personality, backup, and more
+- All buttons have hover tooltips
 
 ### Toggles
 - **✍️ Write like me**: Use your personal writing style
@@ -202,7 +209,6 @@ Access at `http://localhost:3000`
 ### Settings (⚙️)
 - **AI Personality**: Name and personality prompt
 - **Backup & Restore**: Export/import conversations and settings
-- **Web Search**: Toggle DuckDuckGo search
 - **Email Providers**: Gmail OAuth connection
 - **Daily Digest**: Schedule and email settings
 - **Auto-Sync**: Knowledge base sync interval
@@ -249,6 +255,7 @@ Tested on RTX 5090 (32GB VRAM):
 
 | Version | Highlights |
 |---------|------------|
+| **v4.1.0** | Enhanced results UI (copy/email/summary), web search toggle in toolbar, auto-sync indicator, tooltips |
 | **v4.0.0** | UI Refactor - Dedicated Upload panel with tabbed Documents/Audio/Images |
 | **v3.9.0** | Web Search - DuckDuckGo integration with privacy toggle |
 | **v3.8.0** | Meeting Summarization - key points, action items, decisions |
