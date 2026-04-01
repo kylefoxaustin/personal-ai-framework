@@ -119,7 +119,25 @@ case $COMMAND in
         echo "🎤 Meeting Summarizer"
         python3 pipeline/meeting_summarizer.py "$@"
         ;;
-        
+
+    training-watch)
+        echo "🔍 Starting training watcher..."
+        python3 training/training_watcher.py
+        ;;
+
+    train)
+        echo "🏋️ Triggering LoRA training..."
+        python3 -c "
+import json
+from pathlib import Path
+from datetime import datetime
+f = Path.home() / '.personal-ai' / 'training_trigger.json'
+f.parent.mkdir(parents=True, exist_ok=True)
+f.write_text(json.dumps({'action': 'start', 'timestamp': str(datetime.now())}))
+print('✅ Training trigger written. Make sure training-watch is running.')
+"
+        ;;
+
     help|*)
         echo "Personal AI Framework"
         echo ""
@@ -142,6 +160,8 @@ case $COMMAND in
         echo "  email         Draft and send emails (gmail/outlook)"
         echo "  generate        Generate a document (spec, proposal, report, etc.)"
         echo "  summarize       Transcribe and summarize a meeting recording"
+        echo "  training-watch  Start training watcher (listens for Train Now triggers)"
+        echo "  train           Trigger LoRA retraining manually"
         echo "  help            Show this help"
         ;;
 esac

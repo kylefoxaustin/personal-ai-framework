@@ -43,6 +43,14 @@ DEFAULT_SETTINGS = {
     },
     "model": {
         "context_length": 16384
+    },
+    "training": {
+        "enabled": False,
+        "last_run": None,
+        "last_status": None,
+        "min_new_examples": 50,
+        "epochs": 3,
+        "lora_rank": 64
     }
 }
 

@@ -24,25 +24,26 @@ from peft import (
     TaskType
 )
 
-# Configuration
+# Configuration (overridable via environment variables)
 MODEL_PATH = "mistralai/Mistral-7B-Instruct-v0.2"  # HF model for tokenizer/config
 GGUF_PATH = "models/mixtral/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
-OUTPUT_DIR = "training/output"
-DATA_DIR = "training/data"
+OUTPUT_DIR = os.environ.get("TRAINING_OUTPUT_DIR", "training/output")
+DATA_DIR = os.environ.get("TRAINING_DATA_DIR", "training/data")
 
 # LoRA Config
-LORA_R = 64          # Rank - higher = more capacity but more memory
-LORA_ALPHA = 128     # Scaling factor
+LORA_R = int(os.environ.get("TRAINING_LORA_RANK", "64"))
+LORA_ALPHA = LORA_R * 2     # Scaling factor (2x rank)
 LORA_DROPOUT = 0.05
 TARGET_MODULES = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
 
-# Training Config  
+# Training Config
 BATCH_SIZE = 1
 GRADIENT_ACCUMULATION = 8
-EPOCHS = 3
+EPOCHS = int(os.environ.get("TRAINING_EPOCHS", "3"))
 LEARNING_RATE = 2e-4
 MAX_LENGTH = 512
 WARMUP_RATIO = 0.03
+RESUME_CHECKPOINT = os.environ.get("TRAINING_RESUME_CHECKPOINT", None)
 
 
 def load_training_data(data_path: str, tokenizer, max_samples: int = None):
@@ -197,7 +198,11 @@ def main():
     print(f"This will take several hours. Progress will be shown below.")
     print()
     
-    trainer.train()
+    if RESUME_CHECKPOINT and os.path.exists(RESUME_CHECKPOINT):
+        print(f"📂 Resuming from checkpoint: {RESUME_CHECKPOINT}")
+        trainer.train(resume_from_checkpoint=RESUME_CHECKPOINT)
+    else:
+        trainer.train()
     
     # Save final model
     print("\n💾 Saving LoRA adapters...")
