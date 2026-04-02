@@ -22,6 +22,7 @@ COPY pipeline/sync_service.py .
 COPY pipeline/advanced_rag.py .
 COPY pipeline/conversation_store.py .
 COPY pipeline/memory_service.py .
+COPY pipeline/facts_service.py .
 COPY pipeline/settings_manager.py .
 COPY pipeline/config.yaml .
 EXPOSE 8080

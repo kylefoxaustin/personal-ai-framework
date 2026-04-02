@@ -1165,6 +1165,17 @@
         }
         updateTrainingUI(state);
       }).catch(() => {});
+      // Warmup: send a tiny generate request to prime the model's KV cache
+      modelWarmedUp = false;
+      showWarmupBanner();
+      fetch(`${API}/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: 'Hi', max_tokens: 1, use_rag: false })
+      }).then(() => {
+        modelWarmedUp = true;
+        hideWarmupBanner();
+      }).catch(() => { hideWarmupBanner(); });
       // Folder upload fallback handler
       document.getElementById('folderInputFallback').onchange = (e) => {
         if (_folderUploadHandler && _folderUploadExts) {
@@ -1175,6 +1186,26 @@
       };
     });
     
+    // Model warmup state
+    let modelWarmedUp = false;
+
+    function showWarmupBanner() {
+      let banner = document.getElementById('warmupBanner');
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'warmupBanner';
+        banner.style.cssText = 'background: #1a1a2e; border: 1px solid #0f3460; border-radius: 0.5rem; padding: 0.75rem 1rem; margin: 0.5rem 1rem; color: #94a3b8; font-size: 0.85rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 0.5rem;';
+        banner.innerHTML = '<span class="spinner" style="width: 14px; height: 14px; border: 2px solid #0f3460; border-top-color: #4ade80; border-radius: 50%; animation: spin 1s linear infinite; display: inline-block;"></span> Warming up model — first response may take 30-45 seconds';
+        const chatArea = document.getElementById('messages');
+        if (chatArea) chatArea.prepend(banner);
+      }
+    }
+
+    function hideWarmupBanner() {
+      const banner = document.getElementById('warmupBanner');
+      if (banner) banner.remove();
+    }
+
     // Auto-remember state
     let autoRememberEnabled = false;
     

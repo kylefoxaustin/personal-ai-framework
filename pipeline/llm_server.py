@@ -8,6 +8,7 @@ import os
 import yaml
 import shutil
 import subprocess
+import threading
 from datetime import datetime
 from typing import Optional, List
 from pathlib import Path
@@ -17,11 +18,15 @@ from fastapi.responses import StreamingResponse, HTMLResponse
 import json
 from pydantic import BaseModel
 from llama_cpp import Llama
+
+# Lock to prevent concurrent inference calls (llama-cpp-python is not thread-safe)
+_inference_lock = threading.Lock()
 from rag_service import get_rag_service, Document
 from advanced_rag import AdvancedRAG
 from settings_manager import get_all_settings, apply_settings, load_settings, save_settings
 from conversation_store import get_conversation_store
 from memory_service import get_memory_service
+from facts_service import get_facts_service
 
 # Global advanced RAG instance
 _advanced_rag = None
@@ -36,6 +41,26 @@ def get_advanced_rag():
         if rag:
             _advanced_rag = AdvancedRAG(rag)
     return _advanced_rag
+
+import re
+
+def _is_conversational(prompt: str) -> bool:
+    """Check if a prompt is conversational/greeting rather than a knowledge query."""
+    p = prompt.strip().lower()
+    # Short greetings and conversational phrases
+    if len(p.split()) <= 6 and any(w in p for w in [
+        'hi', 'hello', 'hey', 'howdy', 'sup', 'yo',
+        'good morning', 'good afternoon', 'good evening',
+        'how are you', 'what\'s up', 'whats up',
+        'tell me about yourself', 'who are you', 'what are you',
+        'what is your name', 'what\'s your name', 'whats your name',
+        'thanks', 'thank you', 'bye', 'goodbye', 'good night',
+    ]):
+        return True
+    # Very short messages (1-3 words) are likely conversational
+    if len(p.split()) <= 3 and not any(c in p for c in ['?', 'how to', 'what is', 'explain', 'find']):
+        return True
+    return False
 
 # Load configuration
 with open('/app/config.yaml', 'r') as f:
@@ -111,6 +136,9 @@ def load_model(model_path_override=None):
     """Load model with GPU acceleration"""
     global llm, _current_model_path
 
+    # Unload any existing model first to free GPU memory
+    unload_model()
+
     model_path = model_path_override or "/app/models/mixtral/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
 
     if not os.path.exists(model_path):
@@ -168,11 +196,12 @@ def generate(request: GenerationRequest):
         raise HTTPException(status_code=503, detail="Model not loaded")
     
     context_docs = request.context
-    
+
     # Auto-retrieve context from RAG if enabled and no manual context provided
     citations = None
     memory_context = []
-    
+    fact_context = []
+
     if request.use_rag and not context_docs:
         try:
             # Search conversation memory first
@@ -184,7 +213,18 @@ def generate(request: GenerationRequest):
                     print(f"Found {len(memory_docs)} relevant past conversations")
             except Exception as e:
                 print(f"Memory search failed (ok if empty): {e}")
-            
+
+            # Search learned facts
+            try:
+                facts = get_facts_service()
+                if facts:
+                    fact_docs, fact_citations = facts.get_fact_context(request.prompt, k=3)
+                    if fact_docs:
+                        fact_context = fact_docs
+                        print(f"Found {len(fact_docs)} relevant facts")
+            except Exception as e:
+                print(f"Facts search failed (ok if empty): {e}")
+
             # Then search knowledge base
             advanced_rag = get_advanced_rag()
             if advanced_rag:
@@ -199,35 +239,42 @@ def generate(request: GenerationRequest):
         except Exception as e:
             print(f"RAG retrieval failed: {e}")
             context_docs = []
-    
+
     # Build prompt with memory and RAG context
     full_prompt = ""
-    
+
     # Add personality/system prompt
     try:
         settings = load_settings()
         personality = settings.get("personality", {})
         ai_name = personality.get("name", "Assistant")
         system_prompt = personality.get("prompt", "You are a helpful AI assistant.")
-        
+
         full_prompt = f"Your name is {ai_name}. {system_prompt}\n\n"
     except:
         full_prompt = ""
-    
-    # Add memory context (past conversations) first
+
+    # Add learned facts (these override stale training data)
+    if fact_context:
+        full_prompt += "Important — these are verified, up-to-date facts. Use them over your training data:\n\n"
+        for fact in fact_context:
+            full_prompt += f"- {fact}\n"
+        full_prompt += "\n---\n\n"
+
+    # Add memory context (past conversations)
     if memory_context:
-        full_prompt = "From our previous conversations:\n\n"
+        full_prompt += "From our previous conversations:\n\n"
         for doc in memory_context:
             full_prompt += f"{doc}\n\n"
         full_prompt += "---\n\n"
-    
-    # Add RAG context (knowledge base)
-    if context_docs:
+
+    # Add RAG context (knowledge base) - skip for conversational queries
+    if context_docs and not _is_conversational(request.prompt):
         full_prompt += "Relevant information from your knowledge base:\n\n"
         for i, doc in enumerate(context_docs[:3], 1):
             full_prompt += f"[{i}] {doc}\n\n"
         full_prompt += "---\n\n"
-    
+
     # Add conversation history
     if request.conversation_history:
         full_prompt += "Previous conversation:\n"
@@ -235,19 +282,20 @@ def generate(request: GenerationRequest):
             role = "User" if msg.role == "user" else "Assistant"
             full_prompt += f"{role}: {msg.content}\n\n"
         full_prompt += "---\n\n"
-    
+
     full_prompt += f"User: {request.prompt}\n\nAssistant:"
     
-    # Generate
-    response = llm(
-        full_prompt,
-        max_tokens=request.max_tokens,
-        temperature=request.temperature,
-        top_p=request.top_p,
-        stop=["</s>", "\n\n\n"],
-        echo=False
-    )
-    
+    # Generate (lock prevents concurrent CUDA access)
+    with _inference_lock:
+        response = llm(
+            full_prompt,
+            max_tokens=request.max_tokens,
+            temperature=request.temperature,
+            top_p=request.top_p,
+            stop=["</s>", "\n\n\n", "User:", "user:"],
+            echo=False
+        )
+
     return GenerationResponse(
         text=response['choices'][0]['text'].strip(),
         tokens_used=response['usage']['total_tokens'],
@@ -268,10 +316,11 @@ def generate_stream(request: StreamingRequest):
     
     context_docs = request.context
     citations = None
-    
+
     # Auto-retrieve context from RAG if enabled
     memory_context = []
-    
+    fact_context = []
+
     if request.use_rag and not context_docs:
         try:
             # Search conversation memory first
@@ -283,7 +332,18 @@ def generate_stream(request: StreamingRequest):
                     print(f"Found {len(memory_docs)} relevant past conversations")
             except Exception as e:
                 print(f"Memory search failed (ok if empty): {e}")
-            
+
+            # Search learned facts
+            try:
+                facts = get_facts_service()
+                if facts:
+                    fact_docs, fact_citations = facts.get_fact_context(request.prompt, k=3)
+                    if fact_docs:
+                        fact_context = fact_docs
+                        print(f"Found {len(fact_docs)} relevant facts")
+            except Exception as e:
+                print(f"Facts search failed (ok if empty): {e}")
+
             # Then search knowledge base
             advanced_rag = get_advanced_rag()
             if advanced_rag:
@@ -296,42 +356,49 @@ def generate_stream(request: StreamingRequest):
         except Exception as e:
             print(f"RAG retrieval failed: {e}")
             context_docs = []
-    
+
     # Build prompt with memory and RAG context
     full_prompt = ""
-    
+
     # Add personality/system prompt
     try:
         settings = load_settings()
         personality = settings.get("personality", {})
         ai_name = personality.get("name", "Assistant")
         system_prompt = personality.get("prompt", "You are a helpful AI assistant.")
-        
+
         full_prompt = f"Your name is {ai_name}. {system_prompt}\n\n"
     except:
         full_prompt = ""
-    
-    # Add memory context (past conversations) first
+
+    # Add learned facts (these override stale training data)
+    if fact_context:
+        full_prompt += "Important — these are verified, up-to-date facts. Use them over your training data:\n\n"
+        for fact in fact_context:
+            full_prompt += f"- {fact}\n"
+        full_prompt += "\n---\n\n"
+
+    # Add memory context (past conversations)
     if memory_context:
-        full_prompt = "From our previous conversations:\n\n"
+        full_prompt += "From our previous conversations:\n\n"
         for doc in memory_context:
             full_prompt += f"{doc}\n\n"
         full_prompt += "---\n\n"
-    
-    # Add RAG context (knowledge base)
-    if context_docs:
+
+    # Add RAG context (knowledge base) - skip for conversational queries
+    if context_docs and not _is_conversational(request.prompt):
         full_prompt += "Relevant information from your knowledge base:\n\n"
         for i, doc in enumerate(context_docs[:3], 1):
             full_prompt += f"[{i}] {doc}\n\n"
         full_prompt += "---\n\n"
-    
+
     if request.conversation_history:
         full_prompt += "Previous conversation:\n"
         for msg in request.conversation_history[-6:]:
             role = "User" if msg.role == "user" else "Assistant"
             full_prompt += f"{role}: {msg.content}\n\n"
         full_prompt += "---\n\n"
-    
+
     full_prompt += f"User: {request.prompt}\n\nAssistant:"
     
     def generate_tokens():
@@ -345,37 +412,38 @@ def generate_stream(request: StreamingRequest):
         }
         yield f"data: {json.dumps(meta)}\n\n"
         
-        # Stream tokens with timing
+        # Stream tokens with timing (lock prevents concurrent CUDA access)
         full_response = ""
         token_count = 0
         start_time = time.time()
         first_token_time = None
-        
-        for output in llm(
-            full_prompt,
-            max_tokens=request.max_tokens,
-            temperature=request.temperature,
-            top_p=request.top_p,
-            stop=["</s>", "\n\n\n"],
-            echo=False,
-            stream=True
-        ):
-            token = output["choices"][0]["text"]
-            full_response += token
-            token_count += 1
-            
-            # Record time to first token
-            if first_token_time is None:
-                first_token_time = time.time()
-            
-            yield f"data: {json.dumps({'type': 'token', 'token': token})}\n\n"
-        
+
+        with _inference_lock:
+            for output in llm(
+                full_prompt,
+                max_tokens=request.max_tokens,
+                temperature=request.temperature,
+                top_p=request.top_p,
+                stop=["</s>", "\n\n\n", "User:", "user:"],
+                echo=False,
+                stream=True
+            ):
+                token = output["choices"][0]["text"]
+                full_response += token
+                token_count += 1
+
+                # Record time to first token
+                if first_token_time is None:
+                    first_token_time = time.time()
+
+                yield f"data: {json.dumps({'type': 'token', 'token': token})}\n\n"
+
         # Calculate metrics
         end_time = time.time()
         total_time = end_time - start_time
         ttft = (first_token_time - start_time) if first_token_time else 0
         throughput = token_count / total_time if total_time > 0 else 0
-        
+
         # Send completion signal with stats and metrics
         yield f"data: {json.dumps({'type': 'done', 'text': full_response.strip(), 'metrics': {'ttft': round(ttft, 2), 'tokens': token_count, 'total_time': round(total_time, 2), 'throughput': round(throughput, 1)}})}\n\n"
     
@@ -1331,7 +1399,8 @@ Respond ONLY with valid JSON in this exact format, no other text:
 {{"summary": "...", "key_points": ["..."], "action_items": ["..."], "decisions": ["..."]}}"""
 
     try:
-        response = llm(prompt, max_tokens=1000, temperature=0.3)
+        with _inference_lock:
+            response = llm(prompt, max_tokens=1000, temperature=0.3)
         text = response["choices"][0]["text"].strip()
         
         # Try to parse JSON from response
@@ -1359,7 +1428,8 @@ Respond ONLY with valid JSON in this exact format, no other text:
 {{"summary": "...", "key_points": ["..."]}}"""
 
     try:
-        response = llm(prompt, max_tokens=1000, temperature=0.3)
+        with _inference_lock:
+            response = llm(prompt, max_tokens=1000, temperature=0.3)
         text_resp = response["choices"][0]["text"].strip()
 
         import re
@@ -1601,12 +1671,19 @@ def chat_with_search(query: str):
         
         # Search the web
         search_results = []
-        with DDGS() as ddgs:
+        try:
+            ddgs = DDGS()
             for r in ddgs.text(query, max_results=5):
                 search_results.append(f"Title: {r.get('title', '')}\nSnippet: {r.get('body', '')}")
+        except Exception as search_err:
+            print(f"  ❌ DuckDuckGo search error: {search_err}")
+
+        if not search_results:
+            return {"status": "ok", "query": query, "answer": "Web search returned no results. DuckDuckGo may be rate-limiting this query — try again in a few minutes or rephrase.", "sources": []}
         
         context = "\n\n".join(search_results)
-        
+        print(f"  🌐 Web search returned {len(search_results)} results")
+
         # Get personality
         personality = settings.get("personality", {})
         ai_name = personality.get("name", "Assistant")
@@ -1614,19 +1691,39 @@ def chat_with_search(query: str):
         
         prompt = f"""Your name is {ai_name}. {system_prompt}
 
-Based on the following web search results, answer the user's question.
-Cite your sources when possible.
+IMPORTANT: Your training data is outdated. The web search results below are from today and are AUTHORITATIVE. Base your answer ENTIRELY on these results. If the results contradict what you think you know, TRUST THE RESULTS.
 
 Web Search Results:
 {context}
 
 User Question: {query}
 
-Answer:"""
-        
-        response = llm(prompt, max_tokens=1000, temperature=0.7)
+Based on the search results above, the answer is:"""
+
+        with _inference_lock:
+            response = llm(prompt, max_tokens=1000, temperature=0.3, stop=["</s>", "\n\n\n", "User:", "user:"])
         answer = response["choices"][0]["text"].strip()
-        
+
+        # Auto-learn facts from web search results (use raw search snippets, not model answer)
+        try:
+            facts = get_facts_service()
+            if facts and search_results:
+                fact_prompt = f"""Extract one concise factual statement from these web search results. Return ONLY the fact, nothing else.
+If no clear fact can be extracted, respond with "NONE".
+
+Question: {query}
+Search Results: {search_results[0]}
+
+Fact:"""
+                with _inference_lock:
+                    fact_response = llm(fact_prompt, max_tokens=100, temperature=0.1, stop=["</s>", "\n\n"])
+                extracted = fact_response["choices"][0]["text"].strip()
+                if extracted and extracted.upper() != "NONE" and len(extracted) > 10:
+                    source_titles = [r.split("\n")[0].replace("Title: ", "") for r in search_results[:2]]
+                    facts.add_fact(extracted, source=f"web search: {'; '.join(source_titles)}", category="web")
+        except Exception as e:
+            print(f"Fact extraction failed (non-critical): {e}")
+
         return {
             "status": "ok",
             "query": query,
@@ -1635,6 +1732,48 @@ Answer:"""
         }
     except Exception as e:
         return {"status": "error", "error": str(e)}
+
+
+# ===== Facts API Endpoints =====
+
+@app.get("/facts")
+def list_facts():
+    """List all learned facts."""
+    facts = get_facts_service()
+    if not facts:
+        return {"facts": [], "count": 0}
+    all_facts = facts.get_all_facts()
+    return {"facts": all_facts, "count": len(all_facts)}
+
+
+@app.post("/facts")
+def add_fact(fact: str, source: str = "manual", category: str = "general"):
+    """Manually add a fact."""
+    facts = get_facts_service()
+    if not facts:
+        raise HTTPException(status_code=503, detail="Facts service not available")
+    fact_id = facts.add_fact(fact, source=source, category=category)
+    return {"status": "ok", "id": fact_id}
+
+
+@app.delete("/facts/{fact_id}")
+def delete_fact(fact_id: str):
+    """Delete a specific fact."""
+    facts = get_facts_service()
+    if not facts:
+        raise HTTPException(status_code=503, detail="Facts service not available")
+    success = facts.delete_fact(fact_id)
+    return {"status": "ok" if success else "error"}
+
+
+@app.delete("/facts")
+def clear_facts():
+    """Delete all learned facts."""
+    facts = get_facts_service()
+    if not facts:
+        raise HTTPException(status_code=503, detail="Facts service not available")
+    count = facts.clear_all()
+    return {"status": "ok", "deleted": count}
 
 
 if __name__ == "__main__":
