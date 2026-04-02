@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-5.0.0-blue)
+![Version](https://img.shields.io/badge/version-5.1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
@@ -256,6 +256,7 @@ Tested on RTX 5090 (32GB VRAM):
 
 | Version | Highlights |
 |---------|------------|
+| **v5.1.0** | (Experimental) Learned Facts layer, inference stability fixes, model warmup, Skippy personality |
 | **v5.0.0** | (Experimental) Automated LoRA retraining — Train Now button, GPU handoff, GGUF conversion pipeline |
 | **v4.1.0** | Bulk upload (multi-file + folder), enhanced results UI (copy/email/summary), web search toggle, auto-sync indicator, tooltips |
 | **v4.0.0** | UI Refactor - Dedicated Upload panel with tabbed Documents/Audio/Images |

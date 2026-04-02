@@ -49,7 +49,7 @@ def signal_handler(signum, frame):
     _interrupted = True
 
 
-def api_call(method, endpoint, **kwargs):
+def api_call(method, endpoint, timeout=30, **kwargs):
     """Make an HTTP call to the inference server."""
     import urllib.request
     import urllib.error
@@ -64,7 +64,7 @@ def api_call(method, endpoint, **kwargs):
             req.add_header("Content-Type", "application/json")
 
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
             return json.loads(resp.read().decode())
     except urllib.error.URLError as e:
         print(f"  API call failed: {e}")
@@ -276,12 +276,12 @@ def run_orchestrator():
 
         # The model path inside Docker is /app/models/...
         docker_model_path = f"/app/models/{gguf_filename}"
-        result = api_call("POST", "/training/complete", json={"model_path": docker_model_path})
+        result = api_call("POST", "/training/complete", timeout=120, json={"model_path": docker_model_path})
 
         if not result or result.get("status") != "ok":
             # Fall back to previous model
             print("   ⚠️  Failed to load new model, restoring previous...")
-            api_call("POST", "/training/complete")
+            api_call("POST", "/training/complete", timeout=120)
             raise RuntimeError("Failed to deploy new model")
 
         print("   ✅ New model deployed!")
@@ -306,7 +306,7 @@ def run_orchestrator():
         save_setting("training.last_status", "interrupted")
         # Restore previous model
         print("   Restoring previous model...")
-        api_call("POST", "/training/complete")
+        api_call("POST", "/training/complete", timeout=120)
 
     except Exception as e:
         print(f"\n❌ Training failed: {e}")
@@ -314,7 +314,7 @@ def run_orchestrator():
         save_setting("training.last_status", "failed")
         # Restore previous model
         print("   Restoring previous model...")
-        api_call("POST", "/training/complete")
+        api_call("POST", "/training/complete", timeout=120)
         raise
 
 
