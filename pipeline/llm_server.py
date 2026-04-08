@@ -257,14 +257,25 @@ def generate(request: GenerationRequest):
     
     context_docs = request.context
 
-    # Auto-retrieve context from RAG if enabled and no manual context provided
     citations = None
     memory_context = []
     fact_context = []
 
+    # Always search learned facts (independent of RAG setting)
+    try:
+        facts = get_facts_service()
+        if facts:
+            fact_docs, fact_citations = facts.get_fact_context(request.prompt, k=3)
+            if fact_docs:
+                fact_context = fact_docs
+                print(f"Found {len(fact_docs)} relevant facts")
+    except Exception as e:
+        print(f"Facts search failed (ok if empty): {e}")
+
+    # Auto-retrieve context from RAG if enabled and no manual context provided
     if request.use_rag and not context_docs:
         try:
-            # Search conversation memory first
+            # Search conversation memory
             try:
                 memory = get_memory_service()
                 memory_docs, memory_citations = memory.get_memory_context(request.prompt, k=2)
@@ -274,26 +285,13 @@ def generate(request: GenerationRequest):
             except Exception as e:
                 print(f"Memory search failed (ok if empty): {e}")
 
-            # Search learned facts
-            try:
-                facts = get_facts_service()
-                if facts:
-                    fact_docs, fact_citations = facts.get_fact_context(request.prompt, k=3)
-                    if fact_docs:
-                        fact_context = fact_docs
-                        print(f"Found {len(fact_docs)} relevant facts")
-            except Exception as e:
-                print(f"Facts search failed (ok if empty): {e}")
-
-            # Then search knowledge base
+            # Search knowledge base
             advanced_rag = get_advanced_rag()
             if advanced_rag:
-                # Use hybrid search with reranking
                 context_docs, citations = advanced_rag.get_context_with_citations(
                     request.prompt, k=request.rag_k
                 )
             else:
-                # Fallback to basic RAG
                 rag = get_rag_service()
                 context_docs = rag.get_context(request.prompt, k=request.rag_k)
         except Exception as e:
@@ -373,14 +371,24 @@ def generate_stream(request: StreamingRequest):
     
     context_docs = request.context
     citations = None
-
-    # Auto-retrieve context from RAG if enabled
     memory_context = []
     fact_context = []
 
+    # Always search learned facts (independent of RAG setting)
+    try:
+        facts = get_facts_service()
+        if facts:
+            fact_docs, fact_citations = facts.get_fact_context(request.prompt, k=3)
+            if fact_docs:
+                fact_context = fact_docs
+                print(f"Found {len(fact_docs)} relevant facts")
+    except Exception as e:
+        print(f"Facts search failed (ok if empty): {e}")
+
+    # Auto-retrieve context from RAG if enabled
     if request.use_rag and not context_docs:
         try:
-            # Search conversation memory first
+            # Search conversation memory
             try:
                 memory = get_memory_service()
                 memory_docs, memory_citations = memory.get_memory_context(request.prompt, k=2)
@@ -390,18 +398,7 @@ def generate_stream(request: StreamingRequest):
             except Exception as e:
                 print(f"Memory search failed (ok if empty): {e}")
 
-            # Search learned facts
-            try:
-                facts = get_facts_service()
-                if facts:
-                    fact_docs, fact_citations = facts.get_fact_context(request.prompt, k=3)
-                    if fact_docs:
-                        fact_context = fact_docs
-                        print(f"Found {len(fact_docs)} relevant facts")
-            except Exception as e:
-                print(f"Facts search failed (ok if empty): {e}")
-
-            # Then search knowledge base
+            # Search knowledge base
             advanced_rag = get_advanced_rag()
             if advanced_rag:
                 context_docs, citations = advanced_rag.get_context_with_citations(
@@ -1688,27 +1685,51 @@ async def upload_and_ocr(file: UploadFile = File(...), title: str = "Screenshot"
 
 
 
+def _ddg_search(query: str, max_results: int = 5, retries: int = 3):
+    """Search DuckDuckGo with retry/backoff for rate limiting."""
+    import time
+    from duckduckgo_search import DDGS
+
+    for attempt in range(retries):
+        try:
+            results = []
+            with DDGS() as ddgs:
+                for r in ddgs.text(query, max_results=max_results):
+                    results.append(r)
+            if results:
+                return results
+            # Empty results may be rate limiting — retry
+            if attempt < retries - 1:
+                wait = 2 ** attempt  # 1s, 2s, 4s
+                print(f"  ⏳ DDG returned 0 results, retrying in {wait}s (attempt {attempt + 1}/{retries})")
+                time.sleep(wait)
+        except Exception as e:
+            if attempt < retries - 1:
+                wait = 2 ** attempt
+                print(f"  ⏳ DDG error: {e}, retrying in {wait}s (attempt {attempt + 1}/{retries})")
+                time.sleep(wait)
+            else:
+                raise
+    return []
+
+
 @app.get("/search/web")
 def web_search(query: str, max_results: int = 5):
     """Search the web using DuckDuckGo"""
     from settings_manager import load_settings
-    
+
     settings = load_settings()
     if not settings.get("web_search", {}).get("enabled", False):
         return {"status": "error", "error": "Web search is disabled. Enable it in Settings."}
-    
+
     try:
-        from duckduckgo_search import DDGS
-        
-        results = []
-        with DDGS() as ddgs:
-            for r in ddgs.text(query, max_results=max_results):
-                results.append({
-                    "title": r.get("title", ""),
-                    "url": r.get("href", ""),
-                    "snippet": r.get("body", "")
-                })
-        
+        raw_results = _ddg_search(query, max_results=max_results)
+        results = [{
+            "title": r.get("title", ""),
+            "url": r.get("href", ""),
+            "snippet": r.get("body", "")
+        } for r in raw_results]
+
         return {"status": "ok", "query": query, "results": results}
     except Exception as e:
         return {"status": "error", "error": str(e)}
@@ -1724,16 +1745,9 @@ def chat_with_search(query: str):
         return {"status": "error", "error": "Web search is disabled. Enable it in Settings."}
     
     try:
-        from duckduckgo_search import DDGS
-        
-        # Search the web
-        search_results = []
-        try:
-            ddgs = DDGS()
-            for r in ddgs.text(query, max_results=5):
-                search_results.append(f"Title: {r.get('title', '')}\nSnippet: {r.get('body', '')}")
-        except Exception as search_err:
-            print(f"  ❌ DuckDuckGo search error: {search_err}")
+        # Search the web with retry/backoff
+        raw_results = _ddg_search(query, max_results=5)
+        search_results = [f"Title: {r.get('title', '')}\nSnippet: {r.get('body', '')}" for r in raw_results]
 
         if not search_results:
             return {"status": "ok", "query": query, "answer": "Web search returned no results. DuckDuckGo may be rate-limiting this query — try again in a few minutes or rephrase.", "sources": []}
