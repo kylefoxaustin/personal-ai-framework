@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-5.5.0-blue)
+![Version](https://img.shields.io/badge/version-5.6.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
@@ -256,6 +256,7 @@ Tested on RTX 5090 (32GB VRAM):
 
 | Version | Highlights |
 |---------|------------|
+| **v5.6.0** | Model upgrade — Qwen 2.5 14B replaces Mixtral 8x7B, ChatML format, 32K context, unified training |
 | **v5.5.0** | Voice mode — push-to-talk mic input with Whisper STT, browser TTS for spoken responses |
 | **v5.4.0** | Agent tools — Skippy can read files, list directories, search web, and check git status (sandboxed, read-only) |
 | **v5.3.0** | Multi-turn [INST] format, RAG query rewriting, conversation search, model auto-restore, auto-training schedule, training venv, DuckDuckGo retry |
