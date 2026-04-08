@@ -51,6 +51,63 @@ def _wrap_instruct(prompt: str) -> str:
     return f"[INST] {prompt.strip()} [/INST]"
 
 
+def _rewrite_query_for_rag(query: str, conversation_history: Optional[List] = None) -> str:
+    """Rewrite a user query into a better search query for RAG retrieval.
+
+    Uses the LLM to expand vague references, resolve pronouns from conversation
+    history, and produce a clear search-optimized query.
+    Falls back to the original query on any error.
+    """
+    if llm is None or _maintenance_mode:
+        return query
+
+    # Include last 2 messages for context (helps resolve "that thing" references)
+    context_lines = ""
+    if conversation_history:
+        for msg in conversation_history[-2:]:
+            role = "User" if msg.role == "user" else "Assistant"
+            # Truncate long messages
+            content = msg.content[:200]
+            context_lines += f"{role}: {content}\n"
+
+    if context_lines:
+        prompt = f"""Rewrite this query to be more specific and search-friendly for a document retrieval system.
+Use the conversation context to resolve any references like "that", "it", "the thing we discussed".
+Return ONLY the rewritten query, nothing else.
+
+Recent conversation:
+{context_lines}
+Current query: {query}
+
+Rewritten query:"""
+    else:
+        prompt = f"""Rewrite this query to be more specific and search-friendly for a document retrieval system.
+Return ONLY the rewritten query, nothing else. If the query is already clear, return it unchanged.
+
+Query: {query}
+
+Rewritten query:"""
+
+    try:
+        wrapped = _wrap_instruct(prompt)
+        with _inference_lock:
+            response = llm(
+                wrapped,
+                max_tokens=60,
+                temperature=0.1,
+                stop=["</s>", "\n\n", "[INST]"],
+                echo=False,
+            )
+        rewritten = response["choices"][0]["text"].strip().strip('"')
+        if rewritten and len(rewritten) > 5:
+            print(f"  🔄 Query rewrite: \"{query}\" → \"{rewritten}\"")
+            return rewritten
+    except Exception as e:
+        print(f"  Query rewrite failed (using original): {e}")
+
+    return query
+
+
 def _build_multiturn_prompt(
     system_context: str,
     conversation_history: Optional[List] = None,
@@ -272,13 +329,18 @@ def generate(request: GenerationRequest):
     except Exception as e:
         print(f"Facts search failed (ok if empty): {e}")
 
+    # Rewrite query for better RAG retrieval (skipped for conversational queries)
+    retrieval_query = request.prompt
+    if request.use_rag and not context_docs and not _is_conversational(request.prompt):
+        retrieval_query = _rewrite_query_for_rag(request.prompt, request.conversation_history)
+
     # Auto-retrieve context from RAG if enabled and no manual context provided
     if request.use_rag and not context_docs:
         try:
             # Search conversation memory
             try:
                 memory = get_memory_service()
-                memory_docs, memory_citations = memory.get_memory_context(request.prompt, k=2)
+                memory_docs, memory_citations = memory.get_memory_context(retrieval_query, k=2)
                 if memory_docs:
                     memory_context = memory_docs
                     print(f"Found {len(memory_docs)} relevant past conversations")
@@ -289,11 +351,11 @@ def generate(request: GenerationRequest):
             advanced_rag = get_advanced_rag()
             if advanced_rag:
                 context_docs, citations = advanced_rag.get_context_with_citations(
-                    request.prompt, k=request.rag_k
+                    retrieval_query, k=request.rag_k
                 )
             else:
                 rag = get_rag_service()
-                context_docs = rag.get_context(request.prompt, k=request.rag_k)
+                context_docs = rag.get_context(retrieval_query, k=request.rag_k)
         except Exception as e:
             print(f"RAG retrieval failed: {e}")
             context_docs = []
@@ -385,13 +447,18 @@ def generate_stream(request: StreamingRequest):
     except Exception as e:
         print(f"Facts search failed (ok if empty): {e}")
 
+    # Rewrite query for better RAG retrieval (skipped for conversational queries)
+    retrieval_query = request.prompt
+    if request.use_rag and not context_docs and not _is_conversational(request.prompt):
+        retrieval_query = _rewrite_query_for_rag(request.prompt, request.conversation_history)
+
     # Auto-retrieve context from RAG if enabled
     if request.use_rag and not context_docs:
         try:
             # Search conversation memory
             try:
                 memory = get_memory_service()
-                memory_docs, memory_citations = memory.get_memory_context(request.prompt, k=2)
+                memory_docs, memory_citations = memory.get_memory_context(retrieval_query, k=2)
                 if memory_docs:
                     memory_context = memory_docs
                     print(f"Found {len(memory_docs)} relevant past conversations")
@@ -402,11 +469,11 @@ def generate_stream(request: StreamingRequest):
             advanced_rag = get_advanced_rag()
             if advanced_rag:
                 context_docs, citations = advanced_rag.get_context_with_citations(
-                    request.prompt, k=request.rag_k
+                    retrieval_query, k=request.rag_k
                 )
             else:
                 rag = get_rag_service()
-                context_docs = rag.get_context(request.prompt, k=request.rag_k)
+                context_docs = rag.get_context(retrieval_query, k=request.rag_k)
         except Exception as e:
             print(f"RAG retrieval failed: {e}")
             context_docs = []
