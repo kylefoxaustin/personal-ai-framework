@@ -122,6 +122,7 @@ case $COMMAND in
 
     training-watch)
         echo "🔍 Starting training watcher..."
+        echo "   (Training will use venv at training/.venv if available)"
         python3 training/training_watcher.py
         ;;
 
