@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-5.2.0-blue)
+![Version](https://img.shields.io/badge/version-5.3.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
@@ -256,6 +256,7 @@ Tested on RTX 5090 (32GB VRAM):
 
 | Version | Highlights |
 |---------|------------|
+| **v5.3.0** | Multi-turn [INST] format, RAG query rewriting, conversation search, model auto-restore, auto-training schedule, training venv, DuckDuckGo retry |
 | **v5.2.0** | Instruct template fix (facts/web search now reliable), integration test suite, training data dedup fix, RAG hybrid search fix |
 | **v5.1.0** | Learned Facts layer, inference stability fixes, model warmup, Skippy personality |
 | **v5.0.0** | Automated LoRA retraining — Train Now button, GPU handoff, GGUF conversion pipeline |
