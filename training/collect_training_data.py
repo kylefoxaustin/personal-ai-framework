@@ -89,13 +89,22 @@ def merge_with_existing(new_examples: List[Dict], existing_path: Path) -> List[D
         with open(existing_path, "r") as f:
             existing = json.load(f)
 
-    existing_hashes = {content_hash(ex) for ex in existing}
+    # Deduplicate existing data (cleans up legacy duplicates)
+    seen_hashes = set()
+    deduped = []
+    for ex in existing:
+        h = content_hash(ex)
+        if h not in seen_hashes:
+            deduped.append(ex)
+            seen_hashes.add(h)
+    existing = deduped
+
     added = 0
     for ex in new_examples:
         h = content_hash(ex)
-        if h not in existing_hashes:
+        if h not in seen_hashes:
             existing.append(ex)
-            existing_hashes.add(h)
+            seen_hashes.add(h)
             added += 1
 
     return existing, added
