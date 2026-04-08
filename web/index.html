@@ -149,6 +149,10 @@
     .message.user { align-self: flex-end; background: #0f3460; border-bottom-right-radius: 0.25rem; }
     .message.assistant { align-self: flex-start; background: #16213e; border-bottom-left-radius: 0.25rem; }
     .tool-indicator { font-size: 0.78rem; color: #6b8aad; padding: 3px 8px; margin-bottom: 6px; border-left: 2px solid #3a5a7a; }
+    .mic-btn { background: #1a4a7a; border: 1px solid #2a5a8a; color: #eee; padding: 0.5rem 0.75rem; border-radius: 0.5rem; cursor: pointer; font-size: 1.1rem; user-select: none; }
+    .mic-btn:hover { background: #2a5a8a; }
+    .mic-btn.recording { background: #dc2626; border-color: #ef4444; animation: pulse-mic 1s infinite; }
+    @keyframes pulse-mic { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
     .message.system { align-self: center; background: #1a4a7a; font-size: 0.85rem; padding: 0.5rem 1rem; }
     .message .meta { margin-top: 0.5rem; font-size: 0.75rem; color: #64748b; }
     .message .style-tag { display: inline-block; background: #e94560; color: white; font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 0.25rem; margin-left: 0.5rem; }
@@ -633,6 +637,7 @@
       <button id="syncBtn" class="header-btn" onclick="syncNow()" title="Sync knowledge base (manual)"><span class="icon">🔄</span> Sync<span id="syncStatusDot" class="status-dot"></span></button>
       <button class="header-btn" onclick="openMemoryViewer()" title="Browse and manage stored memories"><span class="icon">🧠</span> Memory</button>
       <button id="webSearchBtn" class="header-btn active" onclick="toggleWebSearch()" title="Enable web search — type 'search: your question' to search the internet"><span class="icon">🌐</span> Web</button>
+      <button id="voiceModeBtn" class="header-btn" onclick="toggleVoiceMode()" title="Voice mode — hold mic button to talk, Skippy speaks responses"><span class="icon">🎤</span> Voice</button>
       <button class="header-btn" onclick="openSettings()" title="AI personality, backup, email providers, and more"><span class="icon">⚙️</span> Settings</button>
       <div class="stats">
         <span id="status" class="status">● Connecting...</span>
@@ -668,6 +673,7 @@
     </div>
     <div class="input-row">
       <textarea id="input" rows="1" placeholder="Ask your personal AI... (try 'Draft an email about...')" onkeydown="handleKey(event)"></textarea>
+      <button id="micBtn" class="mic-btn" onmousedown="startRecording()" onmouseup="stopRecording()" style="display:none;" title="Hold to talk">🎤</button>
       <button id="send" onclick="sendMessage()">Send</button>
     </div>
   </footer>
@@ -1156,6 +1162,10 @@
       const savedWebSearch = localStorage.getItem('webSearch');
       webSearchEnabled = savedWebSearch === null ? true : savedWebSearch === 'true';
       document.getElementById('webSearchBtn').classList.toggle('active', webSearchEnabled);
+      // Load voice mode preference
+      voiceModeEnabled = localStorage.getItem('voiceMode') === 'true';
+      document.getElementById('voiceModeBtn').classList.toggle('active', voiceModeEnabled);
+      document.getElementById('micBtn').style.display = voiceModeEnabled ? 'inline-block' : 'none';
       // Sync settings on load (web search + sync dot)
       fetch(`${API}/settings`).then(r => r.json()).then(settings => {
         updateSyncDot(!!settings.sync?.auto_enabled);
@@ -1238,6 +1248,80 @@
       showToast(webSearchEnabled ? '🌐 Web search ON' : '🌐 Web search OFF');
     }
     
+    // Voice mode
+    let voiceModeEnabled = false;
+    let _mediaRecorder = null;
+    let _audioChunks = [];
+
+    function toggleVoiceMode() {
+      voiceModeEnabled = !voiceModeEnabled;
+      document.getElementById('voiceModeBtn').classList.toggle('active', voiceModeEnabled);
+      document.getElementById('micBtn').style.display = voiceModeEnabled ? 'inline-block' : 'none';
+      localStorage.setItem('voiceMode', voiceModeEnabled);
+      if (!voiceModeEnabled) speechSynthesis.cancel();
+      showToast(voiceModeEnabled ? '🎤 Voice mode ON' : '🎤 Voice mode OFF');
+    }
+
+    async function startRecording() {
+      if (!voiceModeEnabled) return;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        _audioChunks = [];
+        _mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        _mediaRecorder.ondataavailable = e => { if (e.data.size > 0) _audioChunks.push(e.data); };
+        _mediaRecorder.start();
+        document.getElementById('micBtn').classList.add('recording');
+        speechSynthesis.cancel();
+      } catch (err) {
+        showToast('Mic access denied');
+        console.error('Mic error:', err);
+      }
+    }
+
+    async function stopRecording() {
+      if (!_mediaRecorder || _mediaRecorder.state !== 'recording') return;
+      document.getElementById('micBtn').classList.remove('recording');
+
+      _mediaRecorder.stop();
+      _mediaRecorder.stream.getTracks().forEach(t => t.stop());
+
+      await new Promise(resolve => { _mediaRecorder.onstop = resolve; });
+
+      const blob = new Blob(_audioChunks, { type: 'audio/webm' });
+      if (blob.size < 1000) { showToast('Recording too short'); return; }
+
+      showToast('Transcribing...');
+      const formData = new FormData();
+      formData.append('file', blob, 'voice.webm');
+
+      try {
+        const resp = await fetch(`${API}/voice/transcribe`, { method: 'POST', body: formData });
+        const data = await resp.json();
+        if (data.status === 'ok' && data.text) {
+          document.getElementById('input').value = data.text;
+          sendMessage();
+        } else {
+          showToast('Transcription failed: ' + (data.error || 'empty result'));
+        }
+      } catch (err) {
+        showToast('Transcription error');
+        console.error('Voice transcribe error:', err);
+      }
+    }
+
+    function speakResponse(text) {
+      if (!voiceModeEnabled) return;
+      speechSynthesis.cancel();
+      // Strip markdown formatting for cleaner speech
+      const clean = text.replace(/```[\s\S]*?```/g, ' code block ')
+                        .replace(/[*_~`#]/g, '')
+                        .replace(/\[(\d+)\]/g, '')
+                        .replace(/\n+/g, '. ');
+      const utterance = new SpeechSynthesisUtterance(clean);
+      utterance.rate = 1.1;
+      speechSynthesis.speak(utterance);
+    }
+
     async function clearAllMemory() {
       const confirmed = confirm(
         '⚠️ DELETE ALL CONVERSATIONS?\n\n' +
@@ -1604,6 +1688,7 @@
                 } else if (data.type === 'done') {
                   fullText = data.text;
                   metricsData = data.metrics || {};
+                  speakResponse(fullText);
                 }
               } catch (e) { /* ignore parse errors */ }
             }
