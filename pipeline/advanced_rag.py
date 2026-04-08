@@ -319,10 +319,8 @@ class AdvancedRAG:
                             keyword_score=normalized_score
                         )
         
-        # Filter out results with zero semantic score (likely irrelevant keyword matches)
-        results = [r for r in results if r.semantic_score > 0.1 or r.keyword_score > 0.8]
-        # 3. Combine scores
-        results = list(results_map.values())
+        # 3. Combine scores and filter out irrelevant matches
+        results = [r for r in results_map.values() if r.semantic_score > 0.1 or r.keyword_score > 0.8]
         for result in results:
             result.final_score = (
                 semantic_weight * result.semantic_score +
