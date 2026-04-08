@@ -1695,6 +1695,32 @@ Respond ONLY with valid JSON in this exact format, no other text:
     except Exception as e:
         return {"error": str(e)}
 
+@app.post("/voice/transcribe")
+async def voice_transcribe(file: UploadFile = File(...)):
+    """Lightweight voice transcription — mic audio to text, no ingestion."""
+    import tempfile
+
+    suffix = Path(file.filename or "audio.webm").suffix.lower() or ".webm"
+
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
+        content_bytes = await file.read()
+        tmp.write(content_bytes)
+        tmp_path = tmp.name
+
+    try:
+        from meeting_summarizer import MeetingSummarizer
+        summarizer = MeetingSummarizer(whisper_model="base", device="cpu")
+        transcript_text, _ = summarizer.transcribe(tmp_path)
+        return {"status": "ok", "text": transcript_text.strip()}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+    finally:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+
+
 @app.post("/upload/transcribe")
 async def upload_and_transcribe(file: UploadFile = File(...), title: str = "Untitled Recording", summarize: bool = False):
     """Upload audio/video and transcribe with Whisper"""
