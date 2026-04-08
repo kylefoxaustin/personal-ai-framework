@@ -67,7 +67,7 @@ docs/              # Guides (architecture, FAQ, quickstart, fresh install)
 - Version badge is in `README.md` (shields.io badge)
 - Version history table is at the bottom of `README.md`
 - Releases are tagged as `vX.Y.Z` on main branch
-- Current version: v5.1.0
+- Current version: v5.2.0
 - Commit style: `vX.Y.Z: Short Description` for releases, `Update README for vX.Y.Z - Feature Name` for README updates
 
 ## Common Tasks

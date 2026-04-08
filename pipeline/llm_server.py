@@ -293,6 +293,10 @@ def generate(request: GenerationRequest):
     full_prompt += f"User: {request.prompt}"
     full_prompt = _wrap_instruct(full_prompt)
 
+    # Re-check model availability (may have been unloaded during context retrieval)
+    if _maintenance_mode or llm is None:
+        raise HTTPException(status_code=503, detail="Model is retraining. Please wait — this usually takes ~2.5 hours.")
+
     # Generate (lock prevents concurrent CUDA access)
     with _inference_lock:
         response = llm(
@@ -409,6 +413,10 @@ def generate_stream(request: StreamingRequest):
 
     full_prompt += f"User: {request.prompt}"
     full_prompt = _wrap_instruct(full_prompt)
+
+    # Re-check model availability (may have been unloaded during context retrieval)
+    if _maintenance_mode or llm is None:
+        raise HTTPException(status_code=503, detail="Model is retraining. Please wait — this usually takes ~2.5 hours.")
 
     def generate_tokens():
         import time
