@@ -27,6 +27,7 @@ from settings_manager import get_all_settings, apply_settings, load_settings, sa
 from conversation_store import get_conversation_store
 from memory_service import get_memory_service
 from facts_service import get_facts_service
+from agent_tools import execute_tool, get_tool_descriptions, set_web_search_fn
 
 # Global advanced RAG instance
 _advanced_rag = None
@@ -106,6 +107,99 @@ Rewritten query:"""
         print(f"  Query rewrite failed (using original): {e}")
 
     return query
+
+
+def _check_for_tool_use(prompt: str, conversation_history: Optional[List] = None):
+    """Pass 1: Ask the LLM if it needs a tool to answer this question.
+
+    Returns {"name": str, "params": dict, "result": str} if a tool was used,
+    or None if no tool is needed. Uses a short, low-temperature inference.
+    """
+    if llm is None or _maintenance_mode:
+        return None
+    if _is_conversational(prompt):
+        return None
+
+    tool_desc = get_tool_descriptions()
+
+    # Include last user message for context on follow-ups
+    context_hint = ""
+    if conversation_history:
+        for msg in reversed(conversation_history[-4:]):
+            if msg.role == "user":
+                context_hint = f"\nPrevious question: {msg.content[:150]}"
+                break
+
+    detection_prompt = f"""You have access to these tools:
+{tool_desc}
+
+Based on the user's question, decide if you need a tool. Most questions do NOT need tools.
+Use a tool ONLY when the question explicitly asks to read a file, list a directory, search the web for current info, or check git status.
+
+If you need a tool, output exactly:
+<tool>TOOL_NAME</tool>
+<params>{{"key": "value"}}</params>
+
+If no tool is needed, output exactly:
+NO_TOOLS
+{context_hint}
+User question: {prompt}"""
+
+    try:
+        wrapped = _wrap_instruct(detection_prompt)
+        with _inference_lock:
+            response = llm(
+                wrapped,
+                max_tokens=80,
+                temperature=0.05,
+                stop=["</s>", "[INST]", "\n\n\n"],
+                echo=False,
+            )
+
+        text = response["choices"][0]["text"].strip()
+        print(f"  [agent] Tool detection: {text[:120]}")
+
+        if "NO_TOOLS" in text:
+            return None
+
+        # Parse tool call
+        tool_match = re.search(r"<tool>([\w_]+)</tool>", text)
+        params_match = re.search(r"<params>(\{.*?\})</params>", text, re.DOTALL)
+
+        if not tool_match:
+            return None
+
+        tool_name = tool_match.group(1)
+        params = {}
+        if params_match:
+            try:
+                params = json.loads(params_match.group(1))
+            except json.JSONDecodeError:
+                print(f"  [agent] Failed to parse params: {params_match.group(1)}")
+                return None
+
+        print(f"  🔧 Executing tool: {tool_name}({params})")
+        result = execute_tool(tool_name, params)
+        print(f"  [agent] Tool result: {len(result)} chars")
+
+        return {"name": tool_name, "params": params, "result": result}
+
+    except Exception as e:
+        print(f"  [agent] Tool detection error: {e}")
+        return None
+
+
+def _build_tool_context(tool_result: dict) -> str:
+    """Format a tool result for injection into the system context."""
+    name = tool_result["name"]
+    params = tool_result["params"]
+    result = tool_result["result"]
+
+    if len(result) > 8000:
+        result = result[:8000] + "\n[... truncated ...]"
+
+    param_str = ", ".join(f"{k}={v}" for k, v in params.items())
+    return f"TOOL RESULT ({name}({param_str})):\n\n{result}\n\n---\n\n"
 
 
 def _build_multiturn_prompt(
@@ -413,6 +507,11 @@ def generate(request: GenerationRequest):
             system_context += f"[{i}] {doc}\n\n"
         system_context += "---\n\n"
 
+    # Agent tool check (Pass 1 — detect if a tool is needed)
+    tool_result = _check_for_tool_use(request.prompt, request.conversation_history)
+    if tool_result:
+        system_context += _build_tool_context(tool_result)
+
     # Build multi-turn prompt with proper [INST] format
     full_prompt = _build_multiturn_prompt(system_context, request.conversation_history, request.prompt)
 
@@ -531,6 +630,11 @@ def generate_stream(request: StreamingRequest):
             system_context += f"[{i}] {doc}\n\n"
         system_context += "---\n\n"
 
+    # Agent tool check (Pass 1 — detect if a tool is needed)
+    tool_result = _check_for_tool_use(request.prompt, request.conversation_history)
+    if tool_result:
+        system_context += _build_tool_context(tool_result)
+
     # Build multi-turn prompt with proper [INST] format
     full_prompt = _build_multiturn_prompt(system_context, request.conversation_history, request.prompt)
 
@@ -540,6 +644,10 @@ def generate_stream(request: StreamingRequest):
 
     def generate_tokens():
         import time
+
+        # Send tool-use indicator if a tool was used
+        if tool_result:
+            yield f"data: {json.dumps({'type': 'tool_use', 'tool': tool_result['name'], 'params': tool_result['params']})}\n\n"
 
         # Send initial metadata (context, citations)
         meta = {
@@ -1803,6 +1911,10 @@ def _ddg_search(query: str, max_results: int = 5, retries: int = 3):
             else:
                 raise
     return []
+
+
+# Wire up web_search tool to use existing _ddg_search
+set_web_search_fn(_ddg_search)
 
 
 @app.get("/search/web")
