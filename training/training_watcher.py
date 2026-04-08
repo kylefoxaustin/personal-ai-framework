@@ -15,6 +15,7 @@ from pathlib import Path
 TRIGGER_FILE = Path.home() / ".personal-ai" / "training_trigger.json"
 STATE_FILE = Path.home() / ".personal-ai" / "training_state.json"
 ORCHESTRATOR = Path(__file__).parent / "training_orchestrator.py"
+VENV_PYTHON = Path(__file__).parent / ".venv" / "bin" / "python"
 
 _running_process = None
 
@@ -67,9 +68,12 @@ def start_orchestrator():
         print("⚠️  Orchestrator already running, ignoring trigger")
         return
 
+    # Use venv Python if available (isolated training dependencies)
+    python = str(VENV_PYTHON) if VENV_PYTHON.exists() else sys.executable
     print(f"🚀 Starting training orchestrator...")
+    print(f"   Python: {python}")
     _running_process = subprocess.Popen(
-        [sys.executable, str(ORCHESTRATOR)],
+        [python, str(ORCHESTRATOR)],
         cwd=str(ORCHESTRATOR.parent.parent),
     )
     print(f"   PID: {_running_process.pid}")
@@ -112,6 +116,54 @@ def cleanup_stale_state():
         pass
 
 
+AUTO_CHECK_INTERVAL = 6 * 3600  # Check every 6 hours
+SETTINGS_FILE = Path.home() / ".personal-ai" / "settings.json"
+CONVERSATIONS_DB = Path.home() / ".personal-ai" / "conversations.db"
+
+
+def check_auto_training():
+    """Check if auto-training should be triggered based on new conversation count."""
+    if _running_process and _running_process.poll() is None:
+        return  # Already training
+
+    # Load settings
+    try:
+        if not SETTINGS_FILE.exists():
+            return
+        with open(SETTINGS_FILE) as f:
+            settings = json.load(f)
+        training = settings.get("training", {})
+        if not training.get("enabled", False):
+            return
+        min_examples = training.get("min_new_examples", 50)
+        last_run = training.get("last_run")
+    except (json.JSONDecodeError, IOError):
+        return
+
+    # Count new conversations since last training
+    try:
+        import sqlite3
+        if not CONVERSATIONS_DB.exists():
+            return
+        conn = sqlite3.connect(CONVERSATIONS_DB)
+        if last_run:
+            count = conn.execute(
+                "SELECT COUNT(*) FROM conversations WHERE updated_at > ?",
+                (last_run,)
+            ).fetchone()[0]
+        else:
+            count = conn.execute("SELECT COUNT(*) FROM conversations").fetchone()[0]
+        conn.close()
+    except Exception:
+        return
+
+    if count >= min_examples:
+        print(f"\n🤖 Auto-training: {count} new conversations (threshold: {min_examples})")
+        start_orchestrator()
+    else:
+        print(f"   Auto-training check: {count}/{min_examples} new conversations")
+
+
 def run_watcher():
     """Main watcher loop."""
     global _running_process
@@ -120,10 +172,12 @@ def run_watcher():
     print("🔍 Training Watcher — monitoring for training triggers")
     print(f"   Trigger file: {TRIGGER_FILE}")
     print(f"   Orchestrator: {ORCHESTRATOR}")
+    print(f"   Auto-check interval: {AUTO_CHECK_INTERVAL // 3600}h")
     print("   Press Ctrl+C to stop")
     print("=" * 60)
 
     cleanup_stale_state()
+    last_auto_check = time.time()
 
     try:
         while True:
@@ -147,6 +201,11 @@ def run_watcher():
                 else:
                     print(f"❌ Orchestrator exited with code {rc}")
                 _running_process = None
+
+            # Periodic auto-training check
+            if time.time() - last_auto_check >= AUTO_CHECK_INTERVAL:
+                check_auto_training()
+                last_auto_check = time.time()
 
             time.sleep(2)
 
