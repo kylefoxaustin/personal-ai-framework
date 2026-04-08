@@ -25,8 +25,8 @@ from peft import (
 )
 
 # Configuration (overridable via environment variables)
-MODEL_PATH = "mistralai/Mistral-7B-Instruct-v0.2"  # HF model for tokenizer/config
-GGUF_PATH = "models/mixtral/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
+MODEL_PATH = "Qwen/Qwen2.5-14B-Instruct"  # HF model for tokenizer/config
+GGUF_PATH = "models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m.gguf"
 OUTPUT_DIR = os.environ.get("TRAINING_OUTPUT_DIR", "training/output")
 DATA_DIR = os.environ.get("TRAINING_DATA_DIR", "training/data")
 
@@ -58,19 +58,13 @@ def load_training_data(data_path: str, tokenizer, max_samples: int = None):
     
     print(f"Loaded {len(data)} examples")
     
-    # Format as instruction-following
+    # Format as ChatML (Qwen 2.5 format)
     formatted = []
     for item in data:
-        # Alpaca format: instruction + input + output
         instruction = item.get('instruction', '')
-        inp = item.get('input', '')
         output = item.get('output', '')
-        
-        if inp:
-            text = f"### Instruction:\n{instruction}\n\n### Input:\n{inp}\n\n### Response:\n{output}"
-        else:
-            text = f"### Instruction:\n{instruction}\n\n### Response:\n{output}"
-        
+
+        text = f"<|im_start|>user\n{instruction}<|im_end|>\n<|im_start|>assistant\n{output}<|im_end|>"
         formatted.append({"text": text})
     
     dataset = Dataset.from_list(formatted)

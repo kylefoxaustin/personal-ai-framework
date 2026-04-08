@@ -99,7 +99,7 @@ def save_setting(key, value):
 
 def get_next_model_version():
     """Determine the next model version number."""
-    existing = list(MODELS_DIR.glob("kyle-7b-v*-q4_k_m.gguf"))
+    existing = list(MODELS_DIR.glob("kyle-14b-v*-q4_k_m.gguf"))
     versions = []
     for f in existing:
         try:
@@ -255,7 +255,7 @@ def run_orchestrator():
         set_status("converting", "Converting to GGUF (this may take a while)", progress=75)
 
         version = get_next_model_version()
-        gguf_filename = f"kyle-7b-v{version}-q4_k_m.gguf"
+        gguf_filename = f"kyle-14b-v{version}-q4_k_m.gguf"
         gguf_path = MODELS_DIR / gguf_filename
         MODELS_DIR.mkdir(parents=True, exist_ok=True)
 

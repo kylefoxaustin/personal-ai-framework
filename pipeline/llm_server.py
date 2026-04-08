@@ -47,9 +47,8 @@ import re
 
 
 def _wrap_instruct(prompt: str) -> str:
-    """Wrap prompt in Mixtral/Mistral [INST] template for single-shot calls.
-    Note: llama-cpp-python adds <s> (BOS) automatically, so we omit it here."""
-    return f"[INST] {prompt.strip()} [/INST]"
+    """Wrap prompt in ChatML template for single-shot calls (Qwen 2.5)."""
+    return f"<|im_start|>user\n{prompt.strip()}<|im_end|>\n<|im_start|>assistant\n"
 
 
 def _rewrite_query_for_rag(query: str, conversation_history: Optional[List] = None) -> str:
@@ -96,7 +95,7 @@ Rewritten query:"""
                 wrapped,
                 max_tokens=60,
                 temperature=0.1,
-                stop=["</s>", "\n\n", "[INST]"],
+                stop=["</s>", "\n\n", "<|im_end|>"],
                 echo=False,
             )
         rewritten = response["choices"][0]["text"].strip().strip('"')
@@ -152,7 +151,7 @@ User question: {prompt}"""
                 wrapped,
                 max_tokens=80,
                 temperature=0.05,
-                stop=["</s>", "[INST]", "\n\n\n"],
+                stop=["</s>", "<|im_end|>", "\n\n\n"],
                 echo=False,
             )
 
@@ -207,52 +206,42 @@ def _build_multiturn_prompt(
     conversation_history: Optional[List] = None,
     current_message: str = "",
 ) -> str:
-    """Build a proper Mixtral multi-turn [INST] prompt.
+    """Build a proper ChatML multi-turn prompt (Qwen 2.5).
 
     Format:
-      [INST] {system context}
+      <|im_start|>system
+      {system context}<|im_end|>
+      <|im_start|>user
+      {user_1}<|im_end|>
+      <|im_start|>assistant
+      {assistant_1}<|im_end|>
+      ...
+      <|im_start|>user
+      {current}<|im_end|>
+      <|im_start|>assistant
 
-      {user_1} [/INST] {assistant_1}</s>[INST] {user_2} [/INST] {assistant_2}</s>[INST] {current} [/INST]
-
-    System context (personality, facts, memory, RAG) goes in the first [INST] block only.
-    BOS (<s>) is added automatically by llama-cpp-python.
+    System context (personality, facts, memory, RAG) goes in the system block.
     """
     history = conversation_history or []
     history = history[-6:]  # Last 6 messages (3 turns)
 
-    # Pair history into complete (user, assistant) turns
-    turns = []
-    i = 0
-    while i < len(history) - 1:
-        if history[i].role == "user" and history[i + 1].role == "assistant":
-            turns.append((history[i].content.strip(), history[i + 1].content.strip()))
-            i += 2
-        else:
-            i += 1  # Skip malformed entries
+    parts = []
 
+    # System block with all context
     ctx = system_context.strip()
-
-    if not turns:
-        # No history — single [INST] block with system context + user message
-        if ctx:
-            return f"[INST] {ctx}\n\n{current_message.strip()} [/INST]"
-        return f"[INST] {current_message.strip()} [/INST]"
-
-    # First [INST]: system context + first user message
-    first_user, first_assistant = turns[0]
     if ctx:
-        parts = [f"[INST] {ctx}\n\n{first_user} [/INST] {first_assistant}</s>"]
-    else:
-        parts = [f"[INST] {first_user} [/INST] {first_assistant}</s>"]
+        parts.append(f"<|im_start|>system\n{ctx}<|im_end|>")
 
-    # Subsequent complete turns
-    for user_msg, assistant_msg in turns[1:]:
-        parts.append(f"[INST] {user_msg} [/INST] {assistant_msg}</s>")
+    # Conversation history
+    for msg in history:
+        role = "user" if msg.role == "user" else "assistant"
+        parts.append(f"<|im_start|>{role}\n{msg.content.strip()}<|im_end|>")
 
-    # Final: current user message
-    parts.append(f"[INST] {current_message.strip()} [/INST]")
+    # Current user message + assistant prompt
+    parts.append(f"<|im_start|>user\n{current_message.strip()}<|im_end|>")
+    parts.append("<|im_start|>assistant")
 
-    return "".join(parts)
+    return "\n".join(parts)
 
 
 def _is_conversational(prompt: str) -> bool:
@@ -350,7 +339,7 @@ def load_model(model_path_override=None):
     # Unload any existing model first to free GPU memory
     unload_model()
 
-    model_path = model_path_override or "/app/models/mixtral/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
+    model_path = model_path_override or "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf"
 
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Model not found at {model_path}")
@@ -413,7 +402,7 @@ async def startup_event():
 
 @app.get("/")
 def read_root():
-    return {"message": "Personal AI LLM Server", "model": "Mixtral-8x7B", "rag_enabled": True}
+    return {"message": "Personal AI LLM Server", "model": "Qwen2.5-14B", "rag_enabled": True}
 
 @app.post("/generate", response_model=GenerationResponse)
 def generate(request: GenerationRequest):
@@ -526,14 +515,14 @@ def generate(request: GenerationRequest):
             max_tokens=request.max_tokens,
             temperature=request.temperature,
             top_p=request.top_p,
-            stop=["</s>", "\n\n\n", "[INST]"],
+            stop=["</s>", "\n\n\n", "<|im_end|>"],
             echo=False
         )
 
     return GenerationResponse(
         text=response['choices'][0]['text'].strip(),
         tokens_used=response['usage']['total_tokens'],
-        model="mixtral-8x7b",
+        model="qwen2.5-14b",
         context_used=context_docs if context_docs else None,
         citations=citations
     )
@@ -669,7 +658,7 @@ def generate_stream(request: StreamingRequest):
                 max_tokens=request.max_tokens,
                 temperature=request.temperature,
                 top_p=request.top_p,
-                stop=["</s>", "\n\n\n", "[INST]"],
+                stop=["</s>", "\n\n\n", "<|im_end|>"],
                 echo=False,
                 stream=True
             ):
@@ -899,7 +888,7 @@ def training_prepare():
 def training_complete(model_path: str = None):
     """Load a new (or the previous) model and exit maintenance mode."""
     global _maintenance_mode
-    path = model_path or _current_model_path or "/app/models/mixtral/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
+    path = model_path or _current_model_path or "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf"
     load_model(path)
     _maintenance_mode = False
     return {"status": "ok", "model_loaded": path}
@@ -2004,7 +1993,7 @@ User Question: {query}"""
         prompt = _wrap_instruct(prompt)
 
         with _inference_lock:
-            response = llm(prompt, max_tokens=1000, temperature=0.3, stop=["</s>", "\n\n\n", "User:", "user:", "[INST]"])
+            response = llm(prompt, max_tokens=1000, temperature=0.3, stop=["</s>", "\n\n\n", "<|im_end|>"])
         answer = response["choices"][0]["text"].strip()
 
         # Auto-learn facts from web search results (use raw search snippets, not model answer)
@@ -2017,7 +2006,7 @@ If no clear fact can be extracted, respond with "NONE".
 Question: {query}
 Search Results: {search_results[0]}""")
                 with _inference_lock:
-                    fact_response = llm(fact_prompt, max_tokens=100, temperature=0.1, stop=["</s>", "\n\n", "[INST]"])
+                    fact_response = llm(fact_prompt, max_tokens=100, temperature=0.1, stop=["</s>", "\n\n", "<|im_end|>"])
                 extracted = fact_response["choices"][0]["text"].strip()
                 if extracted and extracted.upper() != "NONE" and len(extracted) > 10:
                     source_titles = [r.split("\n")[0].replace("Title: ", "") for r in search_results[:2]]

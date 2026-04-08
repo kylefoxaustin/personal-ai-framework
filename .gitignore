@@ -46,6 +46,7 @@ config.local.yaml
 training/output/
 training/data/
 models/kyle-*.gguf
+models/qwen2.5-14b/*.gguf
 pipeline/config.yaml
 knowledge/recordings/
 training/*.log
