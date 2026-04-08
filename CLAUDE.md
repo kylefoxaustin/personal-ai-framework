@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Personal AI Framework - a fully local AI assistant with a 61K+ document knowledge base. Runs Mixtral 8x7B (Q4 GGUF) via llama-cpp-python on NVIDIA GPU, with ChromaDB for RAG and SQLite for conversation storage. The AI persona is named "Skippy."
+Personal AI Framework - a fully local AI assistant with a 61K+ document knowledge base. Runs Qwen 2.5 14B Instruct (Q4 GGUF) via llama-cpp-python on NVIDIA GPU, with ChromaDB for RAG and SQLite for conversation storage. The AI persona is named "Skippy."
 
 ## Architecture
 

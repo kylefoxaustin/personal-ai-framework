@@ -47,7 +47,7 @@ cd personal-ai-framework
 # Run setup (installs dependencies, creates config)
 ./setup.sh
 
-# Download model (Mixtral 8x7B Q4)
+# Download model (Qwen 2.5 14B Q4)
 ./run.sh download-model
 
 # Start services
@@ -285,7 +285,7 @@ MIT License - Use freely for personal projects.
 
 ## 🙏 Acknowledgments
 
-- [Mixtral 8x7B](https://mistral.ai/) - Base model
+- [Qwen 2.5](https://qwenlm.github.io/) - Base model (upgraded from Mixtral 8x7B)
 - [llama.cpp](https://github.com/ggerganov/llama.cpp) - Efficient inference
 - [ChromaDB](https://www.trychroma.com/) - Vector database
 - [OpenAI Whisper](https://github.com/openai/whisper) - Audio transcription

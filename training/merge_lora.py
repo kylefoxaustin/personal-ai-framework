@@ -5,7 +5,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
 import os
 
-MODEL_PATH = "mistralai/Mistral-7B-Instruct-v0.2"
+MODEL_PATH = "Qwen/Qwen2.5-14B-Instruct"
 LORA_PATH = "training/output/final"
 OUTPUT_PATH = "training/output/merged"
 

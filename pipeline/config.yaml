@@ -4,8 +4,8 @@ user:
   description: "Hardware engineer, ARM SoC developer"
 
 model:
-  path: "/app/models/kyle-7b-v2-q4_k_m.gguf"
-  context_length: 16384
+  path: "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf"
+  context_length: 32768
   max_tokens: 512
   temperature: 0.7
   gpu_layers: -1
