@@ -199,23 +199,28 @@ class ConversationStore:
         return [self.get_conversation(c["id"]) for c in convs]
     
     def search_conversations(self, query: str, limit: int = 10) -> List[Dict]:
-        """Basic text search in conversations"""
+        """Text search in conversations by message content."""
         conn = get_db()
         results = conn.execute(
-            """SELECT DISTINCT c.* FROM conversations c
+            """SELECT DISTINCT c.*, COUNT(m.id) as message_count
+               FROM conversations c
                JOIN messages m ON c.id = m.conversation_id
                WHERE m.content LIKE ?
+               GROUP BY c.id
                ORDER BY c.updated_at DESC
                LIMIT ?""",
             (f"%{query}%", limit)
         ).fetchall()
         conn.close()
-        
+
         return [
             {
                 "id": c["id"],
                 "title": c["title"],
-                "updated_at": c["updated_at"]
+                "created_at": c["created_at"],
+                "updated_at": c["updated_at"],
+                "message_count": c["message_count"],
+                "ingested_to_rag": bool(c["ingested_to_rag"]),
             }
             for c in results
         ]

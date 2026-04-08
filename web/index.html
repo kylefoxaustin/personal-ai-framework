@@ -614,6 +614,9 @@
         <button onclick="clearAllMemory()" style="background: #dc2626;" title="Clear all memory">🗑️</button>
       </div>
     </div>
+    <input type="text" id="convSearch" placeholder="Search conversations..."
+           oninput="debouncedSearch()"
+           style="width: calc(100% - 1.5rem); margin: 0.5rem 0.75rem; padding: 0.4rem 0.6rem; background: #1a2a3a; border: 1px solid #2a3a4a; border-radius: 0.4rem; color: #eee; font-size: 0.8rem;">
     <div class="conversation-list" id="conversationList">
       <div class="no-conversations">No conversations yet</div>
     </div>
@@ -991,7 +994,25 @@
         console.error('Failed to load conversations:', err);
       }
     }
-    
+
+    let _searchTimer = null;
+    function debouncedSearch() {
+      clearTimeout(_searchTimer);
+      _searchTimer = setTimeout(searchConversations, 300);
+    }
+    async function searchConversations() {
+      const q = document.getElementById('convSearch').value.trim();
+      if (!q) { loadConversations(); return; }
+      try {
+        const resp = await fetch(`${API}/conversations/search?q=${encodeURIComponent(q)}`);
+        const data = await resp.json();
+        conversations = data.conversations || [];
+        renderConversationList();
+      } catch (err) {
+        console.error('Search failed:', err);
+      }
+    }
+
     function renderConversationList() {
       const list = document.getElementById('conversationList');
       if (conversations.length === 0) {

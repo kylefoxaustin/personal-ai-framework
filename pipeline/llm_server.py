@@ -274,6 +274,15 @@ def load_model(model_path_override=None):
 
     _current_model_path = model_path
     print("✅ Model loaded successfully!")
+
+    # Persist active model path so it survives container restarts
+    try:
+        settings = load_settings()
+        settings.setdefault("model", {})["active_model_path"] = model_path
+        save_settings(settings)
+    except Exception as e:
+        print(f"  Could not persist model path: {e}")
+
     return llm
 
 def unload_model():
@@ -287,8 +296,17 @@ def unload_model():
 
 @app.on_event("startup")
 async def startup_event():
-    """Load model on server start"""
-    load_model()
+    """Load model on server start, restoring last-used model if available."""
+    model_path = None
+    try:
+        settings = load_settings()
+        saved_path = settings.get("model", {}).get("active_model_path")
+        if saved_path and os.path.exists(saved_path):
+            print(f"Restoring last-used model: {saved_path}")
+            model_path = saved_path
+    except Exception:
+        pass
+    load_model(model_path)
     
     # Initialize RAG service (will connect to ChromaDB)
     try:
@@ -1139,6 +1157,13 @@ def list_conversations(limit: int = 50, offset: int = 0):
     """List recent conversations"""
     store = get_conversation_store()
     return {"conversations": store.list_conversations(limit, offset)}
+
+
+@app.get("/conversations/search")
+def search_conversations(q: str, limit: int = 20):
+    """Search conversations by message content"""
+    store = get_conversation_store()
+    return {"conversations": store.search_conversations(q, limit)}
 
 
 @app.get("/conversations/{conv_id}")

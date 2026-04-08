@@ -42,7 +42,8 @@ DEFAULT_SETTINGS = {
         }
     },
     "model": {
-        "context_length": 16384
+        "context_length": 16384,
+        "active_model_path": None
     },
     "training": {
         "enabled": False,
