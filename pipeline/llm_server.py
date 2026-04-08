@@ -46,9 +46,62 @@ import re
 
 
 def _wrap_instruct(prompt: str) -> str:
-    """Wrap prompt in Mixtral/Mistral [INST] template for instruction-following.
+    """Wrap prompt in Mixtral/Mistral [INST] template for single-shot calls.
     Note: llama-cpp-python adds <s> (BOS) automatically, so we omit it here."""
     return f"[INST] {prompt.strip()} [/INST]"
+
+
+def _build_multiturn_prompt(
+    system_context: str,
+    conversation_history: Optional[List] = None,
+    current_message: str = "",
+) -> str:
+    """Build a proper Mixtral multi-turn [INST] prompt.
+
+    Format:
+      [INST] {system context}
+
+      {user_1} [/INST] {assistant_1}</s>[INST] {user_2} [/INST] {assistant_2}</s>[INST] {current} [/INST]
+
+    System context (personality, facts, memory, RAG) goes in the first [INST] block only.
+    BOS (<s>) is added automatically by llama-cpp-python.
+    """
+    history = conversation_history or []
+    history = history[-6:]  # Last 6 messages (3 turns)
+
+    # Pair history into complete (user, assistant) turns
+    turns = []
+    i = 0
+    while i < len(history) - 1:
+        if history[i].role == "user" and history[i + 1].role == "assistant":
+            turns.append((history[i].content.strip(), history[i + 1].content.strip()))
+            i += 2
+        else:
+            i += 1  # Skip malformed entries
+
+    ctx = system_context.strip()
+
+    if not turns:
+        # No history — single [INST] block with system context + user message
+        if ctx:
+            return f"[INST] {ctx}\n\n{current_message.strip()} [/INST]"
+        return f"[INST] {current_message.strip()} [/INST]"
+
+    # First [INST]: system context + first user message
+    first_user, first_assistant = turns[0]
+    if ctx:
+        parts = [f"[INST] {ctx}\n\n{first_user} [/INST] {first_assistant}</s>"]
+    else:
+        parts = [f"[INST] {first_user} [/INST] {first_assistant}</s>"]
+
+    # Subsequent complete turns
+    for user_msg, assistant_msg in turns[1:]:
+        parts.append(f"[INST] {user_msg} [/INST] {assistant_msg}</s>")
+
+    # Final: current user message
+    parts.append(f"[INST] {current_message.strip()} [/INST]")
+
+    return "".join(parts)
 
 
 def _is_conversational(prompt: str) -> bool:
@@ -247,8 +300,8 @@ def generate(request: GenerationRequest):
             print(f"RAG retrieval failed: {e}")
             context_docs = []
 
-    # Build prompt with memory and RAG context
-    full_prompt = ""
+    # Build system context (personality, facts, memory, RAG)
+    system_context = ""
 
     # Add personality/system prompt
     try:
@@ -257,41 +310,33 @@ def generate(request: GenerationRequest):
         ai_name = personality.get("name", "Assistant")
         system_prompt = personality.get("prompt", "You are a helpful AI assistant.")
 
-        full_prompt = f"Your name is {ai_name}. {system_prompt}\n\n"
+        system_context = f"Your name is {ai_name}. {system_prompt}\n\n"
     except:
-        full_prompt = ""
+        system_context = ""
 
     # Add learned facts (these override stale training data)
     if fact_context:
-        full_prompt += "SYSTEM FACTS (mandatory — override your training data, do not contradict these):\n\n"
+        system_context += "SYSTEM FACTS (mandatory — override your training data, do not contradict these):\n\n"
         for fact in fact_context:
-            full_prompt += f"- {fact}\n"
-        full_prompt += "\n---\n\n"
+            system_context += f"- {fact}\n"
+        system_context += "\n---\n\n"
 
     # Add memory context (past conversations)
     if memory_context:
-        full_prompt += "From our previous conversations:\n\n"
+        system_context += "From our previous conversations:\n\n"
         for doc in memory_context:
-            full_prompt += f"{doc}\n\n"
-        full_prompt += "---\n\n"
+            system_context += f"{doc}\n\n"
+        system_context += "---\n\n"
 
     # Add RAG context (knowledge base) - skip for conversational queries
     if context_docs and not _is_conversational(request.prompt):
-        full_prompt += "Relevant information from your knowledge base:\n\n"
+        system_context += "Relevant information from your knowledge base:\n\n"
         for i, doc in enumerate(context_docs[:3], 1):
-            full_prompt += f"[{i}] {doc}\n\n"
-        full_prompt += "---\n\n"
+            system_context += f"[{i}] {doc}\n\n"
+        system_context += "---\n\n"
 
-    # Add conversation history
-    if request.conversation_history:
-        full_prompt += "Previous conversation:\n"
-        for msg in request.conversation_history[-6:]:  # Last 6 messages (3 turns)
-            role = "User" if msg.role == "user" else "Assistant"
-            full_prompt += f"{role}: {msg.content}\n\n"
-        full_prompt += "---\n\n"
-
-    full_prompt += f"User: {request.prompt}"
-    full_prompt = _wrap_instruct(full_prompt)
+    # Build multi-turn prompt with proper [INST] format
+    full_prompt = _build_multiturn_prompt(system_context, request.conversation_history, request.prompt)
 
     # Re-check model availability (may have been unloaded during context retrieval)
     if _maintenance_mode or llm is None:
@@ -304,7 +349,7 @@ def generate(request: GenerationRequest):
             max_tokens=request.max_tokens,
             temperature=request.temperature,
             top_p=request.top_p,
-            stop=["</s>", "\n\n\n", "User:", "user:", "[INST]"],
+            stop=["</s>", "\n\n\n", "[INST]"],
             echo=False
         )
 
@@ -369,8 +414,8 @@ def generate_stream(request: StreamingRequest):
             print(f"RAG retrieval failed: {e}")
             context_docs = []
 
-    # Build prompt with memory and RAG context
-    full_prompt = ""
+    # Build system context (personality, facts, memory, RAG)
+    system_context = ""
 
     # Add personality/system prompt
     try:
@@ -379,40 +424,33 @@ def generate_stream(request: StreamingRequest):
         ai_name = personality.get("name", "Assistant")
         system_prompt = personality.get("prompt", "You are a helpful AI assistant.")
 
-        full_prompt = f"Your name is {ai_name}. {system_prompt}\n\n"
+        system_context = f"Your name is {ai_name}. {system_prompt}\n\n"
     except:
-        full_prompt = ""
+        system_context = ""
 
     # Add learned facts (these override stale training data)
     if fact_context:
-        full_prompt += "SYSTEM FACTS (mandatory — override your training data, do not contradict these):\n\n"
+        system_context += "SYSTEM FACTS (mandatory — override your training data, do not contradict these):\n\n"
         for fact in fact_context:
-            full_prompt += f"- {fact}\n"
-        full_prompt += "\n---\n\n"
+            system_context += f"- {fact}\n"
+        system_context += "\n---\n\n"
 
     # Add memory context (past conversations)
     if memory_context:
-        full_prompt += "From our previous conversations:\n\n"
+        system_context += "From our previous conversations:\n\n"
         for doc in memory_context:
-            full_prompt += f"{doc}\n\n"
-        full_prompt += "---\n\n"
+            system_context += f"{doc}\n\n"
+        system_context += "---\n\n"
 
     # Add RAG context (knowledge base) - skip for conversational queries
     if context_docs and not _is_conversational(request.prompt):
-        full_prompt += "Relevant information from your knowledge base:\n\n"
+        system_context += "Relevant information from your knowledge base:\n\n"
         for i, doc in enumerate(context_docs[:3], 1):
-            full_prompt += f"[{i}] {doc}\n\n"
-        full_prompt += "---\n\n"
+            system_context += f"[{i}] {doc}\n\n"
+        system_context += "---\n\n"
 
-    if request.conversation_history:
-        full_prompt += "Previous conversation:\n"
-        for msg in request.conversation_history[-6:]:
-            role = "User" if msg.role == "user" else "Assistant"
-            full_prompt += f"{role}: {msg.content}\n\n"
-        full_prompt += "---\n\n"
-
-    full_prompt += f"User: {request.prompt}"
-    full_prompt = _wrap_instruct(full_prompt)
+    # Build multi-turn prompt with proper [INST] format
+    full_prompt = _build_multiturn_prompt(system_context, request.conversation_history, request.prompt)
 
     # Re-check model availability (may have been unloaded during context retrieval)
     if _maintenance_mode or llm is None:
@@ -441,7 +479,7 @@ def generate_stream(request: StreamingRequest):
                 max_tokens=request.max_tokens,
                 temperature=request.temperature,
                 top_p=request.top_p,
-                stop=["</s>", "\n\n\n", "User:", "user:", "[INST]"],
+                stop=["</s>", "\n\n\n", "[INST]"],
                 echo=False,
                 stream=True
             ):
