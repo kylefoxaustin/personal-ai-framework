@@ -114,6 +114,8 @@ def cleanup_stale_state():
 
 def run_watcher():
     """Main watcher loop."""
+    global _running_process
+
     print("=" * 60)
     print("🔍 Training Watcher — monitoring for training triggers")
     print(f"   Trigger file: {TRIGGER_FILE}")
@@ -144,6 +146,7 @@ def run_watcher():
                     print("✅ Orchestrator finished successfully")
                 else:
                     print(f"❌ Orchestrator exited with code {rc}")
+                _running_process = None
 
             time.sleep(2)
 
