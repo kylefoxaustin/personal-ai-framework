@@ -303,39 +303,38 @@ def test_facts_add_and_search():
 
 def test_facts_semantic_search():
     """Test semantic similarity search on facts (ChromaDB retrieval + LLM usage)."""
-    test_fact = "The RTX 5090 has 32GB of GDDR7 memory and 21760 CUDA cores."
+    test_fact = "Kyle's favorite programming language is Rust."
     # Add
     status, _ = api_post(
-        f"/facts?fact={urllib.parse.quote(test_fact)}&source=test&category=hardware"
+        f"/facts?fact={urllib.parse.quote(test_fact)}&source=test&category=test"
     )
     if status != 200:
         log_test("Facts semantic retrieval", "SKIP", "could not add test fact")
         return
 
     # Test 1: Verify ChromaDB can retrieve the fact by semantic query
-    # (This tests the vector search independent of the LLM)
     status, body = api_get("/facts")
     stored = [f for f in body.get("facts", []) if f.get("source") == "test"]
-    if stored and "32GB" in stored[0].get("fact", ""):
+    if stored and "Rust" in stored[0].get("fact", ""):
         log_test("Facts semantic retrieval", "PASS",
                  f"fact stored and retrievable in ChromaDB")
     else:
         log_test("Facts semantic retrieval", "FAIL", "fact not found in ChromaDB")
 
-    # Test 2: Check if LLM uses the injected fact (known Mixtral limitation — soft check)
+    # Test 2: Check if LLM uses the injected fact via [INST] template
+    # Note: use_rag must be true — facts retrieval is inside the RAG block
     status, body = api_post("/generate", {
-        "prompt": "How much VRAM does the RTX 5090 have?",
+        "prompt": "What is Kyle's favorite programming language?",
         "max_tokens": 64,
-        "use_rag": False,
+        "use_rag": True,
     }, timeout=120)
     text = body.get("text", "").lower()
-    has_vram = "32" in text or "gddr7" in text
-    if status == 200 and has_vram:
-        log_test("Facts LLM injection", "PASS", "fact influenced response")
+    has_fact = "rust" in text
+    if status == 200 and has_fact:
+        log_test("Facts LLM injection", "PASS", "model used injected fact")
     elif status == 200:
-        # Known limitation: Mixtral sometimes ignores injected facts
-        log_test("Facts LLM injection", "PASS",
-                 f'WARN: Mixtral ignored fact (known issue) — "{text[:60]}"')
+        log_test("Facts LLM injection", "FAIL",
+                 f'model ignored fact — "{text[:60]}"')
     else:
         log_test("Facts LLM injection", "FAIL", f"status={status}")
 

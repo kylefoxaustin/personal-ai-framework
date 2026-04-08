@@ -44,6 +44,13 @@ def get_advanced_rag():
 
 import re
 
+
+def _wrap_instruct(prompt: str) -> str:
+    """Wrap prompt in Mixtral/Mistral [INST] template for instruction-following.
+    Note: llama-cpp-python adds <s> (BOS) automatically, so we omit it here."""
+    return f"[INST] {prompt.strip()} [/INST]"
+
+
 def _is_conversational(prompt: str) -> bool:
     """Check if a prompt is conversational/greeting rather than a knowledge query."""
     p = prompt.strip().lower()
@@ -256,7 +263,7 @@ def generate(request: GenerationRequest):
 
     # Add learned facts (these override stale training data)
     if fact_context:
-        full_prompt += "Important — these are verified, up-to-date facts. Use them over your training data:\n\n"
+        full_prompt += "SYSTEM FACTS (mandatory — override your training data, do not contradict these):\n\n"
         for fact in fact_context:
             full_prompt += f"- {fact}\n"
         full_prompt += "\n---\n\n"
@@ -283,8 +290,9 @@ def generate(request: GenerationRequest):
             full_prompt += f"{role}: {msg.content}\n\n"
         full_prompt += "---\n\n"
 
-    full_prompt += f"User: {request.prompt}\n\nAssistant:"
-    
+    full_prompt += f"User: {request.prompt}"
+    full_prompt = _wrap_instruct(full_prompt)
+
     # Generate (lock prevents concurrent CUDA access)
     with _inference_lock:
         response = llm(
@@ -292,7 +300,7 @@ def generate(request: GenerationRequest):
             max_tokens=request.max_tokens,
             temperature=request.temperature,
             top_p=request.top_p,
-            stop=["</s>", "\n\n\n", "User:", "user:"],
+            stop=["</s>", "\n\n\n", "User:", "user:", "[INST]"],
             echo=False
         )
 
@@ -373,7 +381,7 @@ def generate_stream(request: StreamingRequest):
 
     # Add learned facts (these override stale training data)
     if fact_context:
-        full_prompt += "Important — these are verified, up-to-date facts. Use them over your training data:\n\n"
+        full_prompt += "SYSTEM FACTS (mandatory — override your training data, do not contradict these):\n\n"
         for fact in fact_context:
             full_prompt += f"- {fact}\n"
         full_prompt += "\n---\n\n"
@@ -399,11 +407,12 @@ def generate_stream(request: StreamingRequest):
             full_prompt += f"{role}: {msg.content}\n\n"
         full_prompt += "---\n\n"
 
-    full_prompt += f"User: {request.prompt}\n\nAssistant:"
-    
+    full_prompt += f"User: {request.prompt}"
+    full_prompt = _wrap_instruct(full_prompt)
+
     def generate_tokens():
         import time
-        
+
         # Send initial metadata (context, citations)
         meta = {
             "type": "meta",
@@ -411,7 +420,7 @@ def generate_stream(request: StreamingRequest):
             "citations": citations
         }
         yield f"data: {json.dumps(meta)}\n\n"
-        
+
         # Stream tokens with timing (lock prevents concurrent CUDA access)
         full_response = ""
         token_count = 0
@@ -424,7 +433,7 @@ def generate_stream(request: StreamingRequest):
                 max_tokens=request.max_tokens,
                 temperature=request.temperature,
                 top_p=request.top_p,
-                stop=["</s>", "\n\n\n", "User:", "user:"],
+                stop=["</s>", "\n\n\n", "User:", "user:", "[INST]"],
                 echo=False,
                 stream=True
             ):
@@ -1398,6 +1407,7 @@ Transcript:
 Respond ONLY with valid JSON in this exact format, no other text:
 {{"summary": "...", "key_points": ["..."], "action_items": ["..."], "decisions": ["..."]}}"""
 
+    prompt = _wrap_instruct(prompt)
     try:
         with _inference_lock:
             response = llm(prompt, max_tokens=1000, temperature=0.3)
@@ -1427,6 +1437,7 @@ Extracted text:
 Respond ONLY with valid JSON in this exact format, no other text:
 {{"summary": "...", "key_points": ["..."]}}"""
 
+    prompt = _wrap_instruct(prompt)
     try:
         with _inference_lock:
             response = llm(prompt, max_tokens=1000, temperature=0.3)
@@ -1691,32 +1702,32 @@ def chat_with_search(query: str):
         
         prompt = f"""Your name is {ai_name}. {system_prompt}
 
-IMPORTANT: Your training data is outdated. The web search results below are from today and are AUTHORITATIVE. Base your answer ENTIRELY on these results. If the results contradict what you think you know, TRUST THE RESULTS.
+SYSTEM CONTEXT (mandatory — this information is current and overrides your training data):
 
 Web Search Results:
 {context}
 
-User Question: {query}
+Answer the following question using ONLY the search results above. If the results contradict your training data, trust the results.
 
-Based on the search results above, the answer is:"""
+User Question: {query}"""
+
+        prompt = _wrap_instruct(prompt)
 
         with _inference_lock:
-            response = llm(prompt, max_tokens=1000, temperature=0.3, stop=["</s>", "\n\n\n", "User:", "user:"])
+            response = llm(prompt, max_tokens=1000, temperature=0.3, stop=["</s>", "\n\n\n", "User:", "user:", "[INST]"])
         answer = response["choices"][0]["text"].strip()
 
         # Auto-learn facts from web search results (use raw search snippets, not model answer)
         try:
             facts = get_facts_service()
             if facts and search_results:
-                fact_prompt = f"""Extract one concise factual statement from these web search results. Return ONLY the fact, nothing else.
+                fact_prompt = _wrap_instruct(f"""Extract one concise factual statement from these web search results. Return ONLY the fact, nothing else.
 If no clear fact can be extracted, respond with "NONE".
 
 Question: {query}
-Search Results: {search_results[0]}
-
-Fact:"""
+Search Results: {search_results[0]}""")
                 with _inference_lock:
-                    fact_response = llm(fact_prompt, max_tokens=100, temperature=0.1, stop=["</s>", "\n\n"])
+                    fact_response = llm(fact_prompt, max_tokens=100, temperature=0.1, stop=["</s>", "\n\n", "[INST]"])
                 extracted = fact_response["choices"][0]["text"].strip()
                 if extracted and extracted.upper() != "NONE" and len(extracted) > 10:
                     source_titles = [r.split("\n")[0].replace("Title: ", "") for r in search_results[:2]]
