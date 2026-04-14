@@ -61,19 +61,28 @@ def _rewrite_query_for_rag(query: str, conversation_history: Optional[List] = No
     if llm is None or _maintenance_mode:
         return query
 
-    # Include last 2 messages for context (helps resolve "that thing" references)
+    # Include last 6 messages for context — more turns lets us resolve references
+    # ("that", "it", "tell me more") across deeper conversational history.
+    # Truncate older messages more aggressively to stay within budget.
     context_lines = ""
     if conversation_history:
-        for msg in conversation_history[-2:]:
+        recent = conversation_history[-6:]
+        for i, msg in enumerate(recent):
             role = "User" if msg.role == "user" else "Assistant"
-            # Truncate long messages
-            content = msg.content[:200]
+            # More truncation for older turns, less for recent
+            max_len = 100 if i < len(recent) - 2 else 250
+            content = msg.content[:max_len]
+            if len(msg.content) > max_len:
+                content += "..."
             context_lines += f"{role}: {content}\n"
 
     if context_lines:
         prompt = f"""Rewrite this query to be more specific and search-friendly for a document retrieval system.
-Use the conversation context to resolve any references like "that", "it", "the thing we discussed".
-Return ONLY the rewritten query, nothing else.
+Use the conversation context to:
+- Resolve pronouns and references ("that", "it", "the thing we discussed", "tell me more")
+- Expand abbreviated subjects ("the processor" → full name if mentioned earlier)
+- Maintain topic continuity from the conversation
+Return ONLY the rewritten search query, nothing else.
 
 Recent conversation:
 {context_lines}
@@ -106,6 +115,41 @@ Rewritten query:"""
         print(f"  Query rewrite failed (using original): {e}")
 
     return query
+
+
+def _extract_conversation_topics(conversation_history: Optional[List], max_terms: int = 8) -> List[str]:
+    """Pull key terms from recent user turns to bias retrieval toward ongoing topics.
+
+    Returns a short list of salient words (nouns, technical terms) that can be
+    appended to a retrieval query when the current query alone is too vague.
+    """
+    if not conversation_history:
+        return []
+    _stop = {
+        "the", "a", "an", "is", "are", "was", "were", "be", "been", "being",
+        "have", "has", "had", "do", "does", "did", "will", "would", "could",
+        "should", "may", "might", "shall", "can", "need", "dare", "ought",
+        "i", "me", "my", "we", "our", "you", "your", "he", "she", "it",
+        "they", "them", "this", "that", "these", "those", "what", "which",
+        "who", "how", "when", "where", "why", "about", "with", "from", "for",
+        "and", "but", "or", "not", "no", "so", "if", "then", "than", "too",
+        "very", "just", "also", "more", "some", "any", "all", "each", "of",
+        "in", "on", "at", "to", "by", "up", "out", "into", "over", "after",
+        "tell", "know", "think", "want", "like", "said", "get", "got", "make",
+        "going", "go", "see", "look", "give", "take", "come", "thing", "things",
+    }
+    import re
+    from collections import Counter
+    counts = Counter()
+    # Only look at user turns from last 6 messages
+    for msg in conversation_history[-6:]:
+        if msg.role != "user":
+            continue
+        words = re.findall(r"[a-zA-Z][a-zA-Z0-9_.-]{2,}", msg.content.lower())
+        for w in words:
+            if w not in _stop and len(w) > 2:
+                counts[w] += 1
+    return [w for w, _ in counts.most_common(max_terms)]
 
 
 def _check_for_tool_use(prompt: str, conversation_history: Optional[List] = None):
@@ -261,6 +305,24 @@ def _is_conversational(prompt: str) -> bool:
     if len(p.split()) <= 3 and not any(c in p for c in ['?', 'how to', 'what is', 'explain', 'find']):
         return True
     return False
+
+
+_synthesis_patterns = [
+    "summarize everything", "summarize all", "compile all", "compile everything",
+    "what do i know about", "what do we know about", "everything i know about",
+    "everything we know about", "all info on", "all information on",
+    "give me an overview", "give an overview", "broad overview",
+    "what does my knowledge base", "what's in my knowledge base",
+    "across all documents", "across my documents", "across all my",
+    "comprehensive summary", "full summary",
+]
+
+
+def _is_synthesis_query(prompt: str) -> bool:
+    """Detect broad synthesis requests that should pull from many documents."""
+    p = prompt.strip().lower()
+    return any(pat in p for pat in _synthesis_patterns)
+
 
 # Load configuration
 with open('/app/config.yaml', 'r') as f:
@@ -434,6 +496,12 @@ def generate(request: GenerationRequest):
     retrieval_query = request.prompt
     if request.use_rag and not context_docs and not _is_conversational(request.prompt):
         retrieval_query = _rewrite_query_for_rag(request.prompt, request.conversation_history)
+        # For short/vague queries, append conversation topic terms to improve recall
+        if len(retrieval_query.split()) <= 6 and request.conversation_history:
+            topics = _extract_conversation_topics(request.conversation_history)
+            if topics:
+                retrieval_query = f"{retrieval_query} {' '.join(topics[:5])}"
+                print(f"  📎 Topic-boosted query: \"{retrieval_query}\"")
 
     # Auto-retrieve context from RAG if enabled and no manual context provided
     if request.use_rag and not context_docs:
@@ -448,15 +516,19 @@ def generate(request: GenerationRequest):
             except Exception as e:
                 print(f"Memory search failed (ok if empty): {e}")
 
-            # Search knowledge base
+            # Search knowledge base — use more results for synthesis queries
+            synthesis_mode = _is_synthesis_query(request.prompt)
+            rag_k = max(8, request.rag_k * 3) if synthesis_mode else request.rag_k
+            if synthesis_mode:
+                print(f"  🔬 Synthesis mode: expanding k from {request.rag_k} to {rag_k}")
             advanced_rag = get_advanced_rag()
             if advanced_rag:
                 context_docs, citations = advanced_rag.get_context_with_citations(
-                    retrieval_query, k=request.rag_k
+                    retrieval_query, k=rag_k
                 )
             else:
                 rag = get_rag_service()
-                context_docs = rag.get_context(retrieval_query, k=request.rag_k)
+                context_docs = rag.get_context(retrieval_query, k=rag_k)
         except Exception as e:
             print(f"RAG retrieval failed: {e}")
             context_docs = []
@@ -491,10 +563,29 @@ def generate(request: GenerationRequest):
 
     # Add RAG context (knowledge base) - skip for conversational queries
     if context_docs and not _is_conversational(request.prompt):
-        system_context += "Relevant information from your knowledge base:\n\n"
-        for i, doc in enumerate(context_docs[:3], 1):
-            system_context += f"[{i}] {doc}\n\n"
-        system_context += "---\n\n"
+        if _is_synthesis_query(request.prompt) and citations:
+            # Group chunks by source for cross-document synthesis
+            from collections import OrderedDict
+            groups = OrderedDict()
+            for i, doc in enumerate(context_docs):
+                src = citations[i]["source_file"] if i < len(citations) else "unknown"
+                src_name = src.split("/")[-1] if "/" in src else src
+                groups.setdefault(src_name, []).append(doc)
+            system_context += (
+                "Information from MULTIPLE sources in the knowledge base. "
+                "Synthesize across these sources — note where sources agree, "
+                "disagree, or complement each other:\n\n"
+            )
+            for src, docs in groups.items():
+                system_context += f"── {src} ──\n"
+                for doc in docs:
+                    system_context += f"{doc}\n\n"
+            system_context += "---\n\n"
+        else:
+            system_context += "Relevant information from your knowledge base:\n\n"
+            for doc in context_docs:
+                system_context += f"{doc}\n\n"
+            system_context += "---\n\n"
 
     # Agent tool check (Pass 1 — detect if a tool is needed)
     tool_result = _check_for_tool_use(request.prompt, request.conversation_history)
@@ -557,6 +648,12 @@ def generate_stream(request: StreamingRequest):
     retrieval_query = request.prompt
     if request.use_rag and not context_docs and not _is_conversational(request.prompt):
         retrieval_query = _rewrite_query_for_rag(request.prompt, request.conversation_history)
+        # For short/vague queries, append conversation topic terms to improve recall
+        if len(retrieval_query.split()) <= 6 and request.conversation_history:
+            topics = _extract_conversation_topics(request.conversation_history)
+            if topics:
+                retrieval_query = f"{retrieval_query} {' '.join(topics[:5])}"
+                print(f"  📎 Topic-boosted query: \"{retrieval_query}\"")
 
     # Auto-retrieve context from RAG if enabled
     if request.use_rag and not context_docs:
@@ -571,15 +668,19 @@ def generate_stream(request: StreamingRequest):
             except Exception as e:
                 print(f"Memory search failed (ok if empty): {e}")
 
-            # Search knowledge base
+            # Search knowledge base — use more results for synthesis queries
+            synthesis_mode = _is_synthesis_query(request.prompt)
+            rag_k = max(8, request.rag_k * 3) if synthesis_mode else request.rag_k
+            if synthesis_mode:
+                print(f"  🔬 Synthesis mode: expanding k from {request.rag_k} to {rag_k}")
             advanced_rag = get_advanced_rag()
             if advanced_rag:
                 context_docs, citations = advanced_rag.get_context_with_citations(
-                    retrieval_query, k=request.rag_k
+                    retrieval_query, k=rag_k
                 )
             else:
                 rag = get_rag_service()
-                context_docs = rag.get_context(retrieval_query, k=request.rag_k)
+                context_docs = rag.get_context(retrieval_query, k=rag_k)
         except Exception as e:
             print(f"RAG retrieval failed: {e}")
             context_docs = []
@@ -614,10 +715,29 @@ def generate_stream(request: StreamingRequest):
 
     # Add RAG context (knowledge base) - skip for conversational queries
     if context_docs and not _is_conversational(request.prompt):
-        system_context += "Relevant information from your knowledge base:\n\n"
-        for i, doc in enumerate(context_docs[:3], 1):
-            system_context += f"[{i}] {doc}\n\n"
-        system_context += "---\n\n"
+        if _is_synthesis_query(request.prompt) and citations:
+            # Group chunks by source for cross-document synthesis
+            from collections import OrderedDict
+            groups = OrderedDict()
+            for i, doc in enumerate(context_docs):
+                src = citations[i]["source_file"] if i < len(citations) else "unknown"
+                src_name = src.split("/")[-1] if "/" in src else src
+                groups.setdefault(src_name, []).append(doc)
+            system_context += (
+                "Information from MULTIPLE sources in the knowledge base. "
+                "Synthesize across these sources — note where sources agree, "
+                "disagree, or complement each other:\n\n"
+            )
+            for src, docs in groups.items():
+                system_context += f"── {src} ──\n"
+                for doc in docs:
+                    system_context += f"{doc}\n\n"
+            system_context += "---\n\n"
+        else:
+            system_context += "Relevant information from your knowledge base:\n\n"
+            for doc in context_docs:
+                system_context += f"{doc}\n\n"
+            system_context += "---\n\n"
 
     # Agent tool check (Pass 1 — detect if a tool is needed)
     tool_result = _check_for_tool_use(request.prompt, request.conversation_history)

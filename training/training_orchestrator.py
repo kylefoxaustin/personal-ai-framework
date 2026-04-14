@@ -33,6 +33,7 @@ from convert_to_gguf import convert as convert_to_gguf
 API_URL = "http://localhost:8080"
 SETTINGS_FILE = Path.home() / ".personal-ai" / "settings.json"
 MODELS_DIR = PROJECT_DIR / "models"
+LOG_DIR = TRAINING_DIR / "logs"
 
 # Training script paths
 TRAIN_SCRIPT = TRAINING_DIR / "train_lora.py"
@@ -40,6 +41,76 @@ MERGE_SCRIPT = TRAINING_DIR / "merge_lora.py"
 
 # Interruption flag
 _interrupted = False
+
+
+class _Tee:
+    """Duplicate writes across multiple streams (stdout + log file)."""
+
+    def __init__(self, *streams):
+        self._streams = streams
+
+    def write(self, data):
+        for s in self._streams:
+            try:
+                s.write(data)
+            except Exception:
+                pass
+
+    def flush(self):
+        for s in self._streams:
+            try:
+                s.flush()
+            except Exception:
+                pass
+
+
+def _setup_logging() -> Path:
+    """Tee orchestrator stdout/stderr to a timestamped log file.
+
+    Ensures the run is recoverable even if the controlling terminal dies.
+    """
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+    log_path = LOG_DIR / f"orchestrator_{ts}.log"
+    log_file = open(log_path, "a", buffering=1)  # line-buffered text mode
+    sys.stdout = _Tee(sys.__stdout__, log_file)
+    sys.stderr = _Tee(sys.__stderr__, log_file)
+    return log_path
+
+
+def _print_memory_baseline():
+    """Print a host RAM + swap + GPU snapshot to the log.
+
+    Captured right before training so post-mortems have starting conditions.
+    """
+    try:
+        import psutil
+        vm = psutil.virtual_memory()
+        sw = psutil.swap_memory()
+        print(
+            f"   Memory baseline: "
+            f"ram_total={vm.total / 1024**3:.1f}GB "
+            f"ram_avail={vm.available / 1024**3:.1f}GB "
+            f"ram_used_pct={vm.percent:.1f}% "
+            f"swap={sw.used / 1024**3:.1f}GB/{sw.total / 1024**3:.1f}GB"
+        )
+    except ImportError:
+        print("   (psutil not available — skipping RAM baseline)")
+    except Exception as e:
+        print(f"   (RAM baseline skipped: {e})")
+
+    try:
+        import torch
+        if torch.cuda.is_available():
+            props = torch.cuda.get_device_properties(0)
+            free_b, total_b = torch.cuda.mem_get_info(0)
+            print(
+                f"   GPU baseline:    {props.name} "
+                f"vram_free={free_b / 1024**3:.1f}GB/"
+                f"{total_b / 1024**3:.1f}GB"
+            )
+    except Exception as e:
+        print(f"   (GPU baseline skipped: {e})")
 
 
 def signal_handler(signum, frame):
@@ -122,6 +193,12 @@ def run_orchestrator():
     global _interrupted
     _interrupted = False
 
+    # Persist orchestrator output to disk immediately so a terminal kill
+    # (e.g. systemd-oomd taking out the vte-spawn scope) leaves a forensic
+    # trail instead of vanishing with the tab.
+    log_path = _setup_logging()
+    print(f"📝 Orchestrator log: {log_path}")
+
     # Register signal handler
     signal.signal(signal.SIGUSR1, signal_handler)
 
@@ -186,6 +263,7 @@ def run_orchestrator():
         # Step 3: Run LoRA training
         print("\n🏋️ Step 3/6: Training LoRA adapters...")
         set_status("training", "Training LoRA adapters (this takes ~2.5 hours)", progress=15)
+        _print_memory_baseline()
 
         train_cmd = [
             sys.executable, str(TRAIN_SCRIPT),
