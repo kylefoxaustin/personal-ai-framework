@@ -6,11 +6,65 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
   <title>Personal AI</title>
   <style>
+    /* ── Theme tokens ── */
+    :root {
+      --c-base: #1a1a2e;
+      --c-sidebar: #0d1b2a;
+      --c-surface: #16213e;
+      --c-raised: #0f3460;
+      --c-hover: #1a4a7a;
+      --c-text: #eee;
+      --c-text-2: #94a3b8;
+      --c-text-3: #64748b;
+      --c-accent: #e94560;
+      --c-accent-h: #ff6b6b;
+      --c-ok: #4ade80;
+      --c-ok-bg: #166534;
+      --c-ok-border: #22c55e;
+      --c-err: #f87171;
+      --c-err-bg: #7f1d1d;
+      --c-err-light: #fca5a5;
+      --c-err-dark: #991b1b;
+      --c-blue: #60a5fa;
+      --c-pink: #f472b6;
+      --c-danger: #dc2626;
+      --c-danger-light: #ef4444;
+      --c-overlay: rgba(0,0,0,0.7);
+      --c-overlay-heavy: rgba(0,0,0,0.8);
+      color-scheme: dark;
+    }
+    [data-theme="light"] {
+      --c-base: #f8fafc;
+      --c-sidebar: #f0f4f8;
+      --c-surface: #ffffff;
+      --c-raised: #e2e8f0;
+      --c-hover: #cbd5e1;
+      --c-text: #1e293b;
+      --c-text-2: #64748b;
+      --c-text-3: #94a3b8;
+      --c-accent: #e11d48;
+      --c-accent-h: #be123c;
+      --c-ok: #16a34a;
+      --c-ok-bg: #dcfce7;
+      --c-ok-border: #86efac;
+      --c-err: #dc2626;
+      --c-err-bg: #fee2e2;
+      --c-err-light: #fca5a5;
+      --c-err-dark: #991b1b;
+      --c-blue: #2563eb;
+      --c-pink: #db2777;
+      --c-danger: #dc2626;
+      --c-danger-light: #f87171;
+      --c-overlay: rgba(0,0,0,0.3);
+      --c-overlay-heavy: rgba(0,0,0,0.5);
+      color-scheme: light;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #1a1a2e;
-      color: #eee;
+      background: var(--c-base);
+      color: var(--c-text);
       height: 100vh;
       display: flex;
       margin: 0;
@@ -19,22 +73,22 @@
     /* Sidebar */
     .sidebar {
       width: 260px;
-      background: #0d1b2a;
-      border-right: 1px solid #0f3460;
+      background: var(--c-sidebar);
+      border-right: 1px solid var(--c-raised);
       display: flex;
       flex-direction: column;
       height: 100vh;
     }
     .sidebar-header {
       padding: 1rem;
-      border-bottom: 1px solid #0f3460;
+      border-bottom: 1px solid var(--c-raised);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .sidebar-header h3 { font-size: 0.9rem; color: #94a3b8; }
+    .sidebar-header h3 { font-size: 0.9rem; color: var(--c-text-2); }
     .sidebar-header button {
-      background: #e94560;
+      background: var(--c-accent);
       border: none;
       color: white;
       padding: 0.4rem 0.8rem;
@@ -42,7 +96,7 @@
       cursor: pointer;
       font-size: 0.8rem;
     }
-    .sidebar-header button:hover { background: #ff6b6b; }
+    .sidebar-header button:hover { background: var(--c-accent-h); }
     .conversation-list {
       flex: 1;
       overflow-y: auto;
@@ -55,8 +109,8 @@
       margin-bottom: 0.25rem;
       transition: background 0.2s;
     }
-    .conversation-item:hover { background: #16213e; }
-    .conversation-item.active { background: #0f3460; }
+    .conversation-item:hover { background: var(--c-surface); }
+    .conversation-item.active { background: var(--c-raised); }
     .conversation-item .title {
       font-size: 0.85rem;
       white-space: nowrap;
@@ -65,7 +119,7 @@
     }
     .conversation-item .meta {
       font-size: 0.7rem;
-      color: #64748b;
+      color: var(--c-text-3);
       margin-top: 0.25rem;
     }
     .conversation-item .actions {
@@ -76,22 +130,32 @@
     .conversation-item:hover .actions { display: flex; }
     .conversation-item .actions button {
       background: transparent;
-      border: 1px solid #1a4a7a;
-      color: #94a3b8;
+      border: 1px solid var(--c-hover);
+      color: var(--c-text-2);
       padding: 0.2rem 0.5rem;
       border-radius: 0.25rem;
       cursor: pointer;
       font-size: 0.7rem;
     }
-    .conversation-item .actions button:hover { background: #1a4a7a; color: #eee; }
-    .conversation-item .actions button.delete:hover { background: #e94560; border-color: #e94560; }
+    .conversation-item .actions button:hover { background: var(--c-hover); color: var(--c-text); }
+    .conversation-item .actions button.delete:hover { background: var(--c-accent); border-color: var(--c-accent); }
     .no-conversations {
       text-align: center;
-      color: #64748b;
+      color: var(--c-text-3);
       padding: 2rem 1rem;
       font-size: 0.85rem;
     }
-    
+    /* Light-mode sidebar polish */
+    [data-theme="light"] .sidebar { border-right: 1px solid #d1d5db; }
+    [data-theme="light"] .conversation-item { border: 1px solid transparent; }
+    [data-theme="light"] .conversation-item:hover { background: #ffffff; border-color: #d1d5db; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    [data-theme="light"] .conversation-item.active { background: #e0e7ff; border-color: #a5b4fc; }
+    [data-theme="light"] .sidebar-header { border-bottom: 1px solid #d1d5db; }
+    [data-theme="light"] header { border-bottom: 1px solid #d1d5db; }
+    [data-theme="light"] footer { border-top: 1px solid #d1d5db; }
+    [data-theme="light"] .message.user { background: #e0e7ff; color: #1e293b; }
+    [data-theme="light"] .message.assistant { background: #f8fafc; border: 1px solid #e2e8f0; }
+
     /* Main content area */
     .main-content {
       flex: 1;
@@ -105,79 +169,84 @@
       justify-content: space-between;
       align-items: center;
       padding: 1rem 1.5rem;
-      background: #16213e;
-      border-bottom: 1px solid #0f3460;
+      background: var(--c-surface);
+      border-bottom: 1px solid var(--c-raised);
     }
     header h1 { font-size: 1.5rem; }
     .header-right { display: flex; align-items: center; gap: 1rem; }
     .stats { display: flex; gap: 1rem; font-size: 0.85rem; }
-    .status { color: #4ade80; }
-    .status.offline { color: #f87171; }
-    .docs { color: #94a3b8; }
+    .status { color: var(--c-ok); }
+    .status.offline { color: var(--c-err); }
+    .docs { color: var(--c-text-2); }
     .header-btn {
-      background: #0f3460;
-      border: 1px solid #1a4a7a;
-      color: #eee;
+      background: var(--c-raised);
+      border: 1px solid var(--c-hover);
+      color: var(--c-text);
       padding: 0.4rem 0.8rem;
       border-radius: 0.4rem;
       cursor: pointer;
       font-size: 0.8rem;
       transition: all 0.2s;
     }
-    .header-btn:hover { background: #1a4a7a; }
+    .header-btn:hover { background: var(--c-hover); }
     .header-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .header-btn.syncing { animation: pulse 1s infinite; }
-    .header-btn.active { background: #166534; border-color: #22c55e; color: #4ade80; }
+    .header-btn.active { background: var(--c-ok-bg); border-color: var(--c-ok-border); color: var(--c-ok); }
     .header-btn .status-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #64748b;
+      background: var(--c-text-3);
       display: inline-block;
       position: absolute;
       top: 4px;
       right: 4px;
     }
-    .header-btn .status-dot.on { background: #4ade80; }
+    .header-btn .status-dot.on { background: var(--c-ok); }
     .header-btn { position: relative; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     main { flex: 1; overflow-y: auto; padding: 1.5rem; }
     .messages { display: flex; flex-direction: column; gap: 1rem; }
-    .welcome { text-align: center; padding: 3rem 1rem; color: #94a3b8; }
-    .welcome h2 { color: #eee; margin-bottom: 0.5rem; }
+    .welcome { text-align: center; padding: 3rem 1rem; color: var(--c-text-2); }
+    .welcome h2 { color: var(--c-text); margin-bottom: 0.5rem; }
     .message { max-width: 85%; padding: 1rem 1.25rem; border-radius: 1rem; line-height: 1.6; white-space: pre-wrap; }
-    .message.user { align-self: flex-end; background: #0f3460; border-bottom-right-radius: 0.25rem; }
-    .message.assistant { align-self: flex-start; background: #16213e; border-bottom-left-radius: 0.25rem; }
+    .message.user { align-self: flex-end; background: var(--c-raised); border-bottom-right-radius: 0.25rem; }
+    .message.assistant { align-self: flex-start; background: var(--c-surface); border-bottom-left-radius: 0.25rem; }
     .tool-indicator { font-size: 0.78rem; color: #6b8aad; padding: 3px 8px; margin-bottom: 6px; border-left: 2px solid #3a5a7a; }
-    .mic-btn { background: #1a4a7a; border: 1px solid #2a5a8a; color: #eee; padding: 0.5rem 0.75rem; border-radius: 0.5rem; cursor: pointer; font-size: 1.1rem; user-select: none; }
+    .mic-btn { background: var(--c-hover); border: 1px solid #2a5a8a; color: var(--c-text); padding: 0.5rem 0.75rem; border-radius: 0.5rem; cursor: pointer; font-size: 1.1rem; user-select: none; }
     .mic-btn:hover { background: #2a5a8a; }
-    .mic-btn.recording { background: #dc2626; border-color: #ef4444; animation: pulse-mic 1s infinite; }
+    .mic-btn.recording { background: var(--c-danger); border-color: var(--c-danger-light); animation: pulse-mic 1s infinite; }
     @keyframes pulse-mic { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-    .message.system { align-self: center; background: #1a4a7a; font-size: 0.85rem; padding: 0.5rem 1rem; }
-    .message .meta { margin-top: 0.5rem; font-size: 0.75rem; color: #64748b; }
-    .message .style-tag { display: inline-block; background: #e94560; color: white; font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 0.25rem; margin-left: 0.5rem; }
-    .message details { margin-top: 0.75rem; font-size: 0.8rem; color: #94a3b8; }
+    .message.system { align-self: center; background: var(--c-hover); font-size: 0.85rem; padding: 0.5rem 1rem; }
+    .message .meta { margin-top: 0.5rem; font-size: 0.75rem; color: var(--c-text-3); }
+    .message .style-tag { display: inline-block; background: var(--c-accent); color: white; font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 0.25rem; margin-left: 0.5rem; }
+    .message details { margin-top: 0.75rem; font-size: 0.8rem; color: var(--c-text-2); }
     .message details summary { cursor: pointer; }
-    .context-item { background: #0d1b2a; padding: 0.5rem; margin-top: 0.5rem; border-radius: 0.5rem; font-size: 0.75rem; }
-    .typing { display: flex; gap: 0.3rem; padding: 1.25rem 1.5rem; background: #16213e; border-radius: 1rem; align-self: flex-start; }
-    .typing span { width: 8px; height: 8px; background: #94a3b8; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out; }
+    .context-item { background: var(--c-sidebar); padding: 0.6rem 0.75rem; margin-top: 0.5rem; border-radius: 0.5rem; font-size: 0.75rem; }
+    .context-item .cite-header { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+    .context-item .cite-scores { color: var(--c-text-3); font-size: 0.65rem; margin-left: auto; }
+    .context-item .cite-preview { margin-top: 0.35rem; color: var(--c-text-2); font-size: 0.72rem; line-height: 1.4; }
+    .cite-ref { color: var(--c-blue); cursor: pointer; text-decoration: underline; text-decoration-style: dotted; font-weight: 600; }
+    .cite-ref:hover { color: var(--c-accent); }
+    .typing { display: flex; gap: 0.3rem; padding: 1.25rem 1.5rem; background: var(--c-surface); border-radius: 1rem; align-self: flex-start; }
+    .typing span { width: 8px; height: 8px; background: var(--c-text-2); border-radius: 50%; animation: bounce 1.4s infinite ease-in-out; }
     .typing span:nth-child(1) { animation-delay: -0.32s; }
     .typing span:nth-child(2) { animation-delay: -0.16s; }
     @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
-    footer { display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem 1.5rem; background: #16213e; border-top: 1px solid #0f3460; }
+    footer { display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem 1.5rem; background: var(--c-surface); border-top: 1px solid var(--c-raised); }
     .input-row { display: flex; gap: 0.75rem; }
     .options-row { display: flex; align-items: center; gap: 1rem; font-size: 0.85rem; }
     .toggle-container { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; user-select: none; }
-    .toggle { position: relative; width: 44px; height: 24px; background: #0f3460; border-radius: 12px; transition: background 0.3s; }
-    .toggle.active { background: #e94560; }
+    .toggle { position: relative; width: 44px; height: 24px; background: var(--c-raised); border-radius: 12px; transition: background 0.3s; }
+    .toggle.active { background: var(--c-accent); }
     .toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: transform 0.3s; }
     .toggle.active::after { transform: translateX(20px); }
-    footer textarea { flex: 1; padding: 0.75rem 1rem; border: 1px solid #0f3460; border-radius: 0.5rem; background: #1a1a2e; color: #eee; font-size: 1rem; resize: none; font-family: inherit; }
-    footer textarea:focus { outline: none; border-color: #1a4a7a; }
-    footer button { padding: 0.75rem 1.5rem; background: #e94560; border: none; border-radius: 0.5rem; color: white; font-weight: 600; cursor: pointer; }
-    footer button:hover:not(:disabled) { background: #ff6b6b; }
+    footer textarea { flex: 1; padding: 0.75rem 1rem; border: 1px solid var(--c-raised); border-radius: 0.5rem; background: var(--c-base); color: var(--c-text); font-size: 1rem; resize: none; font-family: inherit; }
+    footer textarea:focus { outline: none; border-color: var(--c-hover); }
+    footer button { padding: 0.75rem 1.5rem; background: var(--c-accent); border: none; border-radius: 0.5rem; color: white; font-weight: 600; cursor: pointer; }
+    footer button:hover:not(:disabled) { background: var(--c-accent-h); }
     footer button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: #16213e; border: 1px solid #1a4a7a; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100; }
+    .toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: var(--c-surface); border: 1px solid var(--c-hover); padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100; }
     .toast.show { opacity: 1; }
     
     /* Settings panel */
@@ -188,15 +257,15 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0,0,0,0.7);
+      background: var(--c-overlay);
       z-index: 300;
       align-items: center;
       justify-content: center;
     }
     .settings-overlay.show { display: flex; }
     .settings-panel {
-      background: #16213e;
-      border: 1px solid #0f3460;
+      background: var(--c-surface);
+      border: 1px solid var(--c-raised);
       border-radius: 1rem;
       padding: 1.5rem;
       width: 90%;
@@ -213,14 +282,14 @@
     .settings-panel h2 button {
       background: none;
       border: none;
-      color: #94a3b8;
+      color: var(--c-text-2);
       font-size: 1.5rem;
       cursor: pointer;
     }
     .settings-section {
       margin-bottom: 1.5rem;
       padding-bottom: 1.5rem;
-      border-bottom: 1px solid #0f3460;
+      border-bottom: 1px solid var(--c-raised);
     }
     .settings-section:last-child {
       border-bottom: none;
@@ -228,7 +297,7 @@
     }
     .settings-section h3 {
       font-size: 0.9rem;
-      color: #94a3b8;
+      color: var(--c-text-2);
       margin-bottom: 1rem;
       display: flex;
       align-items: center;
@@ -249,28 +318,28 @@
     .setting-row input[type="time"],
     .setting-row select {
       padding: 0.5rem;
-      border: 1px solid #0f3460;
+      border: 1px solid var(--c-raised);
       border-radius: 0.4rem;
-      background: #1a1a2e;
-      color: #eee;
+      background: var(--c-base);
+      color: var(--c-text);
       font-size: 0.9rem;
       width: 150px;
     }
     .setting-row input:focus,
     .setting-row select:focus {
       outline: none;
-      border-color: #e94560;
+      border-color: var(--c-accent);
     }
     .toggle-small {
       position: relative;
       width: 44px;
       height: 24px;
-      background: #0f3460;
+      background: var(--c-raised);
       border-radius: 12px;
       cursor: pointer;
       transition: background 0.3s;
     }
-    .toggle-small.active { background: #e94560; }
+    .toggle-small.active { background: var(--c-accent); }
     .toggle-small::after {
       content: '';
       position: absolute;
@@ -288,8 +357,8 @@
       padding: 0.2rem 0.5rem;
       border-radius: 1rem;
     }
-    .status-badge.connected { background: #166534; color: #4ade80; }
-    .status-badge.disconnected { background: #7f1d1d; color: #fca5a5; }
+    .status-badge.connected { background: var(--c-ok-bg); color: var(--c-ok); }
+    .status-badge.disconnected { background: var(--c-err-bg); color: var(--c-err-light); }
     .settings-actions {
       display: flex;
       gap: 0.75rem;
@@ -304,47 +373,47 @@
       font-weight: 600;
     }
     .btn-primary {
-      background: #e94560;
+      background: var(--c-accent);
       border: none;
       color: white;
     }
-    .btn-primary:hover { background: #ff6b6b; }
+    .btn-primary:hover { background: var(--c-accent-h); }
     .btn-secondary {
-      background: #0f3460;
-      border: 1px solid #1a4a7a;
-      color: #eee;
+      background: var(--c-raised);
+      border: 1px solid var(--c-hover);
+      color: var(--c-text);
     }
-    .btn-secondary:hover { background: #1a4a7a; }
+    .btn-secondary:hover { background: var(--c-hover); }
     .btn-small {
       padding: 0.3rem 0.6rem;
       font-size: 0.75rem;
       border-radius: 0.3rem;
-      background: #0f3460;
-      border: 1px solid #1a4a7a;
-      color: #eee;
+      background: var(--c-raised);
+      border: 1px solid var(--c-hover);
+      color: var(--c-text);
       cursor: pointer;
     }
-    .btn-small:hover { background: #1a4a7a; }
-    .btn-small.disconnect { background: #7f1d1d; border-color: #991b1b; }
-    .btn-small.disconnect:hover { background: #991b1b; }
+    .btn-small:hover { background: var(--c-hover); }
+    .btn-small.disconnect { background: var(--c-err-bg); border-color: var(--c-err-dark); }
+    .btn-small.disconnect:hover { background: var(--c-err-dark); }
     
     /* Setup steps */
     .setup-steps { margin-bottom: 1rem; }
     .setup-step {
       margin-bottom: 1.25rem;
       padding: 1rem;
-      background: #1a1a2e;
+      background: var(--c-base);
       border-radius: 0.5rem;
-      border-left: 3px solid #0f3460;
+      border-left: 3px solid var(--c-raised);
     }
     .setup-step h4 {
       margin: 0 0 0.75rem 0;
       font-size: 0.9rem;
-      color: #e94560;
+      color: var(--c-accent);
     }
     .step-content {
       font-size: 0.85rem;
-      color: #94a3b8;
+      color: var(--c-text-2);
     }
     .step-content p { margin: 0 0 0.5rem 0; line-height: 1.5; }
     .step-content ul { margin: 0.5rem 0; padding-left: 1.25rem; }
@@ -353,7 +422,7 @@
     /* Streaming cursor */
     .cursor {
       animation: blink 1s infinite;
-      color: #e94560;
+      color: var(--c-accent);
     }
     @keyframes blink {
       0%, 50% { opacity: 1; }
@@ -369,23 +438,23 @@
       gap: 0.5rem;
       margin-top: 1rem;
       padding-top: 0.75rem;
-      border-top: 1px solid #0f3460;
+      border-top: 1px solid var(--c-raised);
     }
     .email-actions button {
       display: flex;
       align-items: center;
       gap: 0.3rem;
       padding: 0.4rem 0.8rem;
-      background: #0f3460;
-      border: 1px solid #1a4a7a;
+      background: var(--c-raised);
+      border: 1px solid var(--c-hover);
       border-radius: 0.4rem;
-      color: #eee;
+      color: var(--c-text);
       font-size: 0.8rem;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .email-actions button:hover { background: #1a4a7a; }
-    .email-actions button.success { background: #166534; border-color: #22c55e; }
+    .email-actions button:hover { background: var(--c-hover); }
+    .email-actions button.success { background: var(--c-ok-bg); border-color: var(--c-ok-border); }
     
     /* Email recipient input modal */
     .modal-overlay {
@@ -395,15 +464,15 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0,0,0,0.7);
+      background: var(--c-overlay);
       z-index: 200;
       align-items: center;
       justify-content: center;
     }
     .modal-overlay.show { display: flex; }
     .modal {
-      background: #16213e;
-      border: 1px solid #0f3460;
+      background: var(--c-surface);
+      border: 1px solid var(--c-raised);
       border-radius: 1rem;
       padding: 1.5rem;
       width: 90%;
@@ -413,14 +482,14 @@
     .modal input {
       width: 100%;
       padding: 0.75rem;
-      border: 1px solid #0f3460;
+      border: 1px solid var(--c-raised);
       border-radius: 0.5rem;
-      background: #1a1a2e;
-      color: #eee;
+      background: var(--c-base);
+      color: var(--c-text);
       font-size: 1rem;
       margin-bottom: 1rem;
     }
-    .modal input:focus { outline: none; border-color: #1a4a7a; }
+    .modal input:focus { outline: none; border-color: var(--c-hover); }
     .modal-buttons { display: flex; gap: 0.5rem; justify-content: flex-end; }
     .modal-buttons button {
       padding: 0.5rem 1rem;
@@ -428,8 +497,8 @@
       cursor: pointer;
       font-size: 0.9rem;
     }
-    .modal-buttons .cancel { background: #0f3460; border: 1px solid #1a4a7a; color: #eee; }
-    .modal-buttons .confirm { background: #e94560; border: none; color: white; }
+    .modal-buttons .cancel { background: var(--c-raised); border: 1px solid var(--c-hover); color: var(--c-text); }
+    .modal-buttons .confirm { background: var(--c-accent); border: none; color: white; }
       @keyframes spin { to { transform: rotate(360deg); } }
     /* Upload Panel */
     .upload-panel {
@@ -439,21 +508,21 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0,0,0,0.8);
+      background: var(--c-overlay-heavy);
       z-index: 1000;
       justify-content: center;
       align-items: center;
     }
     .upload-panel.open { display: flex; }
     .upload-panel-content {
-      background: #16213e;
+      background: var(--c-surface);
       border-radius: 1rem;
       padding: 2rem;
       width: 90%;
       max-width: 700px;
       max-height: 85vh;
       overflow-y: auto;
-      border: 1px solid #0f3460;
+      border: 1px solid var(--c-raised);
     }
     .upload-panel h2 {
       margin-bottom: 1.5rem;
@@ -462,7 +531,7 @@
       align-items: center;
     }
     .upload-panel h2 button {
-      background: #e94560;
+      background: var(--c-accent);
       border: none;
       color: white;
       width: 36px;
@@ -474,47 +543,47 @@
       align-items: center;
       justify-content: center;
     }
-    .upload-panel h2 button:hover { background: #ff6b6b; }
+    .upload-panel h2 button:hover { background: var(--c-accent-h); }
     .folder-btn {
-      background: #0f3460;
-      border: 1px solid #1a4a7a;
-      color: #94a3b8;
+      background: var(--c-raised);
+      border: 1px solid var(--c-hover);
+      color: var(--c-text-2);
       padding: 0.4rem 1rem;
       border-radius: 0.5rem;
       cursor: pointer;
       font-size: 0.8rem;
       transition: all 0.2s;
     }
-    .folder-btn:hover { background: #1a4a7a; color: #eee; }
+    .folder-btn:hover { background: var(--c-hover); color: var(--c-text); }
     .bulk-progress {
-      background: #1a1a2e;
-      border: 1px solid #0f3460;
+      background: var(--c-base);
+      border: 1px solid var(--c-raised);
       border-radius: 0.5rem;
       padding: 0.75rem;
       margin-top: 0.5rem;
     }
     .bulk-progress-bar {
       height: 6px;
-      background: #0f3460;
+      background: var(--c-raised);
       border-radius: 3px;
       overflow: hidden;
       margin: 0.5rem 0;
     }
     .bulk-progress-bar-fill {
       height: 100%;
-      background: linear-gradient(90deg, #4ade80, #22c55e);
+      background: linear-gradient(90deg, var(--c-ok), var(--c-ok-border));
       border-radius: 3px;
       transition: width 0.3s ease;
     }
     .bulk-result { padding: 0.25rem 0; font-size: 0.85rem; }
     .transcribe-results {
       background: #1a2e1a;
-      border: 1px solid #4ade80;
+      border: 1px solid var(--c-ok);
       border-radius: 0.5rem;
       padding: 1rem;
       margin-top: 0.75rem;
     }
-    .transcribe-results h4 { color: #4ade80; margin: 0.75rem 0 0.25rem 0; }
+    .transcribe-results h4 { color: var(--c-ok); margin: 0.75rem 0 0.25rem 0; }
     .transcribe-results h4:first-child { margin-top: 0; }
     .transcribe-results ul { padding-left: 1.25rem; margin: 0.25rem 0; }
     .transcribe-results li { margin: 0.25rem 0; color: #ccc; }
@@ -525,27 +594,27 @@
       gap: 0.5rem;
       margin-top: 1rem;
       padding-top: 0.75rem;
-      border-top: 1px solid #0f3460;
+      border-top: 1px solid var(--c-raised);
     }
     .transcribe-actions button {
       display: flex;
       align-items: center;
       gap: 0.3rem;
       padding: 0.4rem 0.8rem;
-      background: #0f3460;
-      border: 1px solid #1a4a7a;
+      background: var(--c-raised);
+      border: 1px solid var(--c-hover);
       border-radius: 0.5rem;
-      color: #eee;
+      color: var(--c-text);
       font-size: 0.8rem;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .transcribe-actions button:hover { background: #1a4a7a; }
-    .transcribe-actions button.success { background: #166534; border-color: #22c55e; }
+    .transcribe-actions button:hover { background: var(--c-hover); }
+    .transcribe-actions button.success { background: var(--c-ok-bg); border-color: var(--c-ok-border); }
     .transcript-full {
       max-height: 300px;
       overflow-y: auto;
-      background: #1a1a2e;
+      background: var(--c-base);
       padding: 0.75rem;
       border-radius: 0.25rem;
       white-space: pre-wrap;
@@ -557,22 +626,22 @@
       display: flex;
       gap: 0.5rem;
       margin-bottom: 1.5rem;
-      border-bottom: 1px solid #0f3460;
+      border-bottom: 1px solid var(--c-raised);
       padding-bottom: 1rem;
     }
     .upload-tab {
-      background: #0f3460;
-      border: 1px solid #1a4a7a;
-      color: #94a3b8;
+      background: var(--c-raised);
+      border: 1px solid var(--c-hover);
+      color: var(--c-text-2);
       padding: 0.75rem 1.25rem;
       border-radius: 0.5rem;
       cursor: pointer;
       font-size: 0.9rem;
       transition: all 0.2s;
     }
-    .upload-tab:hover { background: #1a4a7a; color: #eee; }
+    .upload-tab:hover { background: var(--c-hover); color: var(--c-text); }
     .upload-tab.active {
-      background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+      background: linear-gradient(135deg, var(--c-ok) 0%, var(--c-ok-border) 100%);
       border-color: #16a34a;
       color: white;
     }
@@ -581,7 +650,7 @@
     }
     .upload-section.active { display: block; }
     .upload-dropzone {
-      border: 2px dashed #0f3460;
+      border: 2px dashed var(--c-raised);
       border-radius: 0.75rem;
       padding: 3rem 2rem;
       text-align: center;
@@ -590,7 +659,7 @@
       margin-bottom: 1rem;
     }
     .upload-dropzone:hover {
-      border-color: #4ade80;
+      border-color: var(--c-ok);
       background: rgba(74, 222, 128, 0.05);
     }
     .upload-dropzone .icon {
@@ -599,12 +668,12 @@
     }
     .upload-dropzone .title {
       font-size: 1.1rem;
-      color: #eee;
+      color: var(--c-text);
       margin-bottom: 0.5rem;
     }
     .upload-dropzone .subtitle {
       font-size: 0.85rem;
-      color: #64748b;
+      color: var(--c-text-3);
     }
 
   </style>
@@ -616,12 +685,12 @@
       <h3>💬 Conversations</h3>
       <div style="display: flex; gap: 0.5rem;">
         <button onclick="newConversation()">+ New</button>
-        <button onclick="clearAllMemory()" style="background: #dc2626;" title="Clear all memory">🗑️</button>
+        <button onclick="clearAllMemory()" style="background: var(--c-danger);" title="Clear all memory">🗑️</button>
       </div>
     </div>
     <input type="text" id="convSearch" placeholder="Search conversations..."
            oninput="debouncedSearch()"
-           style="width: calc(100% - 1.5rem); margin: 0.5rem 0.75rem; padding: 0.4rem 0.6rem; background: #1a2a3a; border: 1px solid #2a3a4a; border-radius: 0.4rem; color: #eee; font-size: 0.8rem;">
+           style="width: calc(100% - 1.5rem); margin: 0.5rem 0.75rem; padding: 0.4rem 0.6rem; background: var(--c-base); border: 1px solid var(--c-raised); border-radius: 0.4rem; color: var(--c-text); font-size: 0.8rem;">
     <div class="conversation-list" id="conversationList">
       <div class="no-conversations">No conversations yet</div>
     </div>
@@ -639,6 +708,7 @@
       <button id="webSearchBtn" class="header-btn active" onclick="toggleWebSearch()" title="Enable web search — type 'search: your question' to search the internet"><span class="icon">🌐</span> Web</button>
       <button id="voiceModeBtn" class="header-btn" onclick="toggleVoiceMode()" title="Voice mode — hold mic button to talk, Skippy speaks responses"><span class="icon">🎤</span> Voice</button>
       <button class="header-btn" onclick="openSettings()" title="AI personality, backup, email providers, and more"><span class="icon">⚙️</span> Settings</button>
+      <button id="themeBtn" class="header-btn" onclick="toggleTheme()" title="Toggle light/dark theme"><span class="icon">🌙</span> <span class="theme-label">Theme</span></button>
       <div class="stats">
         <span id="status" class="status">● Connecting...</span>
         <span id="docs" class="docs"></span>
@@ -646,10 +716,10 @@
     </div>
   </header>
   <main>
-    <div id="maintenanceBanner" style="display: none; background: #7f1d1d; border: 1px solid #ef4444; border-radius: 0.5rem; padding: 1rem; margin: 0.5rem; text-align: center;">
+    <div id="maintenanceBanner" style="display: none; background: var(--c-err-bg); border: 1px solid var(--c-danger-light); border-radius: 0.5rem; padding: 1rem; margin: 0.5rem; text-align: center;">
       <div style="font-size: 1.2rem; margin-bottom: 0.25rem;">🏋️ Skippy is retraining</div>
-      <div style="color: #fca5a5; font-size: 0.85rem;">This usually takes ~2.5 hours. Chat will resume automatically when done.</div>
-      <div id="maintenanceProgress" style="color: #fca5a5; font-size: 0.8rem; margin-top: 0.25rem;"></div>
+      <div style="color: var(--c-err-light); font-size: 0.85rem;">This usually takes ~2.5 hours. Chat will resume automatically when done.</div>
+      <div id="maintenanceProgress" style="color: var(--c-err-light); font-size: 0.8rem; margin-top: 0.25rem;"></div>
     </div>
     <div id="messages" class="messages">
       <div class="welcome">
@@ -665,7 +735,7 @@
         <div id="styleToggle" class="toggle active"></div>
         <span>✍️ Write like me</span>
       </div>
-      <span id="styleHint" style="color: #94a3b8; font-size: 0.75rem;">Responses use your personal style</span>
+      <span id="styleHint" style="color: var(--c-text-2); font-size: 0.75rem;">Responses use your personal style</span>
       <div class="toggle-container" onclick="toggleAutoRemember()" style="margin-left: 2rem;">
         <div id="autoRememberToggle" class="toggle"></div>
         <span>🧠 Auto-remember</span>
@@ -701,7 +771,7 @@
       <div id="upload-documents" class="upload-section active">
         <div class="setting-row">
           <label>Document Type</label>
-          <select id="uploadDocType2" style="background: #1a1a2e; border: 1px solid #0f3460; color: #eee; padding: 0.5rem; border-radius: 0.25rem;">
+          <select id="uploadDocType2" style="background: var(--c-base); border: 1px solid var(--c-raised); color: var(--c-text); padding: 0.5rem; border-radius: 0.25rem;">
             <option value="document">📄 General Document</option>
             <option value="datasheet">📊 Datasheet/PDF</option>
             <option value="transcript">🎤 Transcript</option>
@@ -724,10 +794,10 @@
       <div id="upload-transcribe" class="upload-section">
         <div class="setting-row">
           <label>Recording Title</label>
-          <input type="text" id="transcribeTitle2" placeholder="Team Meeting 2024-03-30" style="width: 100%; background: #1a1a2e; border: 1px solid #0f3460; color: #eee; padding: 0.5rem; border-radius: 0.25rem;">
+          <input type="text" id="transcribeTitle2" placeholder="Team Meeting 2024-03-30" style="width: 100%; background: var(--c-base); border: 1px solid var(--c-raised); color: var(--c-text); padding: 0.5rem; border-radius: 0.25rem;">
         </div>
         <div class="setting-row" style="display: flex; align-items: center; gap: 0.5rem; margin: 1rem 0;">
-          <input type="checkbox" id="transcribeSummarize2" checked style="width: 18px; height: 18px; accent-color: #4ade80;">
+          <input type="checkbox" id="transcribeSummarize2" checked style="width: 18px; height: 18px; accent-color: var(--c-ok);">
           <label for="transcribeSummarize2" style="cursor: pointer;">📋 Generate meeting summary</label>
         </div>
         <div class="upload-dropzone" id="transcribeDropzone2">
@@ -746,10 +816,10 @@
       <div id="upload-ocr" class="upload-section">
         <div class="setting-row">
           <label>Image Title</label>
-          <input type="text" id="ocrTitle2" placeholder="Meeting Whiteboard" style="width: 100%; background: #1a1a2e; border: 1px solid #0f3460; color: #eee; padding: 0.5rem; border-radius: 0.25rem;">
+          <input type="text" id="ocrTitle2" placeholder="Meeting Whiteboard" style="width: 100%; background: var(--c-base); border: 1px solid var(--c-raised); color: var(--c-text); padding: 0.5rem; border-radius: 0.25rem;">
         </div>
         <div class="setting-row" style="display: flex; align-items: center; gap: 0.5rem; margin: 0.5rem 0;">
-          <input type="checkbox" id="ocrSummarize2" style="width: 18px; height: 18px; accent-color: #60a5fa;">
+          <input type="checkbox" id="ocrSummarize2" style="width: 18px; height: 18px; accent-color: var(--c-blue);">
           <label for="ocrSummarize2" style="cursor: pointer;">📋 Summarize extracted text</label>
         </div>
         <div class="upload-dropzone" id="ocrDropzone2">
@@ -828,36 +898,36 @@
       <div class="settings-section">
         <h3>🏋️ LoRA Training</h3>
         <div id="trainingStatusDisplay" style="margin-bottom: 1rem;">
-          <div style="color: #94a3b8; font-size: 0.85rem;" id="trainingLastRun">Last trained: Never</div>
-          <div style="color: #94a3b8; font-size: 0.85rem;" id="trainingLastStatus"></div>
+          <div style="color: var(--c-text-2); font-size: 0.85rem;" id="trainingLastRun">Last trained: Never</div>
+          <div style="color: var(--c-text-2); font-size: 0.85rem;" id="trainingLastStatus"></div>
         </div>
         <div id="trainingProgressSection" style="display: none; margin-bottom: 1rem;">
           <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.25rem;">
-            <span id="trainingStepLabel" style="color: #f472b6;">Preparing...</span>
-            <span id="trainingProgressPct" style="color: #60a5fa;">0%</span>
+            <span id="trainingStepLabel" style="color: var(--c-pink);">Preparing...</span>
+            <span id="trainingProgressPct" style="color: var(--c-blue);">0%</span>
           </div>
           <div class="bulk-progress-bar">
             <div id="trainingProgressBar" class="bulk-progress-bar-fill" style="width: 0%"></div>
           </div>
-          <div id="trainingDetail" style="color: #94a3b8; font-size: 0.8rem; margin-top: 0.25rem;"></div>
+          <div id="trainingDetail" style="color: var(--c-text-2); font-size: 0.8rem; margin-top: 0.25rem;"></div>
         </div>
         <div class="setting-row">
           <label>Min. new examples to train</label>
-          <input type="number" id="trainingMinExamples" value="50" min="1" max="10000" style="width: 80px; background: #1a1a2e; border: 1px solid #0f3460; color: #eee; padding: 0.5rem; border-radius: 0.25rem;">
+          <input type="number" id="trainingMinExamples" value="50" min="1" max="10000" style="width: 80px; background: var(--c-base); border: 1px solid var(--c-raised); color: var(--c-text); padding: 0.5rem; border-radius: 0.25rem;">
         </div>
         <div class="setting-row">
           <label>Epochs</label>
-          <input type="number" id="trainingEpochs" value="3" min="1" max="10" style="width: 80px; background: #1a1a2e; border: 1px solid #0f3460; color: #eee; padding: 0.5rem; border-radius: 0.25rem;">
+          <input type="number" id="trainingEpochs" value="3" min="1" max="10" style="width: 80px; background: var(--c-base); border: 1px solid var(--c-raised); color: var(--c-text); padding: 0.5rem; border-radius: 0.25rem;">
         </div>
         <div class="setting-row" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-          <button id="trainNowBtn" onclick="triggerTraining()" style="background: #166534; border: 1px solid #22c55e; color: #4ade80; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
+          <button id="trainNowBtn" onclick="triggerTraining()" style="background: var(--c-ok-bg); border: 1px solid var(--c-ok-border); color: var(--c-ok); padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
             🏋️ Train Now
           </button>
-          <button id="cancelTrainingBtn" onclick="cancelTraining()" style="display: none; background: #7f1d1d; border: 1px solid #ef4444; color: #f87171; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
+          <button id="cancelTrainingBtn" onclick="cancelTraining()" style="display: none; background: var(--c-err-bg); border: 1px solid var(--c-danger-light); color: var(--c-err); padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
             ✋ Cancel Training
           </button>
         </div>
-        <p style="color: #64748b; font-size: 0.8rem; margin-top: 0.5rem;">
+        <p style="color: var(--c-text-3); font-size: 0.8rem; margin-top: 0.5rem;">
           Training collects new conversation data, retrains the model, and deploys it. Takes ~2.5 hours. Skippy will be unavailable during training.
         </p>
       </div>
@@ -870,23 +940,23 @@
         </div>
         <div class="setting-row">
           <label>Personality</label>
-          <textarea id="aiPersonality" rows="3" style="width: 100%; background: #1a1a2e; border: 1px solid #0f3460; border-radius: 0.4rem; color: #eee; padding: 0.5rem; font-family: inherit;" placeholder="You are a helpful AI assistant who is slightly sarcastic and loves beer references..."></textarea>
+          <textarea id="aiPersonality" rows="3" style="width: 100%; background: var(--c-base); border: 1px solid var(--c-raised); border-radius: 0.4rem; color: var(--c-text); padding: 0.5rem; font-family: inherit;" placeholder="You are a helpful AI assistant who is slightly sarcastic and loves beer references..."></textarea>
         </div>
         
         <h3>💾 Backup & Restore</h3>
         <div class="setting-row" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-          <button onclick="exportConversations()" style="background: #0f3460; border: 1px solid #4ade80; color: #4ade80; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
+          <button onclick="exportConversations()" style="background: var(--c-raised); border: 1px solid var(--c-ok); color: var(--c-ok); padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
             📤 Export Conversations
           </button>
-          <button onclick="exportFullBackup()" style="background: #0f3460; border: 1px solid #60a5fa; color: #60a5fa; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
+          <button onclick="exportFullBackup()" style="background: var(--c-raised); border: 1px solid var(--c-blue); color: var(--c-blue); padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
             💾 Full Backup
           </button>
-          <label style="background: #0f3460; border: 1px solid #f472b6; color: #f472b6; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
+          <label style="background: var(--c-raised); border: 1px solid var(--c-pink); color: var(--c-pink); padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">
             📥 Import Backup
             <input type="file" accept=".json" onchange="importBackup(event)" style="display: none;">
           </label>
         </div>
-        <p style="color: #64748b; font-size: 0.8rem; margin-top: 0.5rem;">
+        <p style="color: var(--c-text-3); font-size: 0.8rem; margin-top: 0.5rem;">
           Export saves all conversations and settings. Import restores from a backup file.
         </p>
 
@@ -964,15 +1034,15 @@
       <div class="settings-panel" style="max-width: 800px;">
         <div class="settings-header">
           <h2>🧠 Memory Viewer</h2>
-          <button onclick="closeMemoryViewer()" style="background: #dc2626; border: none; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; font-size: 1rem;">✕ Close</button>
+          <button onclick="closeMemoryViewer()" style="background: var(--c-danger); border: none; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; font-size: 1rem;">✕ Close</button>
         </div>
         <div class="settings-content">
-          <div id="memoryStats" style="margin-bottom: 1rem; padding: 1rem; background: #1a1a2e; border-radius: 0.5rem;">
+          <div id="memoryStats" style="margin-bottom: 1rem; padding: 1rem; background: var(--c-base); border-radius: 0.5rem;">
             Loading stats...
           </div>
           
           <h3>💭 Stored Memories</h3>
-          <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1rem;">
+          <p style="color: var(--c-text-2); font-size: 0.85rem; margin-bottom: 1rem;">
             These are conversation snippets Skippy remembers. Click 🗑️ to forget specific memories.
           </p>
           
@@ -1033,8 +1103,10 @@
           <div class="title">${escapeHtml(c.title)}</div>
           <div class="meta">${c.message_count} messages · ${formatDate(c.updated_at)}</div>
           <div class="actions">
-            <button onclick="event.stopPropagation(); ingestConversation('${c.id}')" 
+            <button onclick="event.stopPropagation(); ingestConversation('${c.id}')"
                     title="Save to memory">${c.ingested_to_rag ? '🧠' : '💾'}</button>
+            <button onclick="event.stopPropagation(); exportConversation('${c.id}', '${escapeHtml(c.title)}')"
+                    title="Export as markdown">📄</button>
             <button class="delete" onclick="event.stopPropagation(); deleteConversation('${c.id}')"
                     title="Delete">🗑️</button>
           </div>
@@ -1166,6 +1238,8 @@
       voiceModeEnabled = localStorage.getItem('voiceMode') === 'true';
       document.getElementById('voiceModeBtn').classList.toggle('active', voiceModeEnabled);
       document.getElementById('micBtn').style.display = voiceModeEnabled ? 'inline-block' : 'none';
+      // Load theme preference (default: follow system, fall back to dark)
+      initTheme();
       // Sync settings on load (web search + sync dot)
       fetch(`${API}/settings`).then(r => r.json()).then(settings => {
         updateSyncDot(!!settings.sync?.auto_enabled);
@@ -1210,8 +1284,8 @@
       if (!banner) {
         banner = document.createElement('div');
         banner.id = 'warmupBanner';
-        banner.style.cssText = 'background: #1a1a2e; border: 1px solid #0f3460; border-radius: 0.5rem; padding: 0.75rem 1rem; margin: 0.5rem 1rem; color: #94a3b8; font-size: 0.85rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 0.5rem;';
-        banner.innerHTML = '<span class="spinner" style="width: 14px; height: 14px; border: 2px solid #0f3460; border-top-color: #4ade80; border-radius: 50%; animation: spin 1s linear infinite; display: inline-block;"></span> Warming up model — first response may take 30-45 seconds';
+        banner.style.cssText = 'background: var(--c-base); border: 1px solid var(--c-raised); border-radius: 0.5rem; padding: 0.75rem 1rem; margin: 0.5rem 1rem; color: var(--c-text-2); font-size: 0.85rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 0.5rem;';
+        banner.innerHTML = '<span class="spinner" style="width: 14px; height: 14px; border: 2px solid var(--c-raised); border-top-color: var(--c-ok); border-radius: 50%; animation: spin 1s linear infinite; display: inline-block;"></span> Warming up model — first response may take 30-45 seconds';
         const chatArea = document.getElementById('messages');
         if (chatArea) chatArea.prepend(banner);
       }
@@ -1262,6 +1336,31 @@
       showToast(voiceModeEnabled ? '🎤 Voice mode ON' : '🎤 Voice mode OFF');
     }
 
+    // Theme toggle
+    function initTheme() {
+      const saved = localStorage.getItem('theme');
+      if (saved) {
+        applyTheme(saved);
+      } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+        applyTheme('light');
+      }
+      // Listen for OS theme changes when user hasn't set a manual preference
+      window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+        if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'light' : 'dark');
+      });
+    }
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : '');
+      document.getElementById('themeBtn').querySelector('.icon').textContent = theme === 'light' ? '☀️' : '🌙';
+    }
+    function toggleTheme() {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      const next = isLight ? 'dark' : 'light';
+      applyTheme(next);
+      localStorage.setItem('theme', next);
+      showToast(next === 'light' ? '☀️ Light mode' : '🌙 Dark mode');
+    }
+
     async function startRecording() {
       if (!voiceModeEnabled) return;
       try {
@@ -1309,17 +1408,65 @@
       }
     }
 
-    function speakResponse(text) {
-      if (!voiceModeEnabled) return;
-      speechSynthesis.cancel();
-      // Strip markdown formatting for cleaner speech
-      const clean = text.replace(/```[\s\S]*?```/g, ' code block ')
-                        .replace(/[*_~`#]/g, '')
-                        .replace(/\[(\d+)\]/g, '')
-                        .replace(/\n+/g, '. ');
+    // Streaming TTS — speaks sentence-by-sentence as tokens arrive
+    let _ttsBuffer = '';
+    let _ttsCodeFences = 0;
+
+    function _cleanForSpeech(text) {
+      return text.replace(/```[\s\S]*?```/g, ' code block ')
+                 .replace(/[*_~`#>]/g, '')
+                 .replace(/\[(\d+)\]/g, '')
+                 .replace(/\n+/g, '. ')
+                 .trim();
+    }
+
+    function _speakChunk(text) {
+      const clean = _cleanForSpeech(text);
+      if (!clean || clean.length < 2) return;
       const utterance = new SpeechSynthesisUtterance(clean);
       utterance.rate = 1.1;
       speechSynthesis.speak(utterance);
+    }
+
+    function feedTts(token) {
+      if (!voiceModeEnabled) return;
+      _ttsBuffer += token;
+      // Track code fences — don't speak inside code blocks
+      const fences = (_ttsBuffer.match(/```/g) || []).length;
+      if (fences % 2 !== 0) return;
+      // Sentence boundary: .!? followed by whitespace (min 10 chars to avoid "e.g." splits)
+      const m = _ttsBuffer.match(/^([\s\S]{10,}?[.!?])(\s)/);
+      if (m) {
+        _speakChunk(m[1]);
+        _ttsBuffer = _ttsBuffer.slice(m[1].length);
+        return;
+      }
+      // Paragraph break
+      const nl = _ttsBuffer.indexOf('\n\n');
+      if (nl > 5) {
+        _speakChunk(_ttsBuffer.slice(0, nl));
+        _ttsBuffer = _ttsBuffer.slice(nl + 2);
+      }
+    }
+
+    function flushTts() {
+      if (!voiceModeEnabled) return;
+      if (_ttsBuffer.trim()) _speakChunk(_ttsBuffer);
+      _ttsBuffer = '';
+      _ttsCodeFences = 0;
+    }
+
+    function resetTts() {
+      speechSynthesis.cancel();
+      _ttsBuffer = '';
+      _ttsCodeFences = 0;
+    }
+
+    // Legacy — kept as fallback; streaming path uses feedTts + flushTts
+    function speakResponse(text) {
+      if (!voiceModeEnabled) return;
+      speechSynthesis.cancel();
+      _speakChunk(text);
     }
 
     async function clearAllMemory() {
@@ -1511,34 +1658,57 @@
       showToast('📧 Opened in email client');
     }
 
+    function linkCitations(text, citations) {
+      if (!citations || !citations.length) return text;
+      const ids = new Set(citations.map(c => c.id));
+      return text.replace(/\[(\d+)\]/g, (m, n) => {
+        const id = parseInt(n);
+        if (ids.has(id)) return `<a class="cite-ref" onclick="document.getElementById('cite-${id}')?.scrollIntoView({behavior:'smooth',block:'nearest'})" title="Jump to source [${id}]">[${id}]</a>`;
+        return m;
+      });
+    }
+
+    function renderCitations(citations, context) {
+      if (!citations || !citations.length) {
+        if (!context || !context.length) return '';
+        let h = `<details><summary>📚 Sources (${context.length})</summary>`;
+        context.forEach(c => { h += `<div class="context-item">${c.substring(0, 300)}...</div>`; });
+        return h + '</details>';
+      }
+      let h = `<details><summary>📚 Sources (${citations.length})</summary>`;
+      citations.forEach((c, i) => {
+        const score = c.final_score ? (c.final_score * 100).toFixed(0) : '?';
+        const source = c.source_file ? c.source_file.split('/').pop() : 'unknown';
+        const sem = c.semantic_score ? (c.semantic_score * 100).toFixed(0) : '-';
+        const kw = c.keyword_score ? (c.keyword_score * 100).toFixed(0) : '-';
+        const rr = c.rerank_score ? (c.rerank_score * 100).toFixed(0) : '-';
+        const chunk = c.total_chunks ? ` (${c.chunk_index + 1}/${c.total_chunks})` : '';
+        const preview = context && context[i] ? context[i].replace(/^\[\d+\]\s*/, '').substring(0, 300) : '';
+        h += `<div class="context-item" id="cite-${c.id}">
+          <div class="cite-header">
+            <strong>[${c.id}]</strong>
+            <span title="${c.source_file || source}">${source}${chunk}</span>
+            <span style="color:var(--c-ok);font-weight:600;">${score}%</span>
+            <span class="cite-scores">sem:${sem} kw:${kw} rr:${rr}</span>
+          </div>
+          ${preview ? `<div class="cite-preview">${preview}...</div>` : ''}
+        </div>`;
+      });
+      return h + '</details>';
+    }
+
     function addMessage(role, content, context, tokens, usedStyle, citations) {
       const welcome = messagesDiv.querySelector('.welcome');
       if (welcome) welcome.remove();
       const div = document.createElement('div');
       div.className = `message ${role}`;
-      let html = content;
+      let html = role === 'assistant' ? linkCitations(content, citations) : content;
       if (usedStyle && role === 'assistant') html += `<span class="style-tag">✍️ Your style</span>`;
-      
+
       // Check if this is an email response
       const isEmail = role === 'assistant' && isEmailResponse(content);
-      
-      if (citations && citations.length) {
-        html += `<details><summary>📚 Sources (${citations.length})</summary>`;
-        citations.forEach(c => { 
-          const score = c.final_score ? (c.final_score * 100).toFixed(0) : '?';
-          const source = c.source_file ? c.source_file.split('/').pop() : 'unknown';
-          html += `<div class="context-item">
-            <strong>[${c.id}]</strong> ${source} 
-            <span style="color:#4ade80;margin-left:0.5rem;">${score}% match</span>
-            ${context && context[c.id-1] ? '<br><small>' + context[c.id-1].substring(0, 400) + '...</small>' : ''}
-          </div>`; 
-        });
-        html += '</details>';
-      } else if (context && context.length) {
-        html += `<details><summary>📚 Sources (${context.length})</summary>`;
-        context.forEach(c => { html += `<div class="context-item">${c.substring(0, 300)}...</div>`; });
-        html += '</details>';
-      }
+
+      html += renderCitations(citations, context);
       if (tokens) html += `<div class="meta">${tokens} tokens</div>`;
       
       // Add email action buttons if this is an email
@@ -1580,7 +1750,7 @@
       const thinkingDiv = document.createElement('div');
       thinkingDiv.className = 'message assistant';
       thinkingDiv.innerHTML = '<div style="display: flex; align-items: center; gap: 0.5rem;">' +
-        '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #60a5fa; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
+        '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid var(--c-blue); border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
         '<span>🌐 Searching the web...</span></div>';
       document.getElementById('messages').appendChild(thinkingDiv);
       document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
@@ -1596,8 +1766,8 @@
         if (result.status === 'ok') {
           let sourcesHtml = '';
           if (result.sources && result.sources.length > 0) {
-            sourcesHtml = '<details style="margin-top: 0.5rem;"><summary style="cursor: pointer; color: #60a5fa; font-size: 0.85rem;">📚 Sources</summary>' +
-              '<div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.5rem;">' + 
+            sourcesHtml = '<details style="margin-top: 0.5rem;"><summary style="cursor: pointer; color: var(--c-blue); font-size: 0.85rem;">📚 Sources</summary>' +
+              '<div style="font-size: 0.8rem; color: var(--c-text-2); margin-top: 0.5rem;">' + 
               result.sources.map(s => s.substring(0, 200) + '...').join('<hr style="border-color: #333; margin: 0.5rem 0;">') + 
               '</div></details>';
           }
@@ -1645,6 +1815,7 @@
       // Create streaming message placeholder
       const msgDiv = createStreamingMessage();
       let fullText = '';
+      resetTts();
       let contextUsed = null;
       let citations = null;
       let metricsData = {};
@@ -1685,10 +1856,11 @@
                 } else if (data.type === 'token') {
                   fullText += data.token;
                   updateStreamingMessage(msgDiv, fullText);
+                  feedTts(data.token);
                 } else if (data.type === 'done') {
                   fullText = data.text;
                   metricsData = data.metrics || {};
-                  speakResponse(fullText);
+                  flushTts();
                 }
               } catch (e) { /* ignore parse errors */ }
             }
@@ -1759,32 +1931,17 @@
     
     function finalizeStreamingMessage(div, content, context, citations, usedStyle, metrics = {}) {
       div.classList.remove('streaming');
-      let html = content;
+      let html = linkCitations(content, citations);
       if (usedStyle) html += `<span class="style-tag">✍️ Your style</span>`;
-      
+
       // Check if this is an email response
       const isEmail = isEmailResponse(content);
-      
-      if (citations && citations.length) {
-        html += `<details><summary>📚 Sources (${citations.length})</summary>`;
-        citations.forEach(c => { 
-          const score = c.final_score ? (c.final_score * 100).toFixed(0) : '?';
-          const source = c.source_file ? c.source_file.split('/').pop() : 'unknown';
-          html += `<div class="context-item">
-            <strong>[${c.id}]</strong> ${source} 
-            <span style="color:#4ade80;margin-left:0.5rem;">${score}% match</span>
-          </div>`; 
-        });
-        html += '</details>';
-      } else if (context && context.length) {
-        html += `<details><summary>📚 Sources (${context.length})</summary>`;
-        context.forEach(c => { html += `<div class="context-item">${c.substring(0, 300)}...</div>`; });
-        html += '</details>';
-      }
+
+      html += renderCitations(citations, context);
       
       // Add performance metrics
       if (metrics && metrics.ttft !== undefined) {
-        html += '<div class="meta" style="color: #4ade80; margin-top: 0.5rem;">⚡ TTFT: ' + metrics.ttft + 's | ' + metrics.throughput + ' tok/s | ' + metrics.total_time + 's total</div>';
+        html += '<div class="meta" style="color: var(--c-ok); margin-top: 0.5rem;">⚡ TTFT: ' + metrics.ttft + 's | ' + metrics.throughput + ' tok/s | ' + metrics.total_time + 's total</div>';
       }
       
       // Add email action buttons if this is an email
@@ -1821,6 +1978,33 @@
     // Settings management
     let currentSettings = {};
     // Export/Import Functions
+    async function exportConversation(convId, title) {
+      try {
+        const resp = await fetch(`${API}/conversations/${convId}`);
+        const conv = await resp.json();
+        const date = new Date().toISOString().slice(0, 10);
+        let md = `# ${title || 'Conversation'}\n\nExported: ${date}\n\n---\n\n`;
+        for (const msg of conv.messages) {
+          const label = msg.role === 'user' ? '**You**' : '**Skippy**';
+          md += `${label}:\n\n${msg.content}\n\n---\n\n`;
+        }
+        const blob = new Blob([md], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const slug = (title || 'conversation').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 50);
+        a.download = `skippy-${slug}-${date}.md`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('📄 Exported as markdown');
+      } catch (err) {
+        showToast('❌ Export failed');
+        console.error(err);
+      }
+    }
+
     async function exportConversations() {
       try {
         const resp = await fetch(`${API}/export/conversations`);
@@ -1918,21 +2102,21 @@
         document.getElementById('memoryStats').innerHTML = `
           <div style="display: flex; gap: 2rem;">
             <div>
-              <div style="font-size: 1.5rem; font-weight: bold; color: #4ade80;">${stats.memory_chunks || 0}</div>
-              <div style="color: #94a3b8; font-size: 0.8rem;">Memory Chunks</div>
+              <div style="font-size: 1.5rem; font-weight: bold; color: var(--c-ok);">${stats.memory_chunks || 0}</div>
+              <div style="color: var(--c-text-2); font-size: 0.8rem;">Memory Chunks</div>
             </div>
             <div>
-              <div style="font-size: 1.5rem; font-weight: bold; color: #60a5fa;">${stats.conversations || 0}</div>
-              <div style="color: #94a3b8; font-size: 0.8rem;">Conversations</div>
+              <div style="font-size: 1.5rem; font-weight: bold; color: var(--c-blue);">${stats.conversations || 0}</div>
+              <div style="color: var(--c-text-2); font-size: 0.8rem;">Conversations</div>
             </div>
             <div>
-              <div style="font-size: 1.5rem; font-weight: bold; color: #f472b6;">${stats.total_knowledge_docs || 0}</div>
-              <div style="color: #94a3b8; font-size: 0.8rem;">Total Knowledge Docs</div>
+              <div style="font-size: 1.5rem; font-weight: bold; color: var(--c-pink);">${stats.total_knowledge_docs || 0}</div>
+              <div style="color: var(--c-text-2); font-size: 0.8rem;">Total Knowledge Docs</div>
             </div>
           </div>
         `;
       } catch (err) {
-        document.getElementById('memoryStats').innerHTML = '<span style="color: #f87171;">Failed to load stats</span>';
+        document.getElementById('memoryStats').innerHTML = '<span style="color: var(--c-err);">Failed to load stats</span>';
       }
     }
     
@@ -1942,7 +2126,7 @@
         const data = await resp.json();
         
         if (!data.memories || data.memories.length === 0) {
-          document.getElementById('memoryList').innerHTML = '<p style="color: #94a3b8;">No memories yet. Start chatting and save conversations!</p>';
+          document.getElementById('memoryList').innerHTML = '<p style="color: var(--c-text-2);">No memories yet. Start chatting and save conversations!</p>';
           return;
         }
         
@@ -1953,17 +2137,17 @@
           const timestamp = mem.metadata?.timestamp ? new Date(mem.metadata.timestamp).toLocaleDateString() : '';
           
           html += `
-            <div class="memory-item" style="background: #1a1a2e; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 0.5rem; position: relative;">
-              <div style="font-size: 0.75rem; color: #60a5fa; margin-bottom: 0.25rem;">${convTitle} ${timestamp ? '• ' + timestamp : ''}</div>
-              <div style="font-size: 0.85rem; color: #e2e8f0;">${preview}</div>
-              <button onclick="deleteMemory('${mem.id}')" style="position: absolute; top: 0.5rem; right: 0.5rem; background: #dc2626; border: none; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; cursor: pointer; font-size: 0.7rem;">🗑️</button>
+            <div class="memory-item" style="background: var(--c-base); padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 0.5rem; position: relative;">
+              <div style="font-size: 0.75rem; color: var(--c-blue); margin-bottom: 0.25rem;">${convTitle} ${timestamp ? '• ' + timestamp : ''}</div>
+              <div style="font-size: 0.85rem; color: var(--c-text);">${preview}</div>
+              <button onclick="deleteMemory('${mem.id}')" style="position: absolute; top: 0.5rem; right: 0.5rem; background: var(--c-danger); border: none; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; cursor: pointer; font-size: 0.7rem;">🗑️</button>
             </div>
           `;
         });
         
         document.getElementById('memoryList').innerHTML = html;
       } catch (err) {
-        document.getElementById('memoryList').innerHTML = '<span style="color: #f87171;">Failed to load memories</span>';
+        document.getElementById('memoryList').innerHTML = '<span style="color: var(--c-err);">Failed to load memories</span>';
       }
     }
     
@@ -2009,9 +2193,9 @@
       if (docDrop && !docDrop.hasAttribute('data-init')) {
         docDrop.setAttribute('data-init', 'true');
         docDrop.onclick = () => docInput.click();
-        docDrop.ondragover = (e) => { e.preventDefault(); docDrop.style.borderColor = '#4ade80'; };
-        docDrop.ondragleave = () => { docDrop.style.borderColor = '#0f3460'; };
-        docDrop.ondrop = (e) => { e.preventDefault(); docDrop.style.borderColor = '#0f3460'; handleDocUpload2(filterFiles(e.dataTransfer.files, DOC_EXTS)); };
+        docDrop.ondragover = (e) => { e.preventDefault(); docDrop.style.borderColor = 'var(--c-ok)'; };
+        docDrop.ondragleave = () => { docDrop.style.borderColor = 'var(--c-raised)'; };
+        docDrop.ondrop = (e) => { e.preventDefault(); docDrop.style.borderColor = 'var(--c-raised)'; handleDocUpload2(filterFiles(e.dataTransfer.files, DOC_EXTS)); };
         docInput.onchange = (e) => { handleDocUpload2(e.target.files); e.target.value = ''; };
       }
       
@@ -2022,9 +2206,9 @@
       if (transDrop && !transDrop.hasAttribute('data-init')) {
         transDrop.setAttribute('data-init', 'true');
         transDrop.onclick = () => transInput.click();
-        transDrop.ondragover = (e) => { e.preventDefault(); transDrop.style.borderColor = '#f472b6'; };
-        transDrop.ondragleave = () => { transDrop.style.borderColor = '#0f3460'; };
-        transDrop.ondrop = (e) => { e.preventDefault(); transDrop.style.borderColor = '#0f3460'; handleTranscribeUpload2(filterFiles(e.dataTransfer.files, AUDIO_EXTS)); };
+        transDrop.ondragover = (e) => { e.preventDefault(); transDrop.style.borderColor = 'var(--c-pink)'; };
+        transDrop.ondragleave = () => { transDrop.style.borderColor = 'var(--c-raised)'; };
+        transDrop.ondrop = (e) => { e.preventDefault(); transDrop.style.borderColor = 'var(--c-raised)'; handleTranscribeUpload2(filterFiles(e.dataTransfer.files, AUDIO_EXTS)); };
         transInput.onchange = (e) => { handleTranscribeUpload2(e.target.files); e.target.value = ''; };
       }
       
@@ -2035,9 +2219,9 @@
       if (ocrDrop && !ocrDrop.hasAttribute('data-init')) {
         ocrDrop.setAttribute('data-init', 'true');
         ocrDrop.onclick = () => ocrInput.click();
-        ocrDrop.ondragover = (e) => { e.preventDefault(); ocrDrop.style.borderColor = '#60a5fa'; };
-        ocrDrop.ondragleave = () => { ocrDrop.style.borderColor = '#0f3460'; };
-        ocrDrop.ondrop = (e) => { e.preventDefault(); ocrDrop.style.borderColor = '#0f3460'; handleOcrUpload2(filterFiles(e.dataTransfer.files, IMAGE_EXTS)); };
+        ocrDrop.ondragover = (e) => { e.preventDefault(); ocrDrop.style.borderColor = 'var(--c-blue)'; };
+        ocrDrop.ondragleave = () => { ocrDrop.style.borderColor = 'var(--c-raised)'; };
+        ocrDrop.ondrop = (e) => { e.preventDefault(); ocrDrop.style.borderColor = 'var(--c-raised)'; handleOcrUpload2(filterFiles(e.dataTransfer.files, IMAGE_EXTS)); };
         ocrInput.onchange = (e) => { handleOcrUpload2(e.target.files); e.target.value = ''; };
       }
     }
@@ -2107,12 +2291,12 @@
       const pct = Math.round((current / total) * 100);
       let html = '<div class="bulk-progress">';
       html += '<div style="display: flex; justify-content: space-between; font-size: 0.85rem;">';
-      html += '<span style="color: #94a3b8;">Processing ' + current + ' of ' + total + '</span>';
-      html += '<span style="color: #60a5fa;">' + pct + '%</span></div>';
+      html += '<span style="color: var(--c-text-2);">Processing ' + current + ' of ' + total + '</span>';
+      html += '<span style="color: var(--c-blue);">' + pct + '%</span></div>';
       html += '<div class="bulk-progress-bar"><div class="bulk-progress-bar-fill" style="width: ' + pct + '%"></div></div>';
       if (filename) {
-        html += '<div style="color: #94a3b8; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">' +
-          '<div class="spinner" style="width: 14px; height: 14px; border: 2px solid #60a5fa; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
+        html += '<div style="color: var(--c-text-2); font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">' +
+          '<div class="spinner" style="width: 14px; height: 14px; border: 2px solid var(--c-blue); border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
           escapeHtml(filename) + '</div>';
       }
       for (const r of results) { html += '<div class="bulk-result">' + r + '</div>'; }
@@ -2133,7 +2317,7 @@
         if (isBulk) {
           statusDiv.innerHTML = bulkProgressHtml(i, fileArr.length, file.name, results);
         } else {
-          statusDiv.innerHTML = '<span style="color: #60a5fa;">⏳ Uploading ' + escapeHtml(file.name) + '...</span>';
+          statusDiv.innerHTML = '<span style="color: var(--c-blue);">⏳ Uploading ' + escapeHtml(file.name) + '...</span>';
         }
         try {
           const formData = new FormData();
@@ -2141,12 +2325,12 @@
           const resp = await fetch(API + '/upload/document?doc_type=' + docType, { method: 'POST', body: formData });
           const result = await resp.json();
           if (result.status === 'ok') {
-            results.push('<span style="color: #4ade80;">✅ ' + escapeHtml(file.name) + ' (' + result.chunks_added + ' chunks)</span>');
+            results.push('<span style="color: var(--c-ok);">✅ ' + escapeHtml(file.name) + ' (' + result.chunks_added + ' chunks)</span>');
           } else {
-            results.push('<span style="color: #f87171;">❌ ' + escapeHtml(file.name) + ': ' + escapeHtml(result.error) + '</span>');
+            results.push('<span style="color: var(--c-err);">❌ ' + escapeHtml(file.name) + ': ' + escapeHtml(result.error) + '</span>');
           }
         } catch (err) {
-          results.push('<span style="color: #f87171;">❌ ' + escapeHtml(file.name) + ': Upload failed</span>');
+          results.push('<span style="color: var(--c-err);">❌ ' + escapeHtml(file.name) + ': Upload failed</span>');
         }
       }
       if (isBulk) {
@@ -2167,7 +2351,7 @@
 
     function buildTranscribeResults(filename, result) {
       lastTranscribeResult = result;
-      let html = '<span style="color: #4ade80;">✅ ' + escapeHtml(filename) + ' transcribed (' + result.chunks_added + ' chunks)</span>';
+      let html = '<span style="color: var(--c-ok);">✅ ' + escapeHtml(filename) + ' transcribed (' + result.chunks_added + ' chunks)</span>';
       html += '<div class="transcribe-results">';
 
       if (result.summary && !result.summary.error) {
@@ -2195,7 +2379,7 @@
       html += '</div>';
 
       if (result.full_transcript) {
-        html += '<details style="margin-top: 0.75rem;"><summary style="color: #f472b6; cursor: pointer; font-size: 0.85rem;">Show Full Transcript</summary>';
+        html += '<details style="margin-top: 0.75rem;"><summary style="color: var(--c-pink); cursor: pointer; font-size: 0.85rem;">Show Full Transcript</summary>';
         html += '<div class="transcript-full">' + escapeHtml(result.full_transcript) + '</div></details>';
       }
 
@@ -2275,8 +2459,8 @@
         if (isBulk) {
           statusDiv.innerHTML = bulkProgressHtml(i, fileArr.length, '🎤 ' + file.name, results);
         } else {
-          statusDiv.innerHTML = '<div style="color: #f472b6; display: flex; align-items: center; gap: 0.5rem;">' +
-            '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #f472b6; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
+          statusDiv.innerHTML = '<div style="color: var(--c-pink); display: flex; align-items: center; gap: 0.5rem;">' +
+            '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid var(--c-pink); border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
             '<span>🎤 Transcribing ' + escapeHtml(file.name) + '...</span></div>';
         }
         try {
@@ -2286,15 +2470,15 @@
           const result = await resp.json();
           if (result.status === 'ok') {
             if (isBulk) {
-              results.push('<span style="color: #4ade80;">✅ ' + escapeHtml(file.name) + ' (' + result.chunks_added + ' chunks)</span>');
+              results.push('<span style="color: var(--c-ok);">✅ ' + escapeHtml(file.name) + ' (' + result.chunks_added + ' chunks)</span>');
             } else {
               statusDiv.innerHTML = buildTranscribeResults(file.name, result);
             }
           } else {
-            results.push('<span style="color: #f87171;">❌ ' + escapeHtml(file.name) + ': ' + escapeHtml(result.error) + '</span>');
+            results.push('<span style="color: var(--c-err);">❌ ' + escapeHtml(file.name) + ': ' + escapeHtml(result.error) + '</span>');
           }
         } catch (err) {
-          results.push('<span style="color: #f87171;">❌ ' + escapeHtml(file.name) + ': Transcription failed</span>');
+          results.push('<span style="color: var(--c-err);">❌ ' + escapeHtml(file.name) + ': Transcription failed</span>');
         }
       }
       if (isBulk) {
@@ -2307,7 +2491,7 @@
 
     function buildOcrResults(filename, result) {
       lastOcrResult = result;
-      let html = '<span style="color: #4ade80;">✅ ' + escapeHtml(filename) + ' - ' + result.text_length + ' chars extracted (' + result.chunks_added + ' chunks)</span>';
+      let html = '<span style="color: var(--c-ok);">✅ ' + escapeHtml(filename) + ' - ' + result.text_length + ' chars extracted (' + result.chunks_added + ' chunks)</span>';
       html += '<div class="transcribe-results">';
 
       if (result.summary && !result.summary.error) {
@@ -2317,7 +2501,7 @@
         }
       }
 
-      html += '<details style="margin-top: 0.75rem;"><summary style="color: #60a5fa; cursor: pointer; font-size: 0.85rem;">Show Extracted Text</summary>';
+      html += '<details style="margin-top: 0.75rem;"><summary style="color: var(--c-blue); cursor: pointer; font-size: 0.85rem;">Show Extracted Text</summary>';
       html += '<div class="transcript-full" style="max-height: 200px;">' + escapeHtml(result.full_text || result.text_preview) + '</div></details>';
 
       html += '<div class="transcribe-actions">';
@@ -2394,8 +2578,8 @@
         if (isBulk) {
           statusDiv.innerHTML = bulkProgressHtml(i, fileArr.length, '📷 ' + file.name, results);
         } else {
-          statusDiv.innerHTML = '<div style="color: #60a5fa; display: flex; align-items: center; gap: 0.5rem;">' +
-            '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid #60a5fa; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
+          statusDiv.innerHTML = '<div style="color: var(--c-blue); display: flex; align-items: center; gap: 0.5rem;">' +
+            '<div class="spinner" style="width: 20px; height: 20px; border: 3px solid var(--c-blue); border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>' +
             '<span>📷 Extracting text from ' + escapeHtml(file.name) + '...</span></div>';
         }
         try {
@@ -2405,15 +2589,15 @@
           const result = await resp.json();
           if (result.status === 'ok') {
             if (isBulk) {
-              results.push('<span style="color: #4ade80;">✅ ' + escapeHtml(file.name) + ' (' + result.text_length + ' chars, ' + result.chunks_added + ' chunks)</span>');
+              results.push('<span style="color: var(--c-ok);">✅ ' + escapeHtml(file.name) + ' (' + result.text_length + ' chars, ' + result.chunks_added + ' chunks)</span>');
             } else {
               statusDiv.innerHTML = buildOcrResults(file.name, result);
             }
           } else {
-            results.push('<span style="color: #f87171;">❌ ' + escapeHtml(file.name) + ': ' + escapeHtml(result.error) + '</span>');
+            results.push('<span style="color: var(--c-err);">❌ ' + escapeHtml(file.name) + ': ' + escapeHtml(result.error) + '</span>');
           }
         } catch (err) {
-          results.push('<span style="color: #f87171;">❌ ' + escapeHtml(file.name) + ': OCR failed</span>');
+          results.push('<span style="color: var(--c-err);">❌ ' + escapeHtml(file.name) + ': OCR failed</span>');
         }
       }
       if (isBulk) {
@@ -2527,11 +2711,11 @@
         const el = document.getElementById('trainingLastStatus');
         if (el) {
           el.textContent = state.status === 'failed' ? '❌ ' + (state.error || 'Failed') : '⚠️ Interrupted';
-          el.style.color = '#f87171';
+          el.style.color = 'var(--c-err)';
         }
       } else if (state.status === 'complete') {
         const el = document.getElementById('trainingLastStatus');
-        if (el) { el.textContent = '✅ Success'; el.style.color = '#4ade80'; }
+        if (el) { el.textContent = '✅ Success'; el.style.color = 'var(--c-ok)'; }
       }
 
       // Stop polling when done
@@ -2761,16 +2945,16 @@
         
         if (res.ok) {
           statusEl.textContent = '✅ Uploaded!';
-          statusEl.style.color = '#4ade80';
+          statusEl.style.color = 'var(--c-ok)';
           document.getElementById('connectBtn').disabled = false;
         } else {
           const err = await res.json();
           statusEl.textContent = '❌ ' + (err.detail || 'Upload failed');
-          statusEl.style.color = '#f87171';
+          statusEl.style.color = 'var(--c-err)';
         }
       } catch (err) {
         statusEl.textContent = '❌ Upload failed';
-        statusEl.style.color = '#f87171';
+        statusEl.style.color = 'var(--c-err)';
       }
     }
     
@@ -2792,18 +2976,18 @@
           window.addEventListener('message', function handler(event) {
             if (event.data.type === 'oauth-success' && event.data.provider === currentEmailProvider) {
               statusEl.textContent = '✅ Connected!';
-              statusEl.style.color = '#4ade80';
+              statusEl.style.color = 'var(--c-ok)';
               window.removeEventListener('message', handler);
               setTimeout(() => closeEmailSetup(), 1500);
             }
           });
         } else {
           statusEl.textContent = '❌ ' + (data.detail || 'Failed to get auth URL');
-          statusEl.style.color = '#f87171';
+          statusEl.style.color = 'var(--c-err)';
         }
       } catch (err) {
         statusEl.textContent = '❌ Failed to start OAuth';
-        statusEl.style.color = '#f87171';
+        statusEl.style.color = 'var(--c-err)';
       }
     }
     

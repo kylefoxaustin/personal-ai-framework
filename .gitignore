@@ -50,6 +50,10 @@ models/qwen2.5-14b/*.gguf
 pipeline/config.yaml
 knowledge/recordings/
 training/*.log
+training/logs/
+
+# Private documents (not for GitHub)
+docs/*.pptx
 knowledge/datasheets/**/*.pdf
 knowledge/datasheets/.datasheet_manifest.json
 knowledge/images/

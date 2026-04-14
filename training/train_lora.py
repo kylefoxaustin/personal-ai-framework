@@ -4,8 +4,10 @@ LoRA Fine-tuning for Personal AI
 Trains style adapters on your writing samples.
 """
 import os
+import sys
 import json
 import torch
+import psutil
 from pathlib import Path
 from datetime import datetime
 from datasets import Dataset
@@ -15,7 +17,8 @@ from transformers import (
     TrainingArguments,
     Trainer,
     DataCollatorForLanguageModeling,
-    BitsAndBytesConfig
+    BitsAndBytesConfig,
+    TrainerCallback,
 )
 from peft import (
     LoraConfig,
@@ -23,6 +26,84 @@ from peft import (
     prepare_model_for_kbit_training,
     TaskType
 )
+
+LOG_DIR = Path(os.environ.get("TRAINING_LOG_DIR", "training/logs"))
+
+
+class _Tee:
+    """Duplicate writes to multiple streams (e.g. stdout + a log file).
+
+    Used so training output survives even if the controlling terminal
+    is killed mid-run (e.g. by systemd-oomd taking out the vte-spawn scope).
+    """
+
+    def __init__(self, *streams):
+        self._streams = streams
+
+    def write(self, data):
+        for s in self._streams:
+            try:
+                s.write(data)
+            except Exception:
+                pass
+
+    def flush(self):
+        for s in self._streams:
+            try:
+                s.flush()
+            except Exception:
+                pass
+
+
+def _setup_logging() -> Path:
+    """Tee stdout and stderr to a timestamped log file under training/logs/."""
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+    log_path = LOG_DIR / f"train_{ts}.log"
+    log_file = open(log_path, "a", buffering=1)  # line-buffered text mode
+    sys.stdout = _Tee(sys.__stdout__, log_file)
+    sys.stderr = _Tee(sys.__stderr__, log_file)
+    return log_path
+
+
+class MemoryLoggingCallback(TrainerCallback):
+    """Log host RSS + available RAM + GPU memory every N steps.
+
+    Leaves a forensic trail so future oomd kills are easy to post-mortem.
+    """
+
+    def __init__(self, every_n_steps: int = 50):
+        self.every_n_steps = every_n_steps
+        self._proc = psutil.Process(os.getpid())
+
+    def _snapshot(self, label: str):
+        rss_gb = self._proc.memory_info().rss / (1024 ** 3)
+        vm = psutil.virtual_memory()
+        gpu = ""
+        if torch.cuda.is_available():
+            gpu_alloc = torch.cuda.memory_allocated() / (1024 ** 3)
+            gpu_reserved = torch.cuda.memory_reserved() / (1024 ** 3)
+            gpu = f" | gpu_alloc={gpu_alloc:.2f}GB reserved={gpu_reserved:.2f}GB"
+        print(
+            f"[mem] {label} rss={rss_gb:.2f}GB "
+            f"host_avail={vm.available / (1024 ** 3):.1f}GB "
+            f"pct_used={vm.percent:.1f}%{gpu}",
+            flush=True,
+        )
+
+    def on_train_begin(self, args, state, control, **kwargs):
+        self._snapshot("train_begin")
+
+    def on_step_end(self, args, state, control, **kwargs):
+        if state.global_step and state.global_step % self.every_n_steps == 0:
+            self._snapshot(f"step={state.global_step}")
+
+    def on_epoch_end(self, args, state, control, **kwargs):
+        self._snapshot(f"epoch_end={state.epoch}")
+
+    def on_train_end(self, args, state, control, **kwargs):
+        self._snapshot("train_end")
+
 
 # Configuration (overridable via environment variables)
 MODEL_PATH = "Qwen/Qwen2.5-14B-Instruct"  # HF model for tokenizer/config
@@ -85,10 +166,12 @@ def load_training_data(data_path: str, tokenizer, max_samples: int = None):
 
 
 def main():
+    log_path = _setup_logging()
     print("=" * 60)
     print("LoRA Fine-tuning for Personal AI")
     print("=" * 60)
     print(f"Start time: {datetime.now()}")
+    print(f"Log file:   {log_path}")
     print()
     
     # Check GPU
@@ -104,7 +187,7 @@ def main():
     bnb_config = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.float16,
+        bnb_4bit_compute_dtype=torch.bfloat16,
         bnb_4bit_use_double_quant=True,
     )
     
@@ -121,12 +204,19 @@ def main():
         quantization_config=bnb_config,
         device_map="auto",
         trust_remote_code=True,
-        torch_dtype=torch.float16,
+        torch_dtype=torch.bfloat16,
+        low_cpu_mem_usage=True,
     )
     
     # Prepare for k-bit training
     model = prepare_model_for_kbit_training(model)
-    
+
+    # Reduce activation memory. use_reentrant=False is the modern path and
+    # plays nicely with LoRA + PEFT.
+    model.gradient_checkpointing_enable(
+        gradient_checkpointing_kwargs={"use_reentrant": False}
+    )
+
     # LoRA config
     print("🔧 Setting up LoRA...")
     lora_config = LoraConfig(
@@ -162,12 +252,15 @@ def main():
         logging_steps=50,
         save_strategy="epoch",
         eval_strategy="epoch",
-        fp16=True,
+        bf16=True,
         optim="paged_adamw_8bit",
         report_to="none",
         save_total_limit=2,
-        load_best_model_at_end=True,
-        metric_for_best_model="eval_loss",
+        gradient_checkpointing=True,
+        gradient_checkpointing_kwargs={"use_reentrant": False},
+        dataloader_pin_memory=False,
+        dataloader_num_workers=0,
+        group_by_length=True,
     )
     
     # Data collator
@@ -183,6 +276,7 @@ def main():
         train_dataset=train_data,
         eval_dataset=val_data,
         data_collator=data_collator,
+        callbacks=[MemoryLoggingCallback(every_n_steps=50)],
     )
     
     # Train!

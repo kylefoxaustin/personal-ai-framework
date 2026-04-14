@@ -396,8 +396,10 @@ class AdvancedRAG:
                 "id": r.citation_id,
                 "source_file": r.metadata.get("source_file", "unknown"),
                 "chunk_index": r.metadata.get("chunk_index", 0),
+                "total_chunks": r.metadata.get("total_chunks", 0),
                 "semantic_score": round(r.semantic_score, 3),
                 "keyword_score": round(r.keyword_score, 3),
+                "rerank_score": round(r.rerank_score, 3),
                 "final_score": round(r.final_score, 3)
             })
         
