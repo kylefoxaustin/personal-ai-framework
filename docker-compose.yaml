@@ -12,6 +12,7 @@ services:
       - ./pipeline/config.yaml:/app/config.yaml:ro
       - ./knowledge:/root/knowledge
       - ~/.personal-ai:/root/.personal-ai
+      - ./training:/app/training:ro
     ports:
       - "8080:8080"
 

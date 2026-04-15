@@ -27,8 +27,8 @@ cp ~/emails/*.eml knowledge/emails/
 ./run.sh ingest
 
 # Open web UI
-cd web && python3 -m http.server 3000
-# Go to http://localhost:3000
+cd web && python3 -m http.server 8765
+# Go to http://localhost:8765
 ```
 
 ## That's It!

@@ -29,7 +29,8 @@ def init_db():
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             summary TEXT,
-            ingested_to_rag BOOLEAN DEFAULT FALSE
+            ingested_to_rag BOOLEAN DEFAULT FALSE,
+            excluded_from_training BOOLEAN DEFAULT FALSE
         );
         
         CREATE TABLE IF NOT EXISTS messages (
@@ -46,6 +47,10 @@ def init_db():
         CREATE INDEX IF NOT EXISTS idx_messages_conv ON messages(conversation_id);
         CREATE INDEX IF NOT EXISTS idx_conversations_updated ON conversations(updated_at);
     ''')
+    # Migration: add excluded_from_training column if missing (older DBs)
+    cols = [r[1] for r in conn.execute("PRAGMA table_info(conversations)").fetchall()]
+    if "excluded_from_training" not in cols:
+        conn.execute("ALTER TABLE conversations ADD COLUMN excluded_from_training BOOLEAN DEFAULT FALSE")
     conn.commit()
     conn.close()
 
@@ -68,23 +73,25 @@ class ConversationStore:
         conn.close()
         return conv_id
     
-    def add_message(self, conversation_id: str, role: str, content: str, 
-                    tokens_used: int = None, context_used: List[str] = None):
-        """Add a message to a conversation"""
+    def add_message(self, conversation_id: str, role: str, content: str,
+                    tokens_used: int = None, context_used: List[str] = None) -> int:
+        """Add a message to a conversation. Returns the new message's id."""
         conn = get_db()
-        conn.execute(
+        cur = conn.execute(
             """INSERT INTO messages (conversation_id, role, content, tokens_used, context_used)
                VALUES (?, ?, ?, ?, ?)""",
-            (conversation_id, role, content, tokens_used, 
+            (conversation_id, role, content, tokens_used,
              json.dumps(context_used) if context_used else None)
         )
+        message_id = cur.lastrowid
         conn.execute(
             "UPDATE conversations SET updated_at = CURRENT_TIMESTAMP WHERE id = ?",
             (conversation_id,)
         )
         conn.commit()
         conn.close()
-    
+        return message_id
+
     def get_conversation(self, conversation_id: str) -> Dict:
         """Get full conversation with messages"""
         conn = get_db()
@@ -143,10 +150,21 @@ class ConversationStore:
                 "created_at": c["created_at"],
                 "updated_at": c["updated_at"],
                 "message_count": c["message_count"],
-                "ingested_to_rag": bool(c["ingested_to_rag"])
+                "ingested_to_rag": bool(c["ingested_to_rag"]),
+                "excluded_from_training": bool(c["excluded_from_training"]) if "excluded_from_training" in c.keys() else False,
             }
             for c in convs
         ]
+
+    def set_excluded(self, conversation_id: str, excluded: bool):
+        """Mark a conversation as excluded from future training runs."""
+        conn = get_db()
+        conn.execute(
+            "UPDATE conversations SET excluded_from_training = ? WHERE id = ?",
+            (1 if excluded else 0, conversation_id),
+        )
+        conn.commit()
+        conn.close()
     
     def update_title(self, conversation_id: str, title: str):
         """Update conversation title"""

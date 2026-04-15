@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-5.6.0-blue)
+![Version](https://img.shields.io/badge/version-5.8.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
@@ -54,7 +54,7 @@ cd personal-ai-framework
 ./run.sh start
 
 # Open web UI
-xdg-open http://localhost:3000
+xdg-open http://localhost:8765
 ```
 
 ## 🎭 AI Personality
@@ -185,7 +185,7 @@ personal-ai-framework/
 
 ## 🌐 Web UI
 
-Access at `http://localhost:3000`
+Access at `http://localhost:8765`
 
 ### Main Features
 - **Conversation Sidebar**: All your chats, with save/delete options
@@ -256,6 +256,8 @@ Tested on RTX 5090 (32GB VRAM):
 
 | Version | Highlights |
 |---------|------------|
+| **v5.8.0** | Agent platform + observability — Google Calendar, write-capable tools (sandboxed), reminders, multi-step agent loop, RLHF 👍/👎, training dashboard, selective training exclusion, mobile-friendly UI, Phone Access helper, Prometheus /metrics + Grafana dashboard |
+| **v5.7.0** | Smarter RAG, light mode, streaming TTS, training hardening — multi-doc synthesis, conv-aware RAG, citation score breakdown, theme toggle, conversation export |
 | **v5.6.0** | Model upgrade — Qwen 2.5 14B replaces Mixtral 8x7B, ChatML format, 32K context, unified training |
 | **v5.5.0** | Voice mode — push-to-talk mic input with Whisper STT, browser TTS for spoken responses |
 | **v5.4.0** | Agent tools — Skippy can read files, list directories, search web, and check git status (sandboxed, read-only) |

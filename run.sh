@@ -6,6 +6,9 @@ COMMAND=${1:-help}
 case $COMMAND in
     start)
         echo "🚀 Starting Personal AI services..."
+        # Record host LAN IPs so the phone-access panel can self-detect.
+        mkdir -p ~/.personal-ai
+        hostname -I 2>/dev/null | tr ' ' '\n' | grep -v '^$' > ~/.personal-ai/lan_ips.txt || true
         docker compose up -d llm-server vectordb
         echo "⏳ Waiting for model to load (30s)..."
         sleep 30
@@ -18,17 +21,17 @@ case $COMMAND in
         fi
         
         echo ""
-        echo "Starting web UI on http://localhost:3000"
-        cd web && python3 -m http.server 3000 &
+        echo "Starting web UI on http://localhost:8765"
+        cd web && python3 -m http.server 8765 &
         echo "✅ Web UI started"
         echo ""
-        echo "Open http://localhost:3000 in your browser"
+        echo "Open http://localhost:8765 in your browser"
         ;;
         
     stop)
         echo "🛑 Stopping services..."
         docker compose down
-        pkill -f "python3 -m http.server 3000" 2>/dev/null || true
+        pkill -f "python3 -m http.server 8765" 2>/dev/null || true
         echo "✅ Services stopped"
         ;;
         
