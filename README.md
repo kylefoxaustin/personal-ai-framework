@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-5.8.0-blue)
+![Version](https://img.shields.io/badge/version-5.9.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
@@ -256,6 +256,7 @@ Tested on RTX 5090 (32GB VRAM):
 
 | Version | Highlights |
 |---------|------------|
+| **v5.9.0** | Multi-user support — bcrypt login, per-user data isolation under `users/<name>/`, admin can add/remove users and reset passwords, auto-migrate single-user installs into `users/kyle/` |
 | **v5.8.0** | Agent platform + observability — Google Calendar, write-capable tools (sandboxed), reminders, multi-step agent loop, RLHF 👍/👎, training dashboard, selective training exclusion, mobile-friendly UI, Phone Access helper, Prometheus /metrics + Grafana dashboard |
 | **v5.7.0** | Smarter RAG, light mode, streaming TTS, training hardening — multi-doc synthesis, conv-aware RAG, citation score breakdown, theme toggle, conversation export |
 | **v5.6.0** | Model upgrade — Qwen 2.5 14B replaces Mixtral 8x7B, ChatML format, 32K context, unified training |

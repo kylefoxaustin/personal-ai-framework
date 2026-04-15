@@ -816,9 +816,61 @@
       .pending-action-preview { max-height: 7em; }
       .td-stats { grid-template-columns: repeat(2, 1fr); }
     }
+    /* Auth overlay */
+    .auth-overlay {
+      position: fixed; inset: 0; z-index: 10000;
+      background: var(--c-base, #0f0f1e);
+      display: none; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .auth-overlay.visible { display: flex; }
+    .auth-card {
+      background: var(--c-raised, #1a1a2e);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      max-width: 380px;
+      width: 100%;
+      color: var(--c-text, #eee);
+    }
+    .auth-card h2 { margin: 0 0 0.5rem 0; font-size: 1.4rem; }
+    .auth-card .subtitle { opacity: 0.7; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .auth-card label { display: block; margin-top: 0.75rem; font-size: 0.85rem; opacity: 0.85; }
+    .auth-card input {
+      width: 100%; padding: 0.6rem 0.75rem; margin-top: 0.3rem;
+      background: var(--c-base, #0f0f1e); color: var(--c-text, #eee);
+      border: 1px solid rgba(255,255,255,0.15); border-radius: 0.4rem;
+      font-size: 1rem; box-sizing: border-box;
+    }
+    .auth-card button.primary {
+      width: 100%; margin-top: 1.25rem; padding: 0.7rem;
+      background: var(--c-accent, #6366f1); color: #fff; border: none;
+      border-radius: 0.4rem; font-size: 1rem; cursor: pointer;
+    }
+    .auth-card button.primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .auth-card .error { color: #f87171; font-size: 0.85rem; margin-top: 0.75rem; min-height: 1em; }
+    .auth-card .footer { margin-top: 1rem; font-size: 0.8rem; opacity: 0.65; text-align: center; }
   </style>
 </head>
 <body>
+  <!-- Auth overlay: shown when not logged in or at first-run -->
+  <div id="authOverlay" class="auth-overlay">
+    <div class="auth-card">
+      <h2 id="authTitle">Sign in</h2>
+      <div class="subtitle" id="authSubtitle">Enter your username and password.</div>
+      <form id="authForm" onsubmit="submitAuth(event)">
+        <label>Username <input type="text" id="authUsername" autocomplete="username" required></label>
+        <label>Password <input type="password" id="authPassword" autocomplete="current-password" required></label>
+        <div id="authConfirmWrap" style="display:none;">
+          <label>Confirm password <input type="password" id="authPasswordConfirm" autocomplete="new-password"></label>
+        </div>
+        <div class="error" id="authError"></div>
+        <button class="primary" type="submit" id="authSubmit">Sign in</button>
+      </form>
+      <div class="footer" id="authFooter"></div>
+    </div>
+  </div>
+
   <!-- Mobile overlay (shown when sidebar drawer is open) -->
   <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="closeSidebar()"></div>
 
@@ -854,6 +906,7 @@
       <button id="voiceModeBtn" class="header-btn" onclick="toggleVoiceMode()" title="Voice mode — hold mic button to talk, Skippy speaks responses"><span class="icon">🎤</span> Voice</button>
       <button class="header-btn" onclick="openSettings()" title="AI personality, backup, email providers, and more"><span class="icon">⚙️</span> Settings</button>
       <button id="themeBtn" class="header-btn" onclick="toggleTheme()" title="Toggle light/dark theme"><span class="icon">🌙</span> <span class="theme-label">Theme</span></button>
+      <button id="userBtn" class="header-btn" onclick="logout()" title="Click to sign out"><span class="icon">👤</span> <span id="userBtnLabel">…</span></button>
       <div class="stats">
         <span id="status" class="status">● Connecting...</span>
         <span id="docs" class="docs"></span>
@@ -1001,7 +1054,23 @@
         ⚙️ Settings
         <button onclick="closeSettings()">✕</button>
       </h2>
-      
+
+      <div class="settings-section">
+        <h3>👤 Account</h3>
+        <div class="setting-row">
+          <label>Signed in as</label>
+          <span id="accountUsername" style="opacity: 0.85;">—</span>
+        </div>
+        <div class="setting-row">
+          <button onclick="openChangePassword()">🔑 Change password</button>
+          <button onclick="logout()" style="background: var(--c-danger);">🚪 Sign out</button>
+        </div>
+        <div class="setting-row" id="usersAdminRow" style="display:none;">
+          <label>User management (admin)</label>
+          <button onclick="openUsersAdmin()">👥 Manage users</button>
+        </div>
+      </div>
+
       <div class="settings-section">
         <h3>📬 Daily Digest</h3>
         <div class="setting-row">
@@ -1249,7 +1318,147 @@
     // Derive the API base from whatever host served this page, so the UI works
     // both on the desktop (localhost) and from a phone hitting the LAN IP.
     const API = `${window.location.protocol}//${window.location.hostname}:8080`;
-    
+
+    // ── Auth: bearer token in localStorage, auto-attached to every request ──
+    const AUTH_TOKEN_KEY = 'skippy_token';
+    function getAuthToken() { return localStorage.getItem(AUTH_TOKEN_KEY) || ''; }
+    function setAuthToken(t) {
+      if (t) localStorage.setItem(AUTH_TOKEN_KEY, t);
+      else localStorage.removeItem(AUTH_TOKEN_KEY);
+    }
+    let currentUser = null;
+
+    const _origFetch = window.fetch.bind(window);
+    window.fetch = function(input, init) {
+      init = init || {};
+      const url = typeof input === 'string' ? input : (input && input.url) || '';
+      if (url.startsWith(API)) {
+        const headers = new Headers(init.headers || (typeof input !== 'string' ? input.headers : undefined));
+        const tok = getAuthToken();
+        if (tok && !headers.has('Authorization')) headers.set('Authorization', 'Bearer ' + tok);
+        init.headers = headers;
+      }
+      return _origFetch(input, init).then(resp => {
+        // Global 401 handler: force logout and show login screen.
+        if (resp.status === 401 && url.startsWith(API) && !url.endsWith('/auth/login') && !url.endsWith('/auth/bootstrap') && !url.endsWith('/auth/needs-bootstrap')) {
+          setAuthToken('');
+          currentUser = null;
+          showAuthOverlay();
+        }
+        return resp;
+      });
+    };
+
+    // ── Auth overlay ──
+    let authMode = 'login'; // 'login' | 'bootstrap' | 'change'
+    function showAuthOverlay(mode) {
+      authMode = mode || 'login';
+      const overlay = document.getElementById('authOverlay');
+      const title = document.getElementById('authTitle');
+      const subtitle = document.getElementById('authSubtitle');
+      const submitBtn = document.getElementById('authSubmit');
+      const confirmWrap = document.getElementById('authConfirmWrap');
+      const footer = document.getElementById('authFooter');
+      document.getElementById('authError').textContent = '';
+      document.getElementById('authPassword').value = '';
+      document.getElementById('authPasswordConfirm').value = '';
+      if (authMode === 'bootstrap') {
+        title.textContent = 'Create admin account';
+        subtitle.textContent = 'First-run setup — this account owns the Personal AI framework.';
+        confirmWrap.style.display = 'block';
+        submitBtn.textContent = 'Create account';
+        footer.textContent = 'If you just migrated from the single-user install, use username "kyle" to adopt your existing data.';
+      } else if (authMode === 'change') {
+        title.textContent = 'Change password';
+        subtitle.textContent = 'Your password was reset — pick a new one.';
+        confirmWrap.style.display = 'block';
+        submitBtn.textContent = 'Set password';
+        footer.textContent = '';
+      } else {
+        title.textContent = 'Sign in';
+        subtitle.textContent = 'Enter your username and password.';
+        confirmWrap.style.display = 'none';
+        submitBtn.textContent = 'Sign in';
+        footer.textContent = '';
+      }
+      overlay.classList.add('visible');
+      document.getElementById('authUsername').focus();
+    }
+    function hideAuthOverlay() {
+      document.getElementById('authOverlay').classList.remove('visible');
+    }
+    async function submitAuth(e) {
+      e.preventDefault();
+      const username = document.getElementById('authUsername').value.trim();
+      const password = document.getElementById('authPassword').value;
+      const confirmPw = document.getElementById('authPasswordConfirm').value;
+      const errEl = document.getElementById('authError');
+      const btn = document.getElementById('authSubmit');
+      errEl.textContent = '';
+      if (authMode === 'bootstrap' || authMode === 'change') {
+        if (password !== confirmPw) { errEl.textContent = 'Passwords do not match.'; return; }
+        if (password.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; return; }
+      }
+      btn.disabled = true;
+      try {
+        let resp, data;
+        if (authMode === 'bootstrap') {
+          resp = await fetch(`${API}/auth/bootstrap`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({username, password}) });
+        } else if (authMode === 'change') {
+          // 'change' mode reuses current session token; username field holds the current password here.
+          errEl.textContent = 'Use the settings panel to change password.';
+          btn.disabled = false;
+          return;
+        } else {
+          resp = await fetch(`${API}/auth/login`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({username, password}) });
+        }
+        data = await resp.json();
+        if (!resp.ok) {
+          errEl.textContent = data.detail || 'Error';
+          btn.disabled = false;
+          return;
+        }
+        setAuthToken(data.token);
+        currentUser = data.user;
+        hideAuthOverlay();
+        if (currentUser && currentUser.must_change_password) {
+          alert('Your password was reset by an admin. Please change it in Settings → Account.');
+        }
+        // App init may have been waiting on this — kick off the usual load.
+        if (typeof postLoginInit === 'function') postLoginInit();
+      } catch (err) {
+        errEl.textContent = 'Network error — is the server running?';
+        btn.disabled = false;
+      }
+    }
+    async function logout() {
+      try { await fetch(`${API}/auth/logout`, { method: 'POST' }); } catch(e){}
+      setAuthToken('');
+      currentUser = null;
+      showAuthOverlay('login');
+    }
+    async function checkAuthAndInit() {
+      // Is this a first-run?
+      try {
+        const r = await fetch(`${API}/auth/needs-bootstrap`);
+        const d = await r.json();
+        if (d.needs_bootstrap) { showAuthOverlay('bootstrap'); return false; }
+      } catch (e) {
+        // If server isn't up yet, let the normal error path handle it.
+      }
+      if (!getAuthToken()) { showAuthOverlay('login'); return false; }
+      try {
+        const r = await fetch(`${API}/auth/me`);
+        if (!r.ok) { showAuthOverlay('login'); return false; }
+        const d = await r.json();
+        currentUser = d.user;
+        return true;
+      } catch (e) {
+        showAuthOverlay('login');
+        return false;
+      }
+    }
+
     // Conversation state
     let currentConversationId = null;
     let conversations = [];
@@ -1569,11 +1778,74 @@ sudo ufw allow 8080</pre>
     }
 
     // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
+    function postLoginInit() {
+      // Show username in header; indicate admin with a star.
+      if (currentUser) {
+        document.getElementById('userBtnLabel').textContent =
+          currentUser.username + (currentUser.is_admin ? ' ★' : '');
+      }
       loadConversations();
       requestNotificationPermissionOnce();
       pollReminders();
-      setInterval(pollReminders, 30000);
+      if (!postLoginInit._scheduled) {
+        postLoginInit._scheduled = true;
+        setInterval(pollReminders, 30000);
+      }
+    }
+
+    // ── Account + admin UI (change-password modal, users list) ──
+    async function openChangePassword() {
+      const current = prompt('Current password:');
+      if (!current) return;
+      const next = prompt('New password (min 6 chars):');
+      if (!next) return;
+      const confirm_ = prompt('Confirm new password:');
+      if (next !== confirm_) { alert('Passwords do not match'); return; }
+      const resp = await fetch(`${API}/auth/change-password`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({current_password: current, new_password: next}),
+      });
+      const data = await resp.json();
+      if (resp.ok) { showToast('✅ Password changed'); }
+      else { alert(data.detail || 'Failed'); }
+    }
+
+    async function openUsersAdmin() {
+      if (!currentUser || !currentUser.is_admin) { alert('Admin only'); return; }
+      const resp = await fetch(`${API}/users`);
+      const data = await resp.json();
+      let msg = 'Users:\n\n' + data.users.map(u => `• ${u.username}${u.is_admin ? ' (admin)' : ''}${u.must_change_password ? ' — must change password' : ''}`).join('\n');
+      msg += '\n\nActions: type a command below.\n  add <username> <password>\n  delete <username>\n  reset <username>\n  (blank to cancel)';
+      const cmd = prompt(msg);
+      if (!cmd) return;
+      const parts = cmd.trim().split(/\s+/);
+      try {
+        if (parts[0] === 'add' && parts.length >= 3) {
+          const r = await fetch(`${API}/users`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({username: parts[1], password: parts.slice(2).join(' '), is_admin: false}) });
+          const d = await r.json();
+          if (!r.ok) throw new Error(d.detail || 'create failed');
+          showToast(`✅ User ${parts[1]} created (must change password on first login)`);
+        } else if (parts[0] === 'delete' && parts.length === 2) {
+          if (!confirm(`Delete user '${parts[1]}'? Their data is NOT deleted from disk.`)) return;
+          const r = await fetch(`${API}/users/${parts[1]}`, { method: 'DELETE' });
+          if (!r.ok) { const d = await r.json(); throw new Error(d.detail || 'delete failed'); }
+          showToast(`✅ User ${parts[1]} deleted`);
+        } else if (parts[0] === 'reset' && parts.length === 2) {
+          const r = await fetch(`${API}/users/${parts[1]}/reset-password`, { method: 'POST' });
+          const d = await r.json();
+          if (!r.ok) throw new Error(d.detail || 'reset failed');
+          alert(`Temp password for ${parts[1]}:\n\n${d.temp_password}\n\nShare securely — they must change it on first login.`);
+        } else {
+          alert('Unknown command.');
+        }
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Gate the whole app behind a successful auth check.
+      checkAuthAndInit().then(ok => { if (ok) postLoginInit(); });
       // Load auto-remember preference
       autoRememberEnabled = localStorage.getItem('autoRemember') === 'true';
       if (autoRememberEnabled) {
@@ -3355,6 +3627,12 @@ sudo ufw allow 8080</pre>
 
     async function openSettings() {
       document.getElementById('settingsOverlay').classList.add('show');
+      // Populate account section.
+      if (currentUser) {
+        document.getElementById('accountUsername').textContent =
+          currentUser.username + (currentUser.is_admin ? ' (admin)' : '');
+        document.getElementById('usersAdminRow').style.display = currentUser.is_admin ? '' : 'none';
+      }
       await loadSettings();
     }
     

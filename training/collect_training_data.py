@@ -5,12 +5,16 @@ and converts it to Alpaca-format training examples.
 """
 import json
 import hashlib
+import os
 import sqlite3
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Optional
 
-DB_PATH = Path.home() / ".personal-ai" / "conversations.db"
+# Multi-user: training data is collected per-user. $SKIPPY_USER selects the user;
+# default 'kyle' for back-compat with the single-user install.
+_USER = os.environ.get("SKIPPY_USER") or "kyle"
+DB_PATH = Path.home() / ".personal-ai" / "users" / _USER / "conversations.db"
 DEFAULT_OUTPUT = Path(__file__).parent / "data" / "train_alpaca.json"
 
 

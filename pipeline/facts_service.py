@@ -9,38 +9,41 @@ from datetime import datetime
 from typing import List, Dict, Optional, Tuple
 import chromadb
 
-
-FACTS_COLLECTION = "learned_facts"
-
-# Singleton instance
-_facts_service = None
+from user_paths import facts_collection_name
 
 
-def get_facts_service():
-    """Get or create the global FactsService instance."""
-    global _facts_service
-    if _facts_service is None:
+# Per-user cache
+_facts_services: dict = {}
+
+
+def get_facts_service(username: str = None):
+    """Get or create the FactsService instance for this user."""
+    if username is None:
+        from auth_ctx import get_current_username
+        username = get_current_username()
+    if username not in _facts_services:
         try:
-            _facts_service = FactsService()
+            _facts_services[username] = FactsService(username)
         except Exception as e:
-            print(f"⚠️ Facts service not available: {e}")
+            print(f"⚠️ Facts service not available for {username}: {e}")
             return None
-    return _facts_service
+    return _facts_services[username]
 
 
 class FactsService:
-    """Manage learned facts in a separate ChromaDB collection."""
+    """Manage learned facts in a per-user ChromaDB collection."""
 
-    def __init__(self):
+    def __init__(self, username: str):
         host = os.environ.get("CHROMA_HOST", "vectordb")
         port = int(os.environ.get("CHROMA_PORT", 8000))
+        self.username = username
         self.client = chromadb.HttpClient(host=host, port=port)
         self.collection = self.client.get_or_create_collection(
-            name=FACTS_COLLECTION,
+            name=facts_collection_name(username),
             metadata={"hnsw:space": "cosine"}
         )
         count = self.collection.count()
-        print(f"✅ Facts service connected — {count} learned facts")
+        print(f"✅ Facts service connected for {username} — {count} learned facts")
 
     def add_fact(self, fact: str, source: str = "unknown", category: str = "general") -> str:
         """Store a learned fact. Returns the fact ID."""
