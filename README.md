@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-5.9.1-blue)
+![Version](https://img.shields.io/badge/version-5.9.2-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
@@ -256,6 +256,7 @@ Tested on RTX 5090 (32GB VRAM):
 
 | Version | Highlights |
 |---------|------------|
+| **v5.9.2** | Auth middleware bypasses CORS preflight (`OPTIONS`) — browser was getting 401 on every cross-origin preflight, silently hiding per-user data |
 | **v5.9.1** | Multi-user polish — `/health` is public (no more spurious session wipes), header wraps cleanly when buttons don't fit, 401 handler only logs out when a token was actually sent |
 | **v5.9.0** | Multi-user support — bcrypt login, per-user data isolation under `users/<name>/`, admin can add/remove users and reset passwords, auto-migrate single-user installs into `users/kyle/` |
 | **v5.8.0** | Agent platform + observability — Google Calendar, write-capable tools (sandboxed), reminders, multi-step agent loop, RLHF 👍/👎, training dashboard, selective training exclusion, mobile-friendly UI, Phone Access helper, Prometheus /metrics + Grafana dashboard |

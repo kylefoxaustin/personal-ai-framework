@@ -613,6 +613,12 @@ async def attach_user_ctx(request: Request, call_next):
     gate — individual endpoints can add Depends(require_admin) for stricter
     checks.
     """
+    # CORS preflights don't carry auth headers — let them through so the
+    # CORSMiddleware can answer. Without this the browser never gets past
+    # OPTIONS and never sends the real GET/POST.
+    if request.method == "OPTIONS":
+        return await call_next(request)
+
     token = _extract_token(request)
     user = user_service.session_user(token) if token else None
     path = request.url.path
