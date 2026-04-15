@@ -1,19 +1,28 @@
 #!/usr/bin/env python3
 """
-Settings Manager - Persistent settings for the Personal AI Framework
+Settings Manager — per-user persistent settings.
+
+Each user's settings.json lives under ~/.personal-ai/users/<username>/settings.json.
+Call `load_settings(username)` / `save_settings(username, settings)` — no
+global settings file anymore.
 """
 import json
 from pathlib import Path
 from typing import Dict, Any, Optional
-from datetime import datetime
 import subprocess
 
-CONFIG_DIR = Path.home() / ".personal-ai"
-SETTINGS_FILE = CONFIG_DIR / "settings.json"
+from user_paths import settings_path, email_creds, email_token, user_dir
+
+
+def _resolve(username):
+    if username is None:
+        from auth_ctx import get_current_username
+        return get_current_username()
+    return username
 
 DEFAULT_SETTINGS = {
     "personality": {
-        "name": "Assistant",
+        "name": "Skippy",
         "prompt": "You are a helpful AI assistant.",
         "traits": []
     },
@@ -32,14 +41,8 @@ DEFAULT_SETTINGS = {
         "enabled": False
     },
     "email_providers": {
-        "gmail": {
-            "configured": False,
-            "authenticated": False
-        },
-        "outlook": {
-            "configured": False,
-            "authenticated": False
-        }
+        "gmail": {"configured": False, "authenticated": False},
+        "outlook": {"configured": False, "authenticated": False}
     },
     "model": {
         "context_length": 16384,
@@ -56,35 +59,35 @@ DEFAULT_SETTINGS = {
 }
 
 
-def load_settings() -> Dict[str, Any]:
-    """Load settings from file."""
-    CONFIG_DIR.mkdir(exist_ok=True)
-    
-    if SETTINGS_FILE.exists():
+def load_settings(username: str = None) -> Dict[str, Any]:
+    username = _resolve(username)
+    path = settings_path(username)
+    if path.exists():
         try:
-            with open(SETTINGS_FILE) as f:
+            with open(path) as f:
                 saved = json.load(f)
-            # Merge with defaults (in case new settings added)
-            settings = DEFAULT_SETTINGS.copy()
+            settings = {k: (v.copy() if isinstance(v, dict) else v) for k, v in DEFAULT_SETTINGS.items()}
             for key in saved:
-                if key in settings:
-                    if isinstance(settings[key], dict):
-                        settings[key].update(saved[key])
-                    else:
-                        settings[key] = saved[key]
+                if key in settings and isinstance(settings[key], dict):
+                    settings[key].update(saved[key])
+                else:
+                    settings[key] = saved[key]
             return settings
-        except:
+        except Exception:
             pass
-    
-    return DEFAULT_SETTINGS.copy()
+    return {k: (v.copy() if isinstance(v, dict) else v) for k, v in DEFAULT_SETTINGS.items()}
 
 
-def save_settings(settings: Dict[str, Any]) -> bool:
-    """Save settings to file."""
-    CONFIG_DIR.mkdir(exist_ok=True)
-    
+def save_settings(username_or_settings=None, settings: Dict[str, Any] = None) -> bool:
+    # Back-compat: allow save_settings(settings_dict) with no username arg.
+    if isinstance(username_or_settings, dict) and settings is None:
+        settings = username_or_settings
+        username = _resolve(None)
+    else:
+        username = _resolve(username_or_settings)
+    path = settings_path(username)
     try:
-        with open(SETTINGS_FILE, 'w') as f:
+        with open(path, 'w') as f:
             json.dump(settings, f, indent=2)
         return True
     except Exception as e:
@@ -92,9 +95,14 @@ def save_settings(settings: Dict[str, Any]) -> bool:
         return False
 
 
-def get_setting(path: str) -> Any:
-    """Get a specific setting by dot-path (e.g., 'digest.enabled')."""
-    settings = load_settings()
+def get_setting(path_or_user: str, path: str = None) -> Any:
+    # Back-compat: get_setting("dot.path") with no explicit user.
+    if path is None:
+        path = path_or_user
+        username = _resolve(None)
+    else:
+        username = _resolve(path_or_user)
+    settings = load_settings(username)
     keys = path.split('.')
     value = settings
     for key in keys:
@@ -105,9 +113,16 @@ def get_setting(path: str) -> Any:
     return value
 
 
-def set_setting(path: str, value: Any) -> bool:
-    """Set a specific setting by dot-path."""
-    settings = load_settings()
+def set_setting(path_or_user: str, path_or_value, value=None) -> bool:
+    # Back-compat: set_setting("dot.path", value) with no explicit user.
+    if value is None:
+        path = path_or_user
+        value = path_or_value
+        username = _resolve(None)
+    else:
+        username = _resolve(path_or_user)
+        path = path_or_value
+    settings = load_settings(username)
     keys = path.split('.')
     target = settings
     for key in keys[:-1]:
@@ -115,87 +130,72 @@ def set_setting(path: str, value: Any) -> bool:
             target[key] = {}
         target = target[key]
     target[keys[-1]] = value
-    return save_settings(settings)
+    return save_settings(username, settings)
 
 
-def update_email_provider_status() -> Dict:
-    """Check actual status of email providers."""
-    gmail_creds = CONFIG_DIR / "gmail_credentials.json"
-    gmail_token = CONFIG_DIR / "gmail_token.pickle"
-    outlook_creds = CONFIG_DIR / "outlook_credentials.json"
-    outlook_token = CONFIG_DIR / "outlook_token.json"
-    
+def update_email_provider_status(username: str = None) -> Dict:
+    username = _resolve(username)
+    gmail_creds = email_creds(username)
+    gmail_tok = email_token(username)
+    outlook_creds = user_dir(username) / "outlook_credentials.json"
+    outlook_token = user_dir(username) / "outlook_token.json"
     return {
-        "gmail": {
-            "configured": gmail_creds.exists(),
-            "authenticated": gmail_token.exists()
-        },
-        "outlook": {
-            "configured": outlook_creds.exists(),
-            "authenticated": outlook_token.exists()
-        }
+        "gmail": {"configured": gmail_creds.exists(), "authenticated": gmail_tok.exists()},
+        "outlook": {"configured": outlook_creds.exists(), "authenticated": outlook_token.exists()}
     }
 
 
-def setup_digest_cron(enabled: bool, time: str, email: str) -> bool:
-    """Setup or remove digest cron job."""
+def setup_digest_cron(username: str, enabled: bool, time: str, email: str) -> bool:
+    """Setup or remove digest cron job, tagged by username so multiple users coexist."""
     script_path = Path(__file__).parent / "daily_digest.py"
-    
+    marker = f"# skippy-digest:{username}"
+
     try:
-        # Get existing crontab
         result = subprocess.run(['crontab', '-l'], capture_output=True, text=True)
         existing = result.stdout if result.returncode == 0 else ""
-        
-        # Remove old digest entries
-        lines = [l for l in existing.split('\n') if 'daily_digest.py' not in l and l.strip()]
-        
+        lines = [l for l in existing.split('\n') if marker not in l and l.strip()]
+
         if enabled and email:
             hour, minute = time.split(":")
-            cron_line = f'{minute} {hour} * * * cd {script_path.parent.parent} && /usr/bin/python3 {script_path} -t "{email}" -m mailto -q'
+            cron_line = (
+                f'{minute} {hour} * * * cd {script_path.parent.parent} && '
+                f'SKIPPY_USER="{username}" /usr/bin/python3 {script_path} -t "{email}" -m mailto -q  {marker}'
+            )
             lines.append(cron_line)
-        
-        # Install new crontab
+
         new_crontab = '\n'.join(lines) + '\n' if lines else ''
         process = subprocess.Popen(['crontab', '-'], stdin=subprocess.PIPE)
         process.communicate(new_crontab.encode())
-        
         return True
     except Exception as e:
         print(f"Error setting up cron: {e}")
         return False
 
 
-def apply_settings(settings: Dict[str, Any]) -> Dict[str, Any]:
-    """Apply settings and return status."""
-    results = {
-        "saved": False,
-        "digest_cron": None,
-        "errors": []
-    }
-    
-    # Save settings
-    if save_settings(settings):
+def apply_settings(username_or_settings=None, settings: Dict[str, Any] = None) -> Dict[str, Any]:
+    # Back-compat: apply_settings(settings_dict).
+    if isinstance(username_or_settings, dict) and settings is None:
+        settings = username_or_settings
+        username = _resolve(None)
+    else:
+        username = _resolve(username_or_settings)
+    results = {"saved": False, "digest_cron": None, "errors": []}
+    if save_settings(username, settings):
         results["saved"] = True
     else:
         results["errors"].append("Failed to save settings")
-    
-    # Setup digest cron
+
     digest = settings.get("digest", {})
-    if setup_digest_cron(
-        digest.get("enabled", False),
-        digest.get("time", "08:00"),
-        digest.get("email", "")
-    ):
+    if setup_digest_cron(username, digest.get("enabled", False), digest.get("time", "08:00"), digest.get("email", "")):
         results["digest_cron"] = "configured" if digest.get("enabled") else "disabled"
     else:
         results["errors"].append("Failed to configure digest cron")
-    
+
     return results
 
 
-# API-friendly functions
-def get_all_settings() -> Dict[str, Any]:
-    """Get all settings with live status updates."""
-    settings = load_settings()
-    settings["email_providers"] = update_email_provider_status()
+def get_all_settings(username: str = None) -> Dict[str, Any]:
+    username = _resolve(username)
+    settings = load_settings(username)
+    settings["email_providers"] = update_email_provider_status(username)
     return settings

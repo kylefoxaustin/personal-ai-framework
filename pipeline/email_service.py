@@ -15,9 +15,7 @@ from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-# Configuration directory
-CONFIG_DIR = Path.home() / ".personal-ai"
-CONFIG_DIR.mkdir(exist_ok=True)
+from user_paths import user_dir, email_creds, email_token
 
 
 @dataclass
@@ -96,14 +94,15 @@ def open_url(url: str) -> bool:
 
 
 class GmailService:
-    """Gmail integration using OAuth."""
-    
+    """Gmail integration using OAuth (per-user)."""
+
     SCOPES = ['https://www.googleapis.com/auth/gmail.send',
               'https://www.googleapis.com/auth/gmail.compose']
-    TOKEN_FILE = CONFIG_DIR / "gmail_token.pickle"
-    CREDS_FILE = CONFIG_DIR / "gmail_credentials.json"
-    
-    def __init__(self):
+
+    def __init__(self, username: str):
+        self.username = username
+        self.TOKEN_FILE = email_token(username)
+        self.CREDS_FILE = email_creds(username)
         self.service = None
         self._authenticated = False
     
@@ -262,13 +261,14 @@ Gmail Setup Instructions:
 
 
 class OutlookService:
-    """Outlook/Microsoft 365 integration using OAuth."""
-    
-    TOKEN_FILE = CONFIG_DIR / "outlook_token.json"
-    CREDS_FILE = CONFIG_DIR / "outlook_credentials.json"
+    """Outlook/Microsoft 365 integration using OAuth (per-user)."""
+
     SCOPES = ['Mail.Send', 'Mail.ReadWrite']
-    
-    def __init__(self):
+
+    def __init__(self, username: str):
+        self.username = username
+        self.TOKEN_FILE = user_dir(username) / "outlook_token.json"
+        self.CREDS_FILE = user_dir(username) / "outlook_credentials.json"
         self._authenticated = False
         self._token = None
     
@@ -459,10 +459,11 @@ Outlook/Microsoft 365 Setup Instructions:
 class EmailService:
     """Unified email service supporting Gmail and Outlook."""
     
-    def __init__(self, llm_url: str = "http://localhost:8080"):
+    def __init__(self, username: str, llm_url: str = "http://localhost:8080"):
+        self.username = username
         self.llm_url = llm_url
-        self.gmail = GmailService()
-        self.outlook = OutlookService()
+        self.gmail = GmailService(username)
+        self.outlook = OutlookService(username)
         self._default_provider = None
     
     def get_provider(self, provider: Optional[str] = None):
@@ -629,8 +630,9 @@ def main():
     send_parser.add_argument("-y", "--yes", action="store_true", help="Skip confirmation")
     
     args = parser.parse_args()
-    
-    service = EmailService()
+
+    username = os.environ.get("SKIPPY_USER") or "kyle"
+    service = EmailService(username)
     
     if args.command == "status":
         status = service.status()
@@ -649,9 +651,9 @@ def main():
         else:
             # Show instructions anyway
             if args.provider == "gmail":
-                print(GmailService().setup_instructions())
+                print(GmailService(username).setup_instructions())
             else:
-                print(OutlookService().setup_instructions())
+                print(OutlookService(username).setup_instructions())
     
     elif args.command == "auth":
         service.authenticate(args.provider)

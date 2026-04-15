@@ -43,6 +43,8 @@ Running list of planned features. Status as of **v5.7.0** (2026-04-14).
 
 ## 🔨 Remaining
 
+(All shipped 🎉 — open an issue or add a new section for the next round.)
+
 ### Agent capabilities
 (All shipped 🎉)
 
@@ -50,6 +52,7 @@ Running list of planned features. Status as of **v5.7.0** (2026-04-14).
 (All shipped 🎉)
 
 ### Infrastructure (unreleased)
+- **Multi-user support** — per-user data isolation under `~/.personal-ai/users/<username>/` (conversations.db, reminders.db, settings.json, memory/facts ChromaDB collections name-suffixed, skippy-workspace, Gmail/Calendar tokens). bcrypt password auth via `user_service.py` + sessions table; bearer-token in localStorage (chosen over cookies because of cross-origin HTTP quirks on LAN). FastAPI middleware gates all non-public paths; `require_admin` for user-management endpoints. OAuth callbacks stay public by encoding username into the OAuth `state` parameter. First-run bootstrap flow creates the admin account; legacy single-user install migrates into `users/kyle/` automatically on first startup. Web UI has login overlay, Account section in Settings with change-password + sign-out, admin-only Users management prompt.
 - **Prometheus / Grafana metrics** — `pipeline/metrics.py` defines 13 series (generations/latency/TTFT/throughput, tool calls by tool+outcome, feedback by rating, reminders created/fired, RAG queries by mode + docs-returned, model_loaded/maintenance_mode/knowledge_base_docs gauges). `/metrics` endpoint on the FastAPI server renders text format 0.0.4. Instrumented both `/generate` and `/generate/stream` (endpoint label distinguishes them). `monitoring/` has `prometheus.yml` (scrapes `host.docker.internal:8080`), `grafana-dashboard.json` (13 panels with p50/p95/p99 percentiles), and a README with one-liner docker commands for Prometheus (port 9090) + Grafana (port 3001).
 - **Mobile-friendly UI** — responsive `@media (max-width: 768px)` breakpoint: sidebar becomes a slide-in drawer (☰ hamburger + backdrop + auto-close on conversation select), header buttons collapse to icons, conversation actions always visible (no hover on touch), messages span full width, textarea uses 16px font so iOS doesn't auto-zoom. API base now derived from `window.location.hostname` so the frontend works from any device on the LAN without code changes.
 - **Phone Access helper** — new Settings → 📱 Phone Access panel. `./run.sh start` writes the host's LAN IPs to `~/.personal-ai/lan_ips.txt`; `/system/lan-ips` reads + filters out docker/loopback addresses. One-click **🔎 Detect LAN IP** auto-fills the URL. `/system/qr?data=...` returns a server-rendered SVG QR code (via the `qrcode` pip package). Includes firewall-troubleshooting hints for `ufw`.

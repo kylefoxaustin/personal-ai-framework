@@ -11,8 +11,12 @@ from typing import Dict, List, Optional
 from dataclasses import dataclass
 import subprocess
 
+from user_paths import user_dir
+
 LLM_URL = "http://localhost:8080"
-CONFIG_DIR = Path.home() / ".personal-ai"
+# Digest runs as a cron job per user. The SKIPPY_USER env var identifies the user.
+SKIPPY_USER = os.environ.get("SKIPPY_USER") or "kyle"
+CONFIG_DIR = user_dir(SKIPPY_USER)
 DIGEST_LOG = CONFIG_DIR / "digest_history.json"
 
 

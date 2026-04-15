@@ -8,14 +8,35 @@ import subprocess
 from pathlib import Path
 from typing import Dict, Any, List
 
+def _user() -> str:
+    from auth_ctx import current_user as _cu
+    u = _cu.get()
+    if not u:
+        raise RuntimeError("agent_tools invoked without a current_user context")
+    return u
+
+
+def _user_home_paths() -> List[Path]:
+    """Allowed read paths that include the current user's directory."""
+    from auth_ctx import current_user as _cu
+    u = _cu.get()
+    paths = [Path("/root/knowledge"), Path("/app")]
+    if u:
+        from user_paths import user_dir
+        paths.append(user_dir(u))
+    return paths
+
+
 # Sandboxing constants
 ALLOWED_PATHS = [
     Path("/root/knowledge"),
     Path("/root/.personal-ai"),
     Path("/app"),
 ]
-# Write and script execution are restricted to this sandbox dir
-WORKSPACE_DIR = Path("/root/.personal-ai/skippy-workspace")
+
+def _user_workspace() -> Path:
+    from user_paths import workspace_dir
+    return workspace_dir(_user())
 MAX_FILE_SIZE = 10 * 1024  # 10 KB
 MAX_WRITE_SIZE = 100 * 1024  # 100 KB
 GIT_ALLOWED_SUBCOMMANDS = {"status", "log", "diff", "branch", "show"}
@@ -127,7 +148,8 @@ TOOL_REGISTRY = {
 def _is_path_allowed(path_str: str) -> bool:
     try:
         target = Path(path_str).resolve()
-        return any(target == a or a in target.parents for a in ALLOWED_PATHS)
+        allowed = _user_home_paths()
+        return any(target == a or a in target.parents for a in allowed)
     except (ValueError, OSError):
         return False
 
@@ -248,13 +270,13 @@ def tool_git_status(params: Dict[str, str]) -> str:
 
 def _resolve_workspace_path(rel_path: str) -> Path:
     """
-    Resolve a user-supplied relative path against WORKSPACE_DIR, ensuring the
-    resolved target stays inside the workspace (blocks '..' traversal).
+    Resolve a user-supplied relative path against the current user's workspace,
+    ensuring the resolved target stays inside the workspace (blocks '..' traversal).
     Raises ValueError if the path escapes the sandbox.
     """
-    WORKSPACE_DIR.mkdir(parents=True, exist_ok=True)
-    candidate = (WORKSPACE_DIR / rel_path).resolve()
-    workspace_resolved = WORKSPACE_DIR.resolve()
+    workspace = _user_workspace()
+    candidate = (workspace / rel_path).resolve()
+    workspace_resolved = workspace.resolve()
     if workspace_resolved != candidate and workspace_resolved not in candidate.parents:
         raise ValueError("Path escapes workspace sandbox")
     return candidate
@@ -314,7 +336,7 @@ def tool_run_script(params: Dict[str, str]) -> str:
             capture_output=True,
             text=True,
             timeout=SCRIPT_TIMEOUT,
-            cwd=str(WORKSPACE_DIR),
+            cwd=str(_user_workspace()),
         )
         out = result.stdout.strip()
         err = result.stderr.strip()
@@ -342,8 +364,8 @@ def tool_schedule_reminder(params: Dict[str, str]) -> str:
     if not due_at:
         return "Error: 'due_at' parameter is required (ISO 8601 with timezone)."
     try:
-        import reminder_service
-        result = reminder_service.schedule(text, due_at)
+        from reminder_service import get_reminder_store
+        result = get_reminder_store(_user()).schedule(text, due_at)
         return f"Reminder #{result['id']} scheduled for {result['due_at']}: {text}"
     except ValueError as e:
         return f"Error: Invalid due_at format — {e}"
@@ -361,7 +383,8 @@ def tool_send_email(params: Dict[str, str]) -> str:
     import pickle, base64
     from pathlib import Path as _Path
     from email.mime.text import MIMEText
-    token_file = _Path("/root/.personal-ai/gmail_token.pickle")
+    from user_paths import email_token as _email_token
+    token_file = _email_token(_user())
     if not token_file.exists():
         return "Error: Gmail not connected. Open Settings → Email Providers → Setup Gmail."
 
@@ -390,7 +413,8 @@ def tool_send_email(params: Dict[str, str]) -> str:
 def tool_create_calendar_event(params: Dict[str, str]) -> str:
     try:
         import calendar_service
-        if not calendar_service.is_connected():
+        u = _user()
+        if not calendar_service.is_connected(u):
             return "Error: Calendar not connected. Open Settings → Google Calendar → Connect."
         summary = params.get("summary", "").strip()
         start = params.get("start", "").strip()
@@ -398,6 +422,7 @@ def tool_create_calendar_event(params: Dict[str, str]) -> str:
         if not (summary and start and end):
             return "Error: 'summary', 'start', and 'end' are required."
         result = calendar_service.create_event(
+            u,
             summary=summary,
             start=start,
             end=end,
@@ -412,14 +437,15 @@ def tool_create_calendar_event(params: Dict[str, str]) -> str:
 def tool_list_calendar_events(params: Dict[str, str]) -> str:
     try:
         import calendar_service
-        if not calendar_service.is_connected():
+        u = _user()
+        if not calendar_service.is_connected(u):
             return "Error: Calendar not connected. Open Settings → Google Calendar → Connect."
         days_raw = params.get("days", "7")
         try:
             days = int(days_raw)
         except (TypeError, ValueError):
             days = 7
-        events = calendar_service.list_events(days=days, max_results=25)
+        events = calendar_service.list_events(u, days=days, max_results=25)
         if not events:
             return f"No events in the next {days} day(s)."
         lines = [f"Upcoming events ({days} days):"]

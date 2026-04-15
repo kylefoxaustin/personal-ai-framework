@@ -36,8 +36,11 @@ import metrics
 # Global advanced RAG instance
 _advanced_rag = None
 
-# Email config directory
-EMAIL_CONFIG_DIR = Path.home() / ".personal-ai"
+# Email config directory (per-user — reads current user from auth context)
+def _email_dir() -> Path:
+    from user_paths import user_dir
+    from auth_ctx import get_current_username
+    return user_dir(get_current_username())
 
 def get_advanced_rag():
     global _advanced_rag
@@ -559,11 +562,85 @@ app = FastAPI(title="Personal AI LLM Server")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    # LAN-only app — echo any origin back so session cookies work across
+    # localhost/127.0.0.1/LAN-IP. Can't use allow_origins=["*"] with
+    # allow_credentials=True per the CORS spec.
+    allow_origin_regex=".*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Run one-time legacy → multi-user migration before any service touches disk.
+from migrate_to_multiuser import migrate as _migrate_multiuser
+_migrate_multiuser()
+
+# ── Auth ──
+import user_service
+import auth_ctx
+from fastapi import Request, Response, HTTPException, Cookie, Depends
+
+SESSION_COOKIE = "skippy_session"
+
+# Paths that skip auth (so the login page + OAuth callbacks can work).
+_PUBLIC_EXACT = {
+    "/", "/docs", "/openapi.json", "/redoc", "/favicon.ico",
+    "/auth/login", "/auth/logout", "/auth/bootstrap", "/auth/needs-bootstrap",
+    "/metrics", "/calendar/oauth-callback",
+}
+_PUBLIC_PREFIXES = ("/email/oauth-callback/",)  # /email/oauth-callback/gmail etc.
+
+
+def _is_public(path: str) -> bool:
+    if path in _PUBLIC_EXACT:
+        return True
+    return any(path.startswith(p) for p in _PUBLIC_PREFIXES)
+
+
+def _extract_token(request: Request) -> Optional[str]:
+    """Accept session token via Authorization: Bearer or session cookie."""
+    auth = request.headers.get("authorization") or request.headers.get("Authorization")
+    if auth and auth.lower().startswith("bearer "):
+        return auth.split(None, 1)[1].strip()
+    return request.cookies.get(SESSION_COOKIE)
+
+
+@app.middleware("http")
+async def attach_user_ctx(request: Request, call_next):
+    """
+    Set auth_ctx.current_user from the bearer token or session cookie; reject
+    unauthenticated requests to non-public paths. This is the blanket auth
+    gate — individual endpoints can add Depends(require_admin) for stricter
+    checks.
+    """
+    token = _extract_token(request)
+    user = user_service.session_user(token) if token else None
+    path = request.url.path
+    if not user and not _is_public(path):
+        from fastapi.responses import JSONResponse
+        return JSONResponse({"detail": "Not authenticated"}, status_code=401)
+    token_ctx = auth_ctx.current_user.set(user["username"] if user else None)
+    try:
+        response = await call_next(request)
+    finally:
+        auth_ctx.current_user.reset(token_ctx)
+    return response
+
+
+def require_auth(request: Request) -> dict:
+    """Dependency: resolve the current user or 401."""
+    token = _extract_token(request)
+    user = user_service.session_user(token) if token else None
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    return user
+
+
+def require_admin(user: dict = Depends(require_auth)) -> dict:
+    if not user.get("is_admin"):
+        raise HTTPException(status_code=403, detail="Admin required")
+    return user
+
 
 # Global model instance
 llm = None
@@ -1285,17 +1362,17 @@ def trigger_sync():
 
 # Email OAuth Setup endpoints
 @app.post("/email/upload-credentials/{provider}")
-async def upload_email_credentials(provider: str, file: UploadFile = File(...)):
+async def upload_email_credentials(provider: str, file: UploadFile = File(...), user: dict = Depends(require_auth)):
     """Upload OAuth credentials file for Gmail or Outlook"""
     if provider not in ["gmail", "outlook"]:
         raise HTTPException(status_code=400, detail="Provider must be 'gmail' or 'outlook'")
-    
-    EMAIL_CONFIG_DIR.mkdir(exist_ok=True)
+
+    _email_dir().mkdir(exist_ok=True)
     
     if provider == "gmail":
-        dest = EMAIL_CONFIG_DIR / "gmail_credentials.json"
+        dest = _email_dir() / "gmail_credentials.json"
     else:
-        dest = EMAIL_CONFIG_DIR / "outlook_credentials.json"
+        dest = _email_dir() / "outlook_credentials.json"
     
     try:
         with open(dest, "wb") as f:
@@ -1306,27 +1383,28 @@ async def upload_email_credentials(provider: str, file: UploadFile = File(...)):
 
 
 @app.get("/email/auth-url/{provider}")
-def get_auth_url(provider: str):
+def get_auth_url(provider: str, user: dict = Depends(require_auth)):
     """Get OAuth authorization URL"""
     if provider == "gmail":
-        creds_file = EMAIL_CONFIG_DIR / "gmail_credentials.json"
+        creds_file = _email_dir() / "gmail_credentials.json"
         if not creds_file.exists():
             raise HTTPException(status_code=400, detail="Upload credentials first")
-        
+
         try:
+            import secrets as _secrets
             from google_auth_oauthlib.flow import Flow
-            
+
             with open(creds_file) as f:
                 creds_data = json.load(f)
-            
-            # Create flow with localhost redirect
+
             flow = Flow.from_client_config(
                 creds_data,
                 scopes=['https://www.googleapis.com/auth/gmail.send',
                         'https://www.googleapis.com/auth/gmail.compose'],
-                redirect_uri='http://localhost:8080/email/oauth-callback/gmail'
+                redirect_uri='http://localhost:8080/email/oauth-callback/gmail',
+                state=f"{user['username']}:{_secrets.token_urlsafe(16)}",
             )
-            
+
             auth_url, state = flow.authorization_url(
                 access_type='offline',
                 include_granted_scopes='true',
@@ -1338,7 +1416,7 @@ def get_auth_url(provider: str):
                 "state": state,
                 "code_verifier": flow.code_verifier
             }
-            state_file = EMAIL_CONFIG_DIR / "gmail_oauth_state.json"
+            state_file = _email_dir() / "gmail_oauth_state.json"
             with open(state_file, 'w') as f:
                 json.dump(oauth_state, f)
             
@@ -1349,24 +1427,27 @@ def get_auth_url(provider: str):
             raise HTTPException(status_code=500, detail=str(e))
     
     elif provider == "outlook":
-        creds_file = EMAIL_CONFIG_DIR / "outlook_credentials.json"
+        creds_file = _email_dir() / "outlook_credentials.json"
         if not creds_file.exists():
             raise HTTPException(status_code=400, detail="Upload credentials first")
-        
+
         try:
+            import secrets as _secrets
             with open(creds_file) as f:
                 config = json.load(f)
-            
+
             client_id = config.get('client_id')
             redirect_uri = 'http://localhost:8080/email/oauth-callback/outlook'
             scope = 'https://graph.microsoft.com/Mail.Send https://graph.microsoft.com/Mail.ReadWrite offline_access'
-            
+            state = f"{user['username']}:{_secrets.token_urlsafe(16)}"
+
             auth_url = (
                 f"https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize"
                 f"?client_id={client_id}"
                 f"&response_type=code"
                 f"&redirect_uri={redirect_uri}"
                 f"&scope={scope}"
+                f"&state={state}"
                 f"&response_mode=query"
             )
             
@@ -1399,21 +1480,26 @@ def oauth_callback(provider: str, code: str = None, state: str = None, error: st
             </body></html>
         """)
     
+    # Public callback: identify user from the state prefix (set in get_auth_url).
+    if not state or ":" not in state:
+        return HTMLResponse("<html><body><h2>❌ Missing or malformed state</h2></body></html>")
+    u_from_state = state.split(":", 1)[0]
+    from user_paths import user_dir as _ud
+    _user_dir = _ud(u_from_state)
+
     try:
         if provider == "gmail":
             from google_auth_oauthlib.flow import Flow
             import pickle
-            
-            # Load stored state and code_verifier
-            state_file = EMAIL_CONFIG_DIR / "gmail_oauth_state.json"
+
+            state_file = _user_dir / "gmail_oauth_state.json"
             if not state_file.exists():
                 raise Exception("OAuth flow expired. Please try again.")
-            
+
             with open(state_file) as f:
                 oauth_state = json.load(f)
-            
-            # Load credentials config
-            creds_file = EMAIL_CONFIG_DIR / "gmail_credentials.json"
+
+            creds_file = _user_dir / "gmail_credentials.json"
             with open(creds_file) as f:
                 creds_data = json.load(f)
             
@@ -1431,9 +1517,9 @@ def oauth_callback(provider: str, code: str = None, state: str = None, error: st
             
             # Clean up state file
             state_file.unlink()
-            
+
             # Save token
-            token_file = EMAIL_CONFIG_DIR / "gmail_token.pickle"
+            token_file = _user_dir / "gmail_token.pickle"
             with open(token_file, 'wb') as f:
                 pickle.dump(creds, f)
             
@@ -1450,8 +1536,8 @@ def oauth_callback(provider: str, code: str = None, state: str = None, error: st
         
         elif provider == "outlook":
             import requests
-            
-            creds_file = EMAIL_CONFIG_DIR / "outlook_credentials.json"
+
+            creds_file = _user_dir / "outlook_credentials.json"
             with open(creds_file) as f:
                 config = json.load(f)
             
@@ -1470,7 +1556,7 @@ def oauth_callback(provider: str, code: str = None, state: str = None, error: st
             
             if token_response.status_code == 200:
                 token_data = token_response.json()
-                token_file = EMAIL_CONFIG_DIR / "outlook_token.json"
+                token_file = _user_dir / "outlook_token.json"
                 with open(token_file, 'w') as f:
                     json.dump(token_data, f)
                 
@@ -1514,7 +1600,7 @@ def disconnect_email(provider: str):
         raise HTTPException(status_code=400, detail="Provider must be 'gmail' or 'outlook'")
     
     for filename in files:
-        filepath = EMAIL_CONFIG_DIR / filename
+        filepath = _email_dir() / filename
         if filepath.exists():
             filepath.unlink()
     
@@ -1540,7 +1626,7 @@ def send_email(request: EmailRequest):
     from googleapiclient.discovery import build
     from google.auth.transport.requests import Request
 
-    token_file = EMAIL_CONFIG_DIR / "gmail_token.pickle"
+    token_file = _email_dir() / "gmail_token.pickle"
     if not token_file.exists():
         raise HTTPException(status_code=400, detail="Gmail not connected")
 
@@ -1575,7 +1661,7 @@ def create_draft(request: EmailRequest):
     from googleapiclient.discovery import build
     from google.auth.transport.requests import Request
 
-    token_file = EMAIL_CONFIG_DIR / "gmail_token.pickle"
+    token_file = _email_dir() / "gmail_token.pickle"
     if not token_file.exists():
         raise HTTPException(status_code=400, detail="Gmail not connected")
 
@@ -1756,7 +1842,7 @@ def training_run_detail(name: str):
 
 # ─────────────── Feedback (👍/👎) ───────────────
 
-import feedback_service
+# feedback helpers imported below with get_feedback_store
 
 
 class FeedbackRequest(PydanticBaseModel):
@@ -1765,10 +1851,13 @@ class FeedbackRequest(PydanticBaseModel):
     comment: Optional[str] = None
 
 
+from feedback_service import get_feedback_store
+
+
 @app.post("/feedback")
 def feedback_rate(req: FeedbackRequest):
     try:
-        result = feedback_service.rate(req.message_id, req.rating, req.comment)
+        result = get_feedback_store().rate(req.message_id, req.rating, req.comment)
         metrics.feedback_total.labels(rating=req.rating).inc()
         return result
     except ValueError as e:
@@ -1777,29 +1866,29 @@ def feedback_rate(req: FeedbackRequest):
 
 @app.delete("/feedback/{message_id}")
 def feedback_clear(message_id: int):
-    ok = feedback_service.clear(message_id)
+    ok = get_feedback_store().clear(message_id)
     return {"cleared": ok}
 
 
 @app.get("/feedback/stats")
 def feedback_stats():
-    return feedback_service.stats()
+    return get_feedback_store().stats()
 
 
 @app.get("/feedback/history")
 def feedback_history(days: int = 30):
-    return {"days": days, "buckets": feedback_service.history(days)}
+    return {"days": days, "buckets": get_feedback_store().history(days)}
 
 
 @app.get("/feedback/{message_id}")
 def feedback_get(message_id: int):
-    row = feedback_service.get(message_id)
+    row = get_feedback_store().get(message_id)
     return row or {"message_id": message_id, "rating": None}
 
 
 # ─────────────── Reminders ───────────────
 
-import reminder_service
+from reminder_service import get_reminder_store
 
 
 class ReminderCreate(PydanticBaseModel):
@@ -1810,7 +1899,7 @@ class ReminderCreate(PydanticBaseModel):
 @app.post("/reminders")
 def reminders_create(req: ReminderCreate):
     try:
-        result = reminder_service.schedule(req.text, req.due_at)
+        result = get_reminder_store().schedule(req.text, req.due_at)
         metrics.reminders_created_total.inc()
         return result
     except ValueError as e:
@@ -1819,26 +1908,26 @@ def reminders_create(req: ReminderCreate):
 
 @app.get("/reminders/upcoming")
 def reminders_upcoming(limit: int = 50):
-    return {"reminders": reminder_service.list_upcoming(limit=limit)}
+    return {"reminders": get_reminder_store().list_upcoming(limit=limit)}
 
 
 @app.get("/reminders/due")
 def reminders_due():
-    return {"reminders": reminder_service.get_due_unacked()}
+    return {"reminders": get_reminder_store().get_due_unacked()}
 
 
 @app.post("/reminders/{reminder_id}/ack")
 def reminders_ack(reminder_id: int):
-    ok = reminder_service.ack(reminder_id)
+    ok = get_reminder_store().ack(reminder_id)
     if not ok:
         raise HTTPException(status_code=404, detail="Reminder not found or already acked")
-    metrics.reminders_fired_total.inc()  # UI acks on display, so this is a real fire
+    metrics.reminders_fired_total.inc()
     return {"status": "ok"}
 
 
 @app.delete("/reminders/{reminder_id}")
 def reminders_cancel(reminder_id: int):
-    ok = reminder_service.cancel(reminder_id)
+    ok = get_reminder_store().cancel(reminder_id)
     if not ok:
         raise HTTPException(status_code=404, detail="Reminder not found or already closed")
     return {"status": "ok"}
@@ -1916,32 +2005,36 @@ class CalendarEventRequest(PydanticBaseModel):
 
 
 @app.get("/calendar/status")
-def calendar_status():
+def calendar_status(user: dict = Depends(require_auth)):
+    u = user["username"]
     return {
-        "configured": calendar_service.is_configured(),
-        "connected": calendar_service.is_connected(),
+        "configured": calendar_service.is_configured(u),
+        "connected": calendar_service.is_connected(u),
     }
 
 
 @app.get("/calendar/auth-url")
-def calendar_auth_url():
+def calendar_auth_url(user: dict = Depends(require_auth)):
     """Start Google Calendar OAuth. Requires gmail_credentials.json present."""
-    if not calendar_service.is_configured():
+    u = user["username"]
+    if not calendar_service.is_configured(u):
         raise HTTPException(
             status_code=400,
             detail="Upload Google OAuth credentials first (same file used for Gmail)",
         )
 
     try:
+        import secrets as _secrets
         from google_auth_oauthlib.flow import Flow
 
-        with open(calendar_service.CREDS_FILE) as f:
+        with open(calendar_service.creds_path(u)) as f:
             creds_data = json.load(f)
 
         flow = Flow.from_client_config(
             creds_data,
             scopes=calendar_service.SCOPES,
             redirect_uri="http://localhost:8080/calendar/oauth-callback",
+            state=f"{u}:{_secrets.token_urlsafe(16)}",
         )
 
         auth_url, state = flow.authorization_url(
@@ -1950,7 +2043,7 @@ def calendar_auth_url():
             prompt="consent",
         )
 
-        with open(calendar_service.OAUTH_STATE_FILE, "w") as f:
+        with open(calendar_service.oauth_state_path(u), "w") as f:
             json.dump({"state": state, "code_verifier": flow.code_verifier}, f)
 
         return {"auth_url": auth_url, "state": state}
@@ -1960,29 +2053,32 @@ def calendar_auth_url():
 
 @app.get("/calendar/oauth-callback")
 def calendar_oauth_callback(code: str = None, state: str = None, error: str = None):
+    """Public endpoint — Google redirects here. User identified via `state` prefix."""
     if error:
         return HTMLResponse(
             f"""<html><body style="font-family: sans-serif; text-align: center; padding: 50px;">
             <h2>❌ Authentication Failed</h2><p>{error}</p>
             <script>setTimeout(() => window.close(), 3000);</script></body></html>"""
         )
-    if not code:
+    if not code or not state or ":" not in state:
         return HTMLResponse(
             """<html><body style="font-family: sans-serif; text-align: center; padding: 50px;">
-            <h2>❌ No authorization code</h2></body></html>"""
+            <h2>❌ Missing code or state</h2></body></html>"""
         )
 
+    u = state.split(":", 1)[0]
     try:
         import pickle
         from google_auth_oauthlib.flow import Flow
 
-        if not calendar_service.OAUTH_STATE_FILE.exists():
+        state_path = calendar_service.oauth_state_path(u)
+        if not state_path.exists():
             raise Exception("OAuth flow expired. Please try again.")
 
-        with open(calendar_service.OAUTH_STATE_FILE) as f:
+        with open(state_path) as f:
             oauth_state = json.load(f)
 
-        with open(calendar_service.CREDS_FILE) as f:
+        with open(calendar_service.creds_path(u)) as f:
             creds_data = json.load(f)
 
         flow = Flow.from_client_config(
@@ -1993,9 +2089,9 @@ def calendar_oauth_callback(code: str = None, state: str = None, error: str = No
         flow.code_verifier = oauth_state.get("code_verifier")
         flow.fetch_token(code=code)
 
-        calendar_service.OAUTH_STATE_FILE.unlink()
+        state_path.unlink()
 
-        with open(calendar_service.TOKEN_FILE, "wb") as f:
+        with open(calendar_service.token_path(u), "wb") as f:
             pickle.dump(flow.credentials, f)
 
         return HTMLResponse(
@@ -2016,27 +2112,30 @@ def calendar_oauth_callback(code: str = None, state: str = None, error: str = No
 
 
 @app.delete("/calendar/disconnect")
-def calendar_disconnect():
-    calendar_service.disconnect()
+def calendar_disconnect(user: dict = Depends(require_auth)):
+    calendar_service.disconnect(user["username"])
     return {"status": "ok", "message": "calendar disconnected"}
 
 
 @app.get("/calendar/events")
-def calendar_events(days: int = 7, max_results: int = 25):
-    if not calendar_service.is_connected():
+def calendar_events(days: int = 7, max_results: int = 25, user: dict = Depends(require_auth)):
+    u = user["username"]
+    if not calendar_service.is_connected(u):
         raise HTTPException(status_code=400, detail="Calendar not connected")
     try:
-        return {"events": calendar_service.list_events(days=days, max_results=max_results)}
+        return {"events": calendar_service.list_events(u, days=days, max_results=max_results)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/calendar/create")
-def calendar_create(req: CalendarEventRequest):
-    if not calendar_service.is_connected():
+def calendar_create(req: CalendarEventRequest, user: dict = Depends(require_auth)):
+    u = user["username"]
+    if not calendar_service.is_connected(u):
         raise HTTPException(status_code=400, detail="Calendar not connected")
     try:
         return calendar_service.create_event(
+            u,
             summary=req.summary,
             start=req.start,
             end=req.end,
@@ -2162,8 +2261,8 @@ def auto_ingest_conversation(conv_id: str):
         memory = get_memory_service()
         
         # Mark as not ingested first so we can re-ingest
-        from conversation_store import get_db
-        conn = get_db()
+        store = get_conversation_store()
+        conn = store._conn()
         conn.execute("UPDATE conversations SET ingested_to_rag = FALSE WHERE id = ?", (conv_id,))
         conn.commit()
         conn.close()
@@ -2178,12 +2277,10 @@ def auto_ingest_conversation(conv_id: str):
 
 @app.get("/memory/list")
 def list_memories(limit: int = 100, offset: int = 0):
-    """List all memories stored in ChromaDB"""
+    """List all memories stored in ChromaDB (per-user collection)"""
     try:
-        from rag_service import get_rag_service
-        rag = get_rag_service()
-        
-        # Query ChromaDB for conversation memories
+        rag = get_memory_service().rag
+
         results = rag.collection.get(
             where={"source_type": "conversation_memory"},
             limit=limit,
@@ -2207,12 +2304,9 @@ def list_memories(limit: int = 100, offset: int = 0):
 
 @app.delete("/memory/item/{memory_id}")
 def delete_memory_item(memory_id: str):
-    """Delete a specific memory entry from ChromaDB"""
+    """Delete a specific memory entry from ChromaDB (per-user collection)"""
     try:
-        from rag_service import get_rag_service
-        rag = get_rag_service()
-        
-        # Delete from ChromaDB
+        rag = get_memory_service().rag
         rag.collection.delete(ids=[memory_id])
         
         return {"status": "deleted", "id": memory_id}
@@ -2222,26 +2316,25 @@ def delete_memory_item(memory_id: str):
 
 @app.get("/memory/stats")
 def memory_stats():
-    """Get memory statistics"""
+    """Get memory statistics (this user's conversation memory + shared knowledge base)"""
     try:
-        from rag_service import get_rag_service
-        rag = get_rag_service()
-        
-        # Count conversation memories
-        results = rag.collection.get(
+        mem_rag = get_memory_service().rag
+        results = mem_rag.collection.get(
             where={"source_type": "conversation_memory"},
             include=[]
         )
         memory_count = len(results['ids']) if results and results['ids'] else 0
-        
-        # Get conversation count from SQLite
+
         store = get_conversation_store()
         convs = store.list_conversations(limit=1000)
-        
+
+        from rag_service import get_rag_service
+        kb = get_rag_service()
+
         return {
             "memory_chunks": memory_count,
             "conversations": len(convs),
-            "total_knowledge_docs": rag.collection.count()
+            "total_knowledge_docs": kb.collection.count()
         }
     except Exception as e:
         return {"error": str(e)}
@@ -2884,6 +2977,114 @@ def clear_facts():
         raise HTTPException(status_code=503, detail="Facts service not available")
     count = facts.clear_all()
     return {"status": "ok", "deleted": count}
+
+
+# ── Auth + user-admin endpoints ──
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+
+class BootstrapRequest(BaseModel):
+    username: str
+    password: str
+
+
+class CreateUserRequest(BaseModel):
+    username: str
+    password: str
+    is_admin: bool = False
+
+
+@app.get("/auth/needs-bootstrap")
+def auth_needs_bootstrap():
+    """If there are no users yet, the UI should show a first-run admin create form."""
+    return {"needs_bootstrap": user_service.user_count() == 0}
+
+
+@app.post("/auth/bootstrap")
+def auth_bootstrap(req: BootstrapRequest):
+    """First-run endpoint: creates the initial admin account. Disabled once any user exists."""
+    if user_service.user_count() > 0:
+        raise HTTPException(status_code=409, detail="Users already exist; bootstrap disabled")
+    try:
+        user = user_service.create_user(req.username, req.password, is_admin=True)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    token = user_service.create_session(req.username)
+    return {"user": user, "token": token}
+
+
+@app.post("/auth/login")
+def auth_login(req: LoginRequest):
+    if not user_service.verify_password(req.username, req.password):
+        raise HTTPException(status_code=401, detail="Invalid username or password")
+    token = user_service.create_session(req.username)
+    user = user_service.session_user(token)
+    return {"user": user, "token": token}
+
+
+@app.post("/auth/logout")
+def auth_logout(request: Request):
+    token = _extract_token(request)
+    if token:
+        user_service.revoke_session(token)
+    return {"ok": True}
+
+
+@app.get("/auth/me")
+def auth_me(user: dict = Depends(require_auth)):
+    return {"user": user}
+
+
+@app.post("/auth/change-password")
+def auth_change_password(req: ChangePasswordRequest, user: dict = Depends(require_auth)):
+    if not user_service.verify_password(user["username"], req.current_password):
+        raise HTTPException(status_code=401, detail="Current password is incorrect")
+    try:
+        user_service.set_password(user["username"], req.new_password)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return {"ok": True}
+
+
+@app.get("/users")
+def admin_list_users(user: dict = Depends(require_admin)):
+    return {"users": user_service.list_users()}
+
+
+@app.post("/users")
+def admin_create_user(req: CreateUserRequest, user: dict = Depends(require_admin)):
+    try:
+        created = user_service.create_user(req.username, req.password, is_admin=req.is_admin, must_change=True)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    # Ensure the new user's directory + default settings exist.
+    from user_paths import user_dir
+    user_dir(req.username)
+    return {"user": created}
+
+
+@app.delete("/users/{username}")
+def admin_delete_user(username: str, user: dict = Depends(require_admin)):
+    if username == user["username"]:
+        raise HTTPException(status_code=400, detail="Cannot delete yourself")
+    user_service.revoke_all_sessions(username)
+    user_service.delete_user(username)
+    return {"ok": True}
+
+
+@app.post("/users/{username}/reset-password")
+def admin_reset_password(username: str, user: dict = Depends(require_admin)):
+    temp = user_service.reset_password(username)
+    user_service.revoke_all_sessions(username)
+    return {"temp_password": temp}
 
 
 if __name__ == "__main__":

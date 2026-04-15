@@ -19,3 +19,4 @@ Pillow
 duckduckgo-search
 qrcode
 prometheus_client
+bcrypt

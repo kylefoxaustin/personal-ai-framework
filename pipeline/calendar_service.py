@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
 """
-Calendar Service - Google Calendar integration.
+Calendar Service - Google Calendar integration (per-user).
 
-Reuses gmail_credentials.json (same Google OAuth client works for any
-Google API, as long as the Calendar API is enabled in the Cloud project).
-Stores its own token at calendar_token.pickle so Gmail auth is independent.
+Reuses gmail_credentials.json (same Google OAuth client works for any Google
+API as long as Calendar API is enabled). Each user has their own credentials
+and token under ~/.personal-ai/users/<username>/.
 """
 import pickle
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, List
 
-CONFIG_DIR = Path.home() / ".personal-ai"
-CREDS_FILE = CONFIG_DIR / "gmail_credentials.json"
-TOKEN_FILE = CONFIG_DIR / "calendar_token.pickle"
-OAUTH_STATE_FILE = CONFIG_DIR / "calendar_oauth_state.json"
+from user_paths import email_creds, calendar_token, user_dir
+
 
 SCOPES = [
     "https://www.googleapis.com/auth/calendar.readonly",
@@ -22,42 +20,53 @@ SCOPES = [
 ]
 
 
-def is_connected() -> bool:
-    return TOKEN_FILE.exists()
+def creds_path(username: str) -> Path:
+    return email_creds(username)
 
 
-def is_configured() -> bool:
-    return CREDS_FILE.exists()
+def token_path(username: str) -> Path:
+    return calendar_token(username)
 
 
-def _load_creds():
+def oauth_state_path(username: str) -> Path:
+    return user_dir(username) / "calendar_oauth_state.json"
+
+
+def is_connected(username: str) -> bool:
+    return token_path(username).exists()
+
+
+def is_configured(username: str) -> bool:
+    return creds_path(username).exists()
+
+
+def _load_creds(username: str):
     from google.auth.transport.requests import Request
 
-    with open(TOKEN_FILE, "rb") as f:
+    tok = token_path(username)
+    with open(tok, "rb") as f:
         creds = pickle.load(f)
 
     if not creds.valid and creds.expired and creds.refresh_token:
         creds.refresh(Request())
-        with open(TOKEN_FILE, "wb") as f:
+        with open(tok, "wb") as f:
             pickle.dump(creds, f)
 
     return creds
 
 
-def _service():
+def _service(username: str):
     from googleapiclient.discovery import build
+    return build("calendar", "v3", credentials=_load_creds(username))
 
-    return build("calendar", "v3", credentials=_load_creds())
 
-
-def list_events(days: int = 7, max_results: int = 25) -> List[Dict]:
-    """Return events from now through `days` ahead."""
+def list_events(username: str, days: int = 7, max_results: int = 25) -> List[Dict]:
     now = datetime.now(timezone.utc)
     time_min = now.isoformat()
     time_max = (now + timedelta(days=days)).isoformat()
 
     result = (
-        _service()
+        _service(username)
         .events()
         .list(
             calendarId="primary",
@@ -90,6 +99,7 @@ def list_events(days: int = 7, max_results: int = 25) -> List[Dict]:
 
 
 def create_event(
+    username: str,
     summary: str,
     start: str,
     end: str,
@@ -97,10 +107,6 @@ def create_event(
     location: Optional[str] = None,
     attendees: Optional[List[str]] = None,
 ) -> Dict:
-    """
-    Create an event. `start` and `end` must be ISO-8601 strings.
-    Use YYYY-MM-DD for all-day events, or full RFC3339 with timezone for timed.
-    """
     body: Dict = {"summary": summary}
 
     if "T" in start:
@@ -118,7 +124,7 @@ def create_event(
         body["attendees"] = [{"email": a} for a in attendees]
 
     result = (
-        _service()
+        _service(username)
         .events()
         .insert(calendarId="primary", body=body)
         .execute()
@@ -131,7 +137,7 @@ def create_event(
     }
 
 
-def disconnect() -> None:
-    for f in (TOKEN_FILE, OAUTH_STATE_FILE):
+def disconnect(username: str) -> None:
+    for f in (token_path(username), oauth_state_path(username)):
         if f.exists():
             f.unlink()
