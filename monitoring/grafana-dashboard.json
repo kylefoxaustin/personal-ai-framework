@@ -1,0 +1,117 @@
+{
+  "title": "Skippy — Personal AI Framework",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": { "from": "now-6h", "to": "now" },
+  "timezone": "",
+  "templating": { "list": [] },
+  "annotations": { "list": [] },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Model loaded",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "targets": [{ "expr": "skippy_model_loaded", "refId": "A" }],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "options": { "0": { "text": "DOWN", "color": "red" }, "1": { "text": "UP", "color": "green" } } }
+          ]
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Maintenance mode",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "targets": [{ "expr": "skippy_maintenance_mode", "refId": "A" }]
+    },
+    {
+      "type": "stat",
+      "title": "Knowledge base docs",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "targets": [{ "expr": "skippy_knowledge_base_docs", "refId": "A" }]
+    },
+    {
+      "type": "stat",
+      "title": "Generations / min",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "targets": [{ "expr": "sum(rate(skippy_generations_total[5m])) * 60", "refId": "A" }],
+      "fieldConfig": { "defaults": { "unit": "short", "decimals": 1 } }
+    },
+    {
+      "type": "stat",
+      "title": "👍 : 👎 ratio (7d)",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+      "targets": [{
+        "expr": "sum(increase(skippy_feedback_total{rating=\"up\"}[7d])) / clamp_min(sum(increase(skippy_feedback_total{rating=\"down\"}[7d])), 1)",
+        "refId": "A"
+      }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Generation latency (p50/p95/p99)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "targets": [
+        { "expr": "histogram_quantile(0.50, sum(rate(skippy_generation_latency_seconds_bucket[5m])) by (le))", "refId": "p50", "legendFormat": "p50" },
+        { "expr": "histogram_quantile(0.95, sum(rate(skippy_generation_latency_seconds_bucket[5m])) by (le))", "refId": "p95", "legendFormat": "p95" },
+        { "expr": "histogram_quantile(0.99, sum(rate(skippy_generation_latency_seconds_bucket[5m])) by (le))", "refId": "p99", "legendFormat": "p99" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "s" } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Time to first token (p50/p95)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "targets": [
+        { "expr": "histogram_quantile(0.50, sum(rate(skippy_generation_ttft_seconds_bucket[5m])) by (le))", "refId": "p50", "legendFormat": "p50" },
+        { "expr": "histogram_quantile(0.95, sum(rate(skippy_generation_ttft_seconds_bucket[5m])) by (le))", "refId": "p95", "legendFormat": "p95" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "s" } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Throughput (tokens/sec, p50/p95)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "targets": [
+        { "expr": "histogram_quantile(0.50, sum(rate(skippy_generation_tokens_per_second_bucket[5m])) by (le))", "refId": "p50", "legendFormat": "p50" },
+        { "expr": "histogram_quantile(0.95, sum(rate(skippy_generation_tokens_per_second_bucket[5m])) by (le))", "refId": "p95", "legendFormat": "p95" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "short" } }
+    },
+    {
+      "type": "timeseries",
+      "title": "RAG queries/sec by mode",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "targets": [{ "expr": "sum(rate(skippy_rag_queries_total[5m])) by (mode)", "refId": "A", "legendFormat": "{{mode}}" }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Tool calls / 5m by tool",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
+      "targets": [{ "expr": "sum(increase(skippy_tool_calls_total[5m])) by (tool)", "refId": "A", "legendFormat": "{{tool}}" }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Tool outcomes / 5m",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
+      "targets": [{ "expr": "sum(increase(skippy_tool_calls_total[5m])) by (outcome)", "refId": "A", "legendFormat": "{{outcome}}" }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Feedback / hour",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 28 },
+      "targets": [{ "expr": "sum(increase(skippy_feedback_total[1h])) by (rating)", "refId": "A", "legendFormat": "{{rating}}" }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Reminders created vs fired / hour",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 28 },
+      "targets": [
+        { "expr": "increase(skippy_reminders_created_total[1h])", "refId": "A", "legendFormat": "created" },
+        { "expr": "increase(skippy_reminders_fired_total[1h])", "refId": "B", "legendFormat": "fired" }
+      ]
+    }
+  ]
+}

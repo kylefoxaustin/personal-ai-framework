@@ -17,3 +17,5 @@ openai-whisper
 pytesseract
 Pillow
 duckduckgo-search
+qrcode
+prometheus_client

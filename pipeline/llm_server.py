@@ -5,12 +5,15 @@ Integrates with RAG pipeline for context-aware generation
 """
 import gc
 import os
+# Google OAuth: accept scope supersets (happens when user has already granted
+# related scopes, e.g. Gmail is connected and Calendar is then added).
+os.environ.setdefault("OAUTHLIB_RELAX_TOKEN_SCOPE", "1")
 import yaml
 import shutil
 import subprocess
 import threading
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List, Dict
 from pathlib import Path
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -27,7 +30,8 @@ from settings_manager import get_all_settings, apply_settings, load_settings, sa
 from conversation_store import get_conversation_store
 from memory_service import get_memory_service
 from facts_service import get_facts_service
-from agent_tools import execute_tool, get_tool_descriptions, set_web_search_fn
+from agent_tools import execute_tool, get_tool_descriptions, set_web_search_fn, is_confirm_tool
+import metrics
 
 # Global advanced RAG instance
 _advanced_rag = None
@@ -152,15 +156,23 @@ def _extract_conversation_topics(conversation_history: Optional[List], max_terms
     return [w for w, _ in counts.most_common(max_terms)]
 
 
-def _check_for_tool_use(prompt: str, conversation_history: Optional[List] = None):
+def _check_for_tool_use(
+    prompt: str,
+    conversation_history: Optional[List] = None,
+    tool_history: Optional[List[dict]] = None,
+):
     """Pass 1: Ask the LLM if it needs a tool to answer this question.
+
+    When `tool_history` is provided (list of {name, params, result} from prior
+    iterations of the agent loop), previous tool results are included in the
+    detection prompt so the model can decide whether another tool is needed.
 
     Returns {"name": str, "params": dict, "result": str} if a tool was used,
     or None if no tool is needed. Uses a short, low-temperature inference.
     """
     if llm is None or _maintenance_mode:
         return None
-    if _is_conversational(prompt):
+    if _is_conversational(prompt) and not tool_history:
         return None
 
     tool_desc = get_tool_descriptions()
@@ -173,19 +185,71 @@ def _check_for_tool_use(prompt: str, conversation_history: Optional[List] = None
                 context_hint = f"\nPrevious question: {msg.content[:150]}"
                 break
 
+    # Include prior tool calls + results in this chain, so the model knows
+    # what it has already gathered and can decide what's next.
+    history_hint = ""
+    if tool_history:
+        parts = ["\nTools already run in this chain (use their results; do not repeat them):"]
+        for step in tool_history:
+            preview = step.get("result", "")
+            if len(preview) > 500:
+                preview = preview[:500] + " [... truncated ...]"
+            parts.append(f"- {step['name']}({step.get('params', {})}) → {preview}")
+        history_hint = "\n".join(parts) + "\n"
+
+    now_local = datetime.now().astimezone()
+    now_str = now_local.strftime("%Y-%m-%dT%H:%M:%S%z")
+    now_human = now_local.strftime("%A, %B %d, %Y at %I:%M %p %Z")
+
     detection_prompt = f"""You have access to these tools:
 {tool_desc}
 
-Based on the user's question, decide if you need a tool. Most questions do NOT need tools.
-Use a tool ONLY when the question explicitly asks to read a file, list a directory, search the web for current info, or check git status.
+Current date/time: {now_human} (ISO: {now_str})
 
-If you need a tool, output exactly:
-<tool>TOOL_NAME</tool>
-<params>{{"key": "value"}}</params>
+Decide if you need a tool. Use a tool when the user asks to read a file, list a directory, search the web, check git status, write a file, run a script, schedule a reminder, send an email, create a calendar event, or list calendar events.
+Write/schedule/send tools (write_file, run_script, schedule_reminder, send_email, create_calendar_event) will NOT execute automatically — they propose an action the user must approve.
 
-If no tool is needed, output exactly:
+Output format — `params` MUST be a flat JSON object whose keys are the parameter names themselves, NOT literal "key"/"value" fields.
+
+Example 1 — user asks: Read /app/config.yaml
+<tool>read_file</tool>
+<params>{{"path": "/app/config.yaml"}}</params>
+
+Example 2 — user asks: Write a file hello.md in the workspace with text: hi there
+<tool>write_file</tool>
+<params>{{"path": "hello.md", "content": "hi there"}}</params>
+
+Example 2b — user asks: Write austin_facts.md with a bulleted list of facts
+<tool>write_file</tool>
+<params>{{"path": "austin_facts.md", "content": "# Austin Facts\\n\\n- Capital of Texas\\n- Known as the Live Music Capital of the World\\n- Home to the University of Texas\\n"}}</params>
+(Note: write_file content is raw file text — no 'Subject:' line, no greetings. Match the file extension's format.)
+
+Example 3 — user asks: Remind me tomorrow at 9am to call the dentist
+<tool>schedule_reminder</tool>
+<params>{{"text": "Call the dentist", "due_at": "<ISO 8601 for tomorrow 9am in user's timezone>"}}</params>
+
+Example 4 — user asks: Email alice@example.com with subject "Meeting" and body "Let's sync Friday"
+<tool>send_email</tool>
+<params>{{"to": "alice@example.com", "subject": "Meeting", "body": "Hi Alice,\\n\\nLet's sync Friday — does the morning work for you?\\n\\nThanks,\\nKyle"}}</params>
+
+Example 4b — after listing calendar, user wanted summary email. Compose a real message, do NOT paste the raw tool output:
+<tool>send_email</tool>
+<params>{{"to": "alice@example.com", "subject": "Your week ahead", "body": "Hi Alice,\\n\\nHere is a quick summary of your week:\\n- Tue 2pm: Test event\\n\\nLet me know if anything needs changing.\\n\\nBest,\\nKyle"}}</params>
+
+Example 5 — user asks: Add a calendar event "Dentist" tomorrow 2pm-3pm
+<tool>create_calendar_event</tool>
+<params>{{"summary": "Dentist", "start": "<tomorrow 2pm ISO>", "end": "<tomorrow 3pm ISO>"}}</params>
+
+Example 6 — user asks: What's on my calendar this week?
+<tool>list_calendar_events</tool>
+<params>{{"days": "7"}}</params>
+
+Example 7 — user asks: What is the capital of France?
 NO_TOOLS
-{context_hint}
+
+Now for the real question below, output either a tool call in the exact format shown, or exactly NO_TOOLS.
+If you have already gathered enough information from the tools already run, output NO_TOOLS so the assistant can respond to the user.
+{history_hint}{context_hint}
 User question: {prompt}"""
 
     try:
@@ -193,9 +257,13 @@ User question: {prompt}"""
         with _inference_lock:
             response = llm(
                 wrapped,
-                max_tokens=80,
+                max_tokens=2048,  # Allow long bodies for write_file/send_email
                 temperature=0.05,
-                stop=["</s>", "<|im_end|>", "\n\n\n"],
+                # Note: removed "\n\n\n" — multi-paragraph email/file bodies
+                # legitimately contain blank-line gaps and would be truncated.
+                # Parser slices the FIRST <params>...</params> pair, so trailing
+                # output from a chatty model is harmless.
+                stop=["</s>", "<|im_end|>"],
                 echo=False,
             )
 
@@ -205,25 +273,42 @@ User question: {prompt}"""
         if "NO_TOOLS" in text:
             return None
 
-        # Parse tool call
+        # Parse the FIRST tool call. Slice-based so we only consume the first
+        # <params>...</params> pair (model may emit multiple chained calls).
         tool_match = re.search(r"<tool>([\w_]+)</tool>", text)
-        params_match = re.search(r"<params>(\{.*?\})</params>", text, re.DOTALL)
-
         if not tool_match:
             return None
-
         tool_name = tool_match.group(1)
-        params = {}
-        if params_match:
+
+        params: dict = {}
+        after_tool = text[tool_match.end():]
+        ps = after_tool.find("<params>")
+        pe = after_tool.find("</params>", ps + 1) if ps != -1 else -1
+        if ps != -1 and pe != -1:
+            raw = after_tool[ps + len("<params>"):pe].strip()
             try:
-                params = json.loads(params_match.group(1))
+                params = json.loads(raw)
             except json.JSONDecodeError:
-                print(f"  [agent] Failed to parse params: {params_match.group(1)}")
+                print(f"  [agent] Failed to parse params: {raw[:200]}")
                 return None
+
+        # Scrub Qwen's email-header reflex for write_file content so the UI
+        # preview matches what will actually be written.
+        if tool_name == "write_file" and isinstance(params.get("content"), str):
+            params["content"] = re.sub(r"^\s*Subject:[^\n]*\n+", "", params["content"], count=1)
+
+        # Write-capable tools require explicit user confirmation — don't execute.
+        if is_confirm_tool(tool_name):
+            print(f"  ⏸  Pending confirmation: {tool_name}({params})")
+            metrics.tool_calls_total.labels(tool=tool_name, outcome="pending").inc()
+            return {"name": tool_name, "params": params, "pending": True}
 
         print(f"  🔧 Executing tool: {tool_name}({params})")
         result = execute_tool(tool_name, params)
         print(f"  [agent] Tool result: {len(result)} chars")
+
+        outcome = "error" if result.startswith("Error:") else "executed"
+        metrics.tool_calls_total.labels(tool=tool_name, outcome=outcome).inc()
 
         return {"name": tool_name, "params": params, "result": result}
 
@@ -232,17 +317,97 @@ User question: {prompt}"""
         return None
 
 
+MAX_AGENT_STEPS = 5
+
+
+def _pending_action_metadata(name: str, params: dict) -> dict:
+    """
+    Extra context to show alongside a pending confirm-tool action so the user
+    can decide with full information. For write_file, flags whether the target
+    file already exists and its size/mtime.
+    """
+    meta: dict = {}
+    if name == "write_file":
+        try:
+            import agent_tools as _at
+            from datetime import datetime as _dt
+            _at.WORKSPACE_DIR.mkdir(parents=True, exist_ok=True)
+            target = (_at.WORKSPACE_DIR / params.get("path", "")).resolve()
+            if _at.WORKSPACE_DIR.resolve() in target.parents and target.exists() and target.is_file():
+                st = target.stat()
+                meta["existing_file"] = {
+                    "size_bytes": st.st_size,
+                    "mtime_iso": _dt.fromtimestamp(st.st_mtime).isoformat(timespec="seconds"),
+                }
+        except Exception:
+            pass
+    return meta
+
+
+def _run_agent_loop(prompt: str, conversation_history: Optional[List] = None, max_steps: int = MAX_AGENT_STEPS):
+    """
+    Run up to `max_steps` iterations of tool detection + execution.
+
+    Safe tools execute and feed back into the next detection pass. A confirm-tool
+    breaks the loop and is surfaced as a pending action for user approval.
+
+    Returns:
+        {
+            "steps": [ {name, params, result} ... ],  # completed safe-tool steps
+            "pending": {name, params} or None,        # if chain stopped for approval
+        }
+    """
+    steps: list = []
+    for i in range(max_steps):
+        result = _check_for_tool_use(prompt, conversation_history, tool_history=steps)
+        if result is None:
+            break
+        if result.get("pending"):
+            return {"steps": steps, "pending": {"name": result["name"], "params": result["params"]}}
+        # Safe tool — record and continue
+        steps.append({
+            "name": result["name"],
+            "params": result["params"],
+            "result": result.get("result", ""),
+        })
+        print(f"  [agent] Loop step {i+1}/{max_steps} done: {result['name']}")
+    return {"steps": steps, "pending": None}
+
+
 def _build_tool_context(tool_result: dict) -> str:
     """Format a tool result for injection into the system context."""
     name = tool_result["name"]
-    params = tool_result["params"]
     result = tool_result["result"]
 
     if len(result) > 8000:
         result = result[:8000] + "\n[... truncated ...]"
 
-    param_str = ", ".join(f"{k}={v}" for k, v in params.items())
-    return f"TOOL RESULT ({name}({param_str})):\n\n{result}\n\n---\n\n"
+    # Wrap the result so the model uses it silently. Avoid leaking the
+    # "TOOL RESULT" / "---" / "[planning]" scaffolding into the reply.
+    return (
+        "You just ran a tool on the user's behalf. The tool has finished — do NOT plan, "
+        "do NOT describe what you are about to do, do NOT echo the tool name or a divider. "
+        "Use the data below to answer the user's question directly in natural language.\n\n"
+        f"<{name}_output>\n{result}\n</{name}_output>\n\n"
+    )
+
+
+def _build_tool_chain_context(steps: list) -> str:
+    """Format an agent-loop chain of tool results for pass-2 system context."""
+    if not steps:
+        return ""
+    parts = [
+        "You just ran a chain of tools on the user's behalf. All results are below. "
+        "Answer the user's question directly in natural language — do NOT echo the tool names, "
+        "do NOT emit '[planning]' or 'TOOL RESULT' or '---' dividers, do NOT describe what you did.\n"
+    ]
+    for step in steps:
+        name = step["name"]
+        result = step.get("result", "")
+        if len(result) > 6000:
+            result = result[:6000] + "\n[... truncated ...]"
+        parts.append(f"<{name}_output>\n{result}\n</{name}_output>")
+    return "\n".join(parts) + "\n\n"
 
 
 def _build_multiturn_prompt(
@@ -290,19 +455,29 @@ def _build_multiturn_prompt(
 
 def _is_conversational(prompt: str) -> bool:
     """Check if a prompt is conversational/greeting rather than a knowledge query."""
+    import re as _re
     p = prompt.strip().lower()
-    # Short greetings and conversational phrases
-    if len(p.split()) <= 6 and any(w in p for w in [
+    tokens = p.split()
+    # Match whole words/phrases, not substrings (fixes "this" matching "hi")
+    single_words = {
         'hi', 'hello', 'hey', 'howdy', 'sup', 'yo',
-        'good morning', 'good afternoon', 'good evening',
-        'how are you', 'what\'s up', 'whats up',
+        'thanks', 'bye', 'goodbye',
+    }
+    phrases = [
+        'good morning', 'good afternoon', 'good evening', 'good night',
+        'how are you', "what's up", 'whats up',
         'tell me about yourself', 'who are you', 'what are you',
-        'what is your name', 'what\'s your name', 'whats your name',
-        'thanks', 'thank you', 'bye', 'goodbye', 'good night',
-    ]):
-        return True
+        'what is your name', "what's your name", 'whats your name',
+        'thank you',
+    ]
+    if len(tokens) <= 6:
+        word_set = set(_re.findall(r"[a-z']+", p))
+        if single_words & word_set:
+            return True
+        if any(phrase in p for phrase in phrases):
+            return True
     # Very short messages (1-3 words) are likely conversational
-    if len(p.split()) <= 3 and not any(c in p for c in ['?', 'how to', 'what is', 'explain', 'find']):
+    if len(tokens) <= 3 and not any(c in p for c in ['?', 'how to', 'what is', 'explain', 'find']):
         return True
     return False
 
@@ -348,6 +523,7 @@ class GenerationResponse(BaseModel):
     model: str
     context_used: Optional[List[str]] = None
     citations: Optional[List[dict]] = None  # Source citations with scores
+    pending_action: Optional[dict] = None  # {name, params} — write tool awaiting user approval
 
 class StreamingRequest(BaseModel):
     prompt: str
@@ -474,7 +650,10 @@ def generate(request: GenerationRequest):
         raise HTTPException(status_code=503, detail="Model is retraining. Please wait — this usually takes ~2.5 hours.")
     if llm is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
-    
+
+    import time as _time
+    _gen_start = _time.time()
+
     context_docs = request.context
 
     citations = None
@@ -529,6 +708,8 @@ def generate(request: GenerationRequest):
             else:
                 rag = get_rag_service()
                 context_docs = rag.get_context(retrieval_query, k=rag_k)
+            metrics.rag_queries_total.labels(mode="synthesis" if synthesis_mode else "standard").inc()
+            metrics.rag_docs_returned.observe(len(context_docs) if context_docs else 0)
         except Exception as e:
             print(f"RAG retrieval failed: {e}")
             context_docs = []
@@ -587,10 +768,25 @@ def generate(request: GenerationRequest):
                 system_context += f"{doc}\n\n"
             system_context += "---\n\n"
 
-    # Agent tool check (Pass 1 — detect if a tool is needed)
-    tool_result = _check_for_tool_use(request.prompt, request.conversation_history)
-    if tool_result:
-        system_context += _build_tool_context(tool_result)
+    # Agent loop — up to MAX_AGENT_STEPS safe-tool iterations, then either
+    # continue or stop for confirm-tool approval.
+    agent = _run_agent_loop(request.prompt, request.conversation_history)
+    if agent["pending"]:
+        name = agent["pending"]["name"]
+        params = agent["pending"]["params"]
+        preview_parts = [f"{k}={repr(v)[:60]}" for k, v in params.items() if k != "content"]
+        if "content" in params:
+            preview_parts.append(f"content=[{len(str(params['content']))} chars]")
+        prefix = f"After running {len(agent['steps'])} prior step(s), " if agent["steps"] else ""
+        msg = f"{prefix}I'd like to run `{name}({', '.join(preview_parts)})`. Please approve or deny below."
+        return GenerationResponse(
+            text=msg,
+            tokens_used=0,
+            model="qwen2.5-14b",
+            pending_action={"name": name, "params": params, "meta": _pending_action_metadata(name, params)},
+        )
+    if agent["steps"]:
+        system_context += _build_tool_chain_context(agent["steps"])
 
     # Build multi-turn prompt with proper [INST] format
     full_prompt = _build_multiturn_prompt(system_context, request.conversation_history, request.prompt)
@@ -610,9 +806,16 @@ def generate(request: GenerationRequest):
             echo=False
         )
 
+    _elapsed = _time.time() - _gen_start
+    metrics.generations_total.labels(endpoint="generate").inc()
+    metrics.generation_latency_seconds.labels(endpoint="generate").observe(_elapsed)
+    _tokens = response['usage']['total_tokens']
+    if _elapsed > 0 and _tokens > 0:
+        metrics.generation_tokens_per_second.observe(_tokens / _elapsed)
+
     return GenerationResponse(
         text=response['choices'][0]['text'].strip(),
-        tokens_used=response['usage']['total_tokens'],
+        tokens_used=_tokens,
         model="qwen2.5-14b",
         context_used=context_docs if context_docs else None,
         citations=citations
@@ -681,6 +884,8 @@ def generate_stream(request: StreamingRequest):
             else:
                 rag = get_rag_service()
                 context_docs = rag.get_context(retrieval_query, k=rag_k)
+            metrics.rag_queries_total.labels(mode="synthesis" if synthesis_mode else "standard").inc()
+            metrics.rag_docs_returned.observe(len(context_docs) if context_docs else 0)
         except Exception as e:
             print(f"RAG retrieval failed: {e}")
             context_docs = []
@@ -739,10 +944,33 @@ def generate_stream(request: StreamingRequest):
                 system_context += f"{doc}\n\n"
             system_context += "---\n\n"
 
-    # Agent tool check (Pass 1 — detect if a tool is needed)
-    tool_result = _check_for_tool_use(request.prompt, request.conversation_history)
-    if tool_result:
-        system_context += _build_tool_context(tool_result)
+    # Agent loop — run up to MAX_AGENT_STEPS iterations of safe tools, then
+    # either continue to the final generation or stop for a confirm-tool approval.
+    agent = _run_agent_loop(request.prompt, request.conversation_history)
+    completed_steps = agent["steps"]
+    pending = agent["pending"]
+
+    if pending:
+        name = pending["name"]
+        params = pending["params"]
+        preview_parts = [f"{k}={repr(v)[:60]}" for k, v in params.items() if k != "content"]
+        if "content" in params:
+            preview_parts.append(f"content=[{len(str(params['content']))} chars]")
+        prefix = f"After running {len(completed_steps)} prior step(s), " if completed_steps else ""
+        msg = f"{prefix}I'd like to run `{name}({', '.join(preview_parts)})`. Please approve or deny below."
+
+        def pending_stream():
+            # Emit any prior safe-tool steps first so the UI can show them
+            for step in completed_steps:
+                yield f"data: {json.dumps({'type': 'tool_use', 'tool': step['name'], 'params': step['params'], 'result': step['result']})}\n\n"
+            yield f"data: {json.dumps({'type': 'pending_action', 'name': name, 'params': params, 'meta': _pending_action_metadata(name, params)})}\n\n"
+            yield f"data: {json.dumps({'type': 'token', 'token': msg})}\n\n"
+            yield f"data: {json.dumps({'type': 'done', 'text': msg, 'metrics': {}})}\n\n"
+
+        return StreamingResponse(pending_stream(), media_type="text/event-stream")
+
+    if completed_steps:
+        system_context += _build_tool_chain_context(completed_steps)
 
     # Build multi-turn prompt with proper [INST] format
     full_prompt = _build_multiturn_prompt(system_context, request.conversation_history, request.prompt)
@@ -754,9 +982,15 @@ def generate_stream(request: StreamingRequest):
     def generate_tokens():
         import time
 
-        # Send tool-use indicator if a tool was used
-        if tool_result:
-            yield f"data: {json.dumps({'type': 'tool_use', 'tool': tool_result['name'], 'params': tool_result['params']})}\n\n"
+        # Send one tool-use event per completed step in the agent loop
+        for step in completed_steps:
+            trace = {
+                "type": "tool_use",
+                "tool": step["name"],
+                "params": step["params"],
+                "result": step.get("result", ""),
+            }
+            yield f"data: {json.dumps(trace)}\n\n"
 
         # Send initial metadata (context, citations)
         meta = {
@@ -797,6 +1031,13 @@ def generate_stream(request: StreamingRequest):
         total_time = end_time - start_time
         ttft = (first_token_time - start_time) if first_token_time else 0
         throughput = token_count / total_time if total_time > 0 else 0
+
+        metrics.generations_total.labels(endpoint="stream").inc()
+        metrics.generation_latency_seconds.labels(endpoint="stream").observe(total_time)
+        if first_token_time is not None:
+            metrics.generation_ttft_seconds.observe(ttft)
+        if throughput > 0:
+            metrics.generation_tokens_per_second.observe(throughput)
 
         # Send completion signal with stats and metrics
         yield f"data: {json.dumps({'type': 'done', 'text': full_response.strip(), 'metrics': {'ttft': round(ttft, 2), 'tokens': token_count, 'total_time': round(total_time, 2), 'throughput': round(throughput, 1)}})}\n\n"
@@ -1297,14 +1538,20 @@ def send_email(request: EmailRequest):
     import base64
     from email.mime.text import MIMEText
     from googleapiclient.discovery import build
-    
+    from google.auth.transport.requests import Request
+
     token_file = EMAIL_CONFIG_DIR / "gmail_token.pickle"
     if not token_file.exists():
         raise HTTPException(status_code=400, detail="Gmail not connected")
-    
+
     with open(token_file, 'rb') as f:
         creds = pickle.load(f)
-    
+
+    if not creds.valid and creds.expired and creds.refresh_token:
+        creds.refresh(Request())
+        with open(token_file, 'wb') as f:
+            pickle.dump(creds, f)
+
     service = build('gmail', 'v1', credentials=creds)
     
     message = MIMEText(request.body)
@@ -1326,14 +1573,20 @@ def create_draft(request: EmailRequest):
     import base64
     from email.mime.text import MIMEText
     from googleapiclient.discovery import build
-    
+    from google.auth.transport.requests import Request
+
     token_file = EMAIL_CONFIG_DIR / "gmail_token.pickle"
     if not token_file.exists():
         raise HTTPException(status_code=400, detail="Gmail not connected")
-    
+
     with open(token_file, 'rb') as f:
         creds = pickle.load(f)
-    
+
+    if not creds.valid and creds.expired and creds.refresh_token:
+        creds.refresh(Request())
+        with open(token_file, 'wb') as f:
+            pickle.dump(creds, f)
+
     service = build('gmail', 'v1', credentials=creds)
     
     message = MIMEText(request.body)
@@ -1358,6 +1611,441 @@ def create_draft(request: EmailRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ─────────────── Metrics ───────────────
+
+from fastapi import Response
+
+
+@app.get("/metrics")
+def prometheus_metrics():
+    """Prometheus text-format metrics scrape endpoint."""
+    # Refresh gauges that are cheap to compute on-demand.
+    metrics.model_loaded.set(1 if llm is not None else 0)
+    metrics.maintenance_mode.set(1 if _maintenance_mode else 0)
+    try:
+        stats = get_rag_service().get_stats()
+        metrics.knowledge_base_docs.set(stats.get("document_count", 0))
+    except Exception:
+        pass
+    return Response(content=metrics.render_text(), media_type="text/plain; version=0.0.4")
+
+
+# ─────────────── System / Phone Access helpers ───────────────
+
+@app.get("/system/lan-ips")
+def system_lan_ips():
+    """
+    Return LAN IPv4 addresses of the host, written at container start by
+    `run.sh` to ~/.personal-ai/lan_ips.txt. Filters out docker-bridge and
+    loopback addresses so the UI gets the phone-reachable ones.
+    """
+    ip_file = Path("/root/.personal-ai/lan_ips.txt")
+    if not ip_file.exists():
+        return {"ips": [], "note": "Run ./run.sh start to refresh LAN IP list"}
+    try:
+        raw = [ln.strip() for ln in ip_file.read_text().splitlines() if ln.strip()]
+    except Exception:
+        return {"ips": [], "note": "Could not read LAN IP file"}
+
+    def is_real_lan(ip: str) -> bool:
+        if ip.startswith("127.") or ip.startswith("172.17.") or ip.startswith("172.18."):
+            return False
+        if ip.startswith("169.254."):
+            return False
+        return True
+
+    return {"ips": [ip for ip in raw if is_real_lan(ip)]}
+
+
+@app.get("/system/qr")
+def system_qr(data: str):
+    """Return an SVG QR code for `data`. Used by the phone-access panel."""
+    try:
+        import qrcode
+        import qrcode.image.svg
+    except ImportError:
+        raise HTTPException(status_code=500, detail="qrcode library not installed")
+    factory = qrcode.image.svg.SvgImage
+    img = qrcode.make(data, image_factory=factory, box_size=10, border=2)
+    import io
+    buf = io.BytesIO()
+    img.save(buf)
+    svg = buf.getvalue().decode()
+    return HTMLResponse(content=svg, media_type="image/svg+xml")
+
+
+# ─────────────── Training Dashboard ───────────────
+
+TRAINING_OUTPUT_DIR = Path("/app/../training/output")
+
+
+@app.get("/training/runs")
+def training_runs():
+    """
+    Enumerate LoRA training checkpoints in training/output/ and summarize each.
+    """
+    import glob
+    # Path inside the container is /app; host training/ is not mounted by default.
+    # Try a few likely locations so this works in both dev and container.
+    candidates = [
+        Path("/app/training/output"),
+        Path("/app/../training/output"),
+        Path("/training/output"),
+    ]
+    out_dir = next((p for p in candidates if p.exists()), None)
+    if out_dir is None:
+        return {"runs": [], "output_dir": None, "note": "training/output not mounted in container"}
+
+    runs = []
+    for sub in sorted(out_dir.iterdir()):
+        if not sub.is_dir():
+            continue
+        state = sub / "trainer_state.json"
+        if not state.exists():
+            continue
+        try:
+            with open(state) as f:
+                data = json.load(f)
+        except Exception:
+            continue
+        log = data.get("log_history", [])
+        train_losses = [x.get("loss") for x in log if "loss" in x and "eval_loss" not in x]
+        eval_losses = [x.get("eval_loss") for x in log if "eval_loss" in x]
+        runs.append({
+            "name": sub.name,
+            "global_step": data.get("global_step"),
+            "epochs": data.get("num_train_epochs"),
+            "final_train_loss": train_losses[-1] if train_losses else None,
+            "final_eval_loss": eval_losses[-1] if eval_losses else None,
+            "log_entries": len(log),
+            "mtime_iso": datetime.fromtimestamp(state.stat().st_mtime).isoformat(timespec="seconds"),
+        })
+    return {"runs": runs, "output_dir": str(out_dir)}
+
+
+@app.get("/training/run/{name}")
+def training_run_detail(name: str):
+    """Return trainer_state.log_history for plotting."""
+    # Same candidate search as above; and sanitize `name` (no '..').
+    if ".." in name or "/" in name:
+        raise HTTPException(status_code=400, detail="Invalid checkpoint name")
+    candidates = [
+        Path("/app/training/output"),
+        Path("/app/../training/output"),
+        Path("/training/output"),
+    ]
+    out_dir = next((p for p in candidates if p.exists()), None)
+    if out_dir is None:
+        raise HTTPException(status_code=404, detail="training/output not available")
+    state = out_dir / name / "trainer_state.json"
+    if not state.exists():
+        raise HTTPException(status_code=404, detail="Checkpoint not found")
+    with open(state) as f:
+        data = json.load(f)
+    log = data.get("log_history", [])
+    return {
+        "name": name,
+        "global_step": data.get("global_step"),
+        "epochs": data.get("num_train_epochs"),
+        "series": [
+            {"step": x.get("step"), "loss": x.get("loss"), "eval_loss": x.get("eval_loss"), "lr": x.get("learning_rate")}
+            for x in log
+        ],
+    }
+
+
+# ─────────────── Feedback (👍/👎) ───────────────
+
+import feedback_service
+
+
+class FeedbackRequest(PydanticBaseModel):
+    message_id: int
+    rating: str  # 'up' or 'down'
+    comment: Optional[str] = None
+
+
+@app.post("/feedback")
+def feedback_rate(req: FeedbackRequest):
+    try:
+        result = feedback_service.rate(req.message_id, req.rating, req.comment)
+        metrics.feedback_total.labels(rating=req.rating).inc()
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.delete("/feedback/{message_id}")
+def feedback_clear(message_id: int):
+    ok = feedback_service.clear(message_id)
+    return {"cleared": ok}
+
+
+@app.get("/feedback/stats")
+def feedback_stats():
+    return feedback_service.stats()
+
+
+@app.get("/feedback/history")
+def feedback_history(days: int = 30):
+    return {"days": days, "buckets": feedback_service.history(days)}
+
+
+@app.get("/feedback/{message_id}")
+def feedback_get(message_id: int):
+    row = feedback_service.get(message_id)
+    return row or {"message_id": message_id, "rating": None}
+
+
+# ─────────────── Reminders ───────────────
+
+import reminder_service
+
+
+class ReminderCreate(PydanticBaseModel):
+    text: str
+    due_at: str
+
+
+@app.post("/reminders")
+def reminders_create(req: ReminderCreate):
+    try:
+        result = reminder_service.schedule(req.text, req.due_at)
+        metrics.reminders_created_total.inc()
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid due_at: {e}")
+
+
+@app.get("/reminders/upcoming")
+def reminders_upcoming(limit: int = 50):
+    return {"reminders": reminder_service.list_upcoming(limit=limit)}
+
+
+@app.get("/reminders/due")
+def reminders_due():
+    return {"reminders": reminder_service.get_due_unacked()}
+
+
+@app.post("/reminders/{reminder_id}/ack")
+def reminders_ack(reminder_id: int):
+    ok = reminder_service.ack(reminder_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Reminder not found or already acked")
+    metrics.reminders_fired_total.inc()  # UI acks on display, so this is a real fire
+    return {"status": "ok"}
+
+
+@app.delete("/reminders/{reminder_id}")
+def reminders_cancel(reminder_id: int):
+    ok = reminder_service.cancel(reminder_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Reminder not found or already closed")
+    return {"status": "ok"}
+
+
+# ─────────────── Agent Tool Execution ───────────────
+
+class AgentExecuteRequest(PydanticBaseModel):
+    name: str
+    params: Dict = {}
+
+
+@app.get("/agent/next-free-path")
+def agent_next_free_path(path: str):
+    """
+    Return the first non-colliding variant of `path` inside the workspace.
+    If 'austin_facts.md' exists, returns 'austin_facts_01.md'; if that
+    exists too, tries _02, _03, ... Safe against path traversal.
+    """
+    import agent_tools as _at
+    _at.WORKSPACE_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        target = (_at.WORKSPACE_DIR / path).resolve()
+        if _at.WORKSPACE_DIR.resolve() not in target.parents and _at.WORKSPACE_DIR.resolve() != target.parent:
+            raise HTTPException(status_code=400, detail="Path escapes workspace")
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid path")
+
+    if not target.exists():
+        return {"path": path}
+
+    stem = target.stem
+    suffix = target.suffix
+    parent_rel = target.parent.relative_to(_at.WORKSPACE_DIR.resolve())
+    for i in range(1, 100):
+        candidate_name = f"{stem}_{i:02d}{suffix}"
+        candidate = target.parent / candidate_name
+        if not candidate.exists():
+            rel = (parent_rel / candidate_name).as_posix()
+            if rel.startswith("./"):
+                rel = rel[2:]
+            return {"path": rel}
+    raise HTTPException(status_code=409, detail="Too many variants exist")
+
+
+@app.post("/agent/execute")
+def agent_execute(req: AgentExecuteRequest):
+    """
+    Execute a tool on behalf of the user after they approved it in the UI.
+    Used for write-capable tools that require confirmation (write_file, run_script).
+    Also works for safe tools if the UI wants to invoke them directly.
+    """
+    try:
+        result = execute_tool(req.name, req.params, require_safe=False)
+        outcome = "error" if result.startswith("Error:") else "executed"
+        metrics.tool_calls_total.labels(tool=req.name, outcome=outcome).inc()
+        return {"name": req.name, "params": req.params, "result": result}
+    except Exception as e:
+        metrics.tool_calls_total.labels(tool=req.name, outcome="error").inc()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ─────────────── Google Calendar Endpoints ───────────────
+
+import calendar_service
+
+
+class CalendarEventRequest(PydanticBaseModel):
+    summary: str
+    start: str
+    end: str
+    description: Optional[str] = None
+    location: Optional[str] = None
+    attendees: Optional[List[str]] = None
+
+
+@app.get("/calendar/status")
+def calendar_status():
+    return {
+        "configured": calendar_service.is_configured(),
+        "connected": calendar_service.is_connected(),
+    }
+
+
+@app.get("/calendar/auth-url")
+def calendar_auth_url():
+    """Start Google Calendar OAuth. Requires gmail_credentials.json present."""
+    if not calendar_service.is_configured():
+        raise HTTPException(
+            status_code=400,
+            detail="Upload Google OAuth credentials first (same file used for Gmail)",
+        )
+
+    try:
+        from google_auth_oauthlib.flow import Flow
+
+        with open(calendar_service.CREDS_FILE) as f:
+            creds_data = json.load(f)
+
+        flow = Flow.from_client_config(
+            creds_data,
+            scopes=calendar_service.SCOPES,
+            redirect_uri="http://localhost:8080/calendar/oauth-callback",
+        )
+
+        auth_url, state = flow.authorization_url(
+            access_type="offline",
+            include_granted_scopes="true",
+            prompt="consent",
+        )
+
+        with open(calendar_service.OAUTH_STATE_FILE, "w") as f:
+            json.dump({"state": state, "code_verifier": flow.code_verifier}, f)
+
+        return {"auth_url": auth_url, "state": state}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/calendar/oauth-callback")
+def calendar_oauth_callback(code: str = None, state: str = None, error: str = None):
+    if error:
+        return HTMLResponse(
+            f"""<html><body style="font-family: sans-serif; text-align: center; padding: 50px;">
+            <h2>❌ Authentication Failed</h2><p>{error}</p>
+            <script>setTimeout(() => window.close(), 3000);</script></body></html>"""
+        )
+    if not code:
+        return HTMLResponse(
+            """<html><body style="font-family: sans-serif; text-align: center; padding: 50px;">
+            <h2>❌ No authorization code</h2></body></html>"""
+        )
+
+    try:
+        import pickle
+        from google_auth_oauthlib.flow import Flow
+
+        if not calendar_service.OAUTH_STATE_FILE.exists():
+            raise Exception("OAuth flow expired. Please try again.")
+
+        with open(calendar_service.OAUTH_STATE_FILE) as f:
+            oauth_state = json.load(f)
+
+        with open(calendar_service.CREDS_FILE) as f:
+            creds_data = json.load(f)
+
+        flow = Flow.from_client_config(
+            creds_data,
+            scopes=calendar_service.SCOPES,
+            redirect_uri="http://localhost:8080/calendar/oauth-callback",
+        )
+        flow.code_verifier = oauth_state.get("code_verifier")
+        flow.fetch_token(code=code)
+
+        calendar_service.OAUTH_STATE_FILE.unlink()
+
+        with open(calendar_service.TOKEN_FILE, "wb") as f:
+            pickle.dump(flow.credentials, f)
+
+        return HTMLResponse(
+            """<html><body style="font-family: sans-serif; text-align: center; padding: 50px; background: #1a1a2e; color: #eee;">
+            <h2 style="color: #4ade80;">✅ Calendar Connected!</h2>
+            <p>You can close this window.</p>
+            <script>
+                window.opener && window.opener.postMessage({type: 'oauth-success', provider: 'calendar'}, '*');
+                setTimeout(() => window.close(), 1500);
+            </script></body></html>"""
+        )
+    except Exception as e:
+        return HTMLResponse(
+            f"""<html><body style="font-family: sans-serif; text-align: center; padding: 50px; background: #1a1a2e; color: #eee;">
+            <h2 style="color: #f87171;">❌ Authentication Error</h2><p>{str(e)}</p>
+            <script>setTimeout(() => window.close(), 5000);</script></body></html>"""
+        )
+
+
+@app.delete("/calendar/disconnect")
+def calendar_disconnect():
+    calendar_service.disconnect()
+    return {"status": "ok", "message": "calendar disconnected"}
+
+
+@app.get("/calendar/events")
+def calendar_events(days: int = 7, max_results: int = 25):
+    if not calendar_service.is_connected():
+        raise HTTPException(status_code=400, detail="Calendar not connected")
+    try:
+        return {"events": calendar_service.list_events(days=days, max_results=max_results)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/calendar/create")
+def calendar_create(req: CalendarEventRequest):
+    if not calendar_service.is_connected():
+        raise HTTPException(status_code=400, detail="Calendar not connected")
+    try:
+        return calendar_service.create_event(
+            summary=req.summary,
+            start=req.start,
+            end=req.end,
+            description=req.description,
+            location=req.location,
+            attendees=req.attendees,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # Conversation History Endpoints
@@ -1393,12 +2081,24 @@ def get_conversation(conv_id: str):
     return conv
 
 
+@app.post("/conversations/{conv_id}/exclude-from-training")
+def exclude_conversation(conv_id: str):
+    get_conversation_store().set_excluded(conv_id, True)
+    return {"status": "ok", "excluded": True}
+
+
+@app.delete("/conversations/{conv_id}/exclude-from-training")
+def include_conversation(conv_id: str):
+    get_conversation_store().set_excluded(conv_id, False)
+    return {"status": "ok", "excluded": False}
+
+
 @app.post("/conversations/{conv_id}/messages")
 def add_message(conv_id: str, role: str, content: str, tokens_used: int = None):
-    """Add message to conversation"""
+    """Add message to conversation. Returns the new message's id."""
     store = get_conversation_store()
-    store.add_message(conv_id, role, content, tokens_used)
-    return {"status": "ok"}
+    message_id = store.add_message(conv_id, role, content, tokens_used)
+    return {"status": "ok", "message_id": message_id}
 
 
 @app.delete("/conversations/{conv_id}")

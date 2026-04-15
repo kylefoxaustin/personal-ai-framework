@@ -213,6 +213,58 @@
     .message.user { align-self: flex-end; background: var(--c-raised); border-bottom-right-radius: 0.25rem; }
     .message.assistant { align-self: flex-start; background: var(--c-surface); border-bottom-left-radius: 0.25rem; }
     .tool-indicator { font-size: 0.78rem; color: #6b8aad; padding: 3px 8px; margin-bottom: 6px; border-left: 2px solid #3a5a7a; }
+    .feedback-bar { margin-top: 0.5rem; display: flex; gap: 0.35rem; }
+    .feedback-btn { background: transparent; border: 1px solid var(--c-text-3); color: var(--c-text-2, #94a3b8); border-radius: 0.3rem; padding: 0.15rem 0.45rem; cursor: pointer; font-size: 0.9rem; opacity: 0.55; transition: all 0.15s; }
+    .feedback-btn:hover { opacity: 1; }
+    .feedback-btn.active { opacity: 1; background: var(--c-raised); border-color: var(--c-accent, #ec4899); }
+    .conversation-item.excluded { opacity: 0.55; }
+    .conversation-item.excluded .title { text-decoration: line-through; text-decoration-color: var(--c-text-3); text-decoration-thickness: 1px; }
+    .td-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin: 0.5rem 0 1rem; }
+    .td-stat { background: var(--c-raised); border-radius: 0.4rem; padding: 0.75rem; text-align: center; }
+    .td-big { font-size: 1.4rem; font-weight: 700; color: var(--c-accent, #ec4899); }
+    .td-label { font-size: 0.7rem; color: var(--c-text-3); text-transform: lowercase; margin-top: 0.2rem; }
+    .td-sub { font-size: 0.85rem; color: var(--c-text-2); margin-top: 1rem; }
+    .td-chart { display: flex; gap: 2px; align-items: flex-end; height: 90px; padding: 0.5rem; background: var(--c-raised); border-radius: 0.4rem; margin-top: 0.25rem; }
+    .td-bar { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; min-width: 6px; gap: 1px; }
+    .td-bar-up { width: 100%; background: var(--c-ok, #4ade80); border-radius: 2px 2px 0 0; }
+    .td-bar-down { width: 100%; background: var(--c-err, #f87171); border-radius: 0 0 2px 2px; }
+    .td-empty { color: var(--c-text-3); font-style: italic; padding: 0.5rem 0; }
+    .td-runs-h { margin-top: 1.25rem; }
+    .td-runs { display: flex; flex-direction: column; gap: 0.5rem; }
+    .td-run { background: var(--c-raised); padding: 0.6rem 0.75rem; border-radius: 0.4rem; }
+    .td-run-head { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: space-between; align-items: baseline; }
+    .td-run-meta { font-size: 0.75rem; color: var(--c-text-3); font-family: ui-monospace, monospace; }
+    .td-run-chart { margin-top: 0.4rem; }
+    .td-sparkline { width: 100%; height: 60px; }
+    .td-sparkmeta { margin-top: 0.2rem; }
+    .tool-trace { margin-bottom: 0.5rem; border-left: 2px solid var(--c-text-3); padding-left: 0.5rem; }
+    .tool-trace summary { list-style: none; cursor: pointer; user-select: none; font-size: 0.8rem; color: var(--c-text-3); padding: 2px 0; display: flex; align-items: center; gap: 0.35rem; }
+    .tool-trace summary::-webkit-details-marker { display: none; }
+    .tool-trace[open] .tool-trace-arrow { transform: rotate(90deg); }
+    .tool-trace-arrow { display: inline-block; transition: transform 0.15s; font-size: 0.7rem; }
+    .tool-trace-icon { font-size: 0.85rem; }
+    .tool-trace-body { margin-top: 0.4rem; display: flex; flex-direction: column; gap: 0.35rem; }
+    .tool-trace-params, .tool-trace-result { font-family: ui-monospace, monospace; font-size: 0.75rem; background: var(--c-bg); padding: 0.4rem 0.5rem; border-radius: 0.3rem; max-height: 240px; overflow: auto; margin: 0; white-space: pre-wrap; word-break: break-word; }
+    .tool-trace-params { color: var(--c-text-2, #9ca3af); }
+    .tool-trace-result { color: var(--c-text-2, #9ca3af); }
+    .pending-action-card { margin-top: 0.75rem; padding: 0.75rem; border-radius: 0.5rem; background: var(--c-raised); border: 1px solid var(--c-orange, #f59e0b); }
+    .pending-action-card.completed { border-color: var(--c-ok, #4ade80); }
+    .pending-action-card.denied { border-color: var(--c-text-3); opacity: 0.7; }
+    .pending-action-header { font-weight: 600; margin-bottom: 0.5rem; color: var(--c-orange, #f59e0b); }
+    .pending-action-warning { background: rgba(245, 158, 11, 0.12); border-left: 3px solid var(--c-orange, #f59e0b); padding: 0.5rem 0.75rem; margin-bottom: 0.5rem; border-radius: 0.25rem; font-size: 0.85rem; color: var(--c-text-1, #e5e7eb); }
+    .pending-action-warning.success { background: rgba(74, 222, 128, 0.12); border-left-color: var(--c-ok, #4ade80); }
+    .pending-action-card.completed .pending-action-header { color: var(--c-ok, #4ade80); }
+    .pending-action-params { font-size: 0.8rem; background: var(--c-bg); padding: 0.5rem; border-radius: 0.3rem; margin: 0.25rem 0 0.75rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .pending-action-row { display: flex; flex-direction: column; gap: 0.15rem; }
+    .pending-action-key { font-weight: 600; color: var(--c-text-2, #94a3b8); font-size: 0.75rem; text-transform: lowercase; letter-spacing: 0.02em; }
+    .pending-action-val { font-family: ui-monospace, monospace; font-size: 0.8rem; margin: 0; white-space: pre-wrap; word-break: break-word; color: var(--c-text-1, #e5e7eb); }
+    .pending-action-preview { background: transparent; padding: 0; max-height: 9em; overflow: hidden; }
+    .pending-action-fullwrap summary { cursor: pointer; user-select: none; font-size: 0.75rem; color: var(--c-orange, #f59e0b); padding: 0.2rem 0; list-style: none; }
+    .pending-action-fullwrap summary::-webkit-details-marker { display: none; }
+    .pending-action-fullwrap[open] .tool-trace-arrow { transform: rotate(90deg); }
+    .pending-action-full { background: var(--c-raised); padding: 0.4rem 0.5rem; border-radius: 0.3rem; max-height: 360px; overflow: auto; margin-top: 0.25rem; }
+    .pending-action-buttons { display: flex; gap: 0.5rem; }
+    .pending-action-result { font-family: ui-monospace, monospace; font-size: 0.8rem; background: var(--c-bg); padding: 0.5rem; border-radius: 0.3rem; max-height: 240px; overflow: auto; margin-top: 0.5rem; white-space: pre-wrap; }
     .mic-btn { background: var(--c-hover); border: 1px solid #2a5a8a; color: var(--c-text); padding: 0.5rem 0.75rem; border-radius: 0.5rem; cursor: pointer; font-size: 1.1rem; user-select: none; }
     .mic-btn:hover { background: #2a5a8a; }
     .mic-btn.recording { background: var(--c-danger); border-color: var(--c-danger-light); animation: pulse-mic 1s infinite; }
@@ -676,11 +728,102 @@
       color: var(--c-text-3);
     }
 
+    /* ── Phone Access modal ── */
+    .phone-warn { background: rgba(245, 158, 11, 0.12); border-left: 3px solid var(--c-orange, #f59e0b); padding: 0.6rem 0.75rem; border-radius: 0.3rem; font-size: 0.85rem; margin-bottom: 1rem; line-height: 1.55; }
+    .phone-ok { background: rgba(74, 222, 128, 0.12); border-left: 3px solid var(--c-ok, #4ade80); padding: 0.6rem 0.75rem; border-radius: 0.3rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .phone-url-box { display: flex; gap: 0.5rem; align-items: center; background: var(--c-raised); padding: 0.6rem 0.75rem; border-radius: 0.4rem; }
+    .phone-url-box input { flex: 1; background: transparent; border: none; color: var(--c-text); font-family: ui-monospace, monospace; font-size: 1rem; outline: none; }
+    .phone-qr-wrap { margin-top: 1rem; display: flex; justify-content: center; align-items: center; min-height: 160px; background: #ffffff; padding: 0.75rem; border-radius: 0.5rem; }
+    .phone-qr { max-width: 220px; width: 100%; height: auto; image-rendering: pixelated; }
+    .phone-qr-hint { color: #374151; font-size: 0.85rem; font-style: italic; }
+
+    /* ── Hamburger + mobile drawer bits (hidden on desktop) ── */
+    .hamburger-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: var(--c-text);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      margin-right: 0.5rem;
+      line-height: 1;
+    }
+    .sidebar-backdrop { display: none; }
+
+    /* ── Mobile (≤ 768px) ── */
+    @media (max-width: 768px) {
+      body { flex-direction: row; }
+
+      /* Sidebar becomes a slide-in drawer */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 82vw;
+        max-width: 320px;
+        z-index: 50;
+        transform: translateX(-100%);
+        transition: transform 0.22s ease;
+        box-shadow: 2px 0 16px rgba(0, 0, 0, 0.35);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 40;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.22s ease;
+      }
+      .sidebar-backdrop.show { opacity: 1; pointer-events: auto; }
+
+      .main-content { max-width: 100%; width: 100%; }
+
+      .hamburger-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; min-height: 40px; }
+
+      /* Header: condense buttons to icons only */
+      header { padding: 0.75rem 0.75rem; gap: 0.5rem; }
+      header h1 { font-size: 1.1rem; }
+      .header-right { gap: 0.35rem; flex-wrap: wrap; justify-content: flex-end; }
+      .header-btn { padding: 0.45rem 0.55rem; font-size: 0; min-width: 40px; min-height: 40px; }
+      .header-btn .icon { font-size: 1.05rem; }
+      .header-btn .theme-label { display: none; }
+      .stats { display: none; }  /* save precious screen width; still visible on desktop */
+
+      /* Conversation items: always show actions (no hover on touch) */
+      .conversation-item .actions { display: flex; }
+
+      /* Main + messages */
+      main { padding: 0.75rem; }
+      .message { max-width: 100%; padding: 0.75rem 0.9rem; font-size: 0.95rem; }
+
+      /* Footer: compact, keep big tap targets */
+      footer { padding: 0.6rem 0.75rem; gap: 0.4rem; }
+      footer > div { gap: 0.4rem; }
+      footer textarea { font-size: 16px; padding: 0.6rem 0.75rem; }  /* 16px avoids iOS zoom */
+      footer button { padding: 0.6rem 1rem; min-height: 44px; }
+
+      /* Modals: full-width */
+      .settings-panel { max-width: 95vw !important; padding: 1rem !important; }
+      .settings-panel h2 { font-size: 1.1rem; }
+
+      /* Pending-action preview: smaller max-height so card doesn't push input off-screen */
+      .pending-action-params { font-size: 0.78rem; }
+      .pending-action-preview { max-height: 7em; }
+      .td-stats { grid-template-columns: repeat(2, 1fr); }
+    }
   </style>
 </head>
 <body>
+  <!-- Mobile overlay (shown when sidebar drawer is open) -->
+  <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="closeSidebar()"></div>
+
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside id="sidebar" class="sidebar">
     <div class="sidebar-header">
       <h3>💬 Conversations</h3>
       <div style="display: flex; gap: 0.5rem;">
@@ -699,12 +842,14 @@
   <!-- Main Content -->
   <div class="main-content">
   <header>
+    <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle conversations">☰</button>
     <h1>🧠 Personal AI</h1>
     <div class="header-right">
       <button class="header-btn" onclick="newChat()" title="Start a new conversation"><span class="icon">✨</span> New</button>
       <button class="header-btn upload-btn" onclick="openUploadPanel()" title="Upload documents, audio/video, or images to knowledge base"><span class="icon">📤</span> Upload</button>
       <button id="syncBtn" class="header-btn" onclick="syncNow()" title="Sync knowledge base (manual)"><span class="icon">🔄</span> Sync<span id="syncStatusDot" class="status-dot"></span></button>
       <button class="header-btn" onclick="openMemoryViewer()" title="Browse and manage stored memories"><span class="icon">🧠</span> Memory</button>
+      <button class="header-btn" onclick="openTrainingDashboard()" title="Training runs + response quality metrics"><span class="icon">📊</span> Training</button>
       <button id="webSearchBtn" class="header-btn active" onclick="toggleWebSearch()" title="Enable web search — type 'search: your question' to search the internet"><span class="icon">🌐</span> Web</button>
       <button id="voiceModeBtn" class="header-btn" onclick="toggleVoiceMode()" title="Voice mode — hold mic button to talk, Skippy speaks responses"><span class="icon">🎤</span> Voice</button>
       <button class="header-btn" onclick="openSettings()" title="AI personality, backup, email providers, and more"><span class="icon">⚙️</span> Settings</button>
@@ -960,6 +1105,15 @@
           Export saves all conversations and settings. Import restores from a backup file.
         </p>
 
+        <h3>📱 Phone Access</h3>
+        <div class="setting-row">
+          <label>Use from your phone</label>
+          <button class="btn-small" onclick="openPhoneAccess()">Show URL</button>
+        </div>
+        <p style="color: var(--c-text-3); font-size: 0.8rem; margin-top: 0.5rem;">
+          Open this app in your phone's browser on the same WiFi. Larger tap targets and a slide-in conversation drawer kick in automatically.
+        </p>
+
         <h3>📧 Email Providers</h3>
         <div class="setting-row">
           <label>Gmail</label>
@@ -971,6 +1125,17 @@
           <span id="outlookStatus" class="status-badge disconnected">Not configured</span>
           <button class="btn-small" onclick="openEmailSetup('outlook')" id="outlookSetupBtn">Setup</button>
         </div>
+
+        <h3>📅 Google Calendar</h3>
+        <div class="setting-row">
+          <label>Calendar</label>
+          <span id="calendarStatus" class="status-badge disconnected">Not connected</span>
+          <button class="btn-small" onclick="connectCalendar()" id="calendarSetupBtn">Connect</button>
+        </div>
+        <p style="color: var(--c-text-3); font-size: 0.8rem; margin-top: 0.5rem;">
+          Reuses Gmail OAuth credentials. Make sure the <strong>Google Calendar API</strong> is enabled
+          in the same Google Cloud project.
+        </p>
       </div>
       
       <div class="settings-actions">
@@ -1027,8 +1192,35 @@
     </div>
   </div>
 
+  <!-- Phone Access Modal -->
+  <div id="phoneAccessOverlay" class="settings-overlay">
+    <div class="settings-panel" style="max-width: 520px;">
+      <h2>
+        📱 Phone Access
+        <button onclick="closePhoneAccess()">✕</button>
+      </h2>
+      <div id="phoneAccessContent">Loading…</div>
+      <div class="settings-actions">
+        <button class="btn-secondary" onclick="closePhoneAccess()">Close</button>
+      </div>
+    </div>
+  </div>
 
-  
+  <!-- Training Dashboard Modal -->
+  <div id="trainingOverlay" class="settings-overlay">
+    <div class="settings-panel" style="max-width: 820px;">
+      <h2>
+        📊 Training & Quality
+        <button onclick="closeTrainingDashboard()">✕</button>
+      </h2>
+      <div id="trainingContent">Loading…</div>
+      <div class="settings-actions">
+        <button class="btn-secondary" onclick="closeTrainingDashboard()">Close</button>
+      </div>
+    </div>
+  </div>
+
+
     <!-- Memory Viewer Overlay -->
     <div id="memoryOverlay" class="settings-overlay">
       <div class="settings-panel" style="max-width: 800px;">
@@ -1054,7 +1246,9 @@
     </div>
 
     <script>
-    const API = 'http://localhost:8080';
+    // Derive the API base from whatever host served this page, so the UI works
+    // both on the desktop (localhost) and from a phone hitting the LAN IP.
+    const API = `${window.location.protocol}//${window.location.hostname}:8080`;
     
     // Conversation state
     let currentConversationId = null;
@@ -1098,13 +1292,15 @@
       }
       
       list.innerHTML = conversations.map(c => `
-        <div class="conversation-item ${c.id === currentConversationId ? 'active' : ''}" 
-             onclick="loadConversation('${c.id}')">
+        <div class="conversation-item ${c.id === currentConversationId ? 'active' : ''} ${c.excluded_from_training ? 'excluded' : ''}"
+             onclick="loadConversation('${c.id}'); closeSidebar();">
           <div class="title">${escapeHtml(c.title)}</div>
-          <div class="meta">${c.message_count} messages · ${formatDate(c.updated_at)}</div>
+          <div class="meta">${c.message_count} messages · ${formatDate(c.updated_at)}${c.excluded_from_training ? ' · 🚫 excluded from training' : ''}</div>
           <div class="actions">
             <button onclick="event.stopPropagation(); ingestConversation('${c.id}')"
                     title="Save to memory">${c.ingested_to_rag ? '🧠' : '💾'}</button>
+            <button onclick="event.stopPropagation(); toggleTrainingExclusion('${c.id}', ${c.excluded_from_training ? 'true' : 'false'})"
+                    title="${c.excluded_from_training ? 'Include in training' : 'Exclude from training'}">${c.excluded_from_training ? '🚫' : '🎓'}</button>
             <button onclick="event.stopPropagation(); exportConversation('${c.id}', '${escapeHtml(c.title)}')"
                     title="Export as markdown">📄</button>
             <button class="delete" onclick="event.stopPropagation(); deleteConversation('${c.id}')"
@@ -1136,7 +1332,7 @@
       // Save current conversation first if exists
       currentConversationId = null;
       conversationHistory = [];
-      messagesDiv.innerHTML = `<div class="welcome"><h2>Welcome!</h2><p>Ask me anything about your emails, projects, blogs, or transcripts.</p><p style="margin-top: 0.5rem; font-size: 0.85rem;">Toggle "Write like me" for emails in your personal style.</p><div class="suggestions"><button onclick="suggest('Draft an email about the i.MX demo status')">📧 i.MX demo email</button><button onclick="suggest('What ARM projects have I worked on?')">🔍 ARM projects</button><button onclick="suggest('Write an email following up on project delays')">📧 Delay follow-up</button></div></div>`;
+      messagesDiv.innerHTML = `<div class="welcome"><h2>Welcome!</h2><p>Ask me anything about your emails, projects, blogs, or transcripts.</p><p style="margin-top: 0.5rem; font-size: 0.85rem;">Toggle "Write like me" for emails in your personal style.</p></div>`;
       renderConversationList();
     }
     
@@ -1159,16 +1355,19 @@
     }
     
     async function saveMessage(role, content, tokens = null) {
-      if (!currentConversationId) return;
-      
+      if (!currentConversationId) return null;
+
       try {
-        await fetch(`${API}/conversations/${currentConversationId}/messages?role=${role}&content=${encodeURIComponent(content)}${tokens ? '&tokens_used=' + tokens : ''}`, {
+        const res = await fetch(`${API}/conversations/${currentConversationId}/messages?role=${role}&content=${encodeURIComponent(content)}${tokens ? '&tokens_used=' + tokens : ''}`, {
           method: 'POST'
         });
+        const data = await res.json().catch(() => ({}));
         // Refresh list to update message count
         loadConversations();
+        return data.message_id || null;
       } catch (err) {
         console.error('Failed to save message:', err);
+        return null;
       }
     }
     
@@ -1210,6 +1409,112 @@
       }
     }
     
+    // ── Phone Access helper ──
+    function closePhoneAccess() {
+      document.getElementById('phoneAccessOverlay').classList.remove('show');
+    }
+
+    function _phoneBuildUrl(host) {
+      const port = window.location.port || (window.location.protocol === 'https:' ? '443' : '80');
+      return `${window.location.protocol}//${host}:${port}`;
+    }
+
+    function _phoneRender(host, autoDetected) {
+      const url = _phoneBuildUrl(host);
+      const isLocal = host === 'localhost' || host === '127.0.0.1';
+      const root = document.getElementById('phoneAccessContent');
+
+      const banner = isLocal
+        ? `<div class="phone-warn">
+             ⚠️ You're on <code>localhost</code>. Click <strong>Detect LAN IP</strong> to auto-fill your desktop's reachable IP, or run <code>hostname -I</code> manually.
+           </div>`
+        : (autoDetected
+            ? `<div class="phone-ok">✅ Using detected LAN IP <code>${host}</code>. Scan the QR below or copy the URL.</div>`
+            : `<div class="phone-ok">✅ This page was loaded over your LAN. Scan the QR below or copy the URL.</div>`);
+
+      const detectBtn = isLocal
+        ? `<button class="btn-small" onclick="phoneDetectLanIp()">🔎 Detect LAN IP</button>`
+        : '';
+
+      root.innerHTML = `
+        ${banner}
+        <div class="phone-url-box">
+          <input id="phoneUrlInput" type="text" readonly value="${url}">
+          <button class="btn-small" onclick="copyPhoneUrl()">📋 Copy</button>
+          ${detectBtn}
+        </div>
+        <div id="phoneQrWrap" class="phone-qr-wrap">
+          ${isLocal ? '<p class="phone-qr-hint">QR will render once a LAN IP is detected.</p>' : `<img class="phone-qr" alt="QR to ${url}" src="${API}/system/qr?data=${encodeURIComponent(url)}">`}
+        </div>
+        <p style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--c-text-2);">
+          Point your phone camera at the QR (same WiFi).
+        </p>
+        <details style="margin-top: 0.75rem; font-size: 0.85rem;">
+          <summary style="cursor: pointer;">Phone can't connect?</summary>
+          <ul style="margin: 0.5rem 0 0 1.25rem; color: var(--c-text-2); line-height: 1.6;">
+            <li>Same WiFi? Phone and desktop must be on the same network.</li>
+            <li>Firewall may be blocking. If you have <code>ufw</code>:
+              <pre style="font-size: 0.75rem; margin: 0.25rem 0; padding: 0.4rem 0.6rem; background: var(--c-bg); border-radius: 0.3rem;">sudo ufw allow 8765
+sudo ufw allow 8080</pre>
+            </li>
+            <li>Test from desktop first: hit the URL above in the desktop browser — if that works, the server is fine and it's a network issue.</li>
+          </ul>
+        </details>
+      `;
+    }
+
+    function openPhoneAccess() {
+      document.getElementById('phoneAccessOverlay').classList.add('show');
+      _phoneRender(window.location.hostname, false);
+    }
+
+    async function phoneDetectLanIp() {
+      try {
+        const res = await fetch(`${API}/system/lan-ips`);
+        const data = await res.json();
+        if (!data.ips || data.ips.length === 0) {
+          showToast('❌ No LAN IP found — did you run ./run.sh start?');
+          return;
+        }
+        _phoneRender(data.ips[0], true);
+      } catch (err) {
+        showToast('❌ Failed to detect: ' + err.message);
+      }
+    }
+
+    function copyPhoneUrl() {
+      const inp = document.getElementById('phoneUrlInput');
+      inp.select();
+      navigator.clipboard.writeText(inp.value).then(
+        () => showToast('✅ URL copied'),
+        () => showToast('❌ Copy failed — select and copy manually'),
+      );
+    }
+
+    // ── Mobile sidebar drawer ──
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const bd = document.getElementById('sidebarBackdrop');
+      const open = !sb.classList.contains('open');
+      sb.classList.toggle('open', open);
+      bd.classList.toggle('show', open);
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarBackdrop').classList.remove('show');
+    }
+
+    async function toggleTrainingExclusion(convId, currentlyExcluded) {
+      try {
+        const method = currentlyExcluded ? 'DELETE' : 'POST';
+        await fetch(`${API}/conversations/${convId}/exclude-from-training`, { method });
+        showToast(currentlyExcluded ? '🎓 Included in training' : '🚫 Excluded from training');
+        loadConversations();
+      } catch (err) {
+        showToast('❌ Failed: ' + err.message);
+      }
+    }
+
     async function ingestConversation(convId) {
       try {
         const resp = await fetch(`${API}/conversations/${convId}/ingest`, { method: 'POST' });
@@ -1222,9 +1527,53 @@
       }
     }
     
+    // ── Reminder polling ──
+    const _seenReminderIds = new Set();
+
+    async function pollReminders() {
+      try {
+        const res = await fetch(`${API}/reminders/due`);
+        if (!res.ok) return;
+        const data = await res.json();
+        for (const r of data.reminders || []) {
+          if (_seenReminderIds.has(r.id)) continue;
+          _seenReminderIds.add(r.id);
+          fireReminder(r);
+        }
+      } catch (err) { /* server may be restarting; ignore */ }
+    }
+
+    function fireReminder(r) {
+      showToast(`⏰ Reminder: ${r.text}`);
+      addMessage('system', `⏰ Reminder: ${r.text}`);
+
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          const n = new Notification('⏰ Skippy reminder', {
+            body: r.text,
+            tag: `reminder-${r.id}`,
+          });
+          n.onclick = () => { window.focus(); n.close(); };
+        } catch (e) { /* some browsers throw for unsupported opts */ }
+      }
+
+      // Ack so it doesn't re-fire next poll
+      fetch(`${API}/reminders/${r.id}/ack`, { method: 'POST' }).catch(() => {});
+    }
+
+    function requestNotificationPermissionOnce() {
+      if (!('Notification' in window)) return;
+      if (Notification.permission === 'default') {
+        Notification.requestPermission().catch(() => {});
+      }
+    }
+
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       loadConversations();
+      requestNotificationPermissionOnce();
+      pollReminders();
+      setInterval(pollReminders, 30000);
       // Load auto-remember preference
       autoRememberEnabled = localStorage.getItem('autoRemember') === 'true';
       if (autoRememberEnabled) {
@@ -1537,7 +1886,7 @@
 
     function newChat() {
       conversationHistory = [];
-      messagesDiv.innerHTML = `<div class="welcome"><h2>Welcome!</h2><p>Ask me anything about your emails, projects, blogs, or transcripts.</p><p style="margin-top: 0.5rem; font-size: 0.85rem;">Toggle "Write like me" for emails in your personal style.</p><div class="suggestions"><button onclick="suggest('Draft an email about the i.MX demo status')">📧 i.MX demo email</button><button onclick="suggest('What ARM projects have I worked on?')">🔍 ARM projects</button><button onclick="suggest('Write an email following up on project delays')">📧 Delay follow-up</button></div></div>`;
+      messagesDiv.innerHTML = `<div class="welcome"><h2>Welcome!</h2><p>Ask me anything about your emails, projects, blogs, or transcripts.</p><p style="margin-top: 0.5rem; font-size: 0.85rem;">Toggle "Write like me" for emails in your personal style.</p></div>`;
       showToast('✨ New conversation started');
     }
 
@@ -1819,6 +2168,7 @@
       let contextUsed = null;
       let citations = null;
       let metricsData = {};
+      let pendingAction = null;
       
       try {
         const response = await fetch(`${API}/generate/stream`, {
@@ -1849,7 +2199,9 @@
                 const data = JSON.parse(line.slice(6));
                 
                 if (data.type === 'tool_use') {
-                  showToolIndicator(msgDiv, data.tool, data.params);
+                  showToolIndicator(msgDiv, data.tool, data.params, data.result);
+                } else if (data.type === 'pending_action') {
+                  pendingAction = { name: data.name, params: data.params, meta: data.meta || {} };
                 } else if (data.type === 'meta') {
                   contextUsed = data.context_used;
                   citations = data.citations;
@@ -1869,10 +2221,16 @@
         
         // Finalize the message
         let responseText = fullText.replace(/^### Response:\s*/i, '').replace(/### Instruction:[\s\S]*$/i, '').trim();
+        responseText = cleanAssistantText(responseText);
         const usedPersonalStyle = writeStyleEnabled && isWriteRequest;
         finalizeStreamingMessage(msgDiv, responseText, contextUsed, citations, usedPersonalStyle, metricsData);
-        // Save assistant message to database
-        saveMessage('assistant', responseText);
+        if (pendingAction) {
+          renderPendingActionCard(msgDiv, pendingAction);
+        }
+        // Save assistant message to database and attach feedback buttons
+        saveMessage('assistant', responseText).then(msgId => {
+          if (msgId) renderFeedbackButtons(msgDiv, msgId);
+        });
         conversationHistory.push({ role: 'assistant', content: responseText });
         
         // Auto-ingest to memory if enabled
@@ -1899,18 +2257,288 @@
       input.focus();
     }
     
-    function showToolIndicator(msgDiv, toolName, params) {
-      const labels = {
-        'read_file': `Reading ${params.path || 'file'}...`,
-        'list_files': `Listing ${params.path || 'directory'}...`,
-        'web_search': `Searching: "${params.query || ''}"...`,
-        'git_status': `Running git ${params.subcommand || 'status'}...`,
+    // Render 👍/👎 feedback buttons on an assistant message. Clicking toggles
+    // the rating; clicking the already-active button clears it.
+    function renderFeedbackButtons(msgDiv, messageId) {
+      if (!messageId || msgDiv.querySelector('.feedback-bar')) return;
+      const bar = document.createElement('div');
+      bar.className = 'feedback-bar';
+
+      const up = document.createElement('button');
+      up.className = 'feedback-btn';
+      up.textContent = '👍';
+      up.title = 'Good response';
+
+      const down = document.createElement('button');
+      down.className = 'feedback-btn';
+      down.textContent = '👎';
+      down.title = 'Bad response';
+
+      let current = null;
+
+      function applyUI() {
+        up.classList.toggle('active', current === 'up');
+        down.classList.toggle('active', current === 'down');
+      }
+
+      async function setRating(rating) {
+        if (current === rating) {
+          // Toggle off
+          try {
+            await fetch(`${API}/feedback/${messageId}`, { method: 'DELETE' });
+            current = null;
+          } catch (e) { showToast('❌ Failed to clear rating'); return; }
+        } else {
+          try {
+            await fetch(`${API}/feedback`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message_id: messageId, rating }),
+            });
+            current = rating;
+          } catch (e) { showToast('❌ Failed to save rating'); return; }
+        }
+        applyUI();
+      }
+
+      up.onclick = () => setRating('up');
+      down.onclick = () => setRating('down');
+
+      bar.appendChild(up);
+      bar.appendChild(down);
+      msgDiv.appendChild(bar);
+    }
+
+    function _formatBytes(n) {
+      if (n < 1024) return n + ' B';
+      if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+      return (n / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    // Render one key/value row in a pending-action card. Long string values
+    // (>400 chars or >6 lines) are shown as a preview with a collapsible
+    // "▸ Show full" toggle so the card doesn't blow up the chat scroll.
+    function renderParamRow(key, value) {
+      const row = document.createElement('div');
+      row.className = 'pending-action-row';
+
+      const label = document.createElement('div');
+      label.className = 'pending-action-key';
+      label.textContent = key + ':';
+      row.appendChild(label);
+
+      const valStr = (typeof value === 'string') ? value : JSON.stringify(value);
+      const lineCount = (valStr.match(/\n/g) || []).length + 1;
+      const isLong = valStr.length > 400 || lineCount > 6;
+
+      if (!isLong) {
+        const v = document.createElement('div');
+        v.className = 'pending-action-val';
+        v.textContent = valStr;
+        row.appendChild(v);
+        return row;
+      }
+
+      // Long value — preview first ~6 lines, collapsible full body
+      const previewLines = valStr.split('\n').slice(0, 6).join('\n');
+      const preview = document.createElement('pre');
+      preview.className = 'pending-action-val pending-action-preview';
+      preview.textContent = previewLines + (valStr.length > previewLines.length ? '\n…' : '');
+      row.appendChild(preview);
+
+      const details = document.createElement('details');
+      details.className = 'pending-action-fullwrap';
+      const summary = document.createElement('summary');
+      const sizeStr = _formatBytes(new Blob([valStr]).size);
+      summary.innerHTML = `<span class="tool-trace-arrow">▸</span> Show full ${key} (${valStr.length.toLocaleString()} chars · ${sizeStr})`;
+      details.appendChild(summary);
+
+      const full = document.createElement('pre');
+      full.className = 'pending-action-val pending-action-full';
+      full.textContent = valStr;
+      details.appendChild(full);
+
+      row.appendChild(details);
+      return row;
+    }
+
+    function renderPendingActionCard(msgDiv, action) {
+      const card = document.createElement('div');
+      card.className = 'pending-action-card';
+
+      const header = document.createElement('div');
+      header.className = 'pending-action-header';
+      header.textContent = `🛠️ Proposed action: ${action.name}`;
+      card.appendChild(header);
+
+      // If this write would overwrite an existing file, warn the user.
+      const existing = action.meta && action.meta.existing_file;
+      if (existing) {
+        const warn = document.createElement('div');
+        warn.className = 'pending-action-warning';
+        const kb = (existing.size_bytes / 1024).toFixed(1);
+        const mtime = new Date(existing.mtime_iso).toLocaleString();
+        warn.innerHTML = `⚠️ <strong>This will overwrite an existing file</strong> (${kb} KB, modified ${mtime})`;
+        card.appendChild(warn);
+      }
+
+      const paramsBox = document.createElement('div');
+      paramsBox.className = 'pending-action-params';
+      for (const [k, v] of Object.entries(action.params || {})) {
+        paramsBox.appendChild(renderParamRow(k, v));
+      }
+      card.appendChild(paramsBox);
+
+      const btnRow = document.createElement('div');
+      btnRow.className = 'pending-action-buttons';
+
+      const approveBtn = document.createElement('button');
+      approveBtn.className = 'btn-primary';
+      approveBtn.textContent = existing ? '⚠️ Overwrite' : '✅ Approve & Run';
+
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'btn-secondary';
+      copyBtn.textContent = '📄 Save as copy';
+      copyBtn.style.display = existing && action.name === 'write_file' ? '' : 'none';
+
+      const denyBtn = document.createElement('button');
+      denyBtn.className = 'btn-secondary';
+      denyBtn.textContent = '❌ Deny';
+
+      async function runWithParams(params, label, wasOverwrite = false) {
+        [approveBtn, copyBtn, denyBtn].forEach(b => b.disabled = true);
+        approveBtn.textContent = `⏳ ${label}...`;
+        try {
+          const res = await fetch(`${API}/agent/execute`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: action.name, params }),
+          });
+          const data = await res.json();
+          card.classList.add('completed');
+          btnRow.remove();
+
+          // Transform the stale overwrite warning into a success note so
+          // the card reflects the final state, not the pre-approval state.
+          const warn = card.querySelector('.pending-action-warning');
+          if (warn) {
+            if (wasOverwrite) {
+              warn.className = 'pending-action-warning success';
+              const kb = existing ? (existing.size_bytes / 1024).toFixed(1) + ' KB' : '';
+              warn.innerHTML = `✅ <strong>Overwrote previous version</strong>${kb ? ` (was ${kb})` : ''}`;
+            } else {
+              warn.remove();
+            }
+          }
+
+          const result = document.createElement('pre');
+          result.className = 'pending-action-result';
+          result.textContent = data.result || JSON.stringify(data);
+          card.appendChild(result);
+        } catch (err) {
+          [approveBtn, copyBtn, denyBtn].forEach(b => b.disabled = false);
+          approveBtn.textContent = existing ? '⚠️ Overwrite' : '✅ Approve & Run';
+          showToast('❌ Execution failed: ' + err.message);
+        }
+      }
+
+      approveBtn.onclick = () => runWithParams(action.params, 'Running', !!existing);
+
+      copyBtn.onclick = async () => {
+        try {
+          const res = await fetch(`${API}/agent/next-free-path?path=${encodeURIComponent(action.params.path)}`);
+          const data = await res.json();
+          const newParams = { ...action.params, path: data.path };
+          runWithParams(newParams, `Saving as ${data.path}`, false);
+        } catch (err) {
+          showToast('❌ Could not find free name: ' + err.message);
+        }
       };
-      const label = labels[toolName] || `Using ${toolName}...`;
-      const indicator = document.createElement('div');
-      indicator.className = 'tool-indicator';
-      indicator.textContent = label;
-      msgDiv.insertBefore(indicator, msgDiv.firstChild);
+
+      denyBtn.onclick = () => {
+        card.classList.add('denied');
+        btnRow.remove();
+        const note = document.createElement('div');
+        note.className = 'pending-action-result';
+        note.textContent = 'Denied by user.';
+        card.appendChild(note);
+      };
+
+      btnRow.appendChild(approveBtn);
+      btnRow.appendChild(copyBtn);
+      btnRow.appendChild(denyBtn);
+      card.appendChild(btnRow);
+
+      msgDiv.appendChild(card);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function showToolIndicator(msgDiv, toolName, params, result) {
+      const details = document.createElement('details');
+      details.className = 'tool-trace';
+
+      const summary = document.createElement('summary');
+      const labels = {
+        'read_file': 'Read file',
+        'list_files': 'Listed directory',
+        'web_search': 'Web search',
+        'git_status': 'Git status',
+        'list_calendar_events': 'Listed calendar',
+      };
+      const label = labels[toolName] || toolName;
+      summary.innerHTML = `<span class="tool-trace-icon">🔧</span> <span class="tool-trace-label">${label}</span> <span class="tool-trace-arrow">▸</span>`;
+      details.appendChild(summary);
+
+      const body = document.createElement('div');
+      body.className = 'tool-trace-body';
+
+      if (params && Object.keys(params).length) {
+        const paramsPre = document.createElement('pre');
+        paramsPre.className = 'tool-trace-params';
+        paramsPre.textContent = JSON.stringify(params, null, 2);
+        body.appendChild(paramsPre);
+      }
+
+      if (result) {
+        const resultPre = document.createElement('pre');
+        resultPre.className = 'tool-trace-result';
+        resultPre.textContent = result.length > 2000 ? result.slice(0, 2000) + '\n[... truncated ...]' : result;
+        body.appendChild(resultPre);
+      }
+
+      details.appendChild(body);
+      msgDiv.insertBefore(details, msgDiv.firstChild);
+    }
+
+    // Known tool names Qwen sometimes echoes as pseudo-code in its prose
+    const TOOL_NAMES_RE = /(read_file|list_files|web_search|git_status|write_file|run_script|schedule_reminder|send_email|create_calendar_event|list_calendar_events)/;
+
+    // Safety net: strip tool scaffolding the model sometimes echoes into its reply.
+    function cleanAssistantText(text) {
+      if (!text) return text;
+
+      // Always strip standalone tool-invocation lines anywhere in the response:
+      //   write_file(path="foo.md", content=content)
+      //   send_email(to="x@y", subject="...", body=...)
+      const toolCallLine = new RegExp(`^\\s*${TOOL_NAMES_RE.source}\\s*\\([^)]*\\)\\s*$`, 'gim');
+      text = text.replace(toolCallLine, '').replace(/\n{3,}/g, '\n\n').trim();
+
+      const scaffoldFirst = /^(TOOLS\b|\[planning\]|TOOL RESULT\b|<\w+_output>)/i;
+      if (scaffoldFirst.test(text)) {
+        // Prefer content after the last '---' divider if present
+        const lastDiv = text.lastIndexOf('\n---');
+        if (lastDiv !== -1) {
+          return text.slice(lastDiv).replace(/^\n---+\n?/, '').trim();
+        }
+        // Otherwise strip each known block at the start
+        return text
+          .replace(/^TOOLS\s*\n(?:\s*-.*\n?)+/i, '')
+          .replace(/^\[planning\]\s*\n?/i, '')
+          .replace(/^TOOL RESULT\s*\([^)]*\):\s*\n[\s\S]*?(?:\n---+\n|\n\n)/i, '')
+          .replace(/^<\w+_output>[\s\S]*?<\/\w+_output>\s*/i, '')
+          .trim();
+      }
+      return text;
     }
 
     function createStreamingMessage() {
@@ -1918,19 +2546,28 @@
       if (welcome) welcome.remove();
       const div = document.createElement('div');
       div.className = 'message assistant streaming';
-      div.innerHTML = '<span class="cursor">▊</span>';
+      // Dedicated span for streaming text so tool-trace cards inserted above
+      // it aren't wiped on every token update.
+      const textSpan = document.createElement('span');
+      textSpan.className = 'stream-text';
+      textSpan.innerHTML = '<span class="cursor">▊</span>';
+      div.appendChild(textSpan);
       messagesDiv.appendChild(div);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
       return div;
     }
-    
+
     function updateStreamingMessage(div, text) {
-      div.innerHTML = text.replace(/\n/g, '<br>') + '<span class="cursor">▊</span>';
+      const target = div.querySelector('.stream-text') || div;
+      target.innerHTML = text.replace(/\n/g, '<br>') + '<span class="cursor">▊</span>';
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
     
     function finalizeStreamingMessage(div, content, context, citations, usedStyle, metrics = {}) {
       div.classList.remove('streaming');
+      // Preserve any tool-trace cards that were inserted during streaming —
+      // setting innerHTML below would otherwise wipe them.
+      const traceNodes = Array.from(div.querySelectorAll(':scope > .tool-trace'));
       let html = linkCitations(content, citations);
       if (usedStyle) html += `<span class="style-tag">✍️ Your style</span>`;
 
@@ -1957,6 +2594,10 @@
       }
       
       div.innerHTML = html;
+      // Re-prepend preserved trace cards
+      for (let i = traceNodes.length - 1; i >= 0; i--) {
+        div.insertBefore(traceNodes[i], div.firstChild);
+      }
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
     
@@ -2084,6 +2725,111 @@
     }
 
     // Memory Viewer Functions
+    // ── Training Dashboard ──
+    function closeTrainingDashboard() {
+      document.getElementById('trainingOverlay').classList.remove('show');
+    }
+
+    async function openTrainingDashboard() {
+      document.getElementById('trainingOverlay').classList.add('show');
+      const root = document.getElementById('trainingContent');
+      root.innerHTML = '<p>Loading…</p>';
+
+      try {
+        const [stats, history, runs] = await Promise.all([
+          fetch(`${API}/feedback/stats`).then(r => r.json()),
+          fetch(`${API}/feedback/history?days=30`).then(r => r.json()),
+          fetch(`${API}/training/runs`).then(r => r.json()),
+        ]);
+
+        const parts = [];
+
+        // Feedback summary block
+        const upRate = stats.up_rate === null ? '—' : (stats.up_rate * 100).toFixed(0) + '%';
+        parts.push(`
+          <h3>Response quality (👍 / 👎)</h3>
+          <div class="td-stats">
+            <div class="td-stat"><div class="td-big">${stats.up}</div><div class="td-label">👍 Up</div></div>
+            <div class="td-stat"><div class="td-big">${stats.down}</div><div class="td-label">👎 Down</div></div>
+            <div class="td-stat"><div class="td-big">${upRate}</div><div class="td-label">Up rate</div></div>
+            <div class="td-stat"><div class="td-big">${stats.total}</div><div class="td-label">Total rated</div></div>
+          </div>
+        `);
+
+        // Daily chart
+        if (history.buckets && history.buckets.length) {
+          const maxTotal = Math.max(...history.buckets.map(b => b.total), 1);
+          const bars = history.buckets.map(b => {
+            const upH = (b.up / maxTotal) * 80;
+            const downH = (b.down / maxTotal) * 80;
+            return `<div class="td-bar" title="${b.date}: ${b.up}👍 / ${b.down}👎">
+              <div class="td-bar-up" style="height:${upH}px"></div>
+              <div class="td-bar-down" style="height:${downH}px"></div>
+            </div>`;
+          }).join('');
+          parts.push(`
+            <h4 class="td-sub">Last 30 days</h4>
+            <div class="td-chart">${bars}</div>
+          `);
+        } else {
+          parts.push(`<p class="td-empty">No feedback recorded yet — rate a few assistant messages with 👍/👎 and check back here.</p>`);
+        }
+
+        // Training runs
+        parts.push('<h3 class="td-runs-h">LoRA training runs</h3>');
+        if (!runs.runs || runs.runs.length === 0) {
+          parts.push(`<p class="td-empty">No training runs found${runs.note ? ' (' + runs.note + ')' : ''}.</p>`);
+        } else {
+          parts.push('<div class="td-runs">');
+          for (const r of runs.runs) {
+            const finalLoss = r.final_train_loss !== null && r.final_train_loss !== undefined ? r.final_train_loss.toFixed(3) : '—';
+            const evalLoss = r.final_eval_loss !== null && r.final_eval_loss !== undefined ? r.final_eval_loss.toFixed(3) : '—';
+            const when = r.mtime_iso ? new Date(r.mtime_iso).toLocaleString() : '—';
+            parts.push(`
+              <div class="td-run" data-name="${r.name}">
+                <div class="td-run-head">
+                  <strong>${r.name}</strong>
+                  <span class="td-run-meta">step ${r.global_step ?? '?'} · ${r.epochs ?? '?'}ep · train loss ${finalLoss} · eval ${evalLoss} · ${when}</span>
+                </div>
+                <div class="td-run-chart" id="td-chart-${r.name}">loading curve…</div>
+              </div>
+            `);
+          }
+          parts.push('</div>');
+        }
+
+        root.innerHTML = parts.join('');
+
+        // Fetch and render each run's loss curve (simple inline SVG)
+        for (const r of (runs.runs || [])) {
+          fetch(`${API}/training/run/${r.name}`).then(res => res.json()).then(data => {
+            const host = document.getElementById(`td-chart-${r.name}`);
+            if (!host) return;
+            host.innerHTML = buildLossSparkline(data.series);
+          }).catch(() => {});
+        }
+      } catch (err) {
+        root.innerHTML = `<p class="td-empty">Failed to load dashboard: ${err.message}</p>`;
+      }
+    }
+
+    function buildLossSparkline(series) {
+      const losses = series.filter(s => s.loss !== null && s.loss !== undefined).map(s => s.loss);
+      if (losses.length < 2) return '<span class="td-empty">No loss data.</span>';
+      const w = 700, h = 60, pad = 4;
+      const min = Math.min(...losses), max = Math.max(...losses);
+      const range = max - min || 1;
+      const pts = losses.map((v, i) => {
+        const x = pad + (i / (losses.length - 1)) * (w - 2 * pad);
+        const y = pad + (1 - (v - min) / range) * (h - 2 * pad);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      }).join(' ');
+      return `<svg viewBox="0 0 ${w} ${h}" class="td-sparkline" preserveAspectRatio="none">
+        <polyline points="${pts}" fill="none" stroke="var(--c-accent)" stroke-width="1.5"/>
+      </svg>
+      <div class="td-run-meta td-sparkmeta">loss: ${max.toFixed(3)} → ${min.toFixed(3)}</div>`;
+    }
+
     async function openMemoryViewer() {
       document.getElementById('memoryOverlay').classList.add('show');
       await loadMemoryStats();
@@ -3025,7 +3771,76 @@
           outlookBtn.onclick = () => openEmailSetup('outlook');
         }
       }
+
+      refreshCalendarStatus();
     };
+
+    async function refreshCalendarStatus() {
+      const badge = document.getElementById('calendarStatus');
+      const btn = document.getElementById('calendarSetupBtn');
+      if (!badge || !btn) return;
+
+      try {
+        const res = await fetch(`${API}/calendar/status`);
+        const data = await res.json();
+
+        if (data.connected) {
+          badge.textContent = 'Connected';
+          badge.className = 'status-badge connected';
+          btn.textContent = 'Disconnect';
+          btn.className = 'btn-small disconnect';
+          btn.onclick = disconnectCalendar;
+        } else if (data.configured) {
+          badge.textContent = 'Needs auth';
+          badge.className = 'status-badge disconnected';
+          btn.textContent = 'Connect';
+          btn.className = 'btn-small';
+          btn.onclick = connectCalendar;
+        } else {
+          badge.textContent = 'Set up Gmail first';
+          badge.className = 'status-badge disconnected';
+          btn.textContent = 'Connect';
+          btn.className = 'btn-small';
+          btn.disabled = true;
+        }
+      } catch (err) {
+        badge.textContent = 'Unknown';
+      }
+    }
+
+    async function connectCalendar() {
+      try {
+        const res = await fetch(`${API}/calendar/auth-url`);
+        const data = await res.json();
+        if (!data.auth_url) {
+          showToast('❌ ' + (data.detail || 'Failed to get auth URL'));
+          return;
+        }
+
+        window.open(data.auth_url, 'calendar-oauth', 'width=500,height=600');
+
+        window.addEventListener('message', function handler(event) {
+          if (event.data.type === 'oauth-success' && event.data.provider === 'calendar') {
+            window.removeEventListener('message', handler);
+            showToast('✅ Calendar connected');
+            refreshCalendarStatus();
+          }
+        });
+      } catch (err) {
+        showToast('❌ Failed to start OAuth');
+      }
+    }
+
+    async function disconnectCalendar() {
+      if (!confirm('Disconnect Google Calendar?')) return;
+      try {
+        await fetch(`${API}/calendar/disconnect`, { method: 'DELETE' });
+        showToast('✅ Calendar disconnected');
+        refreshCalendarStatus();
+      } catch (err) {
+        showToast('❌ Failed to disconnect');
+      }
+    }
     
     async function disconnectEmail(provider) {
       if (!confirm(`Disconnect ${provider}? You will need to set it up again.`)) return;

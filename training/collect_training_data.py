@@ -15,35 +15,63 @@ DEFAULT_OUTPUT = Path(__file__).parent / "data" / "train_alpaca.json"
 
 
 def get_conversations_since(since: Optional[str] = None) -> List[Dict]:
-    """Get conversations with messages, optionally filtered by date."""
+    """
+    Get conversations with messages, optionally filtered by date.
+
+    Skips conversations flagged `excluded_from_training=1`. Attaches each
+    message's 👎 status so the caller can drop bad turns from training data.
+    """
     if not DB_PATH.exists():
         return []
 
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
 
+    # Tolerate older DBs that lack the excluded_from_training column.
+    conv_cols = [r[1] for r in conn.execute("PRAGMA table_info(conversations)").fetchall()]
+    has_excluded = "excluded_from_training" in conv_cols
+    has_feedback = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='feedback'"
+    ).fetchone() is not None
+
+    base_sql = "SELECT * FROM conversations"
+    clauses = []
+    args: list = []
+    if has_excluded:
+        clauses.append("(excluded_from_training IS NULL OR excluded_from_training = 0)")
     if since:
-        convs = conn.execute(
-            "SELECT * FROM conversations WHERE updated_at > ? ORDER BY updated_at",
-            (since,)
-        ).fetchall()
-    else:
-        convs = conn.execute(
-            "SELECT * FROM conversations ORDER BY updated_at"
-        ).fetchall()
+        clauses.append("updated_at > ?")
+        args.append(since)
+    if clauses:
+        base_sql += " WHERE " + " AND ".join(clauses)
+    base_sql += " ORDER BY updated_at"
+    convs = conn.execute(base_sql, args).fetchall()
 
     results = []
     for conv in convs:
-        messages = conn.execute(
-            "SELECT role, content FROM messages WHERE conversation_id = ? ORDER BY timestamp",
-            (conv["id"],)
-        ).fetchall()
+        if has_feedback:
+            messages = conn.execute(
+                """SELECT m.id, m.role, m.content, f.rating
+                   FROM messages m
+                   LEFT JOIN feedback f ON f.message_id = m.id
+                   WHERE m.conversation_id = ?
+                   ORDER BY m.timestamp""",
+                (conv["id"],),
+            ).fetchall()
+        else:
+            messages = conn.execute(
+                "SELECT id, role, content, NULL as rating FROM messages WHERE conversation_id = ? ORDER BY timestamp",
+                (conv["id"],),
+            ).fetchall()
         if len(messages) >= 2:
             results.append({
                 "id": conv["id"],
                 "title": conv["title"],
                 "updated_at": conv["updated_at"],
-                "messages": [{"role": m["role"], "content": m["content"]} for m in messages]
+                "messages": [
+                    {"role": m["role"], "content": m["content"], "rating": m["rating"]}
+                    for m in messages
+                ],
             })
 
     conn.close()
@@ -67,6 +95,10 @@ def conversations_to_alpaca(conversations: List[Dict]) -> List[Dict]:
                     continue
                 # Skip system messages that leaked through
                 if msgs[i]["role"] == "system":
+                    continue
+                # Skip turns the user rated 👎 on — that's the whole point of
+                # selective training data. (Messages without a rating pass.)
+                if msgs[i + 1].get("rating") == "down":
                     continue
                 examples.append({
                     "instruction": user_msg,

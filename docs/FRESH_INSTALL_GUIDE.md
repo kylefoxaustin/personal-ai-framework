@@ -184,7 +184,7 @@ cd web
 python3 -m http.server 3000
 ```
 
-Open http://localhost:3000 in your browser.
+Open http://localhost:8765 in your browser.
 
 ### Try Some Queries
 
