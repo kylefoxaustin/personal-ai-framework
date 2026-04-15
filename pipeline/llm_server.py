@@ -586,7 +586,7 @@ SESSION_COOKIE = "skippy_session"
 _PUBLIC_EXACT = {
     "/", "/docs", "/openapi.json", "/redoc", "/favicon.ico",
     "/auth/login", "/auth/logout", "/auth/bootstrap", "/auth/needs-bootstrap",
-    "/metrics", "/calendar/oauth-callback",
+    "/health", "/metrics", "/calendar/oauth-callback",
 }
 _PUBLIC_PREFIXES = ("/email/oauth-callback/",)  # /email/oauth-callback/gmail etc.
 
