@@ -47,6 +47,7 @@ training/output/
 training/data/
 models/kyle-*.gguf
 models/qwen2.5-14b/*.gguf
+models/qwen3-30b-a3b-kyle/*.gguf
 pipeline/config.yaml
 knowledge/recordings/
 training/*.log

@@ -374,6 +374,10 @@ def tool_schedule_reminder(params: Dict[str, str]) -> str:
 
 
 def tool_send_email(params: Dict[str, str]) -> str:
+    # DISABLED 2026-04-17 after an auto-approved send to a real address.
+    # Re-enable only after adding a real guardrail (typed confirmation,
+    # domain allowlist, or mandatory self-cc). See memory: feedback_agent_email_disabled.
+    return "Error: send_email is disabled. See agent_tools.py:tool_send_email for context."
     to = params.get("to", "").strip()
     subject = params.get("subject", "").strip()
     body = params.get("body", "")

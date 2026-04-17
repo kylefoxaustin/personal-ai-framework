@@ -660,7 +660,7 @@ def load_model(model_path_override=None):
     # Unload any existing model first to free GPU memory
     unload_model()
 
-    model_path = model_path_override or "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf"
+    model_path = model_path_override or config.get('model', {}).get('path', "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf")
 
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Model not found at {model_path}")
