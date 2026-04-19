@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "description": "Fixed Skippy eval set. Mix of RAG-heavy, reasoning, coding, and persona prompts. 'gold_substrings' = all must appear (case-insensitive) for auto-pass; missing it means manual review.",
+  "prompts": [
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "prompt": "What bus widths does the i.MX 93 DDR controller support, and how is the width selected?",
+      "gold_substrings": ["64-bit", "32-bit"]
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "prompt": "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+      "gold_substrings": ["LPUART", "IOMUX"]
+    },
+    {
+      "id": "rag_imx93_reference_manual",
+      "category": "rag_datasheet",
+      "prompt": "Roughly how long is the i.MX 93 reference manual?",
+      "gold_substrings": ["5000", "page"]
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "prompt": "Did Kyle ever demo Angry Birds on an NXP platform? Which chip?",
+      "gold_substrings": ["i.MX 8", "Angry Birds"]
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
+      "gold_substrings": ["EV"]
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "prompt": "I have 12 apples. I give 3/4 of them to my kid. How many do I have left? Answer with just the number.",
+      "gold_substrings": ["3"]
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
+      "gold_substrings": ["10:", "11:"]
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "prompt": "Write a concise Python function `reverse_string(s: str) -> str` that returns the reversed string. Just the function, no preamble.",
+      "gold_substrings": ["def reverse_string", "[::-1]"]
+    },
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "prompt": "Write a Python generator `fib()` that yields Fibonacci numbers forever. Just the code.",
+      "gold_substrings": ["def fib", "yield"]
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "prompt": "What's one well-regarded book for someone new to embedded systems?",
+      "gold_substrings": []
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "prompt": "Briefly explain what an MoE (mixture-of-experts) model is and one reason it's appealing vs a dense model of similar quality.",
+      "gold_substrings": ["expert"]
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "prompt": "In two sentences, introduce yourself as Skippy. Stay in character.",
+      "gold_substrings": ["Skippy"]
+    }
+  ]
+}
