@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.4.1-devel-ubuntu22.04
+FROM nvidia/cuda:12.8.0-devel-ubuntu22.04
 RUN apt-get update && apt-get install -y ffmpeg tesseract-ocr \
     python3.10 python3-pip git build-essential \
     cmake ninja-build \
@@ -8,9 +8,14 @@ WORKDIR /app
 RUN pip3 install --upgrade pip
 # Install Python dependencies
 COPY pipeline/requirements.txt .
-# Install llama-cpp-python with CUDA support
+# Install llama-cpp-python with CUDA support.
+# CMAKE_CUDA_ARCHITECTURES=120 targets Blackwell (RTX 5090, sm_120). Default
+# arch list in llama-cpp-python stops at sm_89, which silently falls back to
+# CPU on Blackwell and costs ~20x decode perf. If you move to a different GPU,
+# change this to its compute capability (e.g. 89 for Ada, 90 for Hopper) or a
+# list like "89;90;120".
 RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/libcuda.so.1 && \
-    CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_EXE_LINKER_FLAGS='-L/usr/local/cuda/lib64/stubs -Wl,-rpath-link,/usr/local/cuda/lib64/stubs'" \
+    CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=120 -DCMAKE_EXE_LINKER_FLAGS='-L/usr/local/cuda/lib64/stubs -Wl,-rpath-link,/usr/local/cuda/lib64/stubs'" \
     pip3 install llama-cpp-python --upgrade --force-reinstall --no-cache-dir
 # Install other requirements
 RUN pip3 install -r requirements.txt
