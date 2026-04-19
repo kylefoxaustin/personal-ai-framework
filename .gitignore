@@ -58,3 +58,4 @@ docs/*.pptx
 knowledge/datasheets/**/*.pdf
 knowledge/datasheets/.datasheet_manifest.json
 knowledge/images/
+.skippy-env
