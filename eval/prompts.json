@@ -5,8 +5,8 @@
     {
       "id": "rag_imx93_ddr_width",
       "category": "rag_datasheet",
-      "prompt": "What bus widths does the i.MX 93 DDR controller support, and how is the width selected?",
-      "gold_substrings": ["64-bit", "32-bit"]
+      "prompt": "What memory interface does the i.MX 93 support for external DRAM?",
+      "gold_substrings": ["16-bit", "LPDDR4"]
     },
     {
       "id": "rag_imx93_uart",
@@ -15,10 +15,10 @@
       "gold_substrings": ["LPUART", "IOMUX"]
     },
     {
-      "id": "rag_imx93_reference_manual",
+      "id": "rag_imx93_cortex",
       "category": "rag_datasheet",
-      "prompt": "Roughly how long is the i.MX 93 reference manual?",
-      "gold_substrings": ["5000", "page"]
+      "prompt": "What Arm cores does the i.MX 93 application processor include?",
+      "gold_substrings": ["A55", "M33"]
     },
     {
       "id": "rag_angry_birds_demo",
