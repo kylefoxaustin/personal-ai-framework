@@ -72,10 +72,44 @@ def log_test(name, status, detail=""):
     print(f"  {icon}  {name}{detail_str}")
 
 
+# Populated by login() at startup; api_* helpers attach it as Bearer.
+_AUTH_TOKEN: Optional[str] = None
+
+
+def login(user: Optional[str] = None, password: Optional[str] = None) -> bool:
+    """Authenticate with SKIPPY_USER/SKIPPY_PASSWORD env vars and cache the token.
+
+    Called once in main(); after that, api_get/api_post/api_delete attach the
+    bearer header automatically. Returns True on success.
+    """
+    global _AUTH_TOKEN
+    user = user or os.environ.get("SKIPPY_USER")
+    password = password or os.environ.get("SKIPPY_PASSWORD")
+    if not user or not password:
+        return False
+    url = f"{BASE_URL}/auth/login"
+    payload = json.dumps({"username": user, "password": password}).encode()
+    req = urllib.request.Request(url, data=payload, method="POST")
+    req.add_header("Content-Type", "application/json")
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            body = json.loads(resp.read().decode())
+            _AUTH_TOKEN = body.get("token")
+            return _AUTH_TOKEN is not None
+    except Exception:
+        return False
+
+
+def _attach_auth(req: urllib.request.Request) -> None:
+    if _AUTH_TOKEN:
+        req.add_header("Authorization", f"Bearer {_AUTH_TOKEN}")
+
+
 def api_get(endpoint, timeout=30):
     """GET request to the API. Returns (status_code, response_dict)."""
     url = f"{BASE_URL}{endpoint}"
     req = urllib.request.Request(url)
+    _attach_auth(req)
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             body = json.loads(resp.read().decode())
@@ -100,6 +134,7 @@ def api_post(endpoint, data=None, timeout=30):
         req.add_header("Content-Type", "application/json")
     else:
         req = urllib.request.Request(url, data=b"", method="POST")
+    _attach_auth(req)
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             body = json.loads(resp.read().decode())
@@ -119,6 +154,7 @@ def api_delete(endpoint, timeout=30):
     """DELETE request to the API. Returns (status_code, response_dict)."""
     url = f"{BASE_URL}{endpoint}"
     req = urllib.request.Request(url, method="DELETE")
+    _attach_auth(req)
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             body = json.loads(resp.read().decode())
@@ -359,6 +395,232 @@ def test_rag_retrieval():
                  f"context={'yes' if has_context else 'no'}, response={len(body['text'])} chars")
     else:
         log_test("RAG retrieval", "FAIL", str(body)[:100])
+
+
+# ---------------------------------------------------------------------------
+# Unit tests for RAG ranking internals (no server required; direct import of
+# pipeline/advanced_rag.py). These guard the invariants that the hybrid-search
+# tuning relies on — regressions here have caused eval pass rate to drop
+# before, so pin them as tests.
+# ---------------------------------------------------------------------------
+
+def _import_advanced_rag():
+    """Add pipeline/ to sys.path and import AdvancedRAG + BM25.
+
+    Returns None if the import fails (e.g. a dep is missing in the caller's
+    venv), so the test can SKIP gracefully instead of crashing the suite.
+    """
+    pipeline_dir = str(Path(__file__).parent.parent / "pipeline")
+    if pipeline_dir not in sys.path:
+        sys.path.insert(0, pipeline_dir)
+    try:
+        import advanced_rag  # noqa: F401
+        return advanced_rag
+    except Exception:
+        return None
+
+
+def test_bm25_tokenizer_keeps_product_ids():
+    """BM25 must keep 2-char product identifiers like 'mx' and '93'.
+
+    These were dropped by the pre-v5.9.3 `len > 2` filter, which was the
+    reason i.MX queries couldn't match the reference-manual chunks in BM25.
+    """
+    mod = _import_advanced_rag()
+    if mod is None:
+        log_test("BM25 tokenizer keeps product IDs", "SKIP", "advanced_rag import failed")
+        return
+    tokens = mod.BM25()._tokenize("i.MX 93 DDR controller bus width")
+    missing = [t for t in ("mx", "93") if t not in tokens]
+    if not missing:
+        log_test("BM25 tokenizer keeps product IDs", "PASS", f"tokens={tokens}")
+    else:
+        log_test("BM25 tokenizer keeps product IDs", "FAIL", f"missing {missing} in {tokens}")
+
+
+def test_peripheral_alias_expansion():
+    """UART/SPI/I2C queries should expand to include the LP-prefixed names.
+
+    On i.MX SoCs the peripheral chapters are named LPUART/LPSPI/LPI2C — bare
+    'UART' won't match them semantically without this alias pass.
+    """
+    mod = _import_advanced_rag()
+    if mod is None:
+        log_test("Peripheral alias expansion", "SKIP", "advanced_rag import failed")
+        return
+    adv = mod.AdvancedRAG(rag_service=None)  # _expand_query doesn't touch self.rag
+    cases = [
+        ("What handles UART on i.MX 93?", "LPUART"),
+        ("Tell me about SPI on this chip.", "LPSPI"),
+        ("How does I2C work?", "LPI2C"),
+    ]
+    failures = []
+    for q, expected in cases:
+        expanded = adv._expand_query(q)
+        if expected not in expanded:
+            failures.append(f"{q!r} → {expanded!r} (missing {expected})")
+    if not failures:
+        log_test("Peripheral alias expansion", "PASS", f"{len(cases)}/{len(cases)} cases")
+    else:
+        log_test("Peripheral alias expansion", "FAIL", "; ".join(failures))
+
+
+def test_peripheral_alias_idempotent():
+    """Expansion must not double-append an alias when it's already present."""
+    mod = _import_advanced_rag()
+    if mod is None:
+        log_test("Peripheral alias idempotent", "SKIP", "advanced_rag import failed")
+        return
+    adv = mod.AdvancedRAG(rag_service=None)
+    # Query already contains LPUART — expansion should not add it again.
+    expanded = adv._expand_query("How does LPUART handle UART traffic?")
+    lpuart_count = expanded.lower().count("lpuart")
+    if lpuart_count == 1:
+        log_test("Peripheral alias idempotent", "PASS", f"'lpuart' count={lpuart_count}")
+    else:
+        log_test("Peripheral alias idempotent", "FAIL",
+                 f"'lpuart' appears {lpuart_count}× in {expanded!r}")
+
+
+def test_concept_alias_pin_routing():
+    """Pin-routing intent phrases must trigger the IOMUX concept alias.
+
+    Compound queries like "what IP block routes its pins?" don't get answered
+    by the peripheral-chapter chunks alone — a secondary retrieval with
+    IOMUXC added is needed. Guards the regex patterns in _CONCEPT_ALIASES.
+    """
+    mod = _import_advanced_rag()
+    if mod is None:
+        log_test("Concept alias detects pin routing", "SKIP", "advanced_rag import failed")
+        return
+    adv = mod.AdvancedRAG(rag_service=None)
+    positive = [
+        "what IP block routes its pins?",
+        "how is pad mux handled",
+        "Describe the pin-mux for UART",
+    ]
+    # These should NOT fire (bare "pins" without routing intent).
+    negative = [
+        "how many pins does the chip have?",
+        "is it pin-compatible with other SoCs",
+    ]
+    pos_fail = [q for q in positive if not adv._detect_concept_aliases(q)]
+    neg_fail = [q for q in negative if adv._detect_concept_aliases(q)]
+    if not pos_fail and not neg_fail:
+        log_test("Concept alias detects pin routing", "PASS",
+                 f"{len(positive)} positive, {len(negative)} negative")
+    else:
+        detail = []
+        if pos_fail:
+            detail.append(f"missed positive: {pos_fail}")
+        if neg_fail:
+            detail.append(f"false positive: {neg_fail}")
+        log_test("Concept alias detects pin routing", "FAIL", "; ".join(detail))
+
+
+# ---------------------------------------------------------------------------
+# Integration tests for RAG improvements (require the server).
+# These exercise the end-to-end retrieval+generation path to catch regressions
+# that the unit tests above can't see (e.g. reranker blend weights changing,
+# filter thresholds drifting).
+# ---------------------------------------------------------------------------
+
+def _rag_probe(prompt, expected_substrings, test_name, max_tokens=512, timeout=120):
+    """Helper: POST /generate with RAG on, check response contains all expected
+    substrings (case-insensitive). Passes if all present; fails with a summary
+    of the miss. Used by the RAG-scenario integration tests below.
+    """
+    status, body = api_post("/generate", {
+        "prompt": prompt,
+        "max_tokens": max_tokens,
+        "temperature": 0.3,
+        "use_rag": True,
+        "rag_k": 3,
+    }, timeout=timeout)
+    if status != 200 or not body.get("text"):
+        log_test(test_name, "FAIL", f"status={status}, body={str(body)[:100]}")
+        return
+    text = body["text"].lower()
+    missing = [s for s in expected_substrings if s.lower() not in text]
+    if not missing:
+        log_test(test_name, "PASS", f"all {len(expected_substrings)} substrings present")
+    else:
+        log_test(test_name, "FAIL",
+                 f"missing {missing} in response: {body['text'][:160]!r}")
+
+
+def test_rag_peripheral_query_finds_lpuart():
+    """Bare 'UART' query must surface LPUART chunks and yield an LPUART answer.
+
+    Pre-alias-expansion, the model answered with generic 'UART' text pulled
+    from marketing chunks — missed the LPUART chapter entirely.
+    """
+    _rag_probe(
+        "Which peripheral on the i.MX 93 handles UART?",
+        ["LPUART"],
+        "RAG: UART query surfaces LPUART",
+    )
+
+
+def test_rag_compound_query_finds_iomux():
+    """Compound peripheral+routing query should answer both parts correctly.
+
+    Pre-concept-alias, top-3 was all LPUART chunks with no IOMUX content —
+    model correctly named LPUART but hallucinated 'GPIO' for the routing.
+    """
+    _rag_probe(
+        "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+        ["LPUART", "IOMUX"],
+        "RAG: compound UART+pin-routing query",
+    )
+
+
+def test_rag_rare_phrase_retrieval():
+    """Rare-phrase queries must surface BM25 rank-4/5 chunks, not just rank-1.
+
+    Pre-BM25-admit, the MX8QuadMax chunk (BM25 rank 4 for 'angry birds')
+    was filtered out because its normalized kw ~0.7 failed the > 0.8 gate
+    and its sem score was 0. Model then denied Kyle demoed the game.
+
+    Phrased as a direct "what chip" question rather than "Did Kyle ever demo
+    … Which chip?" — the latter reliably triggers the agent loop to propose
+    a write_file tool call, which obscures the retrieval signal we're
+    actually testing here. This wording exercises the same retrieval path
+    without bouncing off the agent dispatcher.
+    """
+    _rag_probe(
+        "In Kyle's pillar-to-pillar IVI demo, which NXP chip ran Angry Birds on the LCD?",
+        ["i.MX 8", "Angry Birds"],
+        "RAG: rare-phrase multi-hop (Angry Birds)",
+    )
+
+
+def test_rag_persona_not_hijacked():
+    """Persona queries must not be hijacked by weak-relevance RAG chunks.
+
+    When the candidate pool was widened without a sem floor, persona intros
+    returned 'I'm a helpful AI assistant' because a middling-score chunk
+    overrode the persona prompt. The sem > 0.3 floor prevents that.
+    """
+    _rag_probe(
+        "In two sentences, introduce yourself as Skippy. Stay in character.",
+        ["Skippy"],
+        "RAG: persona not hijacked by drift chunks",
+    )
+
+
+def test_rag_general_knowledge_not_refused():
+    """General-knowledge queries must still answer from training, not refuse.
+
+    With weak chunks in context, an over-restrictive RAG directive made the
+    model say 'excerpts don't cover that' for questions that don't need KB
+    content at all. The filter + softer directive keep these answerable.
+    """
+    _rag_probe(
+        "Briefly explain what an MoE (mixture-of-experts) model is.",
+        ["expert"],
+        "RAG: general-knowledge query still answered",
+    )
 
 
 def test_training_status_idle():
@@ -760,6 +1022,17 @@ PHASES = {
             test_facts_add_and_search,
             test_facts_semantic_search,
             test_rag_retrieval,
+            # RAG ranking unit tests (no server; fast)
+            test_bm25_tokenizer_keeps_product_ids,
+            test_peripheral_alias_expansion,
+            test_peripheral_alias_idempotent,
+            test_concept_alias_pin_routing,
+            # RAG end-to-end scenarios (server; slower)
+            test_rag_peripheral_query_finds_lpuart,
+            test_rag_compound_query_finds_iomux,
+            test_rag_rare_phrase_retrieval,
+            test_rag_persona_not_hijacked,
+            test_rag_general_knowledge_not_refused,
         ],
     },
     2: {
@@ -853,7 +1126,15 @@ def main():
     if not wait_for_server(10):
         log(f"Cannot reach server at {BASE_URL}. Is docker compose running?", RED)
         sys.exit(1)
-    log("Server connected.\n", GREEN)
+    log("Server connected.", GREEN)
+
+    # Authenticate — server is auth-gated since v5.9 multi-user support.
+    # SKIPPY_USER / SKIPPY_PASSWORD must be exported (same env the eval
+    # harness uses). Without auth every /generate and /facts call 401s.
+    if not login():
+        log("Auth failed — set SKIPPY_USER and SKIPPY_PASSWORD env vars.", RED)
+        sys.exit(1)
+    log("Authenticated.\n", GREEN)
 
     if args.test:
         # Find and run single test
