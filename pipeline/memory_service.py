@@ -82,8 +82,26 @@ class MemoryService:
         ][:k]
         return memory_results
 
+    # Past responses containing any of these phrases are Skippy's own
+    # prior refusals. Retrieving them as "memory context" causes the model
+    # to parrot the refusal on similar queries, even when the underlying
+    # retrieval issue has been fixed. Filter them out of memory context.
+    _REFUSAL_MARKERS = (
+        "excerpts don't cover",
+        "excerpts do not cover",
+        "retrieved excerpts don't",
+        "i don't have information",
+        "i do not have information",
+    )
+
     def get_memory_context(self, query: str, k: int = 2) -> Tuple[List[str], List[Dict]]:
         results = self.search_memory(query, k=k)
+        # Drop prior refusals so poisoned memory doesn't override corrected
+        # retrieval. See _REFUSAL_MARKERS above.
+        results = [
+            r for r in results
+            if not any(m in r["content"].lower() for m in self._REFUSAL_MARKERS)
+        ]
         contexts = [r["content"] for r in results]
         citations = [
             {

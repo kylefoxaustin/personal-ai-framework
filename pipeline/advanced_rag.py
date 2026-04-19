@@ -199,6 +199,27 @@ class SimpleReranker:
         return results
 
 
+def _has_phrase_match(query: str, content: str) -> bool:
+    """True if a meaningful 2-word query phrase appears in the content.
+
+    Both words in the phrase must be len >= 3 — this is a cheap stopword
+    exclusion that avoids matching generic bigrams ("is a", "of the", "what
+    is") that appear in every long document. Without that guard, long
+    emails trip the check even when they're topically unrelated.
+    """
+    q_words = re.findall(r"\b\w+\b", query.lower())
+    if len(q_words) < 2:
+        return False
+    content_l = content.lower()
+    for i in range(len(q_words) - 1):
+        a, b = q_words[i], q_words[i + 1]
+        if len(a) < 3 or len(b) < 3:
+            continue
+        if f"{a} {b}" in content_l:
+            return True
+    return False
+
+
 class AdvancedRAG:
     """
     Advanced RAG with:
@@ -467,6 +488,22 @@ class AdvancedRAG:
                     break
 
         results = results[:k]
+
+        # Relevance-floor guard against "weak-context hijack". If every chunk
+        # in the top-k has both sem < 0.3 AND zero phrase overlap with the
+        # query (no consecutive query-word pair appears in the chunk), the
+        # retrieval is noise for this query — usually a BM25 coincidence like
+        # a surname "Moe" matching a query about MoE models, or ambient
+        # "experts" text matching a question about mixture-of-experts. Left
+        # in, the weak context hijacks the model into parroting "excerpts
+        # don't cover that" instead of answering from training knowledge.
+        # Empty results tells the caller to skip RAG injection.
+        if results and not any(
+            r.semantic_score >= 0.3 or _has_phrase_match(original_query, r.content)
+            for r in results
+        ):
+            return []
+
         for i, result in enumerate(results):
             result.citation_id = i + 1
 
