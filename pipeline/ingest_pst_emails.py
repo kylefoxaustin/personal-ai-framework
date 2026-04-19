@@ -13,10 +13,13 @@ import requests
 import json
 import hashlib
 
+from ingest_auth import login_headers
+
 # Configuration
 LLM_SERVER = "http://localhost:8080"
 BATCH_SIZE = 50  # Emails per API call
 MANIFEST_FILE = Path("knowledge/emails/.pst_ingest_manifest.json")
+AUTH_HEADERS = login_headers(LLM_SERVER)
 
 def load_manifest():
     if MANIFEST_FILE.exists():
@@ -61,26 +64,36 @@ def parse_email_file(filepath):
     except Exception as e:
         return None
 
+def _post_batch(documents):
+    """Single HTTP POST. Returns chunks_added on 2xx, raises otherwise."""
+    response = requests.post(
+        f"{LLM_SERVER}/ingest/batch",
+        json={'documents': documents},
+        headers=AUTH_HEADERS,
+        timeout=120
+    )
+    response.raise_for_status()
+    return response.json().get('chunks_added', 0)
+
+
 def ingest_batch(emails_data):
-    """Send a batch of emails to the ingestion endpoint."""
-    documents = []
-    for filepath, content, metadata in emails_data:
-        documents.append({
-            'content': content,
-            'metadata': metadata
-        })
-    
-    try:
-        response = requests.post(
-            f"{LLM_SERVER}/ingest/batch",
-            json={'documents': documents},
-            timeout=120
-        )
-        response.raise_for_status()
-        return response.json().get('chunks_added', 0)
-    except Exception as e:
-        print(f"\n    ⚠️ Batch failed: {e}")
+    """Send a batch of emails, bisecting on failure so one bad email
+    doesn't take the whole batch down. Returns total chunks_added."""
+    documents = [{'content': c, 'metadata': m} for _, c, m in emails_data]
+    return _ingest_docs(documents)
+
+
+def _ingest_docs(documents):
+    if not documents:
         return 0
+    try:
+        return _post_batch(documents)
+    except Exception as e:
+        if len(documents) == 1:
+            print(f"\n    ⚠️ Dropping 1 email that server refused: {e}")
+            return 0
+        mid = len(documents) // 2
+        return _ingest_docs(documents[:mid]) + _ingest_docs(documents[mid:])
 
 def main():
     import argparse

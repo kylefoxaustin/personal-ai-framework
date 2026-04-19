@@ -24,9 +24,12 @@ def clean_text(text: str) -> str:
     text = re.sub(r'(.){20,}', '\1\1\1', text)
     return text.strip()
 
+from ingest_auth import login_headers
+
 DATASHEETS_DIR = Path(__file__).parent.parent / "knowledge" / "datasheets"
 MANIFEST_FILE = DATASHEETS_DIR / ".datasheet_manifest.json"
 LLM_URL = "http://localhost:8080"
+AUTH_HEADERS = login_headers(LLM_URL)
 
 
 @dataclass
@@ -304,6 +307,7 @@ def ingest_to_rag(text: str, info: DatasheetInfo) -> int:
                             "content": current_chunk,
                             "metadata": chunk_meta
                         },
+                        headers=AUTH_HEADERS,
                         timeout=60
                     )
                     
@@ -329,6 +333,7 @@ def ingest_to_rag(text: str, info: DatasheetInfo) -> int:
                         resp = requests.post(
                             f"{LLM_URL}/ingest",
                             json={"content": mini_chunk, "metadata": chunk_meta},
+                            headers=AUTH_HEADERS,
                             timeout=30
                         )
                         if resp.status_code == 200:
