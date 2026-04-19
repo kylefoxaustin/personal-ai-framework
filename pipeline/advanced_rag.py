@@ -356,18 +356,28 @@ class AdvancedRAG:
         
         # 2. BM25 keyword search
         self._build_bm25_index()
+        bm25_admit_hashes: set = set()
         if self.bm25_fitted:
             bm25_results = self.bm25.search(query, top_k=candidate_pool)
-            
+
             # Normalize BM25 scores
             if bm25_results:
                 max_score = max(score for _, score in bm25_results)
-                
-                for doc_idx, score in bm25_results:
+
+                for rank, (doc_idx, score) in enumerate(bm25_results):
                     doc = self.cached_docs[doc_idx]
                     doc_hash = hash(doc)
                     normalized_score = score / max_score if max_score > 0 else 0
-                    
+
+                    # Always-admit the top-5 BM25 hits in step 3, regardless of
+                    # normalized threshold. Normalization is division by the
+                    # corpus-max BM25 score, so rank-4/5 chunks on a multi-hop
+                    # query can end up at kw≈0.5 even when they're clearly
+                    # on-topic (e.g. the MX8QuadMax "Angry Birds" transcript
+                    # sits at BM25 rank 4 but gets filtered by kw > 0.8).
+                    if rank < 5:
+                        bm25_admit_hashes.add(doc_hash)
+
                     if doc_hash in results_map:
                         results_map[doc_hash].keyword_score = normalized_score
                     else:
@@ -376,24 +386,39 @@ class AdvancedRAG:
                             metadata=self.cached_metadatas[doc_idx],
                             keyword_score=normalized_score
                         )
-        
+
         # 3. Combine scores and filter out irrelevant matches.
         # Semantic floor at 0.3 — widening the candidate pool exposed a failure
         # mode where chunks at sim=0.1–0.2 would still satisfy the OR clause
         # via a middling BM25 score, get promoted by the reranker, and hijack
         # non-RAG queries (persona, general knowledge) into "excerpts don't
         # cover that" refusals. 0.3 keeps real-relevance chunks (Angry Birds /
-        # LPUART land at 0.42–0.57) while dropping drift.
-        results = [r for r in results_map.values() if r.semantic_score > 0.3 or r.keyword_score > 0.8]
+        # LPUART land at 0.42–0.57) while dropping drift. BM25 top-5 bypass
+        # covers the compound-query tail (see bm25_admit_hashes above).
+        results = [
+            r for r in results_map.values()
+            if r.semantic_score > 0.3
+            or r.keyword_score > 0.8
+            or hash(r.content) in bm25_admit_hashes
+        ]
         for result in results:
             result.final_score = (
                 semantic_weight * result.semantic_score +
                 keyword_weight * result.keyword_score
             )
         
-        # 4. Sort by combined score
+        # 4. Sort by combined score, keep top candidates for reranking —
+        # but always preserve BM25-admitted chunks past the cut, since
+        # their final_score can be low (sem=0, normalized kw < 0.8) even
+        # when they're the actual answer to a compound query. The reranker
+        # will boost them via exact-phrase bonus if warranted.
         results.sort(key=lambda x: x.final_score, reverse=True)
-        results = results[:candidate_pool]  # Keep top candidates for reranking
+        top = results[:candidate_pool]
+        top_hashes = {hash(r.content) for r in top}
+        for r in results[candidate_pool:]:
+            if hash(r.content) in bm25_admit_hashes and hash(r.content) not in top_hashes:
+                top.append(r)
+        results = top
         
         # 5. Rerank
         if use_reranking and results:
