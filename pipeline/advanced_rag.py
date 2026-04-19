@@ -267,8 +267,24 @@ class AdvancedRAG:
         (re.compile(r"\bi2c\b", re.IGNORECASE), "LPI2C"),
     ]
 
+    # Concept aliases for compound queries. When a query asks about pin
+    # routing ("what IP block routes its pins?"), the peripheral-chapter
+    # chunks don't cover the routing side — we need the IOMUX controller
+    # chapter. Trigger on intent phrases, not the bare word "pin", to avoid
+    # false positives on unrelated pin-count / pin-compatible questions.
+    _CONCEPT_ALIASES = [
+        (re.compile(r"\b(?:pin[-\s]?mux|pin\s+mux|route[sd]?\s+.*\bpins?\b|routes?\s+its\s+pins?|ip\s+block.*\bpins?\b|pad\s+mux)\b", re.IGNORECASE),
+         "IOMUXC IOMUX pad"),
+    ]
+
     def _expand_query(self, query: str) -> str:
-        """Append known peripheral aliases. Skip expansion if alias already present."""
+        """Append peripheral aliases (UART → LPUART etc.).
+
+        Concept aliases (pin routing → IOMUXC) deliberately do NOT go here —
+        they pull so strongly that they crowd out the peripheral chunks when
+        folded into a single query. Handled as a secondary retrieval pass
+        in hybrid_search instead.
+        """
         additions = []
         for pattern, alias in self._PERIPHERAL_ALIASES:
             if pattern.search(query) and alias.lower() not in query.lower():
@@ -276,6 +292,14 @@ class AdvancedRAG:
         if additions:
             return f"{query} {' '.join(additions)}"
         return query
+
+    def _detect_concept_aliases(self, query: str) -> List[str]:
+        """Return concept aliases triggered by the query, for secondary retrieval."""
+        out = []
+        for pattern, alias in self._CONCEPT_ALIASES:
+            if pattern.search(query):
+                out.append(alias)
+        return out
 
     def hybrid_search(
         self,
@@ -298,6 +322,7 @@ class AdvancedRAG:
         Returns:
             List of SearchResult objects with scores and citations
         """
+        original_query = query
         query = self._expand_query(query)
 
         results_map: Dict[str, SearchResult] = {}
@@ -378,11 +403,48 @@ class AdvancedRAG:
                 result.final_score = (result.final_score * 0.6) + (result.rerank_score * 0.4)
             results.sort(key=lambda x: x.final_score, reverse=True)
         
-        # 6. Take top k and add citation IDs
+        # 6. Take top k. If the query triggered a concept alias (e.g. pin
+        # routing → IOMUXC), also run a secondary semantic search for that
+        # concept and splice its top-1 into the results. This handles
+        # compound queries like "what peripheral handles UART AND what
+        # IP block routes its pins" where primary retrieval finds the
+        # peripheral chunks but not the routing-side chunks (or vice versa).
+        concept_aliases = self._detect_concept_aliases(original_query)
+        if concept_aliases and k >= 2:
+            seen_hashes = {hash(r.content) for r in results[:k]}
+            for alias in concept_aliases:
+                alias_results = self.rag.collection.query(
+                    query_texts=[f"{original_query} {alias}"],
+                    n_results=5,
+                    include=["documents", "metadatas", "distances"]
+                )
+                if not alias_results["documents"] or not alias_results["documents"][0]:
+                    continue
+                for doc, meta, dist in zip(
+                    alias_results["documents"][0],
+                    alias_results["metadatas"][0],
+                    alias_results["distances"][0],
+                ):
+                    if hash(doc) in seen_hashes:
+                        continue
+                    sim = 1 - dist
+                    if sim < 0.3:
+                        break
+                    sr = SearchResult(
+                        content=doc, metadata=meta or {},
+                        semantic_score=sim, final_score=sim,
+                    )
+                    # Insert at position k-1 so the primary top picks stay
+                    # first and the concept chunk joins at the end of the
+                    # returned k. Displaces the weakest primary pick.
+                    results = results[: k - 1] + [sr] + results[k - 1 : k]
+                    seen_hashes.add(hash(doc))
+                    break
+
         results = results[:k]
         for i, result in enumerate(results):
             result.citation_id = i + 1
-        
+
         return results
     
     def search_with_citations(
