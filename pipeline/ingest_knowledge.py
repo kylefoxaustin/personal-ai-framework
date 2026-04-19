@@ -19,6 +19,8 @@ import mailbox
 import fitz  # PyMuPDF
 from email import policy
 
+from ingest_auth import login_headers
+
 
 class IngestManifest:
     """Tracks ingested files to avoid duplicates."""
@@ -194,6 +196,7 @@ class KnowledgeIngester:
         self.root = Path(self.config['knowledge_root']).resolve()
         self.manifest = IngestManifest(self.config['manifest_file'])
         self.server_url = self.config['llm_server_url']
+        self.auth_headers = login_headers(self.server_url)
 
         # Stats
         self.stats = {
@@ -246,6 +249,7 @@ class KnowledgeIngester:
                     'content': content,
                     'metadata': metadata
                 },
+                headers=self.auth_headers,
                 timeout=60
             )
             response.raise_for_status()
