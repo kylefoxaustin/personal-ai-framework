@@ -30,7 +30,7 @@
       "id": "rag_ev_sustainability",
       "category": "rag_blog",
       "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
-      "gold_substrings": ["EV"]
+      "gold_substrings": ["electric", "sustain"]
     },
     {
       "id": "reason_math_fraction",
