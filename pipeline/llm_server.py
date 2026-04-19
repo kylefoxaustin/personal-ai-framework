@@ -209,8 +209,10 @@ def _check_for_tool_use(
 
 Current date/time: {now_human} (ISO: {now_str})
 
-Decide if you need a tool. Use a tool when the user asks to read a file, list a directory, search the web, check git status, write a file, run a script, schedule a reminder, send an email, create a calendar event, or list calendar events.
+Decide if you need a tool. Use a tool when the user asks to read a file, list a directory, search the web, check git status, write a file to disk, run a script, schedule a reminder, send an email, create a calendar event, or list calendar events.
 Write/schedule/send tools (write_file, run_script, schedule_reminder, send_email, create_calendar_event) will NOT execute automatically — they propose an action the user must approve.
+
+IMPORTANT — do NOT use write_file just because the user says "write". Only use write_file when the user explicitly asks to SAVE something TO A FILE ON DISK (they mention a filename, a path, or say "save to a file"). Requests like "write a Python function" or "write me a poem" mean produce text in the chat response — those are NO_TOOLS.
 
 Output format — `params` MUST be a flat JSON object whose keys are the parameter names themselves, NOT literal "key"/"value" fields.
 
@@ -249,6 +251,14 @@ Example 6 — user asks: What's on my calendar this week?
 
 Example 7 — user asks: What is the capital of France?
 NO_TOOLS
+
+Example 8 — user asks: Write a Python function that reverses a string
+NO_TOOLS
+(No filename, no "save to"; this is a code request, answer inline.)
+
+Example 9 — user asks: Write a quick poem about Austin
+NO_TOOLS
+(Creative-writing request, not a file-save request.)
 
 Now for the real question below, output either a tool call in the exact format shown, or exactly NO_TOOLS.
 If you have already gathered enough information from the tools already run, output NO_TOOLS so the assistant can respond to the user.
@@ -512,7 +522,7 @@ class ConversationMessage(BaseModel):
 
 class GenerationRequest(BaseModel):
     prompt: str
-    max_tokens: Optional[int] = 512
+    max_tokens: Optional[int] = 1024
     temperature: Optional[float] = 0.7
     top_p: Optional[float] = 0.9
     context: Optional[List[str]] = None  # Manual context override
@@ -530,7 +540,7 @@ class GenerationResponse(BaseModel):
 
 class StreamingRequest(BaseModel):
     prompt: str
-    max_tokens: Optional[int] = 512
+    max_tokens: Optional[int] = 1024
     temperature: Optional[float] = 0.7
     top_p: Optional[float] = 0.9
     context: Optional[List[str]] = None
@@ -827,6 +837,18 @@ def generate(request: GenerationRequest):
 
     # Add RAG context (knowledge base) - skip for conversational queries
     if context_docs and not _is_conversational(request.prompt):
+        rag_directive = (
+            "Excerpts retrieved from your knowledge base follow. Use them like this:\n"
+            "- When the user is asking about YOUR DOCUMENTS (datasheet specifics, past "
+            "emails, blog archives, personal notes), treat the excerpts as authoritative. "
+            "Don't invent specifics (numbers, part names, configuration bits) that aren't "
+            "in the excerpts — if they don't contain the answer, say so (e.g. \"the "
+            "retrieved excerpts don't cover that\") rather than guessing.\n"
+            "- For general-knowledge questions (concepts, code, math, widely-known topics), "
+            "answer from your training normally even if the excerpts are tangential.\n"
+            "- When citing a specific fact from an excerpt, prefer quoting the relevant "
+            "phrase verbatim.\n\n"
+        )
         if _is_synthesis_query(request.prompt) and citations:
             # Group chunks by source for cross-document synthesis
             from collections import OrderedDict
@@ -835,10 +857,10 @@ def generate(request: GenerationRequest):
                 src = citations[i]["source_file"] if i < len(citations) else "unknown"
                 src_name = src.split("/")[-1] if "/" in src else src
                 groups.setdefault(src_name, []).append(doc)
+            system_context += rag_directive
             system_context += (
-                "Information from MULTIPLE sources in the knowledge base. "
-                "Synthesize across these sources — note where sources agree, "
-                "disagree, or complement each other:\n\n"
+                "Excerpts from MULTIPLE sources — synthesize across them, noting where "
+                "they agree, disagree, or complement each other:\n\n"
             )
             for src, docs in groups.items():
                 system_context += f"── {src} ──\n"
@@ -846,7 +868,8 @@ def generate(request: GenerationRequest):
                     system_context += f"{doc}\n\n"
             system_context += "---\n\n"
         else:
-            system_context += "Relevant information from your knowledge base:\n\n"
+            system_context += rag_directive
+            system_context += "Excerpts from your knowledge base:\n\n"
             for doc in context_docs:
                 system_context += f"{doc}\n\n"
             system_context += "---\n\n"
@@ -1003,6 +1026,18 @@ def generate_stream(request: StreamingRequest):
 
     # Add RAG context (knowledge base) - skip for conversational queries
     if context_docs and not _is_conversational(request.prompt):
+        rag_directive = (
+            "Excerpts retrieved from your knowledge base follow. Use them like this:\n"
+            "- When the user is asking about YOUR DOCUMENTS (datasheet specifics, past "
+            "emails, blog archives, personal notes), treat the excerpts as authoritative. "
+            "Don't invent specifics (numbers, part names, configuration bits) that aren't "
+            "in the excerpts — if they don't contain the answer, say so (e.g. \"the "
+            "retrieved excerpts don't cover that\") rather than guessing.\n"
+            "- For general-knowledge questions (concepts, code, math, widely-known topics), "
+            "answer from your training normally even if the excerpts are tangential.\n"
+            "- When citing a specific fact from an excerpt, prefer quoting the relevant "
+            "phrase verbatim.\n\n"
+        )
         if _is_synthesis_query(request.prompt) and citations:
             # Group chunks by source for cross-document synthesis
             from collections import OrderedDict
@@ -1011,10 +1046,10 @@ def generate_stream(request: StreamingRequest):
                 src = citations[i]["source_file"] if i < len(citations) else "unknown"
                 src_name = src.split("/")[-1] if "/" in src else src
                 groups.setdefault(src_name, []).append(doc)
+            system_context += rag_directive
             system_context += (
-                "Information from MULTIPLE sources in the knowledge base. "
-                "Synthesize across these sources — note where sources agree, "
-                "disagree, or complement each other:\n\n"
+                "Excerpts from MULTIPLE sources — synthesize across them, noting where "
+                "they agree, disagree, or complement each other:\n\n"
             )
             for src, docs in groups.items():
                 system_context += f"── {src} ──\n"
@@ -1022,7 +1057,8 @@ def generate_stream(request: StreamingRequest):
                     system_context += f"{doc}\n\n"
             system_context += "---\n\n"
         else:
-            system_context += "Relevant information from your knowledge base:\n\n"
+            system_context += rag_directive
+            system_context += "Excerpts from your knowledge base:\n\n"
             for doc in context_docs:
                 system_context += f"{doc}\n\n"
             system_context += "---\n\n"
