@@ -64,7 +64,10 @@ class BM25:
                       'those', 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'you',
                       'your', 'yours', 'he', 'him', 'his', 'she', 'her', 'hers', 'it',
                       'its', 'they', 'them', 'their', 'what', 'which', 'who', 'whom'}
-        return [t for t in tokens if t not in stop_words and len(t) > 2]
+        # len >= 2 keeps product/peripheral identifiers like "mx", "93", "ip"
+        # that used to be stripped by the old `> 2` filter. Single-char tokens
+        # are still dropped (mostly noise: "a", "i", digits 1-9 alone).
+        return [t for t in tokens if t not in stop_words and len(t) >= 2]
     
     def fit(self, documents: List[str]):
         """Fit BM25 on a corpus of documents."""
@@ -253,6 +256,27 @@ class AdvancedRAG:
         except Exception as e:
             print(f"⚠️ Failed to build BM25 index: {e}")
     
+    # NXP-style peripheral naming on i.MX SoCs prefixes low-power blocks with
+    # "LP". Users naturally say "UART"/"SPI"/"I2C", but the reference manual and
+    # chunk text use LPUART/LPSPI/LPI2C exclusively. Without aliasing, semantic
+    # similarity on the bare term pulls marketing/fact-sheet chunks that
+    # happen to use the generic word, instead of the actual peripheral chapter.
+    _PERIPHERAL_ALIASES = [
+        (re.compile(r"\buart\b", re.IGNORECASE), "LPUART"),
+        (re.compile(r"\bspi\b", re.IGNORECASE), "LPSPI"),
+        (re.compile(r"\bi2c\b", re.IGNORECASE), "LPI2C"),
+    ]
+
+    def _expand_query(self, query: str) -> str:
+        """Append known peripheral aliases. Skip expansion if alias already present."""
+        additions = []
+        for pattern, alias in self._PERIPHERAL_ALIASES:
+            if pattern.search(query) and alias.lower() not in query.lower():
+                additions.append(alias)
+        if additions:
+            return f"{query} {' '.join(additions)}"
+        return query
+
     def hybrid_search(
         self,
         query: str,
@@ -274,12 +298,21 @@ class AdvancedRAG:
         Returns:
             List of SearchResult objects with scores and citations
         """
+        query = self._expand_query(query)
+
         results_map: Dict[str, SearchResult] = {}
-        
+
+        # Candidate pool size — don't let it shrink below the floor even when
+        # k is small. Reranker needs room to re-order good-but-lower chunks
+        # into the final top-k; a k*2 pool at k=3 is too tight to recover the
+        # right specific-term chunks (e.g. LPUART) from generic marketing
+        # chunks that happen to have higher semantic score.
+        candidate_pool = max(k * 2, 30)
+
         # 1. Semantic search via ChromaDB
         semantic_results = self.rag.collection.query(
             query_texts=[query],
-            n_results=k * 2,  # Get more for fusion
+            n_results=candidate_pool,
             include=["documents", "metadatas", "distances"]
         )
         
@@ -299,7 +332,7 @@ class AdvancedRAG:
         # 2. BM25 keyword search
         self._build_bm25_index()
         if self.bm25_fitted:
-            bm25_results = self.bm25.search(query, top_k=k * 2)
+            bm25_results = self.bm25.search(query, top_k=candidate_pool)
             
             # Normalize BM25 scores
             if bm25_results:
@@ -319,8 +352,14 @@ class AdvancedRAG:
                             keyword_score=normalized_score
                         )
         
-        # 3. Combine scores and filter out irrelevant matches
-        results = [r for r in results_map.values() if r.semantic_score > 0.1 or r.keyword_score > 0.8]
+        # 3. Combine scores and filter out irrelevant matches.
+        # Semantic floor at 0.3 — widening the candidate pool exposed a failure
+        # mode where chunks at sim=0.1–0.2 would still satisfy the OR clause
+        # via a middling BM25 score, get promoted by the reranker, and hijack
+        # non-RAG queries (persona, general knowledge) into "excerpts don't
+        # cover that" refusals. 0.3 keeps real-relevance chunks (Angry Birds /
+        # LPUART land at 0.42–0.57) while dropping drift.
+        results = [r for r in results_map.values() if r.semantic_score > 0.3 or r.keyword_score > 0.8]
         for result in results:
             result.final_score = (
                 semantic_weight * result.semantic_score +
@@ -329,7 +368,7 @@ class AdvancedRAG:
         
         # 4. Sort by combined score
         results.sort(key=lambda x: x.final_score, reverse=True)
-        results = results[:k * 2]  # Keep top candidates for reranking
+        results = results[:candidate_pool]  # Keep top candidates for reranking
         
         # 5. Rerank
         if use_reranking and results:
