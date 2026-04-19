@@ -1,0 +1,558 @@
+{
+  "name": "qwen3-moe-v6-gpu-restored",
+  "timestamp": "2026-04-19T16:10:41",
+  "endpoint": "http://localhost:8080",
+  "rag_enabled": true,
+  "prompts_version": 1,
+  "prompts": [
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "prompt": "What memory interface does the i.MX 93 support for external DRAM?",
+      "gold_substrings": [
+        "16-bit",
+        "LPDDR4"
+      ],
+      "response": {
+        "text": "The i.MX 93 processor supports LPDDR4x memory technology through its 16-bit DRAM controller. This allows for high-speed data transfer and is suitable for applications requiring large amounts of memory bandwidth. The processor supports up to 2GB of memory capacity with LPDDR4x technology.",
+        "tokens": 3088,
+        "elapsed_s": 60.97,
+        "tok_per_s": 50.6,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/IMX93RM.pdf",
+            "chunk_index": 1,
+            "total_chunks": 2,
+            "semantic_score": 0.712,
+            "keyword_score": 0.691,
+            "rerank_score": 0.627,
+            "final_score": 0.674
+          },
+          {
+            "id": 2,
+            "source_file": "datasheets/IMX93XEC.pdf",
+            "chunk_index": 0,
+            "total_chunks": 7,
+            "semantic_score": 0.539,
+            "keyword_score": 0.703,
+            "rerank_score": 0.797,
+            "final_score": 0.671
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/IMX93IEC.pdf",
+            "chunk_index": 0,
+            "total_chunks": 7,
+            "semantic_score": 0.526,
+            "keyword_score": 0.704,
+            "rerank_score": 0.795,
+            "final_score": 0.666
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "prompt": "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+      "gold_substrings": [
+        "LPUART",
+        "IOMUX"
+      ],
+      "response": {
+        "text": "The peripheral on the i.MX 93 that handles UART is the Low Power Universal Asynchronous Receiver/Transmitter (LPUART). The IP block that routes its pins is the General Purpose Input/Output (GPIO) block.",
+        "tokens": 3687,
+        "elapsed_s": 3.65,
+        "tok_per_s": 1010.9,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/IMX93RM.pdf",
+            "chunk_index": 5,
+            "total_chunks": 11,
+            "semantic_score": 0.512,
+            "keyword_score": 0.764,
+            "rerank_score": 0.533,
+            "final_score": 0.565
+          },
+          {
+            "id": 2,
+            "source_file": "datasheets/IMX93RM.pdf",
+            "chunk_index": 0,
+            "total_chunks": 9,
+            "semantic_score": 0.493,
+            "keyword_score": 0.811,
+            "rerank_score": 0.531,
+            "final_score": 0.565
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/IMX93RM.pdf",
+            "chunk_index": 8,
+            "total_chunks": 10,
+            "semantic_score": 0.557,
+            "keyword_score": 0.0,
+            "rerank_score": 0.511,
+            "final_score": 0.438
+          }
+        ]
+      },
+      "score": "fail (missing: IOMUX)"
+    },
+    {
+      "id": "rag_imx93_cortex",
+      "category": "rag_datasheet",
+      "prompt": "What Arm cores does the i.MX 93 application processor include?",
+      "gold_substrings": [
+        "A55",
+        "M33"
+      ],
+      "response": {
+        "text": "The i.MX 93 application processor includes the following ARM cores:\n\n1. Two ARM Cortex-A55 processors operating up to 1.7 GHz\n2. One ARM Cortex-M33 processor operating up to 250 MHz\n\nThese cores are part of the Arm Core Platform, which includes additional sub-blocks such as the 32 KB L1 I-cache, 32 KB L1-D-cache, 64 KB per core L2 cache, Media Processing Engine (MPE) with Neon\u2122 technology, Floating Point Unit (FPU) with support of the VFPv4-D16 architecture, and 256 KB cluster L3 cache for the Cortex-A55 core. The Cortex-M33 core is used for standing by monitoring with Cortex-A55 and other high-power modules power gated, IoT device control, and machine learning applications.",
+        "tokens": 5842,
+        "elapsed_s": 21.24,
+        "tok_per_s": 275.1,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/iMX93FAMFS.pdf",
+            "chunk_index": 0,
+            "total_chunks": 6,
+            "semantic_score": 0.643,
+            "keyword_score": 1.0,
+            "rerank_score": 0.92,
+            "final_score": 0.818
+          },
+          {
+            "id": 2,
+            "source_file": "datasheets/IMX93XEC.pdf",
+            "chunk_index": 1,
+            "total_chunks": 4,
+            "semantic_score": 0.621,
+            "keyword_score": 0.848,
+            "rerank_score": 0.88,
+            "final_score": 0.765
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/IMX93IEC.pdf",
+            "chunk_index": 1,
+            "total_chunks": 4,
+            "semantic_score": 0.622,
+            "keyword_score": 0.851,
+            "rerank_score": 0.877,
+            "final_score": 0.765
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "prompt": "Did Kyle ever demo Angry Birds on an NXP platform? Which chip?",
+      "gold_substrings": [
+        "i.MX 8",
+        "Angry Birds"
+      ],
+      "response": {
+        "text": "Based on the information provided in the search results, Kyle did not demo Angry Birds on an NXP platform. The search results mention various NXP microcontrollers such as the LPC11U24, but there is no specific mention of Kyle demonstrating Angry Birds on any of these platforms. The results do indicate that NXP has demonstrated other games and applications on their platforms, but not specifically Angry Birds.",
+        "tokens": 3323,
+        "elapsed_s": 20.07,
+        "tok_per_s": 165.6,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "writing/transcripts/Yes i actually played angry birds on that ivi demo.txt",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.613,
+            "final_score": 0.425
+          },
+          {
+            "id": 2,
+            "source_file": "writing/transcripts/Altia User Interface Software Featured in the NXP eCockpit Showcase.txt",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.51,
+            "keyword_score": 0.0,
+            "rerank_score": 0.482,
+            "final_score": 0.407
+          },
+          {
+            "id": 3,
+            "source_file": "writing/blogs/blog4.txt",
+            "chunk_index": 1,
+            "total_chunks": 3,
+            "semantic_score": 0.417,
+            "keyword_score": 0.0,
+            "rerank_score": 0.523,
+            "final_score": 0.384
+          }
+        ]
+      },
+      "score": "fail (missing: i.MX 8)"
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
+      "gold_substrings": [
+        "EV"
+      ],
+      "response": {
+        "text": "Based on the provided podcast transcript, here's what was said about the sustainability argument for electric vehicles:\n\n*   **NXP's Role in EVs:** NXP's solutions are used throughout the electric powertrain and connected EV systems. This includes specific platforms like the GreenBox Real-Time Development Platform and the GoldBox Vehicle Network Referencing Design, which help car makers build greener innovations.\n*   **Focus on Efficiency:** The podcast emphasizes that efficiency is vital for optimizing EV applications. NXP's innovations in this area focus on battery management, power conversion, and power distribution to prolong the useful lifetime of EV components.\n*   **Energy Usage:** The podcast highlights that the energy used to manufacture semiconductors is a significant factor in the overall carbon footprint of a vehicle. However, it also points out that the energy saved by using efficient EVs over their lifetime is substantial.",
+        "tokens": 3233,
+        "elapsed_s": 19.55,
+        "tok_per_s": 165.4,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "writing/blogs/PDCST-TRANS-CTOS-PERSPECTIVE-TOP-TECH-TRENDINGS-2024.pdf",
+            "chunk_index": 14,
+            "total_chunks": 22,
+            "semantic_score": 0.532,
+            "keyword_score": 0.96,
+            "rerank_score": 0.659,
+            "final_score": 0.66
+          },
+          {
+            "id": 2,
+            "source_file": "writing/blogs/PDCST-TRANS-ROAD-SUSTAINABILITY-23-04.pdf",
+            "chunk_index": 0,
+            "total_chunks": 9,
+            "semantic_score": 0.602,
+            "keyword_score": 0.861,
+            "rerank_score": 0.574,
+            "final_score": 0.638
+          },
+          {
+            "id": 3,
+            "source_file": "writing/blogs/PDCST-TRANS-ROAD-SUSTAINABILITY-23-04.pdf",
+            "chunk_index": 5,
+            "total_chunks": 9,
+            "semantic_score": 0.458,
+            "keyword_score": 1.0,
+            "rerank_score": 0.556,
+            "final_score": 0.594
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "prompt": "I have 12 apples. I give 3/4 of them to my kid. How many do I have left? Answer with just the number.",
+      "gold_substrings": [
+        "3"
+      ],
+      "response": {
+        "text": "3",
+        "tokens": 2853,
+        "elapsed_s": 1.61,
+        "tok_per_s": 1771.4,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 6,
+            "semantic_score": 0.343,
+            "keyword_score": 0.747,
+            "rerank_score": 0.487,
+            "final_score": 0.473
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 2,
+            "semantic_score": 0.484,
+            "keyword_score": 0.0,
+            "rerank_score": 0.522,
+            "final_score": 0.412
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.464,
+            "keyword_score": 0.0,
+            "rerank_score": 0.539,
+            "final_score": 0.411
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
+      "gold_substrings": [
+        "10:5"
+      ],
+      "response": {
+        "text": "The first train travels for 1 hour before the second train leaves. In that hour, it covers 60 miles. So, when the second train leaves, the distance between them is 195 - 60 = 135 miles. The combined speed of the two trains is 60 + 80 = 140 mph. To cover 135 miles at 140 mph, it takes 135/140 = 0.964 hours. Converting this to minutes gives 0.964 * 60 = 57.86 minutes. Therefore, the trains meet at 10:57.86 a.m., which is approximately 11:00 a.m.",
+        "tokens": 2187,
+        "elapsed_s": 2.95,
+        "tok_per_s": 741.7,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.453,
+            "keyword_score": 0.0,
+            "rerank_score": 0.558,
+            "final_score": 0.414
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.432,
+            "keyword_score": 0.0,
+            "rerank_score": 0.569,
+            "final_score": 0.409
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.434,
+            "keyword_score": 0.0,
+            "rerank_score": 0.515,
+            "final_score": 0.388
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "prompt": "Write a concise Python function `reverse_string(s: str) -> str` that returns the reversed string. Just the function, no preamble.",
+      "gold_substrings": [
+        "def reverse_string",
+        "[::-1]"
+      ],
+      "response": {
+        "text": "```python\ndef reverse_string(s: str) -> str:\n    return s[::-1]\n```",
+        "tokens": 1027,
+        "elapsed_s": 1.52,
+        "tok_per_s": 677.7,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/IMX93RM.pdf",
+            "chunk_index": 1,
+            "total_chunks": 15,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.469,
+            "final_score": 0.368
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "prompt": "Write a Python generator `fib()` that yields Fibonacci numbers forever. Just the code.",
+      "gold_substrings": [
+        "def fib",
+        "yield"
+      ],
+      "response": {
+        "text": "def fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b",
+        "tokens": 2782,
+        "elapsed_s": 1.77,
+        "tok_per_s": 1571.1,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/IMX93RM.pdf",
+            "chunk_index": 2,
+            "total_chunks": 8,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.53,
+            "final_score": 0.392
+          },
+          {
+            "id": 2,
+            "source_file": "datasheets/AN14316.pdf",
+            "chunk_index": 2,
+            "total_chunks": 7,
+            "semantic_score": 0.0,
+            "keyword_score": 0.922,
+            "rerank_score": 0.517,
+            "final_score": 0.373
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/IMX93RM.pdf",
+            "chunk_index": 0,
+            "total_chunks": 14,
+            "semantic_score": 0.0,
+            "keyword_score": 0.987,
+            "rerank_score": 0.423,
+            "final_score": 0.347
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "prompt": "What's one well-regarded book for someone new to embedded systems?",
+      "gold_substrings": [],
+      "response": {
+        "text": "I don't know of any well-regarded books for someone new to embedded systems.",
+        "tokens": 3049,
+        "elapsed_s": 16.83,
+        "tok_per_s": 181.1,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/AN13872.pdf",
+            "chunk_index": 1,
+            "total_chunks": 7,
+            "semantic_score": 0.363,
+            "keyword_score": 0.843,
+            "rerank_score": 0.619,
+            "final_score": 0.552
+          },
+          {
+            "id": 2,
+            "source_file": "writing/blogs/PDCST-TRANS-CTOS-PERSPECTIVE-TOP-TECH-TRENDINGS-2024.pdf",
+            "chunk_index": 12,
+            "total_chunks": 22,
+            "semantic_score": 0.4,
+            "keyword_score": 0.537,
+            "rerank_score": 0.5,
+            "final_score": 0.465
+          },
+          {
+            "id": 3,
+            "source_file": "writing/blogs/blog2.txt",
+            "chunk_index": 0,
+            "total_chunks": 3,
+            "semantic_score": 0.341,
+            "keyword_score": 0.536,
+            "rerank_score": 0.477,
+            "final_score": 0.431
+          }
+        ]
+      },
+      "score": "manual"
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "prompt": "Briefly explain what an MoE (mixture-of-experts) model is and one reason it's appealing vs a dense model of similar quality.",
+      "gold_substrings": [
+        "expert"
+      ],
+      "response": {
+        "text": "An Mixture-of-Experts (MoE) model is a type of artificial intelligence architecture that combines multiple specialized models, or \"experts,\" to make decisions or predictions. Each expert is trained to handle a specific subset of tasks or data, and a gating mechanism determines which experts are activated for a given input. This approach allows the model to be more efficient and accurate, as it can leverage the strengths of each expert for specific tasks.\n\nOne reason an MoE model is appealing compared to a dense model of similar quality is its efficiency. MoE models can be more computationally efficient because they activate only a subset of experts for a given input, whereas dense models typically activate all their parameters. This can lead to faster inference times and lower computational costs, making MoE models more suitable for deployment in resource-constrained environments.",
+        "tokens": 2841,
+        "elapsed_s": 3.03,
+        "tok_per_s": 937.0,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 4,
+            "semantic_score": 0.0,
+            "keyword_score": 0.975,
+            "rerank_score": 0.591,
+            "final_score": 0.412
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 4,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.553,
+            "final_score": 0.401
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 3,
+            "semantic_score": 0.0,
+            "keyword_score": 0.809,
+            "rerank_score": 0.564,
+            "final_score": 0.371
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "prompt": "In two sentences, introduce yourself as Skippy. Stay in character.",
+      "gold_substrings": [
+        "Skippy"
+      ],
+      "response": {
+        "text": "I'm Skippy, the little dog with the big ears. I'm known for my boundless energy and love for adventure.",
+        "tokens": 4104,
+        "elapsed_s": 2.04,
+        "tok_per_s": 2015.8,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 2,
+            "total_chunks": 4,
+            "semantic_score": 0.345,
+            "keyword_score": 0.806,
+            "rerank_score": 0.59,
+            "final_score": 0.526
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 3,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.611,
+            "final_score": 0.424
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.381,
+            "keyword_score": 0.0,
+            "rerank_score": 0.478,
+            "final_score": 0.351
+          }
+        ]
+      },
+      "score": "pass"
+    }
+  ],
+  "avg_tok_per_s": 796.9
+}
