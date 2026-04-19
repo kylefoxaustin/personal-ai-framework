@@ -1,6 +1,6 @@
 # Personal AI Framework — Feature Roadmap
 
-Running list of planned features. Status as of **v5.7.0** (2026-04-14).
+Running list of planned features. Status as of **v5.9.2** (2026-04-18).
 
 ---
 
@@ -16,7 +16,7 @@ Running list of planned features. Status as of **v5.7.0** (2026-04-14).
 - **Citation links with score breakdown** — each citation shows semantic / BM25 / rerank scores so you can see *why* a chunk was chosen.
 - **Conversation-aware RAG** — retrieval uses the last 6 turns as context and boosts chunks that match the ongoing topic.
 
-### Agent capabilities (unreleased)
+### Agent capabilities (v5.8.0)
 - **Google Calendar integration** — `calendar_service.py` + six endpoints (`/calendar/status`, `/auth-url`, `/oauth-callback`, `/disconnect`, `/events`, `/create`). Reuses `gmail_credentials.json`, separate `calendar_token.pickle`. Settings UI has Connect/Disconnect. Natural-language "add this to my calendar" lands with tool-calling below.
 - **Write-capable tools** — `write_file` and `run_script` added to `agent_tools.py`, sandboxed to `~/.personal-ai/skippy-workspace/`. Confirm-tool registry + two-phase flow: LLM proposes → UI shows approve/deny card → `/agent/execute` runs after approval. Path traversal blocked, 100 KB write cap, 30s script timeout, only `.py` and `.sh` scripts allowed.
 - **Reminders** — `reminder_service.py` (SQLite at `~/.personal-ai/reminders.db`) + `schedule_reminder` confirm-tool. Endpoints: `/reminders` (create/upcoming/due/ack/cancel). UI polls `/reminders/due` every 30s, surfaces via toast + system bubble + browser Notification API. Detection prompt gets current datetime so Qwen can convert "tomorrow at 9am" into ISO 8601.
@@ -33,34 +33,32 @@ Running list of planned features. Status as of **v5.7.0** (2026-04-14).
     - On approve, the warning banner morphs to reflect final state: overwrite → green ✅ "Overwrote previous version (was 1.8 KB)"; save-as-copy → banner removed.
     - Removed stale welcome-screen suggestion pills (`i.MX demo email`, `ARM projects`, `Delay follow-up`).
 
-### Training / model quality (in progress)
+### Training / model quality (v5.8.0)
 - **RLHF-lite** — `feedback_service.py` + SQLite `feedback` table (shares `conversations.db`). Endpoints: `POST /feedback`, `DELETE /feedback/{message_id}`, `GET /feedback/{message_id}`, `GET /feedback/stats`, `GET /feedback/history?days=30`. UI renders 👍/👎 buttons below every assistant message; click to rate, click same to clear, click opposite to flip. Rating overwrites on conflict (`ON CONFLICT(message_id) DO UPDATE`). `conversation_store.add_message` now returns the new `message_id` so the frontend can wire buttons to the correct row.
 - **Training dashboard** — new 📊 header button opens a modal with: 👍/👎 counts + up rate, last-30-days bar chart (daily buckets, green up / red down), list of LoRA checkpoints read from `training/output/*/trainer_state.json` with inline SVG sparkline of train loss per run. Endpoints: `GET /training/runs`, `GET /training/run/{name}`. docker-compose mounts `./training:/app/training:ro` so the container can read checkpoint logs.
 - **Selective training data** — `conversations.excluded_from_training` column with auto-migration for older DBs. Sidebar gets a 🎓 / 🚫 toggle per conversation (strike-through + opacity when excluded). Endpoints: `POST /conversations/{id}/exclude-from-training`, `DELETE` to unset. `training/collect_training_data.py` skips excluded conversations and any user→assistant pair where the assistant message has 👎 rating — closes the RLHF → training feedback loop.
 - **Tool-call bleed scrubber** — `cleanAssistantText` also strips standalone tool-invocation lines like `write_file(path="foo.md", content=content)` or `send_email(to="x@y", …)` that Qwen sometimes echoes into final prose.
 
+### Observability (v5.8.0)
+- **Prometheus / Grafana metrics** — `pipeline/metrics.py` defines 13 series (generations/latency/TTFT/throughput, tool calls by tool+outcome, feedback by rating, reminders created/fired, RAG queries by mode + docs-returned, model_loaded/maintenance_mode/knowledge_base_docs gauges). `/metrics` endpoint on the FastAPI server renders text format 0.0.4. Instrumented both `/generate` and `/generate/stream` (endpoint label distinguishes them). `monitoring/` has `prometheus.yml` (scrapes `host.docker.internal:8080`), `grafana-dashboard.json` (13 panels with p50/p95/p99 percentiles), and a README with one-liner docker commands for Prometheus (port 9090) + Grafana (port 3001).
+
+### Multi-user + mobile (v5.9.0 – v5.9.2)
+- **Multi-user support** (v5.9.0 / v5.9.1 polish) — per-user data isolation under `~/.personal-ai/users/<username>/` (conversations.db, reminders.db, settings.json, memory/facts ChromaDB collections name-suffixed, skippy-workspace, Gmail/Calendar tokens). bcrypt password auth via `user_service.py` + sessions table; bearer-token in localStorage (chosen over cookies because of cross-origin HTTP quirks on LAN). FastAPI middleware gates all non-public paths; `require_admin` for user-management endpoints. OAuth callbacks stay public by encoding username into the OAuth `state` parameter. First-run bootstrap flow creates the admin account; legacy single-user install migrates into `users/kyle/` automatically on first startup. Web UI has login overlay, Account section in Settings with change-password + sign-out, admin-only Users management prompt.
+- **Auth middleware / CORS preflight fix** (v5.9.2) — middleware short-circuits OPTIONS preflight so browser cross-origin requests don't trip auth before CORS headers are applied.
+- **Mobile-friendly UI** — responsive `@media (max-width: 768px)` breakpoint: sidebar becomes a slide-in drawer (☰ hamburger + backdrop + auto-close on conversation select), header buttons collapse to icons, conversation actions always visible (no hover on touch), messages span full width, textarea uses 16px font so iOS doesn't auto-zoom. API base now derived from `window.location.hostname` so the frontend works from any device on the LAN without code changes.
+- **Phone Access helper** — new Settings → 📱 Phone Access panel. `./run.sh start` writes the host's LAN IPs to `~/.personal-ai/lan_ips.txt`; `/system/lan-ips` reads + filters out docker/loopback addresses. One-click **🔎 Detect LAN IP** auto-fills the URL. `/system/qr?data=...` returns a server-rendered SVG QR code (via the `qrcode` pip package). Includes firewall-troubleshooting hints for `ufw`.
+
+### Base model + cloud training (on `main`, post-v5.9.2)
+- **Kyle-merged Qwen3-30B-A3B MoE deploy** — swapped base from Qwen 2.5 14B Instruct to Kyle-merged Qwen3-30B-A3B MoE (Q4_K_M). Production decode on 5090: 155 tok/s sustained / 192 peak plain-prose, 69.7 tok/s tool-use path, 14.7 tok/s cold start.
+- **Cloud training pipeline hardening** — MoE LoRA training works end-to-end on a RunPod H100; first real run completed successfully (~$15 / 5 h). Runbook at `docs/cloud-training-runbook.md`.
+- **Use-case deck generator** — `scripts/build_use_case_deck.py` regenerates the 16-slide NPU sizing + use-case PowerPoint deck from source data.
+- **Workload distribution benchmark** — `bench_skippy.py` hits `/generate/stream` across 5 workload categories (plain_chat / long_form_reasoning / tool_use / rag_long_context / cold_start) and reports TTFT + decode tok/s percentiles. Measured spread: 3.6 → 222 tok/s decode (~60× range) across real workloads — fed into the Keyhole sizer as independent validation.
+
 ---
 
 ## 🔨 Remaining
 
-(All shipped 🎉 — open an issue or add a new section for the next round.)
-
-### Agent capabilities
-(All shipped 🎉)
-
-### Training / model quality
-(All shipped 🎉)
-
-### Infrastructure (unreleased)
-- **Multi-user support** — per-user data isolation under `~/.personal-ai/users/<username>/` (conversations.db, reminders.db, settings.json, memory/facts ChromaDB collections name-suffixed, skippy-workspace, Gmail/Calendar tokens). bcrypt password auth via `user_service.py` + sessions table; bearer-token in localStorage (chosen over cookies because of cross-origin HTTP quirks on LAN). FastAPI middleware gates all non-public paths; `require_admin` for user-management endpoints. OAuth callbacks stay public by encoding username into the OAuth `state` parameter. First-run bootstrap flow creates the admin account; legacy single-user install migrates into `users/kyle/` automatically on first startup. Web UI has login overlay, Account section in Settings with change-password + sign-out, admin-only Users management prompt.
-- **Prometheus / Grafana metrics** — `pipeline/metrics.py` defines 13 series (generations/latency/TTFT/throughput, tool calls by tool+outcome, feedback by rating, reminders created/fired, RAG queries by mode + docs-returned, model_loaded/maintenance_mode/knowledge_base_docs gauges). `/metrics` endpoint on the FastAPI server renders text format 0.0.4. Instrumented both `/generate` and `/generate/stream` (endpoint label distinguishes them). `monitoring/` has `prometheus.yml` (scrapes `host.docker.internal:8080`), `grafana-dashboard.json` (13 panels with p50/p95/p99 percentiles), and a README with one-liner docker commands for Prometheus (port 9090) + Grafana (port 3001).
-- **Mobile-friendly UI** — responsive `@media (max-width: 768px)` breakpoint: sidebar becomes a slide-in drawer (☰ hamburger + backdrop + auto-close on conversation select), header buttons collapse to icons, conversation actions always visible (no hover on touch), messages span full width, textarea uses 16px font so iOS doesn't auto-zoom. API base now derived from `window.location.hostname` so the frontend works from any device on the LAN without code changes.
-- **Phone Access helper** — new Settings → 📱 Phone Access panel. `./run.sh start` writes the host's LAN IPs to `~/.personal-ai/lan_ips.txt`; `/system/lan-ips` reads + filters out docker/loopback addresses. One-click **🔎 Detect LAN IP** auto-fills the URL. `/system/qr?data=...` returns a server-rendered SVG QR code (via the `qrcode` pip package). Includes firewall-troubleshooting hints for `ufw`.
-
-### Infrastructure
-Operational polish.
-
-- **Multi-user support** — separate conversation histories, memory stores, and personas per user. Likely needs a lightweight login (local only) and per-user SQLite DBs under `~/.personal-ai/users/<name>/`.
+(All shipped 🎉 — add a new section here for the next round.)
 
 ---
 
