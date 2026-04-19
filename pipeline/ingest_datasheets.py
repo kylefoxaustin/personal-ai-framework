@@ -25,11 +25,14 @@ def clean_text(text: str) -> str:
     return text.strip()
 
 from ingest_auth import login_headers
+from ingest_failure_log import FailureLog
 
 DATASHEETS_DIR = Path(__file__).parent.parent / "knowledge" / "datasheets"
 MANIFEST_FILE = DATASHEETS_DIR / ".datasheet_manifest.json"
+FAILURE_LOG_PATH = DATASHEETS_DIR / ".datasheet_failures.jsonl"
 LLM_URL = "http://localhost:8080"
 AUTH_HEADERS = login_headers(LLM_URL)
+FAILURES = FailureLog(FAILURE_LOG_PATH)
 
 
 @dataclass
@@ -409,7 +412,12 @@ def ingest_datasheets(force: bool = False):
         try:
             text, info = process_datasheet(pdf)
             chunks = ingest_to_rag(text, info)
-            
+
+            if chunks == 0:
+                print(f"   ❌ Zero chunks ingested — logging for replay\n")
+                FAILURES.record(str(pdf), "zero chunks ingested (server rejected all retries)")
+                continue
+
             manifest["processed"][rel_path] = {
                 "mtime": file_stat.st_mtime,
                 "chunks": chunks,
@@ -418,13 +426,14 @@ def ingest_datasheets(force: bool = False):
                 "category": info.category,
                 "processed_at": datetime.now().isoformat()
             }
-            
+
             total_chunks += chunks
             processed += 1
             print(f"   ✅ Added {chunks} chunks\n")
-            
+
         except Exception as e:
             print(f"   ❌ Error: {e}\n")
+            FAILURES.record(str(pdf), str(e))
     
     save_manifest(manifest)
     
@@ -458,6 +467,48 @@ def list_datasheets():
         print()
 
 
+def replay_datasheets(log_path: Path):
+    """Re-attempt every datasheet recorded in a failure log."""
+    log = FailureLog(log_path)
+    sources = list(log.read_sources())
+    if not sources:
+        print(f"⚠️ No failures in {log_path}")
+        return
+    print(f"🔁 Replaying {len(sources)} datasheet(s) from {log_path}")
+    log.archive()
+    manifest = load_manifest()
+    total_chunks = 0
+    for src in sources:
+        pdf = Path(src)
+        if not pdf.exists():
+            print(f"  ⚠️ Missing: {src}")
+            continue
+        print(f"📄 Replaying: {pdf.name}")
+        try:
+            text, info = process_datasheet(pdf)
+            chunks = ingest_to_rag(text, info)
+            if chunks == 0:
+                print("   ❌ Still zero chunks — re-logged")
+                FAILURES.record(str(pdf), "replay: zero chunks")
+                continue
+            rel_path = str(pdf.relative_to(DATASHEETS_DIR)) if DATASHEETS_DIR in pdf.parents else pdf.name
+            manifest["processed"][rel_path] = {
+                "mtime": pdf.stat().st_mtime,
+                "chunks": chunks,
+                "part_number": info.part_number,
+                "manufacturer": info.manufacturer,
+                "category": info.category,
+                "processed_at": datetime.now().isoformat(),
+            }
+            total_chunks += chunks
+            print(f"   ✅ Added {chunks} chunks")
+        except Exception as e:
+            print(f"   ❌ Error: {e}")
+            FAILURES.record(str(pdf), str(e))
+    save_manifest(manifest)
+    print(f"Replay complete: {total_chunks} chunks added")
+
+
 def main():
     import argparse
     
@@ -477,14 +528,20 @@ def main():
         help="Force re-processing of all files"
     )
     parser.add_argument(
+        "--replay", metavar="LOG",
+        help="Re-attempt datasheets recorded in a failure log"
+    )
+    parser.add_argument(
         "file",
         nargs="?",
         help="Specific file to process (for info command)"
     )
-    
+
     args = parser.parse_args()
-    
-    if args.command == "ingest":
+
+    if args.replay:
+        replay_datasheets(Path(args.replay))
+    elif args.command == "ingest":
         ingest_datasheets(force=args.force)
     elif args.command == "list":
         list_datasheets()

@@ -20,6 +20,7 @@ import fitz  # PyMuPDF
 from email import policy
 
 from ingest_auth import login_headers
+from ingest_failure_log import FailureLog
 
 
 class IngestManifest:
@@ -197,6 +198,7 @@ class KnowledgeIngester:
         self.manifest = IngestManifest(self.config['manifest_file'])
         self.server_url = self.config['llm_server_url']
         self.auth_headers = login_headers(self.server_url)
+        self.failure_log = FailureLog(self.root / ".ingest_failures.jsonl")
 
         # Stats
         self.stats = {
@@ -263,6 +265,7 @@ class KnowledgeIngester:
         except Exception as e:
             print(f"  ❌ Ingestion failed: {e}")
             self.stats['errors'] += 1
+            self.failure_log.record(str(filepath), str(e))
             return False
 
     def scan_and_ingest(self, force: bool = False):
@@ -305,7 +308,31 @@ class KnowledgeIngester:
         # Save manifest
         self.manifest.save()
 
-        # Print summary
+        self._print_summary()
+
+    def replay_failures(self, log_path: Path):
+        """Re-attempt every source recorded in a failure log."""
+        log = FailureLog(log_path)
+        sources = list(log.read_sources())
+        if not sources:
+            print(f"⚠️ No failures in {log_path}")
+            return
+        print(f"🔁 Replaying {len(sources)} failed source(s) from {log_path}")
+        log.archive()  # move aside so fresh failures go to a clean log
+        for src in sources:
+            filepath = Path(src)
+            if not filepath.exists():
+                print(f"  ⚠️ Missing: {src}")
+                continue
+            self.stats['files_scanned'] += 1
+            print(f"📄 Replaying: {filepath.relative_to(self.root) if self.root in filepath.parents else filepath}")
+            if self.ingest_file(filepath):
+                self.stats['files_ingested'] += 1
+                print("   ✅ Done")
+        self.manifest.save()
+        self._print_summary()
+
+    def _print_summary(self):
         print("-" * 50)
         print("📊 Ingestion Complete!")
         print(f"   Files scanned:  {self.stats['files_scanned']}")
@@ -313,7 +340,7 @@ class KnowledgeIngester:
         print(f"   Files skipped:  {self.stats['files_skipped']} (unchanged)")
         print(f"   Chunks added:   {self.stats['chunks_added']}")
         if self.stats['errors']:
-            print(f"   ⚠️ Errors:      {self.stats['errors']}")
+            print(f"   ⚠️ Errors:      {self.stats['errors']} (logged to {self.failure_log.path})")
 
 
 def main():
@@ -324,6 +351,8 @@ def main():
                         help='Force re-ingestion of all files')
     parser.add_argument('--dry-run', '-n', action='store_true',
                         help='Show what would be ingested without doing it')
+    parser.add_argument('--replay', metavar='LOG',
+                        help='Re-attempt sources recorded in a failure log')
 
     args = parser.parse_args()
 
@@ -337,7 +366,10 @@ def main():
         print("🔍 DRY RUN - no changes will be made")
         # TODO: implement dry run mode
 
-    ingester.scan_and_ingest(force=args.force)
+    if args.replay:
+        ingester.replay_failures(Path(args.replay))
+    else:
+        ingester.scan_and_ingest(force=args.force)
 
 
 if __name__ == '__main__':

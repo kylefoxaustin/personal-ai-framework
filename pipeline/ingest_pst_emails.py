@@ -14,12 +14,15 @@ import json
 import hashlib
 
 from ingest_auth import login_headers
+from ingest_failure_log import FailureLog
 
 # Configuration
 LLM_SERVER = "http://localhost:8080"
 BATCH_SIZE = 50  # Emails per API call
 MANIFEST_FILE = Path("knowledge/emails/.pst_ingest_manifest.json")
+FAILURE_LOG_PATH = Path("knowledge/emails/.pst_ingest_failures.jsonl")
 AUTH_HEADERS = login_headers(LLM_SERVER)
+FAILURES = FailureLog(FAILURE_LOG_PATH)
 
 def load_manifest():
     if MANIFEST_FILE.exists():
@@ -79,21 +82,23 @@ def _post_batch(documents):
 def ingest_batch(emails_data):
     """Send a batch of emails, bisecting on failure so one bad email
     doesn't take the whole batch down. Returns total chunks_added."""
-    documents = [{'content': c, 'metadata': m} for _, c, m in emails_data]
-    return _ingest_docs(documents)
+    items = [(fp, {'content': c, 'metadata': m}) for fp, c, m in emails_data]
+    return _ingest_items(items)
 
 
-def _ingest_docs(documents):
-    if not documents:
+def _ingest_items(items):
+    if not items:
         return 0
     try:
-        return _post_batch(documents)
+        return _post_batch([doc for _, doc in items])
     except Exception as e:
-        if len(documents) == 1:
-            print(f"\n    ⚠️ Dropping 1 email that server refused: {e}")
+        if len(items) == 1:
+            fp = items[0][0]
+            print(f"\n    ⚠️ Dropping email {fp}: {e}")
+            FAILURES.record(str(fp), str(e))
             return 0
-        mid = len(documents) // 2
-        return _ingest_docs(documents[:mid]) + _ingest_docs(documents[mid:])
+        mid = len(items) // 2
+        return _ingest_items(items[:mid]) + _ingest_items(items[mid:])
 
 def main():
     import argparse
@@ -101,25 +106,34 @@ def main():
     parser.add_argument('--sent-only', action='store_true', help='Only process Sent Items')
     parser.add_argument('--limit', type=int, help='Limit number of emails to process')
     parser.add_argument('--force', action='store_true', help='Ignore manifest, re-ingest all')
+    parser.add_argument('--replay', metavar='LOG', help='Re-attempt emails recorded in a failure log')
     args = parser.parse_args()
-    
+
     extracted_dir = Path("knowledge/emails/extracted")
-    
-    # Find email files
-    if args.sent_only:
+
+    # Replay mode pulls paths from the failure log instead of scanning.
+    if args.replay:
+        log = FailureLog(args.replay)
+        email_files = [Path(s) for s in log.read_sources() if Path(s).exists()]
+        if not email_files:
+            print(f"⚠️ No replayable emails in {args.replay}")
+            return
+        print(f"🔁 Replaying {len(email_files)} email(s) from {args.replay}")
+        log.archive()
+    elif args.sent_only:
         email_files = list(extracted_dir.rglob("*"))
         email_files = [f for f in email_files if f.is_file() and "Sent" in str(f)]
     else:
         email_files = list(extracted_dir.rglob("*"))
-        email_files = [f for f in email_files if f.is_file() 
+        email_files = [f for f in email_files if f.is_file()
                       and ("Inbox" in str(f) or "Sent" in str(f))
                       and "Calendar" not in str(f)
                       and "Contacts" not in str(f)
                       and "Tasks" not in str(f)]
-    
+
     # Filter to only files (not dirs) with no extension (actual emails)
     email_files = [f for f in email_files if f.is_file() and f.suffix == '']
-    
+
     if args.limit:
         email_files = email_files[:args.limit]
     
