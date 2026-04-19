@@ -1,0 +1,517 @@
+{
+  "name": "qwen3-moe-v1",
+  "timestamp": "2026-04-19T02:06:54",
+  "endpoint": "http://localhost:8080",
+  "rag_enabled": true,
+  "prompts_version": 1,
+  "prompts": [
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "prompt": "What bus widths does the i.MX 93 DDR controller support, and how is the width selected?",
+      "gold_substrings": [
+        "64-bit",
+        "32-bit"
+      ],
+      "response": {
+        "text": "The i.MX 93 DDR controller supports a bus width of 16-bit. This width is selected through the configuration of the DRAM controller, which allows for the specification of the number of channels and chip selects. In the case of the i.MX 93, it has one controller with one channel and two chip selects, which together define the 16-bit bus width.",
+        "tokens": 4172,
+        "elapsed_s": 24.11,
+        "tok_per_s": 173.0,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/IMX93AEC.pdf",
+            "chunk_index": 5,
+            "total_chunks": 9,
+            "semantic_score": 0.51,
+            "keyword_score": 0.0,
+            "rerank_score": 0.628,
+            "final_score": 0.465
+          },
+          {
+            "id": 2,
+            "source_file": "datasheets/IMX93CEC.pdf",
+            "chunk_index": 7,
+            "total_chunks": 8,
+            "semantic_score": 0.51,
+            "keyword_score": 0.0,
+            "rerank_score": 0.628,
+            "final_score": 0.465
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/IMX93XEC.pdf",
+            "chunk_index": 8,
+            "total_chunks": 9,
+            "semantic_score": 0.508,
+            "keyword_score": 0.0,
+            "rerank_score": 0.628,
+            "final_score": 0.465
+          }
+        ]
+      },
+      "score": "fail (missing: 64-bit, 32-bit)"
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "prompt": "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+      "gold_substrings": [
+        "LPUART",
+        "IOMUX"
+      ],
+      "response": {
+        "text": "The i.MX 93 processor handles UART through the **SCU (System Control Unit)** IP block, which routes the pins for the UART peripheral. The SCU is responsible for managing various system-level functions, including pin multiplexing, which allows the processor to route different peripheral signals to specific GPIO pins. This ensures that the UART peripheral can be connected to the appropriate pins on the processor, facilitating communication with external devices.",
+        "tokens": 3631,
+        "elapsed_s": 3.26,
+        "tok_per_s": 1113.8,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/IMX93EVKQSG.pdf",
+            "chunk_index": 0,
+            "total_chunks": 6,
+            "semantic_score": 0.569,
+            "keyword_score": 0.0,
+            "rerank_score": 0.71,
+            "final_score": 0.523
+          },
+          {
+            "id": 2,
+            "source_file": "datasheets/i.MX93/iMX93FAMFS.pdf",
+            "chunk_index": 10,
+            "total_chunks": 17,
+            "semantic_score": 0.606,
+            "keyword_score": 0.0,
+            "rerank_score": 0.668,
+            "final_score": 0.522
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/IMX93EVKQSG.pdf",
+            "chunk_index": 1,
+            "total_chunks": 6,
+            "semantic_score": 0.556,
+            "keyword_score": 0.0,
+            "rerank_score": 0.7,
+            "final_score": 0.514
+          }
+        ]
+      },
+      "score": "fail (missing: LPUART, IOMUX)"
+    },
+    {
+      "id": "rag_imx93_reference_manual",
+      "category": "rag_datasheet",
+      "prompt": "Roughly how long is the i.MX 93 reference manual?",
+      "gold_substrings": [
+        "5000",
+        "page"
+      ],
+      "response": {
+        "text": "The i.MX 93 reference manual is approximately 1,000 pages long.",
+        "tokens": 2499,
+        "elapsed_s": 2.4,
+        "tok_per_s": 1040.8,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/IMX93AEC.pdf",
+            "chunk_index": 0,
+            "total_chunks": 8,
+            "semantic_score": 0.429,
+            "keyword_score": 0.0,
+            "rerank_score": 0.808,
+            "final_score": 0.504
+          },
+          {
+            "id": 2,
+            "source_file": "datasheets/AN13997.pdf",
+            "chunk_index": 0,
+            "total_chunks": 7,
+            "semantic_score": 0.457,
+            "keyword_score": 0.0,
+            "rerank_score": 0.77,
+            "final_score": 0.5
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/i.MX93/iMX93FAMFS.pdf",
+            "chunk_index": 13,
+            "total_chunks": 17,
+            "semantic_score": 0.434,
+            "keyword_score": 0.0,
+            "rerank_score": 0.669,
+            "final_score": 0.45
+          }
+        ]
+      },
+      "score": "fail (missing: 5000)"
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "prompt": "Did Kyle ever demo Angry Birds on an NXP platform? Which chip?",
+      "gold_substrings": [
+        "i.MX 8",
+        "Angry Birds"
+      ],
+      "response": {
+        "text": "Based on the information provided, Kyle did not demo Angry Birds on an NXP platform. The information provided does not mention any specific demo of Angry Birds by Kyle on an NXP platform. However, it does mention a demo of Angry Birds on a screen, which could be related to an NXP platform, but the specific chip is not mentioned.",
+        "tokens": 3016,
+        "elapsed_s": 14.71,
+        "tok_per_s": 205.0,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "writing/transcripts/Yes i actually played angry birds on that ivi demo.txt",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.613,
+            "final_score": 0.425
+          },
+          {
+            "id": 2,
+            "source_file": "writing/transcripts/Altia User Interface Software Featured in the NXP eCockpit Showcase.txt",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.51,
+            "keyword_score": 0.0,
+            "rerank_score": 0.482,
+            "final_score": 0.407
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/AN14113.pdf",
+            "chunk_index": 0,
+            "total_chunks": 7,
+            "semantic_score": 0.463,
+            "keyword_score": 0.0,
+            "rerank_score": 0.474,
+            "final_score": 0.384
+          }
+        ]
+      },
+      "score": "fail (missing: i.MX 8)"
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
+      "gold_substrings": [
+        "EV"
+      ],
+      "response": {
+        "text": "Based on the provided information, there is no direct mention of NXP-adjacent podcasts discussing the sustainability argument for electric vehicles. However, the NXP Smarter World Podcast does cover topics related to sustainability, such as the role of technology in driving positive change and sustainable growth. For specific details on electric vehicles, other sources like the podcast \"Driving the Electric Fleet\" by Xos Trucks are mentioned, which discusses the benefits and challenges of transitioning to electric fleets.",
+        "tokens": 2352,
+        "elapsed_s": 15.72,
+        "tok_per_s": 149.6,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "writing/blogs/PDCST-TRANS-ROAD-SUSTAINABILITY-23-04.pdf",
+            "chunk_index": 0,
+            "total_chunks": 9,
+            "semantic_score": 0.583,
+            "keyword_score": 0.818,
+            "rerank_score": 0.585,
+            "final_score": 0.626
+          },
+          {
+            "id": 2,
+            "source_file": "writing/blogs/PDCST-TRANS-DRIV-ELEC-FLEET-23-01.pdf",
+            "chunk_index": 0,
+            "total_chunks": 9,
+            "semantic_score": 0.592,
+            "keyword_score": 0.0,
+            "rerank_score": 0.582,
+            "final_score": 0.482
+          },
+          {
+            "id": 3,
+            "source_file": "writing/blogs/PDCST-TRANS-CTOS-PERSPECTIVE-TOP-TECH-TRENDINGS-2024.pdf",
+            "chunk_index": 13,
+            "total_chunks": 22,
+            "semantic_score": 0.685,
+            "keyword_score": 0.0,
+            "rerank_score": 0.453,
+            "final_score": 0.469
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "prompt": "I have 12 apples. I give 3/4 of them to my kid. How many do I have left? Answer with just the number.",
+      "gold_substrings": [
+        "3"
+      ],
+      "response": {
+        "text": "3",
+        "tokens": 2649,
+        "elapsed_s": 1.7,
+        "tok_per_s": 1562.6,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 2,
+            "semantic_score": 0.484,
+            "keyword_score": 0.0,
+            "rerank_score": 0.522,
+            "final_score": 0.412
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.464,
+            "keyword_score": 0.0,
+            "rerank_score": 0.539,
+            "final_score": 0.411
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 4,
+            "semantic_score": 0.448,
+            "keyword_score": 0.0,
+            "rerank_score": 0.54,
+            "final_score": 0.404
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
+      "gold_substrings": [
+        "10:",
+        "11:"
+      ],
+      "response": {
+        "text": "To find when the two trains meet, we can use the formula:\n\nDistance = Rate \u00d7 Time\n\nLet's assume the trains meet after 't' hours from when the first train leaves Austin. The second train leaves an hour later, so it travels for 't - 1' hours.\n\nFor the first train:\nDistance = 60 mph \u00d7 t\n\nFor the second train:\nDistance = 80 mph \u00d7 (t - 1)\n\nSince the total distance between Austin and Dallas is 195 miles, the sum of the distances covered by both trains when they meet should equal 195 miles:\n\n60t + 80(t - 1) = 195\n\nNow, let's solve for 't':\n\n60t + 80t - 80 = 195\n140t = 195 + 80\n140t = 275\nt = 275 / 140\nt \u2248 1.96 hours\n\nSince the first train leaves at 9am, we need to add approximately 1.96 hours to 9am to find when they meet:\n\n9am + 1.96 hours \u2248 10:58am\n\nTherefore, the two trains meet at approximately 10:58am.",
+        "tokens": 3760,
+        "elapsed_s": 8.04,
+        "tok_per_s": 467.6,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 3,
+            "semantic_score": 0.468,
+            "keyword_score": 0.0,
+            "rerank_score": 0.445,
+            "final_score": 0.375
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 3,
+            "semantic_score": 0.448,
+            "keyword_score": 0.0,
+            "rerank_score": 0.458,
+            "final_score": 0.372
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 3,
+            "semantic_score": 0.437,
+            "keyword_score": 0.0,
+            "rerank_score": 0.463,
+            "final_score": 0.369
+          }
+        ]
+      },
+      "score": "fail (missing: 11:)"
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "prompt": "Write a concise Python function `reverse_string(s: str) -> str` that returns the reversed string. Just the function, no preamble.",
+      "gold_substrings": [
+        "def reverse_string",
+        "[::-1]"
+      ],
+      "response": {
+        "text": "I'd like to run `write_file()`. Please approve or deny below.",
+        "tokens": 0,
+        "elapsed_s": 1.31,
+        "tok_per_s": 0.0,
+        "citations": null
+      },
+      "score": "fail (missing: def reverse_string, [::-1])"
+    },
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "prompt": "Write a Python generator `fib()` that yields Fibonacci numbers forever. Just the code.",
+      "gold_substrings": [
+        "def fib",
+        "yield"
+      ],
+      "response": {
+        "text": "I'd like to run `write_file(path='fib.py', content=[82 chars])`. Please approve or deny below.",
+        "tokens": 0,
+        "elapsed_s": 1.31,
+        "tok_per_s": 0.0,
+        "citations": null
+      },
+      "score": "fail (missing: def fib, yield)"
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "prompt": "What's one well-regarded book for someone new to embedded systems?",
+      "gold_substrings": [],
+      "response": {
+        "text": "Based on the search results, I can't provide a specific book recommendation for someone new to embedded systems. The results appear to be related to financial services, the definition of \"well,\" and water well drilling services in Houston, Texas. \n\nI'd be happy to help you find a book on embedded systems if you'd like. Could you please provide more details about your specific interests or needs?",
+        "tokens": 4114,
+        "elapsed_s": 16.66,
+        "tok_per_s": 246.9,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.399,
+            "keyword_score": 0.0,
+            "rerank_score": 0.562,
+            "final_score": 0.392
+          },
+          {
+            "id": 2,
+            "source_file": "datasheets/TQ_iMX93_WP.pdf",
+            "chunk_index": 0,
+            "total_chunks": 2,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.528,
+            "final_score": 0.391
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.39,
+            "keyword_score": 0.0,
+            "rerank_score": 0.553,
+            "final_score": 0.385
+          }
+        ]
+      },
+      "score": "manual"
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "prompt": "Briefly explain what an MoE (mixture-of-experts) model is and one reason it's appealing vs a dense model of similar quality.",
+      "gold_substrings": [
+        "expert"
+      ],
+      "response": {
+        "text": "An Mixture-of-Experts (MoE) model is a type of artificial intelligence model that combines the outputs of multiple smaller models, or \"experts,\" to make a final prediction. Each expert specializes in a specific task or aspect of the data, and the model uses a gating mechanism to determine which experts to use for a given input. This approach allows the model to be more flexible and adaptable than a single, dense model, as it can dynamically select the most appropriate experts for a given task.\n\nOne reason an MoE model is appealing compared to a dense model of similar quality is that it can be more efficient in terms of computational resources. Since the model only uses the experts that are relevant to a given input, it can potentially reduce the amount of computation required to make a prediction. This can lead to faster inference times and lower energy consumption, which can be particularly important for applications that require real-time processing or are constrained by power usage.",
+        "tokens": 2928,
+        "elapsed_s": 3.1,
+        "tok_per_s": 943.1,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 4,
+            "semantic_score": 0.0,
+            "keyword_score": 0.977,
+            "rerank_score": 0.591,
+            "final_score": 0.412
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 4,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.553,
+            "final_score": 0.401
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 3,
+            "semantic_score": 0.0,
+            "keyword_score": 0.826,
+            "rerank_score": 0.556,
+            "final_score": 0.371
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "prompt": "In two sentences, introduce yourself as Skippy. Stay in character.",
+      "gold_substrings": [
+        "Skippy"
+      ],
+      "response": {
+        "text": "I'm Skippy, the talking squirrel from the Peanut Butter commercials. I'm known for my quick wit and love of peanut butter.",
+        "tokens": 1895,
+        "elapsed_s": 1.62,
+        "tok_per_s": 1169.8,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.5,
+            "final_score": 0.38
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 2,
+            "semantic_score": 0.0,
+            "keyword_score": 0.83,
+            "rerank_score": 0.517,
+            "final_score": 0.356
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 3,
+            "total_chunks": 7,
+            "semantic_score": 0.387,
+            "keyword_score": 0.0,
+            "rerank_score": 0.461,
+            "final_score": 0.347
+          }
+        ]
+      },
+      "score": "pass"
+    }
+  ],
+  "avg_tok_per_s": 707.2
+}
