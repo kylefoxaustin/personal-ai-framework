@@ -1,0 +1,579 @@
+{
+  "name": "qwen3-moe-v2-fixes",
+  "timestamp": "2026-04-19T02:15:31",
+  "endpoint": "http://localhost:8080",
+  "rag_enabled": true,
+  "prompts_version": 1,
+  "prompts": [
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "prompt": "What bus widths does the i.MX 93 DDR controller support, and how is the width selected?",
+      "gold_substrings": [
+        "64-bit",
+        "32-bit"
+      ],
+      "response": {
+        "text": "The i.MX 93 DDR controller supports a bus width of 16-bit. This configuration is selected through the use of the Number of Chip Selects parameter, which is set to 2. The bus width is a critical aspect of the DDR controller's configuration, as it determines the amount of data that can be transferred in parallel. The i.MX 93 supports LPDDR4/LPDDR4X memory configurations, and the bus width is one of the key parameters that define the memory interface's capabilities. The configuration details for the i.MX 93 DDR controller are provided in the data sheet, which includes information on the number of controllers, channels, and chip selects. The bus width is selected based on the specific requirements of the application and the available memory configurations. The i.MX 93 DDR controller supports LPDDR4/LPDDR4X modes, and the bus width is one of the key parameters that define the memory interface's capabilities. The configuration details for the i.MX 93 DDR controller are provided in the data sheet, which includes information on the number of controllers, channels, and chip selects. The bus width is selected based on the specific requirements of the application and the available memory configurations.",
+        "tokens": 4669,
+        "elapsed_s": 24.08,
+        "tok_per_s": 193.9,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/IMX93AEC.pdf",
+            "chunk_index": 5,
+            "total_chunks": 9,
+            "semantic_score": 0.51,
+            "keyword_score": 0.0,
+            "rerank_score": 0.628,
+            "final_score": 0.465
+          },
+          {
+            "id": 2,
+            "source_file": "datasheets/IMX93CEC.pdf",
+            "chunk_index": 7,
+            "total_chunks": 8,
+            "semantic_score": 0.51,
+            "keyword_score": 0.0,
+            "rerank_score": 0.628,
+            "final_score": 0.465
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/IMX93XEC.pdf",
+            "chunk_index": 8,
+            "total_chunks": 9,
+            "semantic_score": 0.508,
+            "keyword_score": 0.0,
+            "rerank_score": 0.628,
+            "final_score": 0.465
+          }
+        ]
+      },
+      "score": "fail (missing: 64-bit, 32-bit)"
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "prompt": "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+      "gold_substrings": [
+        "LPUART",
+        "IOMUX"
+      ],
+      "response": {
+        "text": "The i.MX 93 processor handles UART through its General Purpose Input/Output (GPIO) interface. The specific IP block responsible for routing the UART pins is the Multipurpose Input/Output (MPIO) controller. The MPIO controller allows for flexible pin multiplexing, enabling various functions including UART, to be assigned to different GPIO pins.",
+        "tokens": 3645,
+        "elapsed_s": 8.43,
+        "tok_per_s": 432.2,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/IMX93EVKQSG.pdf",
+            "chunk_index": 0,
+            "total_chunks": 6,
+            "semantic_score": 0.569,
+            "keyword_score": 0.0,
+            "rerank_score": 0.71,
+            "final_score": 0.523
+          },
+          {
+            "id": 2,
+            "source_file": "datasheets/i.MX93/iMX93FAMFS.pdf",
+            "chunk_index": 10,
+            "total_chunks": 17,
+            "semantic_score": 0.606,
+            "keyword_score": 0.0,
+            "rerank_score": 0.668,
+            "final_score": 0.522
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/IMX93EVKQSG.pdf",
+            "chunk_index": 1,
+            "total_chunks": 6,
+            "semantic_score": 0.556,
+            "keyword_score": 0.0,
+            "rerank_score": 0.7,
+            "final_score": 0.514
+          }
+        ]
+      },
+      "score": "fail (missing: LPUART, IOMUX)"
+    },
+    {
+      "id": "rag_imx93_reference_manual",
+      "category": "rag_datasheet",
+      "prompt": "Roughly how long is the i.MX 93 reference manual?",
+      "gold_substrings": [
+        "5000",
+        "page"
+      ],
+      "response": {
+        "text": "The i.MX 93 Reference Manual is approximately 1,000 pages long.",
+        "tokens": 2778,
+        "elapsed_s": 7.93,
+        "tok_per_s": 350.2,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/IMX93AEC.pdf",
+            "chunk_index": 0,
+            "total_chunks": 8,
+            "semantic_score": 0.429,
+            "keyword_score": 0.0,
+            "rerank_score": 0.808,
+            "final_score": 0.504
+          },
+          {
+            "id": 2,
+            "source_file": "datasheets/AN13997.pdf",
+            "chunk_index": 0,
+            "total_chunks": 7,
+            "semantic_score": 0.457,
+            "keyword_score": 0.0,
+            "rerank_score": 0.77,
+            "final_score": 0.5
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/i.MX93/iMX93FAMFS.pdf",
+            "chunk_index": 13,
+            "total_chunks": 17,
+            "semantic_score": 0.434,
+            "keyword_score": 0.0,
+            "rerank_score": 0.669,
+            "final_score": 0.45
+          }
+        ]
+      },
+      "score": "fail (missing: 5000)"
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "prompt": "Did Kyle ever demo Angry Birds on an NXP platform? Which chip?",
+      "gold_substrings": [
+        "i.MX 8",
+        "Angry Birds"
+      ],
+      "response": {
+        "text": "Yes, Kyle demonstrated Angry Birds on an NXP platform. The specific chip used was the NXP LPC11U24 microcontroller, which features an ARM Cortex-M0 processor. This demonstration was part of a project that utilized the NXP LPC11U24 to create an interactive Angry Birds USB slingshot, incorporating a 3-axis accelerometer for motion control.",
+        "tokens": 2801,
+        "elapsed_s": 4.02,
+        "tok_per_s": 696.2,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "writing/transcripts/Yes i actually played angry birds on that ivi demo.txt",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.613,
+            "final_score": 0.425
+          },
+          {
+            "id": 2,
+            "source_file": "writing/transcripts/Altia User Interface Software Featured in the NXP eCockpit Showcase.txt",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.51,
+            "keyword_score": 0.0,
+            "rerank_score": 0.482,
+            "final_score": 0.407
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/AN14113.pdf",
+            "chunk_index": 0,
+            "total_chunks": 7,
+            "semantic_score": 0.463,
+            "keyword_score": 0.0,
+            "rerank_score": 0.474,
+            "final_score": 0.384
+          }
+        ]
+      },
+      "score": "fail (missing: i.MX 8)"
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
+      "gold_substrings": [
+        "EV"
+      ],
+      "response": {
+        "text": "The NXP Smarter World podcast has discussed the sustainability argument for electric vehicles in several episodes. In one episode, Dakota Semler, co-founder and CEO of Xos Trucks, a company dedicated to decarbonizing transportation with electric trucking technology, shares his insights. He emphasizes that while there is initial hesitation among drivers when they first encounter an electric truck, they quickly become enthusiastic after a few shifts. This is because electric trucks offer a more comfortable and efficient driving experience, which can lead to better driver retention and satisfaction. The podcast also highlights the importance of total cost of ownership, which is a significant factor in fleet operators' decisions to go electric. The sustainability argument for electric vehicles is further supported by the fact that they contribute to reducing carbon emissions and improving air quality, which is crucial for addressing climate change and promoting a more sustainable world.",
+        "tokens": 2711,
+        "elapsed_s": 15.31,
+        "tok_per_s": 177.1,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "writing/blogs/PDCST-TRANS-ROAD-SUSTAINABILITY-23-04.pdf",
+            "chunk_index": 0,
+            "total_chunks": 9,
+            "semantic_score": 0.593,
+            "keyword_score": 0.854,
+            "rerank_score": 0.574,
+            "final_score": 0.632
+          },
+          {
+            "id": 2,
+            "source_file": "writing/blogs/PDCST-TRANS-CTOS-PERSPECTIVE-TOP-TECH-TRENDINGS-2024.pdf",
+            "chunk_index": 13,
+            "total_chunks": 22,
+            "semantic_score": 0.684,
+            "keyword_score": 0.0,
+            "rerank_score": 0.462,
+            "final_score": 0.472
+          },
+          {
+            "id": 3,
+            "source_file": "writing/blogs/PDCST-TRANS-DRIV-ELEC-FLEET-23-01.pdf",
+            "chunk_index": 0,
+            "total_chunks": 9,
+            "semantic_score": 0.541,
+            "keyword_score": 0.0,
+            "rerank_score": 0.594,
+            "final_score": 0.465
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "prompt": "I have 12 apples. I give 3/4 of them to my kid. How many do I have left? Answer with just the number.",
+      "gold_substrings": [
+        "3"
+      ],
+      "response": {
+        "text": "3",
+        "tokens": 2752,
+        "elapsed_s": 1.62,
+        "tok_per_s": 1702.7,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 2,
+            "semantic_score": 0.484,
+            "keyword_score": 0.0,
+            "rerank_score": 0.522,
+            "final_score": 0.412
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.464,
+            "keyword_score": 0.0,
+            "rerank_score": 0.539,
+            "final_score": 0.411
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 4,
+            "semantic_score": 0.448,
+            "keyword_score": 0.0,
+            "rerank_score": 0.54,
+            "final_score": 0.404
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
+      "gold_substrings": [
+        "10:",
+        "11:"
+      ],
+      "response": {
+        "text": "The first train travels for 1 hour before the second train leaves, covering 60 miles. The remaining distance is 135 miles. The combined speed of the trains is 140 mph, so they will meet in 135/140 hours, which is approximately 0.964 hours or 57.86 minutes after the second train leaves. Therefore, they will meet at approximately 10:57 a.m.",
+        "tokens": 2927,
+        "elapsed_s": 3.47,
+        "tok_per_s": 843.3,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.466,
+            "keyword_score": 0.0,
+            "rerank_score": 0.561,
+            "final_score": 0.42
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 3,
+            "semantic_score": 0.472,
+            "keyword_score": 0.0,
+            "rerank_score": 0.445,
+            "final_score": 0.376
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.448,
+            "keyword_score": 0.0,
+            "rerank_score": 0.468,
+            "final_score": 0.375
+          }
+        ]
+      },
+      "score": "fail (missing: 11:)"
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "prompt": "Write a concise Python function `reverse_string(s: str) -> str` that returns the reversed string. Just the function, no preamble.",
+      "gold_substrings": [
+        "def reverse_string",
+        "[::-1]"
+      ],
+      "response": {
+        "text": "```python\ndef reverse_string(s: str) -> str:\n    return s[::-1]\n```",
+        "tokens": 2819,
+        "elapsed_s": 1.89,
+        "tok_per_s": 1493.2,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/IMX93RM.pdf",
+            "chunk_index": 1,
+            "total_chunks": 15,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.469,
+            "final_score": 0.368
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 3,
+            "semantic_score": 0.0,
+            "keyword_score": 0.82,
+            "rerank_score": 0.513,
+            "final_score": 0.353
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/IMX93RM.pdf",
+            "chunk_index": 2,
+            "total_chunks": 15,
+            "semantic_score": 0.0,
+            "keyword_score": 0.825,
+            "rerank_score": 0.424,
+            "final_score": 0.318
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "prompt": "Write a Python generator `fib()` that yields Fibonacci numbers forever. Just the code.",
+      "gold_substrings": [
+        "def fib",
+        "yield"
+      ],
+      "response": {
+        "text": "def fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b",
+        "tokens": 2744,
+        "elapsed_s": 1.78,
+        "tok_per_s": 1539.7,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/IMX93RM.pdf",
+            "chunk_index": 2,
+            "total_chunks": 8,
+            "semantic_score": 0.0,
+            "keyword_score": 0.96,
+            "rerank_score": 0.53,
+            "final_score": 0.385
+          },
+          {
+            "id": 2,
+            "source_file": "datasheets/AN14316.pdf",
+            "chunk_index": 2,
+            "total_chunks": 7,
+            "semantic_score": 0.0,
+            "keyword_score": 0.898,
+            "rerank_score": 0.517,
+            "final_score": 0.368
+          },
+          {
+            "id": 3,
+            "source_file": "datasheets/IMX93RM.pdf",
+            "chunk_index": 0,
+            "total_chunks": 14,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.423,
+            "final_score": 0.349
+          }
+        ]
+      },
+      "score": "pass"
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "prompt": "What's one well-regarded book for someone new to embedded systems?",
+      "gold_substrings": [],
+      "response": {
+        "text": "The retrieved excerpts don't cover that.",
+        "tokens": 2684,
+        "elapsed_s": 19.0,
+        "tok_per_s": 141.3,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "datasheets/TQ_iMX93_WP.pdf",
+            "chunk_index": 0,
+            "total_chunks": 2,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.58,
+            "final_score": 0.412
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 4,
+            "total_chunks": 5,
+            "semantic_score": 0.394,
+            "keyword_score": 0.0,
+            "rerank_score": 0.586,
+            "final_score": 0.4
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.378,
+            "keyword_score": 0.0,
+            "rerank_score": 0.553,
+            "final_score": 0.38
+          }
+        ]
+      },
+      "score": "manual"
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "prompt": "Briefly explain what an MoE (mixture-of-experts) model is and one reason it's appealing vs a dense model of similar quality.",
+      "gold_substrings": [
+        "expert"
+      ],
+      "response": {
+        "text": "The retrieved excerpts don't cover that.",
+        "tokens": 2849,
+        "elapsed_s": 2.38,
+        "tok_per_s": 1197.5,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 4,
+            "semantic_score": 0.0,
+            "keyword_score": 0.977,
+            "rerank_score": 0.591,
+            "final_score": 0.412
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 4,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.553,
+            "final_score": 0.401
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 3,
+            "semantic_score": 0.0,
+            "keyword_score": 0.826,
+            "rerank_score": 0.556,
+            "final_score": 0.371
+          }
+        ]
+      },
+      "score": "fail (missing: expert)"
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "prompt": "In two sentences, introduce yourself as Skippy. Stay in character.",
+      "gold_substrings": [
+        "Skippy"
+      ],
+      "response": {
+        "text": "I'm Skippy, a therapy dog who loves to help people feel better. I wag my tail instead of my tongue, and I'm here to spread happiness wherever I go!",
+        "tokens": 2040,
+        "elapsed_s": 1.63,
+        "tok_per_s": 1254.0,
+        "citations": [
+          {
+            "id": 1,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "semantic_score": 0.382,
+            "keyword_score": 0.698,
+            "rerank_score": 0.584,
+            "final_score": 0.52
+          },
+          {
+            "id": 2,
+            "source_file": "unknown",
+            "chunk_index": 0,
+            "total_chunks": 2,
+            "semantic_score": 0.0,
+            "keyword_score": 1.0,
+            "rerank_score": 0.633,
+            "final_score": 0.433
+          },
+          {
+            "id": 3,
+            "source_file": "unknown",
+            "chunk_index": 1,
+            "total_chunks": 2,
+            "semantic_score": 0.398,
+            "keyword_score": 0.0,
+            "rerank_score": 0.575,
+            "final_score": 0.397
+          }
+        ]
+      },
+      "score": "pass"
+    }
+  ],
+  "avg_tok_per_s": 835.1
+}

@@ -42,7 +42,7 @@
       "id": "reason_multistep",
       "category": "reasoning",
       "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
-      "gold_substrings": ["10:", "11:"]
+      "gold_substrings": ["10:5"]
     },
     {
       "id": "code_reverse_string",
