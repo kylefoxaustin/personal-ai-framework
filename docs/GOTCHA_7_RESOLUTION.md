@@ -1,51 +1,89 @@
 # Gotcha #7 Resolution Document
-**Status:** DRAFT — awaiting external reviewer sign-off before framing commits  
-**Date:** 2026-05-08  
+**Status:** REVISED DRAFT — awaiting Kyle + external reviewer sign-off before any framing commits  
+**Date:** 2026-05-08 (revised post-reviewer feedback)  
 **Author:** [docs] session  
 
 ---
 
-## Background
+## Overview
 
-Gotcha #7 (working title: "recipe transfer is base-family-coupled") was proposed based on N=1 preliminary data:
-- Qwen 7B v4 (Qwen family): +3.1pp over base (67.4% → 70.5%)
-- Mistral 7B v4 (Mistral family): ~−4pp vs Qwen baseline at same recipe
+This document summarises the four prerequisite tasks required before framing gotcha #7 ("recipe transfer may be base-family-coupled"). All four tasks are now complete. The evidence is more nuanced than the original framing anticipated — see Synthesis.
 
-External reviewer (Remediation Plan) flagged that gotcha #7 framing should not proceed until:
-1. Mistral full-seq loss falsification (Task 1) ✅
-2. Post-regrade reconciliation (Task 2) ✅
-3. Variance bounds / noise floor (Task 3) ✅
-4. Llama v4 cross-family outcome (Task 4) ✅ — results below
+**Hold on framing commits remains in force** until: (a) pipeline-bug scope confirmed below, (b) Kyle + external reviewer sign off on revised framing.
 
 ---
 
-## Task 1: Mistral Full-Seq Falsification
+## New Finding: Grader-Methodology Signal (Elevated from Task 3)
 
-**Claim:** Mistral v4 underperforms because full-seq loss confound, not architecture.  
-**Finding:** Full-seq model is HF-functional (5/5 test prompts coherent). 0/132 score via Skippy pipeline = template incompatibility, not training failure. LR confound confirmed (same 2e-4 LR, 2–4× more gradient tokens in full-seq).  
-**Conclusion:** Mistral v4 performance is confounded by: (a) pipeline template bug, (b) potential LR confound. Not a clean architectural signal.
+Two independent lines of evidence suggest the substring grader rewards **format fidelity at temp=0** rather than correctness robustness. These findings change how all headline numbers should be interpreted.
+
+### A. Temperature sensitivity of fine-tunes (SK-P0-002)
+
+Fine-tuned models are highly temperature-brittle at temp=0.3; base models are essentially flat:
+
+| Model | temp=0 (production) | temp=0.3 (variance bounds) | Δ |
+|---|---:|---:|---:|
+| Qwen 7B base | 67.4% | 69.1% | +1.7pp |
+| Skippy 7B v4 (Qwen FT) | 70.5% | 44.5% | **−26pp** |
+| Mistral 7B base | 60.6% | 60.6% | 0pp |
+| Skippy Mistral v4 (Mistral FT) | 56.8% | 54.0% | −2.8pp |
+
+**Interpretation:** At temp=0 greedy decoding, fine-tunes produce the exact trained phrasings that the substring grader matches. At temp=0.3, stochastic sampling deviates from those phrasings — even when the semantic content is correct — and the grader fails the sample. Base models don't show this pattern because they weren't trained to reproduce specific substrings.
+
+**What this is NOT:** A claim that the fine-tune is worse. It is a claim that the substring grader measures a narrow distributional property (phrasing consistency), not a broad capability property (correctness under variation).
+
+**Methodological boundary:** The temp=0.3 variance bounds (σ ≈ 1.4–2.3pp) characterise sampling noise *within the temp=0.3 regime only*. They do not gate or invalidate temp=0 production deltas — those are measured in the same temp=0 regime. Comparing a temp=0 delta against a temp=0.3 noise floor would be a category error.
+
+### B. LLM-judge corroboration (SK-P1-002)
+
+The Sonnet 4.6 judge (4-dim rubric: correctness, instruction-following, faithfulness, conciseness) reaches a different conclusion than the substring grader on the v4-vs-base comparison:
+
+- Substring grader: Skippy v4 beats Qwen base by +3.2pp
+- LLM judge: Qwen base beats Skippy v4 by 0.35 points (small but opposite direction)
+
+The judge rewards semantic quality; the grader rewards format match. They diverge on the fine-tune vs base comparison — not on the overall ladder ranking, but on the direction of the FT gain. This is a second independent signal that the +3.1pp headline may be a grader artifact.
+
+**Together, A and B tell the same story:** temp=0 substring grader pass rate is a measure of training-induced phrasing consistency, not a robust measure of general capability gain.
+
+---
+
+## Task 1: Mistral Full-Seq Falsification — Pipeline Bug Scope
+
+**Critical question (reviewer directive 2):** Does the pipeline template bug affect the original Mistral v4 −3.8pp result, or only the full-seq falsification attempt?
+
+**Answer: Full-seq only. The original Mistral v4 result is clean.**
+
+Evidence:
+- Original Mistral v4 (assistant_only_loss): `acc_candidate-kyle-mistral-7b-v4_20260508-095500.json` — **75/132 = 56.8%** at temp=0. Not zero.
+- Full-seq Mistral v4: `acc_candidate-kyle-mistral-7b-v4-fullseq_20260508-132129.json` — **0/132 = 0.0%** at temp=0.
+- Inspection of `models/mistral-7b-kyle/kyle-mistral-7b-v4-q4_k_m.gguf`: **no `{% generation %}` markers embedded.** The GGUF uses the stock Mistral template for inference.
+
+The catastrophic 0/132 failure is isolated to the full-seq model. Root cause: the full-seq model was trained without the template patch and with a higher effective LR (same 2e-4 LR, but 2–4× more gradient-contributing tokens). It produces coherent outputs via HF inference but fails the Skippy pipeline — likely because it learned output distributions incompatible with how the pipeline formats prompts.
+
+**Implication for gotcha #7:** The original Mistral v4 −3.8pp delta is a valid, unconfounded data point. Gotcha #7 has N=2 cross-family evidence (Mistral + Llama).
 
 ---
 
 ## Task 2: Post-Regrade Reconciliation
 
-Persona category (6 prompts) quarantined as BROKEN_SUBSTRING_INCOMPATIBLE. All 35+ eval JSONs regraded. Denominator 132 → 126.
+Persona category (6 prompts) quarantined as BROKEN_SUBSTRING_INCOMPATIBLE. Denominator 132 → 126. All 35+ eval JSONs regraded.
 
-**Post-regrade headline ladder (temp=0, 126-sample basis):**
+**Headline ladder (temp=0, 126-sample post-regrade basis):**
 
-| Model | Passed | /126 | Pass Rate |
-|---|---:|---:|---:|
-| Qwen 7B base (stock) | 89 | 126 | 70.6% |
-| Skippy 7B v4 (Qwen FT) | 93 | 126 | 73.8% |
-| Mistral 7B base (stock) | 80 | 126 | 63.5% |
-| Mistral 7B v4 (Mistral FT) | ~75 | 126 | ~59.5% |
-| Llama 3.1 8B base (stock) | 75 | 126 | 59.5% |
+| Model | Passed /126 | Pass Rate |
+|---|---:|---:|
+| Skippy 7B v4 (Qwen FT) | 93 | 73.8% |
+| Qwen 7B base | 89 | 70.6% |
+| Mistral 7B base | 80 | 63.5% |
+| Mistral 7B v4 (Mistral FT) | 75 | 59.5% |
+| Llama 3.1 8B base | 75 | 59.5% |
+| Llama 3.1 8B v4 (Llama FT) | 71 | 56.3% |
 
 ---
 
 ## Task 3: Variance Bounds (Noise Floor)
 
-**Protocol:** 5 anchored models × 5 reps at temp=0.3. Results in `eval/results/acc_acc_variance_*.json`.
+**Protocol:** 5 anchored models × 5 reps at temp=0.3. See Grader-Methodology section above for full interpretation.
 
 | Model | Mean (temp=0.3) | σ | Range |
 |---|---:|---:|---|
@@ -55,88 +93,76 @@ Persona category (6 prompts) quarantined as BROKEN_SUBSTRING_INCOMPATIBLE. All 3
 | skippy-7b-v4 | 44.5% | 2.81pp | 40.9–47.7% |
 | skippy-mistral-v4 | 54.0% | 2.24pp | 50.8–56.1% |
 
-**Noise floor for base models: σ ≈ 1.4–2.3pp.** A delta must exceed ~4.5pp (2σ) to be considered meaningful.
-
-### New Finding: Temperature Sensitivity of Fine-Tunes
-
-Fine-tuned models are highly temperature-brittle; base models are not:
-
-| Model | temp=0 | temp=0.3 | Δ |
-|---|---:|---:|---:|
-| qwen-7b-base | 67.4% | 69.1% | +1.7pp |
-| skippy-7b-v4 | 70.5% | 44.5% | **−26pp** |
-| mistral-7b-base | 63.5% | 60.6% | −2.9pp |
-| skippy-mistral-v4 | ~59.5% | 54.0% | **−5.5pp** |
-
-**Interpretation:** Fine-tunes learned narrow output patterns that the substring grader rewards at temp=0 (greedy decoding). At temp=0.3, sampling breaks those patterns even when semantically correct. This is an independent corroborating signal for substring grader concerns. Confirmed across both Qwen and Mistral families.
-
-**Methodological note:** The variance bounds σ values apply within the temp=0.3 regime only. Production comparisons (temp=0) have a noise floor near zero (deterministic).
+σ ≈ 1.4–2.3pp for base models within the temp=0.3 regime.
 
 ---
 
 ## Task 4: Llama 3.1 8B v4 Cross-Family Outcome
 
-**Training:** 2026-05-08, train_loss=0.8024, 2 epochs, 47.7 min on RTX 5090.  
-**Script:** `training/train_lora_llama_v4.py`  
-**GGUF:** `models/llama-3.1-8b-kyle/llama-8b-kyle-v4-q4_k_m.gguf`
+**Training:** 2026-05-08, train_loss=0.8024, 2 epochs, 47.7 min on RTX 5090.
 
-| Model | Passed /132 | Pass Rate | vs Base |
-|---|---:|---:|---:|
-| Llama 3.1 8B base (stock) | 75/132 | 56.8% | — |
-| **Llama 3.1 8B v4** | **71/132** | **53.8%** | **−3.0pp** |
+| Model | Passed /132 | Rate | vs Base (temp=0) | Δ/σ |
+|---|---:|---:|---:|---:|
+| Llama 3.1 8B base | 75 | 56.8% | — | — |
+| Llama 3.1 8B v4 | 71 | 53.8% | −3.0pp | −1.3σ |
 
-*Eval completed 2026-05-08 17:12. Post-regrade /126: 71/126 = 56.3% (vs base 59.5% → −3.2pp).*  
-*train_loss=0.8024 (cf. Qwen v4: 0.676). Higher loss suggests weaker signal uptake.*
+train_loss=0.8024 vs Qwen v4 0.676. Higher loss may indicate weaker signal uptake on the Skippy training distribution.
 
 ---
 
-## Synthesis: What the Data Says About Gotcha #7
+## Synthesis
 
-### Original claim
-"The v4 recipe transfer is base-family-coupled — gains on Qwen may not transfer to other architectures."
+### Cross-family recipe transfer (all comparisons at temp=0)
 
-### Evidence for (supports claim)
-- Mistral v4 at temp=0.3: 54.0% vs base 60.6% — fine-tune hurts relative to base
-- Qwen v4 at temp=0.3: 44.5% vs base 69.1% — fine-tune hurts even more (but production at temp=0 shows gain)
-- Temperature sensitivity is family-agnostic — both families show the same brittle-FT pattern
+| Family | Base | FT | Δ (temp=0) | Δ/σ |
+|---|---:|---:|---:|---:|
+| Qwen 7B | 67.4% | 70.5% | **+3.1pp** | +1.4σ |
+| Qwen 14B | ~67% | 72.7% | **+5.3pp** | +2.3σ |
+| Mistral 7B | 60.6% | 56.8% | −3.8pp | −1.7σ |
+| Llama 3.1 8B | 56.8% | 53.8% | −3.0pp | −1.3σ |
 
-### Evidence against / complicating factors
-- Mistral v4 is confounded: pipeline template bug + potential LR mismatch (Task 1)
-- Cross-family delta at temp=0.3 (Qwen base vs Mistral base = −8.5pp) is 3.7σ — real architectural gap, not noise
-- Fine-tune gain at temp=0 exists for Qwen (+3.1pp); Mistral v4 result at temp=0 is confounded
-- Llama result (Task 4) provides a cleaner N=2 datapoint with same pipeline
+*Note: all deltas are temp=0 vs temp=0. σ values are from the temp=0.3 variance bounds and apply within that regime only; they are used here as a rough order-of-magnitude reference for what constitutes a meaningful delta, not as a strict statistical gate on temp=0 results.*
 
-### Reviewer's 2σ threshold
-- Qwen: FT gain = +3.1pp = 1.4σ (below threshold)
-- Mistral: FT loss = ~−4pp = 1.8σ (below threshold, and confounded)
-- Llama: **TBD**
+### What the data supports
 
-### Outcome: Llama shows regression (−3.0pp)
+**In the temp=0 substring-grader regime:**
+- Qwen family gains (+3.1pp, +5.3pp); both are below 2σ individually but consistent N=2.
+- Non-Qwen families regress (−3.8pp Mistral, −3.0pp Llama); both below 2σ individually but directionally consistent N=2.
+- Pattern is architecturally split: Qwen benefits, non-Qwen does not.
 
-All three non-Qwen data points show regression or neutral:
-- Mistral 7B v4: −4pp (1.8σ, confounded by pipeline bug)
-- Llama 3.1 8B v4: −3.0pp (1.3σ, clean measurement)
+**With grader-methodology caveat applied:**
+- The Qwen gains may partly reflect format-fidelity learning rather than capability gain (temperature-sensitivity + LLM-judge both suggest this).
+- The non-Qwen regressions are also measured by the same potentially-format-biased grader, so the magnitude is uncertain in both directions.
+- The directional split (Qwen ↑, non-Qwen ↓) may still be real, but the mechanism is unclear: is it architectural, or is it that the training data's phrasing patterns are more Qwen-like?
 
-Both are individually below 2σ, but directionally consistent across two independent families.
+### What this is NOT
 
-### Proposed framing (pending reviewer sign-off)
+- **Not "gotcha #7 stands" as an established fact.** Both individual cross-family deltas are below 2σ, and the grader methodology is under scrutiny.
+- **Not "the fine-tune adds nothing."** The Qwen N=2 gains are real measurements; the question is what they measure.
 
-**Recommended:** Use the "non-transfer" branch:
-> "Recipe transfer is *not reliably* cross-family. Qwen architecture benefits from the assistant_only_loss v4 recipe (N=2: +3.1pp on 7B, +5.3pp on 14B). Llama-3.1-8B and Mistral-7B both show slight regressions (−3pp each, below individual 2σ threshold but directionally consistent across both non-Qwen families). Gotcha #7 stands: customers targeting non-Qwen bases should treat recipe transfer as unvalidated and budget for a re-validation run."
+### Proposed framing (preliminary, not final)
 
-**Reviewer questions:**
-1. Is directional consistency across N=2 non-Qwen families sufficient to upgrade from "preliminary" to "established" framing despite sub-2σ individual measurements?
-2. Should Mistral confound caveat (pipeline bug) be retained in the final write-up, or is Llama (clean) sufficient?
-3. Does temperature-sensitivity finding (fine-tune fragility at temp=0.3) belong in the gotcha, or is it a separate methodological note?
+> "Preliminary evidence suggests the v4 recipe may be architecture-coupled: Qwen 7B and 14B show consistent gains (+3.1pp, +5.3pp) while Mistral-7B and Llama-3.1-8B show slight regressions (−3.8pp, −3.0pp). All four deltas are below the estimated 2σ noise threshold individually. Customers targeting non-Qwen bases should treat recipe transfer as unvalidated. **Note:** the substring grader's format-fidelity bias (evidenced by 26pp temperature sensitivity and LLM-judge reversal) means the absolute magnitude of these deltas should be interpreted cautiously — the directional split may be more reliable than the headline numbers."
+
+---
+
+## Reviewer Questions
+
+1. Is directional consistency across N=2 non-Qwen families (sub-2σ individually, same direction) sufficient to describe gotcha #7 as "preliminary-established" rather than "speculative"?
+2. Does the grader-methodology caveat belong inline in the gotcha framing, or in a separate methodological note that gotcha #7 cross-references?
+3. Should the Mistral train/inference template mismatch (trained with patched template, inferred with stock) be called out as a residual confound, or is it irrelevant given the assistant_only_loss model scored 56.8% (not catastrophically broken)?
 
 ---
 
 ## What Must Happen Before Framing Commits
 
 - [x] All four tasks complete
-- [ ] This document reviewed by external Claude (route to reviewer)
-- [ ] Llama eval result filled in above
-- [ ] Framing direction confirmed by Kyle
+- [x] Pipeline bug scope clarified (full-seq only; N=2 confirmed)
+- [x] Temp regimes kept separate in all claims
+- [x] "Gotcha #7 stands" language removed; preliminary framing substituted
+- [ ] Kyle reviews revised framing direction
+- [ ] External reviewer signs off on revised doc
+- [ ] White paper gains a "Grader-Methodology Findings" section (temperature + LLM-judge paired)
 - [ ] [backend] SHARED-P0-001 un-held
 
 ---
