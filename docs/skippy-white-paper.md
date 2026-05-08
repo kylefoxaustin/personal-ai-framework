@@ -131,7 +131,7 @@ That's lower than v1's 75.0%. But:
 
 ### Iteration arc, scaling up
 
-v4 worked at 7B parameters. Did it scale? We ran the same recipe at 14B, 30B sparse-MoE, and 32B dense:
+v4 worked at 7B parameters. Did it scale? We ran the same recipe at 14B, 30B sparse-MoE, 32B dense, and on a non-Qwen 7B base:
 
 | Base model | Recipe | Headline | Notes |
 |---|---|---:|---|
@@ -141,6 +141,7 @@ v4 worked at 7B parameters. Did it scale? We ran the same recipe at 14B, 30B spa
 | Qwen3 **30B-MoE** | v4 + router | **67.4%** | router LoRA recovers most of the regression |
 | Qwen3 **30B-MoE** | v4 + router + experts | **62.9%** | extra capacity *over-fits* and breaks blog retrieval |
 | Qwen2.5 **32B** | v4 | **63.6%** | **regresses −4.6pp from 32B base; trades capability for safety** |
+| Mistral **7B v0.3** | v4 | **56.8%** | **regresses −3.8pp; recipe transfers gains but damages retrieval on non-Qwen base** |
 
 The recipe that won at 7B and 14B did NOT extend cleanly. The MoE base failed catastrophically with the simple recipe; needed an architecture-aware variant. The 32B dense base did something subtler — apples-to-apples vs the unmodified Qwen2.5-32B-Instruct (68.2% on the same eval), the fine-tune produced a 4.6pp regression. Per-category, the trade was clean: it FIXED a refusal-calibration failure (the same `made_up_peripheral` fabrication present in both the 14B fine-tune AND the 32B stock base, where stock 32B fabricated 3/9, FT recovered to 9/9), but cost ~9 sample-equivalents across numerical_precision, rag_datasheet, and multihop. The recipe is trading capability for safety calibration at this corpus size, and at 32B the trade is net-negative.
 
@@ -150,7 +151,7 @@ The iteration ledger: 4.9 free hours of dense training + ~$140 of cloud GPU = th
 
 ---
 
-## Six gotchas that survive most testing
+## Seven gotchas that survive most testing
 
 Things that survived our internal rounds of "is this good enough to ship" until we built tooling specifically to catch them.
 
@@ -207,6 +208,16 @@ This matters for two reasons:
 **What to do**: always run an apples-to-apples baseline of your unmodified base model on the same eval you run your fine-tunes against. Track per-category contributions, not just headline. The trade between safety calibration and capability is real and visible only if you have both endpoints.
 
 A second confirmation showed up when we ran cross-family baselines (see "Cross-family baselines" section below): Llama-3.1 8B Instruct and Mistral 7B v0.3 Instruct, completely unmodified, *also* score 6/9 on the same `made_up_peripheral` adversarial probe — the exact failure mode our 14B v4 fine-tune showed. Qwen2.5-7B Instruct stock is the outlier at 9/9. The base model's refusal-calibration baseline is family-specific; some bases will need more refusal data than others to reach the same gate, and you cannot tell which without running the baseline first.
+
+### 7. Recipe transfer is base-family-coupled, not just architecture-class-coupled
+
+When we ran the v4 recipe on Mistral 7B v0.3 — same hyperparameters, same corpus, same loss masking, only the base model changed — we expected a roughly Qwen-shaped gain pattern with maybe a smaller magnitude. We got something different: the *gains* transferred cleanly (refusal +3, rag_email +3, numerical_precision +3 — same lifts the recipe produces on Qwen), but three categories that the Qwen v4 fine-tune held or improved *regressed* on Mistral. Coding fell 6/6 → 3/6. rag_blog fell 3/3 → 0/3. rag_datasheet fell 53/78 → 45/78. Net headline: 60.6% → 56.8%, a 3.8-point regression on a base that was already weaker than Qwen.
+
+The pattern is informative: gains are family-portable, damage is family-specific. The same recipe that lifted the Qwen 7B base by 3.1 points dropped the Mistral 7B base by 3.8 points, while producing identical category-level *gains*. The recipe didn't fail to transfer — it transferred *and* introduced a separate failure mode that wasn't present on Qwen.
+
+The hypothesis we have, untested: Mistral's chat template required `{% generation %}` marker patching to enable assistant-only loss masking (a known training-pipeline requirement when the stock template doesn't ship with the markers, similar to what we hit on Qwen3-MoE). The patched template plus assistant-only loss may interact with Mistral's `[INST]`/`[/INST]` formatting differently than the same combination interacted with Qwen2.5's ChatML, in a way that re-weights the model away from retrieval-following at inference. Falsifying or confirming that takes one more training run with full-sequence loss instead of assistant-only — outside the scope of this campaign, queued as Tier 4 work in the recipe taxonomy.
+
+**What to do**: when transferring a fine-tune recipe across base families, *expect the gain pattern to transfer cleanly and budget for at least one corrective iteration to address family-specific damage.* A recipe declared "validated" on one family is not validated on another until you've run the apples-to-apples baseline AND the FT on the same eval. The headline number can hide a useful-gain plus damaging-side-effect combination that nets to "regression" but is actually composed of two independent effects.
 
 ---
 
@@ -380,6 +391,27 @@ If we apply the same recipe to Llama-3.1 8B, the *categories the recipe touches*
 **Prediction before training**: v4 on Llama-3.1 8B will lift refusal and persona, will not meaningfully move reasoning, and the headline ceiling is likely 60-63% (not 70.5%). The recipe's category-level effects should transfer; the absolute headline depends on the base's starting reasoning capability, which the recipe cannot recover.
 
 This is the kind of pre-registered prediction the recipe taxonomy lets us make. When the FT runs, we'll know whether the recipe transferred *qualitatively* (same category shifts) even when the headline doesn't.
+
+### Mistral v4 — pre-registered prediction partially falsified
+
+After we wrote the prediction above, we ran the v4 recipe on Mistral 7B v0.3 Instruct (same hyperparameters, same 6,517-example corpus, same loss-masking, only the base model changed). Result: **75/132 = 56.8%** — a **−3.8pp regression** from the 60.6% Mistral stock baseline.
+
+The qualitative-transfer half of the prediction held. The headline-ceiling half did not.
+
+| Prediction | Mistral v4 actual | Status |
+|---|---|---|
+| Refusal lift (recipe-driven) | +3 (6/9 → 9/9) | ✅ confirmed — same lift as Qwen v4 produced |
+| Reasoning won't move | flat (0/6 → 0/6) | ✅ confirmed — base-capped as predicted |
+| rag_email lift | +3 (0/3 → 3/3) | ✅ confirmed — same lift as Qwen v4 |
+| Headline ceiling 60-63% | 56.8% | ❌ **falsified** — recipe regressed below the stock baseline |
+
+What we did not anticipate: the recipe **damaged categories that were already passing** on the Mistral stock base. Coding fell from 6/6 to 3/6 (−3). rag_blog fell from 3/3 to 0/3 (−3). rag_datasheet fell from 53/78 to 45/78 (−8). On Qwen 7B v4 these same categories *held or improved* — coding stayed 6/6, rag_blog stayed 3/3, rag_datasheet went up. On Mistral, the same recipe broke them.
+
+This is a new finding worth promoting to its own gotcha (added below): **recipe transfer is base-family-coupled, not just architecture-class-coupled.** The categories the recipe *gains* on transfer cleanly across families (refusal, rag_email, numerical_precision lifts are nearly identical). The categories the recipe *might damage* are family-specific. The same fine-tune that improved retrieval on Qwen broke it on Mistral, while otherwise behaving identically.
+
+The hypothesis we have, untested: Mistral's chat template required `{% generation %}` marker patching before assistant-only loss could work (similar to Qwen3-MoE). The patched template + the loss-masking strategy may interact differently with Mistral's `[INST]`/`[/INST]` formatting than with Qwen's ChatML markers, in a way that biases retrieval-following. Verifying or falsifying that requires running v4 on Mistral with full-sequence loss instead of assistant-only — separate iteration, not done here.
+
+The cell is added to the recipe taxonomy as a **filled negative-transfer cell**: Mistral 7B v0.3 + v4 recipe = recipe damages retrieval, gains refusal/email/numerical-precision; net regression. Customer rule: if your base is non-Qwen dense, expect the gain pattern to transfer but budget for at least one corrective iteration on retrieval categories before declaring the recipe valid for that family.
 
 ---
 
