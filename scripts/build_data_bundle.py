@@ -181,21 +181,96 @@ VOICE_COLS = ["model", "avg_chars", "bullets_per_resp", "bolds_per_resp",
 # ============================================================
 # Sheet 6 — RTX 5090 performance measurements
 # ============================================================
-# Source: backend's bakeoff_llm_anchors.py harness (keyhole-sizer commit 4996470).
+# Canonical source: keyhole repo's data/output/llm_anchors_5090.json
+# (consolidated by scripts/bakeoff_llm_anchors.py). Per the [docs]/[backend]
+# 12:21 agreement, keyhole owns canonical; Skippy vendors at build-time
+# with __source__ provenance pointing back to the keyhole path + git SHA.
 # Skippy fine-tunes inherit from their base via measurement_alias since FT
 # preserves base architecture + GGUF size + compute graph.
 
-PERF_ROWS = [
-    # model, gguf_gb, prefill_tok_s_at_2k, decode_tok_s_n256, decode_tok_s_rag_8k,
-    # rag_total_sec, source
-    ("Qwen 2.5 7B Q4_K_M",        4.68, 10865, 211.7, 183.9, 12.3,  "anchor: qwen2.5-7b-dense"),
-    ("Mistral 7B v0.3 Q4_K_M",    4.37, 10217, 239.4, 182.7, 12.6,  "anchor: mistral_7b_v03_dense"),
-    ("Llama-3.1 8B Q4_K_M",       4.92, 10162, 211.5, 171.0, 13.3,  "anchor: llama_3_1_8b_dense"),
-    ("Skippy 7B v4 (= Qwen 7B alias)",      4.68, 10865, 211.7, 183.9, 12.3,  "FT preserves base GGUF size + compute graph"),
-    ("Skippy Mistral v4 (= Mistral alias)", 4.37, 10217, 239.4, 182.7, 12.6,  "FT preserves base GGUF size + compute graph"),
+KEYHOLE_ANCHORS_PATH = ROOT.parent / "keyhole" / "data" / "output" / "llm_anchors_5090.json"
+
+# Map alias key (used by sizers + keyhole anchor file) → friendly model name
+# for the bundle's perf_5090 sheet.
+_ALIAS_LABEL = {
+    "qwen_2_5_7b_dense":     "Qwen 2.5 7B Q4_K_M",
+    "mistral_7b_v03_dense":  "Mistral 7B v0.3 Q4_K_M",
+    "llama_3_1_8b_dense":    "Llama-3.1 8B Q4_K_M",
+    "qwen_2_5_32b_dense":    "Qwen 2.5 32B Q4_K_M",
+    "skippy_moe_30b_a3b":    "Qwen 3 30B-A3B (MoE) Q4_K_M",
+}
+
+# Skippy fine-tunes that ride the same anchor as their base.
+_SKIPPY_FT_ALIASES = [
+    ("Skippy 7B v4 (= qwen_2_5_7b_dense alias)",      "qwen_2_5_7b_dense"),
+    ("Skippy Mistral v4 (= mistral_7b_v03_dense alias)", "mistral_7b_v03_dense"),
 ]
+
 PERF_COLS = ["model", "gguf_gb", "prefill_tok_s_at_2k", "decode_tok_s_n256",
              "decode_tok_s_rag_8k", "rag_total_sec", "source"]
+
+
+def load_perf_rows():
+    """Read keyhole's canonical 5090 anchor file and return rows for the bundle.
+
+    Falls back to inline values + a STALE marker if the canonical file is
+    missing (e.g. keyhole not cloned alongside personal-ai-framework).
+    """
+    if KEYHOLE_ANCHORS_PATH.exists():
+        try:
+            data = json.loads(KEYHOLE_ANCHORS_PATH.read_text())
+            anchors = data.get("anchors", {})
+            meta = data.get("__meta__", {})
+            rows = []
+            # One row per anchor's Q4_K_M cell
+            for alias, anchor in anchors.items():
+                q = anchor.get("quants", {}).get("Q4_K_M")
+                if not q:
+                    continue
+                label = _ALIAS_LABEL.get(alias, f"[{alias}]")
+                rows.append((
+                    label,
+                    round(q.get("gguf_size_gb", 0), 2),
+                    round(q.get("prefill_tok_s_at_2k", 0)),
+                    round(q.get("decode_tok_s_n256", 0), 1),
+                    round(q.get("decode_tok_s_rag_8k_2k", 0), 1),
+                    round(q.get("rag_total_sec", 0), 2),
+                    f"anchor: {alias}",
+                ))
+            # Skippy FT rows that re-use a base's anchor
+            for label, alias in _SKIPPY_FT_ALIASES:
+                anchor = anchors.get(alias)
+                q = anchor.get("quants", {}).get("Q4_K_M") if anchor else None
+                if q:
+                    rows.append((
+                        label,
+                        round(q.get("gguf_size_gb", 0), 2),
+                        round(q.get("prefill_tok_s_at_2k", 0)),
+                        round(q.get("decode_tok_s_n256", 0), 1),
+                        round(q.get("decode_tok_s_rag_8k_2k", 0), 1),
+                        round(q.get("rag_total_sec", 0), 2),
+                        f"FT preserves base GGUF size + compute graph (alias: {alias})",
+                    ))
+            source_note = (
+                f"vendored from {KEYHOLE_ANCHORS_PATH.relative_to(ROOT.parent)} "
+                f"(git_head {meta.get('git_head', '?')}, "
+                f"methodology {meta.get('methodology_version', '?')})"
+            )
+            return rows, source_note
+        except (json.JSONDecodeError, OSError, KeyError) as exc:
+            return _fallback_perf_rows(), f"STALE — fallback after parse error ({exc})"
+    return _fallback_perf_rows(), "STALE — keyhole canonical anchor file not found"
+
+
+def _fallback_perf_rows():
+    """Hardcoded snapshot if the canonical file isn't reachable."""
+    return [
+        ("Qwen 2.5 7B Q4_K_M",        4.68, 10865, 211.7, 183.9, 12.3,  "anchor: qwen_2_5_7b_dense"),
+        ("Mistral 7B v0.3 Q4_K_M",    4.37, 10217, 239.4, 182.7, 12.6,  "anchor: mistral_7b_v03_dense"),
+        ("Llama-3.1 8B Q4_K_M",       4.92, 10162, 211.5, 171.0, 13.3,  "anchor: llama_3_1_8b_dense"),
+        ("Skippy 7B v4 (= qwen_2_5_7b_dense alias)",         4.68, 10865, 211.7, 183.9, 12.3, "FT preserves base"),
+        ("Skippy Mistral v4 (= mistral_7b_v03_dense alias)", 4.37, 10217, 239.4, 182.7, 12.6, "FT preserves base"),
+    ]
 
 
 # ============================================================
@@ -249,15 +324,15 @@ METHODOLOGY_COLS = ["aspect", "value", "note"]
 # Sheet 1 — index (built last so it can describe row counts)
 # ============================================================
 
-def make_index_rows(headlines, percat):
+def make_index_rows(headlines, percat, n_perf):
     return [
         ("models",            len(MODELS_ROWS),    "Every base + fine-tune we evaluated. Family / arch / size / GGUF / training cost / role."),
         ("eval_headlines",    len(headlines),      "One row per eval run (acc_*.json). Pass rate, sample count, timestamp, raw JSON name."),
         ("eval_per_category", len(percat),         "Long format: (model × category) → pass / total / rate. Sums across categories per model = headline."),
         ("voice_metrics",     len(VOICE_ROWS),     "Voice gate measurements. Compare stock cadence (verbose) vs Skippy fine-tune voice (terse)."),
-        ("perf_5090",         len(PERF_ROWS),      "RTX 5090 throughput measurements (decode tok/s, prefill, RAG total)."),
+        ("perf_5090",         n_perf,              "RTX 5090 throughput measurements (decode tok/s, prefill, RAG total). Vendored from keyhole canonical anchor file; see methodology."),
         ("recipe_matrix",     len(RECIPE_ROWS),    "8 filled cells in the recipe taxonomy. Dimensions: arch / size / LoRA targets / loss / corpus / hyperparams / gates / hardware."),
-        ("methodology",       len(METHODOLOGY_ROWS), "Eval setup, RAG config, hardware, gotchas. Read this first if you're new to the project."),
+        ("methodology",       len(METHODOLOGY_ROWS) + 1, "Eval setup, RAG config, hardware, gotchas. Read this first if you're new to the project."),
     ]
 
 INDEX_COLS = ["sheet_name", "row_count", "what_it_contains"]
@@ -271,12 +346,17 @@ def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
 
     headlines_df, percat_df = scrape_eval_jsons()
+    perf_rows, perf_source_note = load_perf_rows()
     models_df       = pd.DataFrame(MODELS_ROWS, columns=MODELS_COLS)
     voice_df        = pd.DataFrame(VOICE_ROWS, columns=VOICE_COLS)
-    perf_df         = pd.DataFrame(PERF_ROWS, columns=PERF_COLS)
+    perf_df         = pd.DataFrame(perf_rows, columns=PERF_COLS)
     recipe_df       = pd.DataFrame(RECIPE_ROWS, columns=RECIPE_COLS)
-    method_df       = pd.DataFrame(METHODOLOGY_ROWS, columns=METHODOLOGY_COLS)
-    index_df        = pd.DataFrame(make_index_rows(headlines_df, percat_df), columns=INDEX_COLS)
+    # Append the perf-source provenance row to methodology so it lands in the bundle
+    method_rows = METHODOLOGY_ROWS + [
+        ("perf_5090 source", "keyhole-canonical (vendored)", perf_source_note),
+    ]
+    method_df       = pd.DataFrame(method_rows, columns=METHODOLOGY_COLS)
+    index_df        = pd.DataFrame(make_index_rows(headlines_df, percat_df, len(perf_df)), columns=INDEX_COLS)
 
     with pd.ExcelWriter(OUT, engine="openpyxl") as xl:
         index_df.to_excel(xl, sheet_name="index", index=False)
