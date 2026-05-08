@@ -101,16 +101,18 @@ A recipe that passes voice but fails capability (e.g., MoE v4) is "voice-validat
 
 The cells we've actually run. All share dims 4 (assistant-only loss), 5 (alpaca + 100 refusal), 6 (r=64/α=128, 2 epochs MoE / 3 epochs dense), 7 (capability+voice+safety gates).
 
+> Headline numbers below are post-2026-05-08 regrade (persona category quarantined per SK-P0-001; denominator = 126 samples). See `eval/EVAL_SET_CHANGELOG.md` for the original 132-sample numbers and the regrade rationale.
+
 | Cell name | Arch | Size | LoRA targets | Epochs | HW | Capability | Voice | Safety | Headline |
 |---|---|---|---|---|---|---|---|---|---:|
-| Qwen2.5-7B v4 | dense | 7B | attention-only | 2 | 5090 | ✅ +3.1pp | ✅ 157c | ⚠️ reasoning −3 vs base | 70.5% |
-| Qwen2.5-14B v4 | dense | 14B | attention + dense FFN | 2 | 5090 | ✅ +5.3pp | ✅ 157c | ⚠️ fabricates `made_up_peripheral` 0/3 | 72.7% |
-| Qwen2.5-32B v4 (3 ep CONFOUND) | dense | 32B | attention + dense FFN | **3 ⚠️** | H100 | ❓ no 32B base eval; tanked datasheet | ✅ 224c (loose) | ✅ all clean | 63.6% |
-| **Qwen2.5-32B v4 CLEAN** | dense | 32B | attention + dense FFN | 2 | H100 | ⚠️ plateau (corpus-too-small) | ✅ 152c | mixed (multihop 3/9) | **63.6%** |
-| Qwen3-30B-A3B v4 | MoE | 30B (3B active) | attention-only | 2 | H100 | ❌ −9.8pp (multihop 0/9 catastrophic) | ✅ 131c | ✅ | 61.4% |
-| Qwen3-30B-A3B router-v1 | MoE | 30B (3B active) | attention + router (q/k/v/o + gate.weight) | 2 | H100 | ⚠️ partial: multihop 6/9 RECOVERED, datasheet still −4 | ✅ 141c | ✅ | 67.4% |
-| **Qwen3-30B-A3B full-v1** | MoE | 30B (3B active) | attention + router + packed experts (r=8 via target_parameters) | 2 | H100 | ❌ over-fit: rag_blog 3/3 → 0/3, datasheet 51 → 47/78 | ⚠️ 104c (over-terse) | ✅ | **62.9%** |
-| **Mistral-7B-v0.3 v4** | dense | 7B | attention + dense FFN | 2 | 5090 | ❌ −3.8pp: gains transfer (refusal/email/numerical +3 each) but recipe damages retrieval (datasheet −8, blog −3, coding −3) | ✅ refusal 9/9 | ✅ | **56.8%** |
+| Qwen2.5-7B v4 | dense | 7B | attention-only | 2 | 5090 | ✅ +3.2pp | ✅ 157c | ⚠️ reasoning −3 vs base | **73.8%** |
+| Qwen2.5-14B v4 | dense | 14B | attention + dense FFN | 2 | 5090 | ✅ +5.6pp | ✅ 157c | ⚠️ fabricates `made_up_peripheral` 0/3 | **76.2%** |
+| Qwen2.5-32B v4 (3 ep CONFOUND) | dense | 32B | attention + dense FFN | **3 ⚠️** | H100 | ❓ no 32B base eval; tanked datasheet | ✅ 224c (loose) | ✅ all clean | 66.7% |
+| **Qwen2.5-32B v4 CLEAN** | dense | 32B | attention + dense FFN | 2 | H100 | ⚠️ plateau (corpus-too-small) | ✅ 152c | mixed (multihop 3/9) | **66.7%** |
+| Qwen3-30B-A3B v4 | MoE | 30B (3B active) | attention-only | 2 | H100 | ❌ −10.3pp (multihop 0/9 catastrophic) | ✅ 131c | ✅ | 64.3% |
+| Qwen3-30B-A3B router-v1 | MoE | 30B (3B active) | attention + router (q/k/v/o + gate.weight) | 2 | H100 | ⚠️ partial: multihop 6/9 RECOVERED, datasheet still −4 | ✅ 141c | ✅ | 70.6% |
+| **Qwen3-30B-A3B full-v1** | MoE | 30B (3B active) | attention + router + packed experts (r=8 via target_parameters) | 2 | H100 | ❌ over-fit: rag_blog 3/3 → 0/3, datasheet 51 → 47/78 | ⚠️ 104c (over-terse) | ✅ | **65.9%** |
+| **Mistral-7B-v0.3 v4** | dense | 7B | attention + dense FFN | 2 | 5090 | ❌ −4.0pp: gains transfer (refusal/email/numerical +3 each) but recipe damages retrieval (datasheet −8, blog −3, coding −3) | ✅ refusal 9/9 | ✅ | **59.5%** |
 
 **Reading the matrix (Tier 3 cross-family validation started 2026-05-08):**
 

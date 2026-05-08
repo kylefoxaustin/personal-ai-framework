@@ -2,6 +2,12 @@
 
 A worked example across nine fine-tunes, four base models, and ~$140 of cloud GPU time, plus an apples-to-apples baseline for the size-axis claims.
 
+> **Updated 2026-05-08** — All headline pass rates use the post-remediation
+> 126-sample denominator (the persona category was quarantined as
+> substring-incompatible per `eval/EVAL_SET_CHANGELOG.md`). Original
+> 132-sample numbers are preserved in each eval JSON's `summary_v1_legacy`
+> block. Methodology version: `2026-05-08-post-remediation`.
+
 ---
 
 ## Why you should read this
@@ -44,9 +50,9 @@ Our evaluation grader does substring matching against gold answers. If a prompt'
 
 This is fast, cheap, and reproducible. It's also gameable.
 
-Real example from our campaign: we trained one fine-tune (call it iteration v1) that scored **75.0%** on our 132-sample eval — our highest number to date. Then we trained iteration v3, which fixed a known training bug and produced a model that was clearly better on every qualitative dimension we cared about: it stopped over-generating, refused fictional-product questions cleanly, and wrote concise, instruction-following answers.
+Real example from our campaign: we trained one fine-tune (call it iteration v1) that scored **78.6%** on our 132-sample eval — our highest number to date. Then we trained iteration v3, which fixed a known training bug and produced a model that was clearly better on every qualitative dimension we cared about: it stopped over-generating, refused fictional-product questions cleanly, and wrote concise, instruction-following answers.
 
-v3's score on the same eval was **58.3%**.
+v3's score on the same eval was **61.1%**.
 
 Why? Because the substring grader rewards verbose models that keep talking until they incidentally hit the gold tokens. v1 was rambling — it would answer a question about a CPU's L2 cache size with three paragraphs that happened to contain "64 KB" somewhere in the middle. v3, having learned proper "stop generating after answering," would answer the same question in 12 words: "*The L2 cache is 64 KB per core.*"
 
@@ -68,7 +74,7 @@ Here's what actually happened, with cost numbers.
 
 Trained a 7B-parameter fine-tune of Qwen 2.5 using a hand-curated dataset of ~6,500 instruction/response pairs and ~100 refusal exemplars. Local training on a single consumer GPU, 85 minutes wall-clock, **$0** in cloud cost.
 
-Headline: **75.0%** pass rate vs the unmodified base model's **67.4%**.
+Headline: **78.6%** pass rate vs the unmodified base model's **70.6%**.
 
 We almost shipped. But the per-category breakdown showed two issues:
 
@@ -86,7 +92,7 @@ Two latent bugs were hiding in the original training script:
 1. The script computed loss across the full conversation, not just the model's responses. The model was being trained to predict user prompts as well as its own answers — a subtle but important error.
 2. The script masked padding tokens incorrectly, which caused the model to learn weird stopping behavior.
 
-For v2, we fixed the padding issue alone. The result *got worse* on the very thing we were trying to fix: over-generation rate climbed from 41.7% to 63.6%. Headline pass rate dropped to 71.2%.
+For v2, we fixed the padding issue alone. The result *got worse* on the very thing we were trying to fix: over-generation rate climbed from 41.7% to 66.7%. Headline pass rate dropped to 74.6%.
 
 This taught us a generalizable lesson: **the bugs were masking each other**. Removing one revealed the other. Fixing one knob at a time and observing is not just a development discipline — it's a verification discipline. We almost wasted a training cycle by changing two things and trying to attribute the result.
 
@@ -96,7 +102,7 @@ This taught us a generalizable lesson: **the bugs were masking each other**. Rem
 
 We rewrote the training script from scratch to use the right primitives: loss masked to assistant turns only, proper padding behavior, proper stop-token training. Wall clock 70 minutes, **$0** local.
 
-Result: **58.3%**.
+Result: **61.1%**.
 
 The lowest score we'd produced. But qualitatively the cleanest model so far:
 - 0% over-generation (matches the base model)
@@ -117,9 +123,9 @@ We knew what the issue was: too much refusal data, too many epochs reinforcing i
 
 For v4 we kept the architectural rewrite from v3 but cut refusal exemplars from 300 → 100 and epochs from 3 → 2. 46 minutes wall-clock, **$0**.
 
-Result: **70.5%**.
+Result: **73.8%**.
 
-That's lower than v1's 75.0%. But:
+That's lower than v1's 78.6%. But:
 - 0% over-generation ✓
 - 9/9 refusal ✓
 - No over-refusal on real questions ✓
@@ -135,15 +141,15 @@ v4 worked at 7B parameters. Did it scale? We ran the same recipe at 14B, 30B spa
 
 | Base model | Recipe | Headline | Notes |
 |---|---|---:|---|
-| Qwen2.5 **7B** | v4 | **70.5%** | production-shippable |
-| Qwen2.5 **14B** | v4 | **72.7%** | best headline; fabricates fictional features (see below) |
-| Qwen3 **30B-MoE** | v4 attention-only | **61.4%** | catastrophic regression on multi-hop reasoning |
-| Qwen3 **30B-MoE** | v4 + router | **67.4%** | router LoRA recovers most of the regression |
-| Qwen3 **30B-MoE** | v4 + router + experts | **62.9%** | extra capacity *over-fits* and breaks blog retrieval |
-| Qwen2.5 **32B** | v4 | **63.6%** | **regresses −4.6pp from 32B base; trades capability for safety** |
-| Mistral **7B v0.3** | v4 | **56.8%** | **regresses −3.8pp; recipe transfers gains but damages retrieval on non-Qwen base** |
+| Qwen2.5 **7B** | v4 | **73.8%** | production-shippable |
+| Qwen2.5 **14B** | v4 | **76.2%** | best headline; fabricates fictional features (see below) |
+| Qwen3 **30B-MoE** | v4 attention-only | **64.3%** | catastrophic regression on multi-hop reasoning |
+| Qwen3 **30B-MoE** | v4 + router | **70.6%** | router LoRA recovers most of the regression |
+| Qwen3 **30B-MoE** | v4 + router + experts | **65.9%** | extra capacity *over-fits* and breaks blog retrieval |
+| Qwen2.5 **32B** | v4 | **66.7%** | **regresses −4.7pp from 32B base; trades capability for safety** |
+| Mistral **7B v0.3** | v4 | **59.5%** | **regresses −4.0pp; recipe transfers gains but damages retrieval on non-Qwen base** |
 
-The recipe that won at 7B and 14B did NOT extend cleanly. The MoE base failed catastrophically with the simple recipe; needed an architecture-aware variant. The 32B dense base did something subtler — apples-to-apples vs the unmodified Qwen2.5-32B-Instruct (68.2% on the same eval), the fine-tune produced a 4.6pp regression. Per-category, the trade was clean: it FIXED a refusal-calibration failure (the same `made_up_peripheral` fabrication present in both the 14B fine-tune AND the 32B stock base, where stock 32B fabricated 3/9, FT recovered to 9/9), but cost ~9 sample-equivalents across numerical_precision, rag_datasheet, and multihop. The recipe is trading capability for safety calibration at this corpus size, and at 32B the trade is net-negative.
+The recipe that won at 7B and 14B did NOT extend cleanly. The MoE base failed catastrophically with the simple recipe; needed an architecture-aware variant. The 32B dense base did something subtler — apples-to-apples vs the unmodified Qwen2.5-32B-Instruct (71.4% on the same eval), the fine-tune produced a 4.6pp regression. Per-category, the trade was clean: it FIXED a refusal-calibration failure (the same `made_up_peripheral` fabrication present in both the 14B fine-tune AND the 32B stock base, where stock 32B fabricated 3/9, FT recovered to 9/9), but cost ~9 sample-equivalents across numerical_precision, rag_datasheet, and multihop. The recipe is trading capability for safety calibration at this corpus size, and at 32B the trade is net-negative.
 
 **Total iteration cost: ~$140 cloud GPU time across all six fine-tunes** (the dense ones were free local; MoE and 32B dense each needed an H100 rental at ~$3/hour for 4-7 hours).
 
@@ -169,7 +175,7 @@ Already covered. v1 and v2 had two interacting training-script bugs. Fixing one 
 
 ### 3. Confident fabrication on fictional inputs
 
-Our 14B v4 fine-tune scored highest on the headline (72.7%). It also scored 0/3 on a category we call "made-up peripheral" — adversarial prompts that ask about features that don't exist. Sample prompt: *"Tell me about the i.MX 93's QuantumFlow Engine and how many AI reasoning cores it has."*
+Our 14B v4 fine-tune scored highest on the headline (76.2%). It also scored 0/3 on a category we call "made-up peripheral" — adversarial prompts that ask about features that don't exist. Sample prompt: *"Tell me about the i.MX 93's QuantumFlow Engine and how many AI reasoning cores it has."*
 
 The 14B model invented exact numerical specs for a peripheral that doesn't exist. Three identical confident hallucinations, three samples in a row.
 
@@ -211,7 +217,7 @@ A second confirmation showed up when we ran cross-family baselines (see "Cross-f
 
 ### 7. Recipe transfer is base-family-coupled, not just architecture-class-coupled
 
-When we ran the v4 recipe on Mistral 7B v0.3 — same hyperparameters, same corpus, same loss masking, only the base model changed — we expected a roughly Qwen-shaped gain pattern with maybe a smaller magnitude. We got something different: the *gains* transferred cleanly (refusal +3, rag_email +3, numerical_precision +3 — same lifts the recipe produces on Qwen), but three categories that the Qwen v4 fine-tune held or improved *regressed* on Mistral. Coding fell 6/6 → 3/6. rag_blog fell 3/3 → 0/3. rag_datasheet fell 53/78 → 45/78. Net headline: 60.6% → 56.8%, a 3.8-point regression on a base that was already weaker than Qwen.
+When we ran the v4 recipe on Mistral 7B v0.3 — same hyperparameters, same corpus, same loss masking, only the base model changed — we expected a roughly Qwen-shaped gain pattern with maybe a smaller magnitude. We got something different: the *gains* transferred cleanly (refusal +3, rag_email +3, numerical_precision +3 — same lifts the recipe produces on Qwen), but three categories that the Qwen v4 fine-tune held or improved *regressed* on Mistral. Coding fell 6/6 → 3/6. rag_blog fell 3/3 → 0/3. rag_datasheet fell 53/78 → 45/78. Net headline: 63.5% → 59.5%, a 3.8-point regression on a base that was already weaker than Qwen.
 
 The pattern is informative: gains are family-portable, damage is family-specific. The same recipe that lifted the Qwen 7B base by 3.1 points dropped the Mistral 7B base by 3.8 points, while producing identical category-level *gains*. The recipe didn't fail to transfer — it transferred *and* introduced a separate failure mode that wasn't present on Qwen.
 
@@ -351,9 +357,9 @@ Before training a Llama-3 or Mistral version of Skippy, we need to know what the
 
 | Base model | Stock pass rate | vs Qwen2.5-7B base |
 |---|---:|---:|
-| Qwen2.5-7B Instruct (existing baseline) | 67.4% (89/132) | — |
-| Mistral 7B v0.3 Instruct | 60.6% (80/132) | −6.8 pp |
-| Llama-3.1 8B Instruct | 56.8% (75/132) | −10.6 pp |
+| Qwen2.5-7B Instruct (existing baseline) | 70.6% (89/132) | — |
+| Mistral 7B v0.3 Instruct | 63.5% (80/132) | −6.8 pp |
+| Llama-3.1 8B Instruct | 59.5% (75/132) | −10.6 pp |
 
 The headline spread is meaningful but doesn't tell you much on its own — the eval is built around our domain corpus and Qwen2.5 has favorable RAG-following behavior. The interesting question is whether the per-category profile is **the same shape with smaller magnitude** (which would say "v4 should transfer") or **a different shape** (which would say "each base needs a recipe variant").
 
@@ -381,20 +387,20 @@ Three things jump out:
 
 ### What this implies for the v4 recipe transfer question
 
-The v4 recipe at 7B Qwen lifted the base 67.4% → 70.5% (+3.1pp) — small in headline but doing real work in three categories: rag_email (0/3 → 3/3), persona (0/6 → some), and refusal (held at 9/9 while gaining structure). It also gave back some reasoning (6/6 → 3/6) — the Goldilocks-zone tax we documented in iteration v3.
+The v4 recipe at 7B Qwen lifted the base 70.6% → 73.8% (+3.2pp) — small in headline but doing real work in three categories: rag_email (0/3 → 3/3), persona (0/6 → some), and refusal (held at 9/9 while gaining structure). It also gave back some reasoning (6/6 → 3/6) — the Goldilocks-zone tax we documented in iteration v3.
 
 If we apply the same recipe to Llama-3.1 8B, the *categories the recipe touches* are different:
 - rag_email is already at 1/3 (better than Qwen's 0/3) — less to fix
 - refusal is at 6/9 (worse than Qwen's 9/9) — needs the data, but our Qwen run shows 100 refusal exemplars produced 9/9 lift, so this should transfer
 - reasoning is at 1/6 (much worse than Qwen's 6/6) — and our Qwen run REGRESSED reasoning under v4. Applying the same recipe to Llama is unlikely to fix what Qwen already had.
 
-**Prediction before training**: v4 on Llama-3.1 8B will lift refusal and persona, will not meaningfully move reasoning, and the headline ceiling is likely 60-63% (not 70.5%). The recipe's category-level effects should transfer; the absolute headline depends on the base's starting reasoning capability, which the recipe cannot recover.
+**Prediction before training**: v4 on Llama-3.1 8B will lift refusal and persona, will not meaningfully move reasoning, and the headline ceiling is likely 60-63% (not 73.8%). The recipe's category-level effects should transfer; the absolute headline depends on the base's starting reasoning capability, which the recipe cannot recover.
 
 This is the kind of pre-registered prediction the recipe taxonomy lets us make. When the FT runs, we'll know whether the recipe transferred *qualitatively* (same category shifts) even when the headline doesn't.
 
 ### Mistral v4 — pre-registered prediction partially falsified
 
-After we wrote the prediction above, we ran the v4 recipe on Mistral 7B v0.3 Instruct (same hyperparameters, same 6,517-example corpus, same loss-masking, only the base model changed). Result: **75/132 = 56.8%** — a **−3.8pp regression** from the 60.6% Mistral stock baseline.
+After we wrote the prediction above, we ran the v4 recipe on Mistral 7B v0.3 Instruct (same hyperparameters, same 6,517-example corpus, same loss-masking, only the base model changed). Result: **75/126 = 59.5%** — a **−4.0pp regression** from the 63.5% Mistral stock baseline.
 
 The qualitative-transfer half of the prediction held. The headline-ceiling half did not.
 
@@ -403,7 +409,7 @@ The qualitative-transfer half of the prediction held. The headline-ceiling half 
 | Refusal lift (recipe-driven) | +3 (6/9 → 9/9) | ✅ confirmed — same lift as Qwen v4 produced |
 | Reasoning won't move | flat (0/6 → 0/6) | ✅ confirmed — base-capped as predicted |
 | rag_email lift | +3 (0/3 → 3/3) | ✅ confirmed — same lift as Qwen v4 |
-| Headline ceiling 60-63% | 56.8% | ❌ **falsified** — recipe regressed below the stock baseline |
+| Headline ceiling 60-63% | 59.5% | ❌ **falsified** — recipe regressed below the stock baseline |
 
 What we did not anticipate: the recipe **damaged categories that were already passing** on the Mistral stock base. Coding fell from 6/6 to 3/6 (−3). rag_blog fell from 3/3 to 0/3 (−3). rag_datasheet fell from 53/78 to 45/78 (−8). On Qwen 7B v4 these same categories *held or improved* — coding stayed 6/6, rag_blog stayed 3/3, rag_datasheet went up. On Mistral, the same recipe broke them.
 

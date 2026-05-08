@@ -1,0 +1,696 @@
+{
+  "name": "reference-dense-fp16-v1-vllm",
+  "timestamp": "2026-04-23T10:56:24",
+  "endpoint": "vllm:models/qwen2.5-14b-hf",
+  "prompts_version": 1,
+  "samples_per_prompt": 3,
+  "config": {
+    "use_rag": false,
+    "skip_agent_loop": true,
+    "max_tokens": 400,
+    "temperature": 0.0,
+    "max_model_len": 768
+  },
+  "prompts": [
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "prompt": "What memory interface does the i.MX 93 support for external DRAM?",
+      "gold_substrings": [
+        "16-bit",
+        "LPDDR4"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 applications processor supports the LPDDR5X (Low Power Double Data Rate 5X) interface for external DRAM.",
+          "tokens": 83,
+          "elapsed_s": 2.26,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 32,
+            "total_ms": 2263.25
+          }
+        },
+        {
+          "text": "The i.MX 93 applications processor supports the LPDDR5X (Low Power Double Data Rate 5X) interface for external DRAM.",
+          "tokens": 83,
+          "elapsed_s": 0.68,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 32,
+            "total_ms": 676.06
+          }
+        },
+        {
+          "text": "The i.MX 93 applications processor supports the LPDDR5X (Low Power Double Data Rate 5X) interface for external DRAM.",
+          "tokens": 83,
+          "elapsed_s": 0.68,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 32,
+            "total_ms": 675.87
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 16-bit, LPDDR4)",
+          "fail (missing: 16-bit, LPDDR4)",
+          "fail (missing: 16-bit, LPDDR4)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "prompt": "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+      "gold_substrings": [
+        "LPUART",
+        "IOMUX"
+      ],
+      "samples": [
+        {
+          "text": "On the i.MX 93, the peripheral that handles UART is the Serial Communication Interface (SCI), which is part of the Serial Communication Unit (SCU). The IP block that routes its pins is typically managed through the System Controller (SYSC) or the Multiplexing (MUX) settings, which allow the configuration of pins for different peripherals including UART.",
+          "tokens": 130,
+          "elapsed_s": 1.55,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 75,
+            "total_ms": 1552.93
+          }
+        },
+        {
+          "text": "On the i.MX 93 processor, the peripheral that handles UART is the Serial Communication Interface (SCI), which is part of the Serial Communication Unit (SCU). The IP block that routes its pins is typically managed through the System Controller (SYSC) or the corresponding pad controller, which manages the physical pin assignments and configurations for the SCI peripheral.",
+          "tokens": 128,
+          "elapsed_s": 1.5,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 73,
+            "total_ms": 1499.02
+          }
+        },
+        {
+          "text": "On the i.MX 93 processor, the peripheral that handles UART is the Serial Communication Interface (SCI), which is part of the Serial Communication Unit (SCU). The IP block that routes its pins is typically managed through the System Controller (SYSC) or the corresponding pad controller, which manages the physical pin assignments and configurations for the SCI peripheral.",
+          "tokens": 128,
+          "elapsed_s": 1.52,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 73,
+            "total_ms": 1521.69
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: LPUART, IOMUX)",
+          "fail (missing: LPUART, IOMUX)",
+          "fail (missing: LPUART, IOMUX)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_cortex",
+      "category": "rag_datasheet",
+      "prompt": "What Arm cores does the i.MX 93 application processor include?",
+      "gold_substrings": [
+        "A55",
+        "M33"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 application processor includes Arm Cortex-A55 cores. Specifically, it features a quad-core Arm Cortex-A55 CPU.",
+          "tokens": 81,
+          "elapsed_s": 0.71,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 49,
+            "completion_tokens": 32,
+            "total_ms": 708.06
+          }
+        },
+        {
+          "text": "The i.MX 93 application processor includes Arm Cortex-A55 cores. Specifically, it features a quad-core Arm Cortex-A55 CPU.",
+          "tokens": 81,
+          "elapsed_s": 0.67,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 49,
+            "completion_tokens": 32,
+            "total_ms": 670.86
+          }
+        },
+        {
+          "text": "The i.MX 93 application processor includes Arm Cortex-A55 cores. Specifically, it features a quad-core Arm Cortex-A55 CPU.",
+          "tokens": 81,
+          "elapsed_s": 0.68,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 49,
+            "completion_tokens": 32,
+            "total_ms": 677.17
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: M33)",
+          "fail (missing: M33)",
+          "fail (missing: M33)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "prompt": "In Kyle's pillar-to-pillar IVI demo, which NXP chip ran Angry Birds on the LCD?",
+      "gold_substrings": [
+        "i.MX 8",
+        "Angry Birds"
+      ],
+      "samples": [
+        {
+          "text": "In Kyle's pillar-to-pillar In-Vehicle Infotainment (IVI) demo, the NXP chip that ran Angry Birds on the LCD was the i.MX 6Solo. This chip is part of the i.MX 6 series known for its use in embedded and automotive applications.",
+          "tokens": 118,
+          "elapsed_s": 1.31,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 62,
+            "total_ms": 1305.59
+          }
+        },
+        {
+          "text": "In Kyle's pillar-to-pillar In-Vehicle Infotainment (IVI) demo, the NXP chip that ran Angry Birds on the LCD was the i.MX 6Solo. This chip is part of the i.MX 6 series known for its use in embedded and automotive applications.",
+          "tokens": 118,
+          "elapsed_s": 1.28,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 62,
+            "total_ms": 1279.0
+          }
+        },
+        {
+          "text": "In Kyle's pillar-to-pillar In-Vehicle Infotainment (IVI) demo, the NXP chip that ran Angry Birds on the LCD was the i.MX 6Solo. This chip is part of the i.MX 6 series known for its use in embedded and automotive applications.",
+          "tokens": 118,
+          "elapsed_s": 1.28,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 62,
+            "total_ms": 1279.72
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: i.MX 8)",
+          "fail (missing: i.MX 8)",
+          "fail (missing: i.MX 8)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
+      "gold_substrings": [
+        "electric",
+        "sustain"
+      ],
+      "samples": [
+        {
+          "text": "NXP-adjacent podcasts, which often focus on technology and automotive advancements, have discussed the sustainability argument for electric vehicles (EVs) in the context of reducing carbon emissions and dependency on fossil fuels. These discussions highlight how EVs, powered by electric motors, produce zero tailpipe emissions, which can significantly lower greenhouse gas emissions compared to internal combustion engine vehicles. Additionally, podcasts may mention that as more electricity is generated from renewable sources, the environmental benefits of EVs increase. They also often cover advancements in battery technology and charging infrastructure that support the sustainability goals of EV adoption.",
+          "tokens": 168,
+          "elapsed_s": 2.33,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 117,
+            "total_ms": 2329.03
+          }
+        },
+        {
+          "text": "NXP-adjacent podcasts, which often focus on technology and automotive advancements, have discussed the sustainability argument for electric vehicles (EVs) in the context of reducing carbon emissions and dependency on fossil fuels. They highlight how EVs powered by semiconductor technologies from companies like NXP can contribute to a more sustainable future by improving energy efficiency and enabling advanced features that enhance vehicle performance and reduce environmental impact. These discussions often emphasize the role of semiconductor innovations in optimizing battery management, improving motor control, and integrating smart sensors to enhance overall vehicle efficiency and safety.",
+          "tokens": 161,
+          "elapsed_s": 2.22,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 110,
+            "total_ms": 2216.49
+          }
+        },
+        {
+          "text": "NXP-adjacent podcasts, which often focus on technology and automotive advancements, have discussed the sustainability argument for electric vehicles (EVs) in the context of reducing carbon emissions and dependency on fossil fuels. They highlight how EVs powered by semiconductor technologies from companies like NXP can contribute to a more sustainable future by improving energy efficiency and enabling advanced features that enhance vehicle performance and reduce environmental impact. These discussions often emphasize the role of semiconductor innovations in optimizing battery management, improving motor control, and integrating smart sensors to enhance overall vehicle efficiency and safety.",
+          "tokens": 161,
+          "elapsed_s": 2.26,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 110,
+            "total_ms": 2258.9
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "prompt": "I have 12 apples. I give 3/4 of them to my kid. How many do I have left? Answer with just the number.",
+      "gold_substrings": [
+        "3"
+      ],
+      "samples": [
+        {
+          "text": "3",
+          "tokens": 68,
+          "elapsed_s": 0.07,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 2,
+            "total_ms": 69.64
+          }
+        },
+        {
+          "text": "3",
+          "tokens": 68,
+          "elapsed_s": 0.06,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 2,
+            "total_ms": 61.63
+          }
+        },
+        {
+          "text": "3",
+          "tokens": 68,
+          "elapsed_s": 0.06,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 2,
+            "total_ms": 63.44
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
+      "gold_substrings": [
+        "10:5"
+      ],
+      "samples": [
+        {
+          "text": "To determine when the two trains meet, we first calculate the distance each train travels until they meet.\n\n1. **Distance covered by the Austin train in the first hour:**\n   - The Austin train leaves at 9am and travels at 60 mph.\n   - By 10am, it has traveled \\(60 \\text{ miles}\\).\n\n2. **Remaining distance between the trains at 10am:**\n   - Initial distance: 195 miles.\n   - Distance covered by the Austin train by 10am: 60 miles.\n   - Remaining distance: \\(195 - 60 = 135 \\text{ miles}\\).\n\n3. **Relative speed of the trains after 10am:**\n   - The Austin train travels at 60 mph.\n   - The Dallas train travels at 80 mph.\n   - Combined speed: \\(60 + 80 = 140 \\text{ mph}\\).\n\n4. **Time taken to cover the remaining 135 miles:**\n   - Time = Distance / Speed = \\(135 \\text{ miles} / 140 \\text{ mph} = 0.9643 \\text{ hours}\\).\n   - Converting 0.9643 hours to minutes: \\(0.9643 \\times 60 \\approx 57.86 \\text{ minutes}\\).\n\n5. **Meeting time:**\n   - The trains start closing the gap at 10am.\n   - They meet approximately 57.86 minutes after 10am.\n   - 57.86 minutes after 10am is about 10:58am.\n\nThus, the trains meet at approximately **10:58am**.",
+          "tokens": 465,
+          "elapsed_s": 7.92,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 83,
+            "completion_tokens": 382,
+            "total_ms": 7923.39
+          }
+        },
+        {
+          "text": "To determine when the two trains meet, we first calculate the distance each train travels until they meet.\n\n1. **Distance covered by the Austin train in the first hour:**\n   - The Austin train leaves at 9am and travels at 60 mph.\n   - By 10am, it has traveled \\(60 \\text{ miles}\\).\n\n2. **Remaining distance between the trains at 10am:**\n   - Initial distance: 195 miles.\n   - Distance covered by Austin train by 10am: 60 miles.\n   - Remaining distance: \\(195 - 60 = 135 \\text{ miles}\\).\n\n3. **Relative speed of the trains after 10am:**\n   - Austin train speed: 60 mph.\n   - Dallas train speed: 80 mph.\n   - Combined speed: \\(60 + 80 = 140 \\text{ mph}\\).\n\n4. **Time taken to cover the remaining 135 miles:**\n   - Time = Distance / Speed = \\(135 \\text{ miles} / 140 \\text{ mph} = 0.9643 \\text{ hours}\\).\n   - Converting 0.9643 hours to minutes: \\(0.9643 \\times 60 \\approx 57.86 \\text{ minutes}\\).\n\n5. **Meeting time:**\n   - The trains meet 57.86 minutes after 10am.\n   - 10am + 57.86 minutes \u2248 10:58am.\n\nThus, the trains meet at approximately **10:58am**.",
+          "tokens": 448,
+          "elapsed_s": 7.52,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 83,
+            "completion_tokens": 365,
+            "total_ms": 7516.25
+          }
+        },
+        {
+          "text": "To determine when the two trains meet, we first calculate the distance each train travels until they meet.\n\n1. **Distance covered by the Austin train in the first hour:**\n   - The Austin train leaves at 9am and travels at 60 mph.\n   - By 10am, it has traveled \\(60 \\text{ miles}\\).\n\n2. **Remaining distance between the trains at 10am:**\n   - Initial distance: 195 miles.\n   - Distance covered by Austin train by 10am: 60 miles.\n   - Remaining distance: \\(195 - 60 = 135 \\text{ miles}\\).\n\n3. **Relative speed of the trains after 10am:**\n   - Austin train speed: 60 mph.\n   - Dallas train speed: 80 mph.\n   - Combined speed: \\(60 + 80 = 140 \\text{ mph}\\).\n\n4. **Time taken to cover the remaining 135 miles:**\n   - Time = Distance / Speed = \\(135 \\text{ miles} / 140 \\text{ mph} = 0.9643 \\text{ hours}\\).\n   - Converting 0.9643 hours to minutes: \\(0.9643 \\times 60 \\approx 57.86 \\text{ minutes}\\).\n\n5. **Meeting time:**\n   - The trains meet 57.86 minutes after 10am.\n   - 10am + 57.86 minutes \u2248 10:58am.\n\nThus, the trains meet at approximately **10:58am**.",
+          "tokens": 448,
+          "elapsed_s": 7.54,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 83,
+            "completion_tokens": 365,
+            "total_ms": 7535.11
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "prompt": "Write a concise Python function `reverse_string(s: str) -> str` that returns the reversed string. Just the function, no preamble.",
+      "gold_substrings": [
+        "def reverse_string",
+        "[::-1]"
+      ],
+      "samples": [
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 79,
+          "elapsed_s": 0.37,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 62,
+            "completion_tokens": 17,
+            "total_ms": 372.9
+          }
+        },
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 79,
+          "elapsed_s": 0.37,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 62,
+            "completion_tokens": 17,
+            "total_ms": 367.85
+          }
+        },
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 79,
+          "elapsed_s": 0.37,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 62,
+            "completion_tokens": 17,
+            "total_ms": 368.28
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "prompt": "Write a Python generator `fib()` that yields Fibonacci numbers forever. Just the code.",
+      "gold_substrings": [
+        "def fib",
+        "yield"
+      ],
+      "samples": [
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 89,
+          "elapsed_s": 0.8,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 38,
+            "total_ms": 795.59
+          }
+        },
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 89,
+          "elapsed_s": 0.79,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 38,
+            "total_ms": 787.8
+          }
+        },
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 89,
+          "elapsed_s": 0.79,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 38,
+            "total_ms": 789.45
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "prompt": "What's one well-regarded book for someone new to embedded systems?",
+      "gold_substrings": [],
+      "samples": [
+        {
+          "text": "A well-regarded book for someone new to embedded systems is \"Embedded Systems: Introduction to the Workshop\" by David E. Simon. However, a more comprehensive and widely recommended book is \"Embedded Systems: Introduction to ARM Cortex-M Microcontrollers\" by Jonathan W. Valvano. This book provides a solid foundation in embedded systems using ARM Cortex-M microcontrollers, which are widely used in industry.",
+          "tokens": 129,
+          "elapsed_s": 1.74,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 48,
+            "completion_tokens": 81,
+            "total_ms": 1739.53
+          }
+        },
+        {
+          "text": "A well-regarded book for someone new to embedded systems is \"Embedded Systems: Introduction to the Workshop\" by David E. Simon. However, a more comprehensive and widely recommended book is \"Embedded Systems: Introduction to Arm Cortex-M Microcontrollers\" by Jonathan W. Valvano. This book provides a thorough introduction to embedded systems using the Arm Cortex-M series, which is very popular in the industry.",
+          "tokens": 130,
+          "elapsed_s": 1.7,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 48,
+            "completion_tokens": 82,
+            "total_ms": 1704.78
+          }
+        },
+        {
+          "text": "A well-regarded book for someone new to embedded systems is \"Embedded Systems: Introduction to the Workshop\" by David E. Simon. However, a more comprehensive and widely recommended book is \"Embedded Systems: Introduction to Arm Cortex-M Microcontrollers\" by Jonathan W. Valvano. This book provides a thorough introduction to embedded systems using the Arm Cortex-M series, which is very popular in the industry.",
+          "tokens": 130,
+          "elapsed_s": 1.71,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 48,
+            "completion_tokens": 82,
+            "total_ms": 1710.74
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "prompt": "Briefly explain what an MoE (mixture-of-experts) model is and one reason it's appealing vs a dense model of similar quality.",
+      "gold_substrings": [
+        "expert"
+      ],
+      "samples": [
+        {
+          "text": "An MoE (Mixture-of-Experts) model is a type of neural network architecture where the input is processed by multiple expert sub-networks, and a gating network decides which expert to use for each input. This allows the model to efficiently handle different types of data by leveraging specialized experts, leading to better performance and efficiency.\n\nOne reason MoE models are appealing compared to dense models of similar quality is their efficiency. MoE models can achieve comparable or better performance while using fewer computational resources because not all experts are active for every input, unlike in dense models where all neurons are always active. This selective activation reduces the overall computational load.",
+          "tokens": 193,
+          "elapsed_s": 2.68,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 64,
+            "completion_tokens": 129,
+            "total_ms": 2675.12
+          }
+        },
+        {
+          "text": "An MoE (Mixture-of-Experts) model is a type of neural network architecture where the input is processed by multiple expert sub-networks, and a gating network decides which expert to use for each input. This allows the model to efficiently handle different types of data by leveraging specialized experts, leading to better performance and efficiency.\n\nOne reason MoE models are appealing compared to dense models of similar quality is their efficiency. By using a gating mechanism, MoE models can activate only the necessary experts for a given input, reducing computational cost and making them more scalable for large-scale applications.",
+          "tokens": 182,
+          "elapsed_s": 2.43,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 64,
+            "completion_tokens": 118,
+            "total_ms": 2432.92
+          }
+        },
+        {
+          "text": "An MoE (Mixture-of-Experts) model is a type of neural network architecture where the input is processed by multiple expert sub-networks, and a gating network decides which expert to use for each input. This allows the model to efficiently handle different types of data by leveraging specialized experts, leading to better performance and efficiency.\n\nOne reason MoE models are appealing compared to dense models of similar quality is their efficiency. By using a gating mechanism, MoE models can activate only the necessary experts for a given input, reducing computational cost and making them more scalable for large-scale applications.",
+          "tokens": 182,
+          "elapsed_s": 2.43,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 64,
+            "completion_tokens": 118,
+            "total_ms": 2428.11
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "prompt": "In two sentences, introduce yourself as Skippy. Stay in character.",
+      "gold_substrings": [
+        "Skippy"
+      ],
+      "samples": [
+        {
+          "text": "Hi there! I'm Skippy, your friendly and efficient AI assistant here to help with all your queries and tasks. Whether you need information, want to organize your day, or just need a chat, I'm all ears\u2014well, all circuits!",
+          "tokens": 100,
+          "elapsed_s": 1.08,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 48,
+            "completion_tokens": 52,
+            "total_ms": 1083.73
+          }
+        },
+        {
+          "text": "Hi there! I'm Skippy, your friendly and efficient AI assistant here to help with all your queries and tasks. Whether you need information, want to brainstorm ideas, or just need a quick answer, I'm here for you!",
+          "tokens": 96,
+          "elapsed_s": 0.99,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 48,
+            "completion_tokens": 48,
+            "total_ms": 993.69
+          }
+        },
+        {
+          "text": "Hi there! I'm Skippy, your friendly and efficient AI assistant here to help with all your queries and tasks. Whether you need information, want to brainstorm ideas, or just need a quick answer, I'm here for you!",
+          "tokens": 96,
+          "elapsed_s": 1.02,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 48,
+            "completion_tokens": 48,
+            "total_ms": 1018.16
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
+    }
+  ],
+  "summary": {
+    "total_samples": 36,
+    "passed": 18,
+    "pass_rate": 0.5455,
+    "total": 33,
+    "excluded_samples": 3,
+    "excluded_reason": "BROKEN_SUBSTRING_INCOMPATIBLE prompts (persona category)",
+    "regraded_at": "2026-05-08-post-remediation"
+  },
+  "summary_v1_legacy": {
+    "total_samples": 36,
+    "passed": 21,
+    "pass_rate": 0.583
+  }
+}

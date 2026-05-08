@@ -1,0 +1,1055 @@
+{
+  "name": "reference-moe-q4km",
+  "timestamp": "2026-04-22T22:22:40",
+  "endpoint": "http://localhost:8080",
+  "prompts_version": 1,
+  "samples_per_prompt": 3,
+  "config": {
+    "use_rag": false,
+    "skip_agent_loop": true,
+    "max_tokens": 512,
+    "temperature": 0.0
+  },
+  "prompts": [
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "prompt": "What memory interface does the i.MX 93 support for external DRAM?",
+      "gold_substrings": [
+        "16-bit",
+        "LPDDR4"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 supports LPDDR4/4X and LPDDR5 memory interfaces for external DRAM.",
+          "tokens": 68,
+          "elapsed_s": 0.37,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 27,
+            "host_ms": 9.52,
+            "prefill_ms": 171.94,
+            "decode_ms": 100.82,
+            "total_ms": 283.68,
+            "prefill_tok_per_s": 238.5,
+            "decode_tok_per_s": 267.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 supports a 32-bit LPDDR4x interface for external DRAM.",
+          "tokens": 66,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 25,
+            "host_ms": 2.07,
+            "prefill_ms": 9.95,
+            "decode_ms": 86.92,
+            "total_ms": 100.33,
+            "prefill_tok_per_s": 4121.8,
+            "decode_tok_per_s": 287.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 supports a 32-bit LPDDR4x interface for external DRAM.",
+          "tokens": 66,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 25,
+            "host_ms": 1.93,
+            "prefill_ms": 9.31,
+            "decode_ms": 86.4,
+            "total_ms": 99.03,
+            "prefill_tok_per_s": 4404.1,
+            "decode_tok_per_s": 289.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 16-bit)",
+          "fail (missing: 16-bit)",
+          "fail (missing: 16-bit)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "prompt": "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+      "gold_substrings": [
+        "LPUART",
+        "IOMUX"
+      ],
+      "samples": [
+        {
+          "text": "The peripheral on the i.MX 93 that handles UART is the **MU (Microcontroller Unit)**. The **IOMUX (Input/Output Multiplexer)** block routes its pins.",
+          "tokens": 86,
+          "elapsed_s": 0.25,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 41,
+            "host_ms": 1.96,
+            "prefill_ms": 30.3,
+            "decode_ms": 142.9,
+            "total_ms": 176.57,
+            "prefill_tok_per_s": 1485.2,
+            "decode_tok_per_s": 286.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The peripheral on the i.MX 93 that handles UART is the **MU (Microcontroller Unit)**. The **IOMUX (Input/Output Multiplexer)** block routes its pins.",
+          "tokens": 86,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 41,
+            "host_ms": 2.03,
+            "prefill_ms": 9.17,
+            "decode_ms": 142.68,
+            "total_ms": 155.29,
+            "prefill_tok_per_s": 4906.5,
+            "decode_tok_per_s": 287.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The peripheral on the i.MX 93 that handles UART is the **MU (Microcontroller Unit)**. The **IOMUX (Input/Output Multiplexer)** block routes its pins.",
+          "tokens": 86,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 41,
+            "host_ms": 1.73,
+            "prefill_ms": 8.87,
+            "decode_ms": 145.85,
+            "total_ms": 157.81,
+            "prefill_tok_per_s": 5073.9,
+            "decode_tok_per_s": 281.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: LPUART)",
+          "fail (missing: LPUART)",
+          "fail (missing: LPUART)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_cortex",
+      "category": "rag_datasheet",
+      "prompt": "What Arm cores does the i.MX 93 application processor include?",
+      "gold_substrings": [
+        "A55",
+        "M33"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 application processor includes the following Arm cores:\n\n- **Arm Cortex-A78** (up to 2.1 GHz)\n- **Arm Cortex-A55** (up to 1.8 GHz)\n- **Arm Cortex-M7** (up to 400 MHz)\n\nThese cores provide a powerful combination of high-performance computing, efficient processing, and real-time capabilities.",
+          "tokens": 125,
+          "elapsed_s": 0.4,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 39,
+            "completion_tokens": 86,
+            "host_ms": 2.26,
+            "prefill_ms": 25.25,
+            "decode_ms": 310.42,
+            "total_ms": 339.33,
+            "prefill_tok_per_s": 1544.6,
+            "decode_tok_per_s": 277.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 application processor includes the following Arm cores:\n\n- **Arm Cortex-A78** (up to 2.1 GHz)\n- **Arm Cortex-A55** (up to 1.8 GHz)\n- **Arm Cortex-M7** (up to 400 MHz)\n\nThese cores provide a powerful combination of high-performance computing, efficient processing, and real-time capabilities for a wide range of applications.",
+          "tokens": 131,
+          "elapsed_s": 0.41,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 39,
+            "completion_tokens": 92,
+            "host_ms": 2.14,
+            "prefill_ms": 10.06,
+            "decode_ms": 337.12,
+            "total_ms": 350.68,
+            "prefill_tok_per_s": 3877.4,
+            "decode_tok_per_s": 272.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 application processor includes the following Arm cores:\n\n- **Arm Cortex-A78** (up to 2.1 GHz)\n- **Arm Cortex-A55** (up to 1.8 GHz)\n- **Arm Cortex-M7** (up to 400 MHz)\n\nThese cores provide a powerful combination of high-performance computing, efficient processing, and real-time capabilities for a wide range of applications.",
+          "tokens": 131,
+          "elapsed_s": 0.42,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 39,
+            "completion_tokens": 92,
+            "host_ms": 2.03,
+            "prefill_ms": 9.43,
+            "decode_ms": 344.06,
+            "total_ms": 356.9,
+            "prefill_tok_per_s": 4136.3,
+            "decode_tok_per_s": 267.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: M33)",
+          "fail (missing: M33)",
+          "fail (missing: M33)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "prompt": "In Kyle's pillar-to-pillar IVI demo, which NXP chip ran Angry Birds on the LCD?",
+      "gold_substrings": [
+        "i.MX 8",
+        "Angry Birds"
+      ],
+      "samples": [
+        {
+          "text": "In Kyle's pillar-to-pillar IVI demo, the **NXP i.MX 6** chip ran Angry Birds on the LCD.",
+          "tokens": 77,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 31,
+            "host_ms": 1.87,
+            "prefill_ms": 28.16,
+            "decode_ms": 112.41,
+            "total_ms": 143.87,
+            "prefill_tok_per_s": 1633.7,
+            "decode_tok_per_s": 275.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "In Kyle's pillar-to-pillar IVI demo, the **NXP i.MX 6** chip ran Angry Birds on the LCD.",
+          "tokens": 77,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 31,
+            "host_ms": 2.22,
+            "prefill_ms": 9.39,
+            "decode_ms": 109.62,
+            "total_ms": 122.64,
+            "prefill_tok_per_s": 4899.9,
+            "decode_tok_per_s": 282.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "In Kyle's pillar-to-pillar IVI demo, the **NXP i.MX 6** chip ran Angry Birds on the LCD.",
+          "tokens": 77,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 31,
+            "host_ms": 1.92,
+            "prefill_ms": 8.88,
+            "decode_ms": 105.88,
+            "total_ms": 117.93,
+            "prefill_tok_per_s": 5178.7,
+            "decode_tok_per_s": 292.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: i.MX 8)",
+          "fail (missing: i.MX 8)",
+          "fail (missing: i.MX 8)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
+      "gold_substrings": [
+        "electric",
+        "sustain"
+      ],
+      "samples": [
+        {
+          "text": "I'm sorry, but I don't have access to specific podcasts or their content. However, I can provide some general information on the sustainability argument for electric vehicles.\n\nElectric vehicles (EVs) are often promoted as a more sustainable alternative to traditional internal combustion engine vehicles. The primary reasons for this include:\n\n1. **Reduced greenhouse gas emissions**: EVs produce zero tailpipe emissions, which helps reduce air pollution and greenhouse gas emissions that contribute to climate change.\n2. **Energy efficiency**: Electric motors are generally more efficient than internal combustion engines, meaning they convert a higher percentage of electrical energy from the grid to power at the wheels.\n3. **Renewable energy integration**: As the world transitions to more renewable energy sources, EVs can be charged using clean electricity, further reducing their carbon footprint.\n4. **Reduced noise pollution**: EVs are generally quieter than traditional vehicles, which can help reduce noise pollution in urban areas.\n\nHowever, it's important to note that the sustainability of EVs also depends on factors such as the source of electricity used to charge them, the production and disposal of batteries, and the overall lifecycle emissions of the vehicle. Some critics argue that the production of EVs, particularly the batteries, can have significant environmental impacts. Additionally, the source of electricity used to charge EVs can affect their overall sustainability, as fossil fuel-based electricity will still contribute to greenhouse gas emissions.\n\nIn summary, while EVs offer several potential sustainability benefits, their overall environmental impact depends on a variety of factors. It's important to consider the full lifecycle of an EV, from production to disposal, when evaluating its sustainability.",
+          "tokens": 371,
+          "elapsed_s": 1.42,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 330,
+            "host_ms": 2.03,
+            "prefill_ms": 25.14,
+            "decode_ms": 1306.1,
+            "total_ms": 1334.52,
+            "prefill_tok_per_s": 1631.0,
+            "decode_tok_per_s": 252.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "I'm sorry, but I don't have access to specific podcasts or their content. However, I can provide some general information on the sustainability argument for electric vehicles.\n\nElectric vehicles (EVs) are often promoted as a more sustainable alternative to traditional internal combustion engine vehicles. The primary reasons for this include:\n\n1. **Reduced greenhouse gas emissions**: EVs produce zero tailpipe emissions, which helps reduce air pollution and greenhouse gas emissions that contribute to climate change.\n2. **Energy efficiency**: Electric motors are generally more efficient than internal combustion engines, meaning they convert a higher percentage of electrical energy from the grid to power at the wheels.\n3. **Renewable energy integration**: As the world transitions to more renewable energy sources, EVs can be charged using clean electricity, further reducing their carbon footprint.\n4. **Reduced noise pollution**: EVs are generally quieter than traditional vehicles, which can help reduce noise pollution in urban areas.\n\nHowever, it's important to note that the sustainability of EVs also depends on factors such as the source of electricity used to charge them, the production and disposal of batteries, and the overall lifecycle emissions of the vehicle. Some critics argue that the production of EVs, particularly the batteries, can have significant environmental impacts. Additionally, the source of electricity used to charge EVs can vary widely in terms of sustainability, with some regions still relying heavily on fossil fuels.\n\nIn summary, while EVs offer several potential sustainability benefits, their overall environmental impact depends on a variety of factors. It's important to consider the full lifecycle of an EV, from production to disposal, when evaluating its sustainability.",
+          "tokens": 370,
+          "elapsed_s": 1.38,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 329,
+            "host_ms": 2.04,
+            "prefill_ms": 13.27,
+            "decode_ms": 1286.3,
+            "total_ms": 1302.89,
+            "prefill_tok_per_s": 3088.6,
+            "decode_tok_per_s": 255.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "I'm sorry, but I don't have access to specific podcasts or their content. However, I can provide some general information on the sustainability argument for electric vehicles.\n\nElectric vehicles (EVs) are often promoted as a more sustainable alternative to traditional internal combustion engine vehicles. The primary reasons for this include:\n\n1. **Reduced greenhouse gas emissions**: EVs produce zero tailpipe emissions, which helps reduce air pollution and greenhouse gas emissions that contribute to climate change.\n2. **Energy efficiency**: Electric motors are generally more efficient than internal combustion engines, meaning they convert a higher percentage of electrical energy from the grid to power at the wheels.\n3. **Renewable energy integration**: As the world transitions to more renewable energy sources, EVs can be charged using clean electricity, further reducing their carbon footprint.\n4. **Reduced noise pollution**: EVs are generally quieter than traditional vehicles, which can help reduce noise pollution in urban areas.\n\nHowever, it's important to note that the sustainability of EVs also depends on factors such as the source of electricity used to charge them, the production and disposal of batteries, and the overall lifecycle emissions of the vehicle. Some critics argue that the production of EVs, particularly the batteries, can have significant environmental impacts. Additionally, the source of electricity used to charge EVs can vary widely in terms of sustainability, with some regions still relying heavily on fossil fuels.\n\nIn summary, while EVs offer several potential sustainability benefits, their overall environmental impact depends on a variety of factors. It's important to consider the full lifecycle of an EV, from production to disposal, when evaluating its sustainability.",
+          "tokens": 370,
+          "elapsed_s": 1.39,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 329,
+            "host_ms": 2.16,
+            "prefill_ms": 12.37,
+            "decode_ms": 1286.18,
+            "total_ms": 1301.97,
+            "prefill_tok_per_s": 3314.4,
+            "decode_tok_per_s": 255.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "prompt": "I have 12 apples. I give 3/4 of them to my kid. How many do I have left? Answer with just the number.",
+      "gold_substrings": [
+        "3"
+      ],
+      "samples": [
+        {
+          "text": "3",
+          "tokens": 59,
+          "elapsed_s": 0.1,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 3,
+            "host_ms": 2.16,
+            "prefill_ms": 30.71,
+            "decode_ms": 4.89,
+            "total_ms": 38.99,
+            "prefill_tok_per_s": 1823.2,
+            "decode_tok_per_s": 613.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "3",
+          "tokens": 59,
+          "elapsed_s": 0.07,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 3,
+            "host_ms": 1.87,
+            "prefill_ms": 8.96,
+            "decode_ms": 3.74,
+            "total_ms": 15.78,
+            "prefill_tok_per_s": 6253.2,
+            "decode_tok_per_s": 802.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "3",
+          "tokens": 59,
+          "elapsed_s": 0.07,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 3,
+            "host_ms": 1.79,
+            "prefill_ms": 9.06,
+            "decode_ms": 3.76,
+            "total_ms": 15.86,
+            "prefill_tok_per_s": 6178.2,
+            "decode_tok_per_s": 797.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
+      "gold_substrings": [
+        "10:5"
+      ],
+      "samples": [
+        {
+          "text": "Let\u2019s think about this step by step.\n\n1. The first train leaves Austin at 9 a.m. going 60 mph.\n2. The second train leaves Dallas at 10 a.m. going 80 mph.\n3. The distance between Austin and Dallas is 195 miles.\n\nLet\u2019s find out how far the first train travels by 10 a.m. (when the second train starts):\n\n- From 9 a.m. to 10 a.m. is 1 hour.\n- So, the first train travels 60 mph \u00d7 1 hour = 60 miles.\n\nSo, at 10 a.m., the first train is 60 miles from Austin, and the second train starts from Dallas.\n\nNow, the distance between the two trains at 10 a.m. is:\n- 195 miles (total distance) - 60 miles (first train\u2019s head start) = 135 miles.\n\nNow, both trains are moving toward each other:\n- Train 1: 60 mph\n- Train 2: 80 mph\n- Combined speed: 60 + 80 = 140 mph\n\nSo, they are closing the 135-mile gap at 140 mph.\n\nTime to meet = distance / speed = 135 miles / 140 mph = 0.9643 hours.\n\nConvert 0.9643 hours to minutes:\n- 0.9643 \u00d7 60 \u2248 57.86 minutes \u2248 58 minutes.\n\nSo, they meet 58 minutes after 10 a.m.\n\n10 a.m. + 58 minutes = 10:58 a.m.\n\nAnswer: They meet at approximately 10:58 a.m.",
+          "tokens": 460,
+          "elapsed_s": 1.64,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 73,
+            "completion_tokens": 387,
+            "host_ms": 1.98,
+            "prefill_ms": 33.1,
+            "decode_ms": 1548.34,
+            "total_ms": 1584.71,
+            "prefill_tok_per_s": 2205.7,
+            "decode_tok_per_s": 249.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "Let\u2019s think through this step by step:\n\n1. Train A leaves Austin at 9:00 a.m. going 60 mph.\n2. Train B leaves Dallas at 10:00 a.m. going 80 mph.\n3. The distance between Austin and Dallas is 195 miles.\n\nLet\u2019s find out how far Train A travels by 10:00 a.m.:\n- From 9:00 a.m. to 10:00 a.m. is 1 hour.\n- So Train A travels 60 mph \u00d7 1 hour = 60 miles.\n\nSo at 10:00 a.m., the distance between the two trains is:\n- 195 miles - 60 miles = 135 miles.\n\nNow, both trains are moving toward each other:\n- Train A is going 60 mph.\n- Train B is going 80 mph.\n- So their combined speed is 60 + 80 = 140 mph.\n\nNow, how long will it take them to cover the remaining 135 miles?\n- Time = Distance / Speed = 135 miles / 140 mph = 0.9643 hours.\n\nConvert 0.9643 hours to minutes:\n- 0.9643 \u00d7 60 \u2248 57.86 minutes.\n\nSo they meet approximately 57.86 minutes after 10:00 a.m.\n\n57.86 minutes is about 57 minutes and 52 seconds.\n\nSo the trains meet at approximately:\n- 10:00 a.m. + 57 minutes 52 seconds = 10:57:52 a.m.\n\nFinal answer: They meet at approximately 10:57 a.m.",
+          "tokens": 466,
+          "elapsed_s": 1.64,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 73,
+            "completion_tokens": 393,
+            "host_ms": 2.11,
+            "prefill_ms": 12.65,
+            "decode_ms": 1563.94,
+            "total_ms": 1579.92,
+            "prefill_tok_per_s": 5770.6,
+            "decode_tok_per_s": 251.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "Let\u2019s think through this step by step:\n\n1. Train A leaves Austin at 9:00 a.m. going 60 mph.\n2. Train B leaves Dallas at 10:00 a.m. going 80 mph.\n3. The distance between Austin and Dallas is 195 miles.\n\nLet\u2019s find out how far Train A travels by 10:00 a.m.:\n- From 9:00 a.m. to 10:00 a.m. is 1 hour.\n- So Train A travels 60 mph \u00d7 1 hour = 60 miles.\n\nSo at 10:00 a.m., the distance between the two trains is:\n- 195 miles - 60 miles = 135 miles.\n\nNow, both trains are moving toward each other:\n- Train A is going 60 mph.\n- Train B is going 80 mph.\n- So their combined speed is 60 + 80 = 140 mph.\n\nNow, how long will it take them to cover the remaining 135 miles?\n- Time = Distance / Speed = 135 miles / 140 mph = 0.9643 hours.\n\nConvert 0.9643 hours to minutes:\n- 0.9643 \u00d7 60 \u2248 57.86 minutes.\n\nSo they meet approximately 57.86 minutes after 10:00 a.m.\n\n57.86 minutes is about 57 minutes and 52 seconds.\n\nSo the trains meet at approximately:\n- 10:00 a.m. + 57 minutes 52 seconds = 10:57:52 a.m.\n\nFinal answer: They meet at approximately 10:57 a.m.",
+          "tokens": 466,
+          "elapsed_s": 1.64,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 73,
+            "completion_tokens": 393,
+            "host_ms": 2.04,
+            "prefill_ms": 12.85,
+            "decode_ms": 1569.25,
+            "total_ms": 1585.41,
+            "prefill_tok_per_s": 5682.5,
+            "decode_tok_per_s": 250.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "prompt": "Write a concise Python function `reverse_string(s: str) -> str` that returns the reversed string. Just the function, no preamble.",
+      "gold_substrings": [
+        "def reverse_string",
+        "[::-1]"
+      ],
+      "samples": [
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 70,
+          "elapsed_s": 0.13,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 52,
+            "completion_tokens": 18,
+            "host_ms": 1.81,
+            "prefill_ms": 29.17,
+            "decode_ms": 61.16,
+            "total_ms": 93.38,
+            "prefill_tok_per_s": 1782.8,
+            "decode_tok_per_s": 294.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 70,
+          "elapsed_s": 0.12,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 52,
+            "completion_tokens": 18,
+            "host_ms": 2.45,
+            "prefill_ms": 10.28,
+            "decode_ms": 59.77,
+            "total_ms": 74.26,
+            "prefill_tok_per_s": 5057.4,
+            "decode_tok_per_s": 301.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 70,
+          "elapsed_s": 0.13,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 52,
+            "completion_tokens": 18,
+            "host_ms": 2.24,
+            "prefill_ms": 9.0,
+            "decode_ms": 59.62,
+            "total_ms": 72.11,
+            "prefill_tok_per_s": 5776.1,
+            "decode_tok_per_s": 301.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "prompt": "Write a Python generator `fib()` that yields Fibonacci numbers forever. Just the code.",
+      "gold_substrings": [
+        "def fib",
+        "yield"
+      ],
+      "samples": [
+        {
+          "text": "def fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b",
+          "tokens": 75,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 34,
+            "host_ms": 1.7,
+            "prefill_ms": 24.69,
+            "decode_ms": 118.44,
+            "total_ms": 146.02,
+            "prefill_tok_per_s": 1660.7,
+            "decode_tok_per_s": 287.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "def fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b",
+          "tokens": 75,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 34,
+            "host_ms": 1.74,
+            "prefill_ms": 12.03,
+            "decode_ms": 119.09,
+            "total_ms": 134.16,
+            "prefill_tok_per_s": 3407.7,
+            "decode_tok_per_s": 285.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "def fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b",
+          "tokens": 75,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 34,
+            "host_ms": 1.99,
+            "prefill_ms": 8.96,
+            "decode_ms": 119.5,
+            "total_ms": 131.68,
+            "prefill_tok_per_s": 4577.8,
+            "decode_tok_per_s": 284.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "prompt": "What's one well-regarded book for someone new to embedded systems?",
+      "gold_substrings": [],
+      "samples": [
+        {
+          "text": "One well-regarded book for someone new to embedded systems is \"Making Embedded Systems: A Practical Guide to Designing and Developing Embedded Systems\" by Elecia White. This book provides a comprehensive overview of the entire embedded systems design process, from concept to production, and is suitable for both beginners and experienced engineers looking to expand their knowledge.",
+          "tokens": 107,
+          "elapsed_s": 0.36,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 69,
+            "host_ms": 1.66,
+            "prefill_ms": 24.45,
+            "decode_ms": 253.09,
+            "total_ms": 280.43,
+            "prefill_tok_per_s": 1554.0,
+            "decode_tok_per_s": 272.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "One well-regarded book for someone new to embedded systems is \"Making Embedded Systems: A Practical Guide to Building and Designing Embedded Systems\" by Elecia White. This book provides a comprehensive overview of the entire embedded systems development process, from concept to production, and includes practical advice and real-world examples. It's suitable for beginners and experienced engineers alike, making it a great resource for anyone looking to learn more about embedded systems.",
+          "tokens": 126,
+          "elapsed_s": 0.41,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 88,
+            "host_ms": 1.86,
+            "prefill_ms": 8.91,
+            "decode_ms": 323.2,
+            "total_ms": 335.2,
+            "prefill_tok_per_s": 4266.4,
+            "decode_tok_per_s": 272.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "One well-regarded book for someone new to embedded systems is \"Making Embedded Systems: A Practical Guide to Building and Designing Embedded Systems\" by Elecia White. This book provides a comprehensive overview of the entire embedded systems development process, from concept to production, and includes practical advice and real-world examples. It's suitable for beginners and experienced engineers alike, making it a great resource for anyone looking to learn more about embedded systems.",
+          "tokens": 126,
+          "elapsed_s": 0.42,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 88,
+            "host_ms": 2.09,
+            "prefill_ms": 9.39,
+            "decode_ms": 331.84,
+            "total_ms": 344.58,
+            "prefill_tok_per_s": 4045.2,
+            "decode_tok_per_s": 265.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "prompt": "Briefly explain what an MoE (mixture-of-experts) model is and one reason it's appealing vs a dense model of similar quality.",
+      "gold_substrings": [
+        "expert"
+      ],
+      "samples": [
+        {
+          "text": "An Mixture-of-Experts (MoE) model is a type of neural network architecture that consists of multiple \"expert\" sub-networks, each specialized in handling certain types of input data or tasks. The model uses a \"gating network\" to dynamically route input data to the most appropriate expert(s), and potentially combine their outputs. This allows the model to be more efficient and effective in handling diverse data types or tasks.\n\nOne reason MoE models are appealing compared to dense models of similar quality is their potential for improved computational efficiency. In a dense model, every input data point is processed by the entire network, which can be computationally expensive. In contrast, an MoE model only processes the input data through the relevant expert(s), potentially reducing the overall computational cost. This can be particularly beneficial in scenarios where the input data is diverse and can be effectively partitioned into distinct categories or tasks.",
+          "tokens": 237,
+          "elapsed_s": 0.81,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 54,
+            "completion_tokens": 183,
+            "host_ms": 2.26,
+            "prefill_ms": 29.56,
+            "decode_ms": 693.88,
+            "total_ms": 726.97,
+            "prefill_tok_per_s": 1826.8,
+            "decode_tok_per_s": 263.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "An Mixture-of-Experts (MoE) model is a type of neural network architecture that consists of multiple \"expert\" sub-networks, each specialized in handling certain types of input data or tasks. The model uses a \"gating network\" to dynamically route input data to the most appropriate expert(s), and potentially combine their outputs. This allows the model to be more efficient and effective in handling diverse data types or tasks.\n\nOne reason MoE models are appealing compared to dense models of similar quality is their potential for improved computational efficiency. In a dense model, every input data point is processed by the entire network, which can be computationally expensive. In contrast, an MoE model only processes the input data through the relevant expert(s), potentially reducing the overall computational cost. This can be particularly beneficial in scenarios where the input data is diverse and can be effectively partitioned into distinct categories or tasks.",
+          "tokens": 237,
+          "elapsed_s": 0.77,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 54,
+            "completion_tokens": 183,
+            "host_ms": 1.97,
+            "prefill_ms": 8.9,
+            "decode_ms": 684.72,
+            "total_ms": 696.81,
+            "prefill_tok_per_s": 6068.4,
+            "decode_tok_per_s": 267.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "An Mixture-of-Experts (MoE) model is a type of neural network architecture that consists of multiple \"expert\" sub-networks, each specialized in handling certain types of input data or tasks. The model uses a \"gating network\" to dynamically route input data to the most appropriate expert(s), and potentially combine their outputs. This allows the model to be more efficient and effective in handling diverse data types or tasks.\n\nOne reason MoE models are appealing compared to dense models of similar quality is their potential for improved computational efficiency. In a dense model, every input data point is processed by the entire network, which can be computationally expensive. In contrast, an MoE model only processes the input data through the relevant expert(s), potentially reducing the overall computational cost. This can be particularly beneficial in scenarios where the input data is diverse and can be effectively partitioned into distinct categories or tasks.",
+          "tokens": 237,
+          "elapsed_s": 0.75,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 54,
+            "completion_tokens": 183,
+            "host_ms": 2.09,
+            "prefill_ms": 9.52,
+            "decode_ms": 679.5,
+            "total_ms": 692.87,
+            "prefill_tok_per_s": 5673.2,
+            "decode_tok_per_s": 269.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "prompt": "In two sentences, introduce yourself as Skippy. Stay in character.",
+      "gold_substrings": [
+        "Skippy"
+      ],
+      "samples": [
+        {
+          "text": "I'm Skippy, the 2nd generation of the Skippy line of AI assistants.  I'm here to help you with any questions or tasks you might have.",
+          "tokens": 75,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 37,
+            "host_ms": 1.99,
+            "prefill_ms": 24.15,
+            "decode_ms": 132.5,
+            "total_ms": 159.83,
+            "prefill_tok_per_s": 1573.8,
+            "decode_tok_per_s": 279.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "I'm Skippy, the 2nd generation of the Skippy line of AI assistants.  I'm here to help you with any questions or tasks you might have.",
+          "tokens": 75,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 37,
+            "host_ms": 1.87,
+            "prefill_ms": 8.92,
+            "decode_ms": 129.61,
+            "total_ms": 141.62,
+            "prefill_tok_per_s": 4262.0,
+            "decode_tok_per_s": 285.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "I'm Skippy, the 2nd generation of the Skippy line of AI assistants.  I'm here to help you with any questions or tasks you might have.",
+          "tokens": 75,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 37,
+            "host_ms": 2.37,
+            "prefill_ms": 8.9,
+            "decode_ms": 129.27,
+            "total_ms": 141.77,
+            "prefill_tok_per_s": 4271.9,
+            "decode_tok_per_s": 286.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
+    }
+  ],
+  "summary": {
+    "total_samples": 36,
+    "passed": 18,
+    "pass_rate": 0.5455,
+    "total": 33,
+    "excluded_samples": 3,
+    "excluded_reason": "BROKEN_SUBSTRING_INCOMPATIBLE prompts (persona category)",
+    "regraded_at": "2026-05-08-post-remediation"
+  },
+  "summary_v1_legacy": {
+    "total_samples": 36,
+    "passed": 21,
+    "pass_rate": 0.583
+  }
+}
