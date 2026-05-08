@@ -110,8 +110,9 @@ The cells we've actually run. All share dims 4 (assistant-only loss), 5 (alpaca 
 | Qwen3-30B-A3B v4 | MoE | 30B (3B active) | attention-only | 2 | H100 | ❌ −9.8pp (multihop 0/9 catastrophic) | ✅ 131c | ✅ | 61.4% |
 | Qwen3-30B-A3B router-v1 | MoE | 30B (3B active) | attention + router (q/k/v/o + gate.weight) | 2 | H100 | ⚠️ partial: multihop 6/9 RECOVERED, datasheet still −4 | ✅ 141c | ✅ | 67.4% |
 | **Qwen3-30B-A3B full-v1** | MoE | 30B (3B active) | attention + router + packed experts (r=8 via target_parameters) | 2 | H100 | ❌ over-fit: rag_blog 3/3 → 0/3, datasheet 51 → 47/78 | ⚠️ 104c (over-terse) | ✅ | **62.9%** |
+| **Mistral-7B-v0.3 v4** | dense | 7B | attention + dense FFN | 2 | 5090 | ❌ −3.8pp: gains transfer (refusal/email/numerical +3 each) but recipe damages retrieval (datasheet −8, blog −3, coding −3) | ✅ refusal 9/9 | ✅ | **56.8%** |
 
-**Reading the matrix (Tier 2.x complete 2026-05-07):**
+**Reading the matrix (Tier 3 cross-family validation started 2026-05-08):**
 
 **For dense Qwen2.5:**
 - 7B v4 and 14B v4 at 2 epochs both lift their bases cleanly.
@@ -161,11 +162,11 @@ The middle row WAS the most diagnostic experiment. Outcome: **the failure decomp
 
 ### Tier 3 (cross-family, local cost)
 
-| Cell | Hypothesis | Validates what |
-|---|---|---|
-| Llama-3-8B + v4 recipe | Recipe transfers across base families | "Not Qwen-specific" |
-| Mistral-7B + v4 recipe | Recipe transfers across base families | "Not Qwen-specific" |
-| Mixtral-8x7B + (attention + router) LoRA | MoE-aware recipe transfers across MoE families | "Not Qwen3-specific MoE failure" |
+| Cell | Hypothesis | Validates what | Status |
+|---|---|---|---|
+| Mistral-7B v0.3 + v4 recipe | Recipe transfers across base families | "Not Qwen-specific" | ✅ DONE 2026-05-08 — **PARTIALLY transfers**: gains (refusal/email/numerical) clean across families; recipe damages retrieval categories on Mistral (rag_datasheet −8, rag_blog −3, coding −3). Net headline regression −3.8pp. Filed as filled negative-transfer cell — recipe is base-family-coupled. |
+| Llama-3.1 8B + v4 recipe | Recipe transfers across base families | "Not Qwen-specific" | ⏸️ Stock baseline DONE (56.8%); FT not yet trained. Pre-registered prediction (white paper): headline ceiling 60-63% — likely also falsified per Mistral pattern. |
+| Mixtral-8x7B + (attention + router) LoRA | MoE-aware recipe transfers across MoE families | "Not Qwen3-specific MoE failure" | ⏸️ Untested |
 
 ### Tier 4 (recipe variants — change dims 4–6)
 
@@ -175,6 +176,7 @@ The middle row WAS the most diagnostic experiment. Outcome: **the failure decomp
 | Smaller corpus (1K examples) | dim 5 | Recipe still works with less data |
 | Mixed corpus (alpaca + raw text) | dim 5 | Style transfer with continued pretraining |
 | Higher rank (r=128) | dim 6 | Capacity vs over-fitting |
+| **Mistral-7B v4 with full-sequence loss** | dim 4 — drops assistant-only loss | Tests whether the assistant_only_loss + `{% generation %}`-patched [INST] template combination is what damages retrieval on Mistral (Tier 3 follow-up) |
 
 ## Reading the matrix
 
