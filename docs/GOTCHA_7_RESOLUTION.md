@@ -1,5 +1,5 @@
 # Gotcha #7 Resolution Document
-**Status:** REVISED DRAFT — awaiting Kyle + external reviewer sign-off before any framing commits  
+**Status:** APPROVED — both reviewers signed off 2026-05-08; framing commits landed  
 **Date:** 2026-05-08 (revised post-reviewer feedback)  
 **Author:** [docs] session  
 
@@ -166,10 +166,10 @@ train_loss=0.8024 vs Qwen v4 0.676. Higher loss may indicate weaker signal uptak
 - [x] Pipeline bug scope clarified (full-seq only; N=2 confirmed)
 - [x] Temp regimes kept separate in all claims
 - [x] "Gotcha #7 stands" language removed; preliminary framing substituted
-- [ ] Kyle reviews revised framing direction
+- [x] Kyle reviews revised framing direction (2026-05-08 — blessed framing commits)
 - [x] External reviewer signs off on revised doc (2026-05-08 — all 3 Qs answered; framing direction approved; Mistral confound disclosed; differential format-fidelity nuance added)
-- [ ] White paper gains a "Grader-Methodology Findings" section (temperature + LLM-judge paired)
-- [ ] [backend] SHARED-P0-001 un-held
+- [x] White paper gains a "Grader-Methodology Findings" section (temperature + LLM-judge paired) — commit 24b6ad4
+- [x] [backend] SHARED-P0-001 un-held (2026-05-08 17:34)
 
 ---
 
