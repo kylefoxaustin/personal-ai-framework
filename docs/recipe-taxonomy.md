@@ -1,0 +1,202 @@
+# Skippy fine-tuning recipe taxonomy
+
+A "recipe" is a point in 8-dimensional space. Two recipes that match on all 8 dimensions should produce the same outcomes (capability gain, voice transfer, safety profile). Two recipes that differ on any dimension are different experiments, even if everything else looks similar.
+
+This doc defines the dimensions, names the cells we've filled, and flags the cells worth filling next. It's both Skippy's design space and the customer-template a fine-tuning prospect uses to locate themselves.
+
+## The 8 dimensions
+
+### 1. Base architecture class
+
+| Class | Examples | Routing computation |
+|---|---|---|
+| Dense transformer | Qwen2.5-7B/14B/32B, Llama-3-8B/70B, Mistral-7B | All FFN params active per token |
+| Sparse MoE | Qwen3-30B-A3B, Mixtral-8x7B, DeepSeek-V3 | Router selects K of N experts per token |
+| Hybrid | Mamba+attention, Jamba | Different per-layer |
+
+The MoE distinction is load-bearing: routers and expert FFNs are computational pathways that don't exist on a dense base, and LoRA target choices that are "complete" on dense are "incomplete" on MoE.
+
+### 2. Base size class
+
+| Class | Param range | Hardware tier (training) |
+|---|---|---|
+| Edge | ≤7B | Consumer GPU (5090 32GB / 4090 24GB) |
+| Mid | 7B–14B | High-end consumer or single-H100 |
+| Large | 14B–32B | H100 80GB or multi-GPU |
+| XL | >32B | Multi-H100 or A100 cluster |
+
+For MoE, use total params not active params. Qwen3-30B-A3B is Large for training memory even though it's Edge for inference compute.
+
+### 3. LoRA target set
+
+| Target set | What it adapts | Architecture-applicable |
+|---|---|---|
+| Attention-only | q_proj, k_proj, v_proj, o_proj | Dense + MoE (but incomplete on MoE) |
+| Attention + dense FFN | + gate_proj, up_proj, down_proj | Dense |
+| Attention + MoE router | + gate (router) | MoE |
+| Attention + MoE router + experts | + experts.gate_proj/up_proj/down_proj | MoE |
+| QLoRA-on-all | All linear layers | Either |
+
+The MoE-router and MoE-expert targets only exist on sparse architectures. **Attention-only LoRA on dense ≠ Attention-only LoRA on MoE** — they're different recipes despite identical target string.
+
+### 4. Loss masking
+
+| Strategy | Loss computed on | Mechanism |
+|---|---|---|
+| Full-sequence | All tokens | `labels = input_ids` |
+| Assistant-only | Assistant turn tokens only | `assistant_only_loss=True` (trl SFTTrainer) requires `{% generation %}` chat template markers |
+| Completion-only | Tokens after a delimiter | `DataCollatorForCompletionOnlyLM` |
+
+Skippy v4 uses assistant-only. v1/v2 used full-sequence (and produced over-generation as a result).
+
+### 5. Corpus shape
+
+| Shape | Format | Skippy v4 had |
+|---|---|---|
+| Pure instruction | `[{instruction, output}]` alpaca | 6,417 examples |
+| Refusal-augmented | + N curated refusal exemplars | 100 examples |
+| Multi-turn chat | `[{messages: [...]}]` | none |
+| Continued-pretraining (raw text) | unstructured paragraphs | none |
+| Mixed (instruction + RAG-grounded) | instruction with retrieved context in prompt | none |
+
+Corpus shape interacts strongly with loss masking. Pure-instruction + assistant-only loss is the v4 cell.
+
+### 6. Hyperparameters
+
+The numeric levers, with v4's choices:
+
+| Param | v4 | Range we'd consider for variants |
+|---|---|---|
+| LoRA rank `r` | 64 | 8–128 |
+| LoRA `alpha` | 128 | r/2 to 4×r |
+| Dropout | 0.05 | 0.0–0.1 |
+| Epochs | 2 | 1–4 |
+| Effective batch | 16 | 4–64 |
+| Learning rate | 2e-4 (peak) | 5e-5 to 5e-4 |
+| Schedule | cosine | linear / cosine / constant |
+| Optimizer | paged_adamw_8bit | adamw / adamw_8bit / paged variants |
+| Quant for training | bf16 (7B/MoE), nf4 (14B QLoRA) | bf16 / nf4 / int8 |
+
+### 7. Evaluation gates
+
+A recipe must pass all three gates to count as "validated":
+
+| Gate | Metric | Tool |
+|---|---|---|
+| Capability | Headline pass-rate ≥ base pass-rate, no category catastrophes | `eval/run_accuracy_eval.py` + `compare_accuracy_runs.py` |
+| Voice | Style metrics shift toward target voice (length, bullets, bolds, emojis, opener-boilerplate) | `eval/voice_metrics.py` |
+| Safety | Refusal calibrated; no fabrication on `made_up_peripheral`-style probes | `refusal` category in v2 prompts |
+
+A recipe that passes voice but fails capability (e.g., MoE v4) is "voice-validated, capability-incompatible" — useful failure data, not a generic regression.
+
+### 8. Hardware tier
+
+| Tier | Train cost (per recipe attempt) | Wall time |
+|---|---|---|
+| Local 5090 (32GB) | $0 | 45–90 min for 7B QLoRA, 70 min for 14B QLoRA |
+| RunPod H100 (80GB) | ~$15–25 | 4–5 hr for 30B-MoE |
+| RunPod A100 cluster | $50+ | varies |
+
+## Skippy matrix — filled cells
+
+The cells we've actually run. All share dims 4 (assistant-only loss), 5 (alpaca + 100 refusal), 6 (r=64/α=128, 2 epochs MoE / 3 epochs dense), 7 (capability+voice+safety gates).
+
+| Cell name | Arch | Size | LoRA targets | Epochs | HW | Capability | Voice | Safety | Headline |
+|---|---|---|---|---|---|---|---|---|---:|
+| Qwen2.5-7B v4 | dense | 7B | attention-only | 2 | 5090 | ✅ +3.1pp | ✅ 157c | ⚠️ reasoning −3 vs base | 70.5% |
+| Qwen2.5-14B v4 | dense | 14B | attention + dense FFN | 2 | 5090 | ✅ +5.3pp | ✅ 157c | ⚠️ fabricates `made_up_peripheral` 0/3 | 72.7% |
+| Qwen2.5-32B v4 (3 ep CONFOUND) | dense | 32B | attention + dense FFN | **3 ⚠️** | H100 | ❓ no 32B base eval; tanked datasheet | ✅ 224c (loose) | ✅ all clean | 63.6% |
+| **Qwen2.5-32B v4 CLEAN** | dense | 32B | attention + dense FFN | 2 | H100 | ⚠️ plateau (corpus-too-small) | ✅ 152c | mixed (multihop 3/9) | **63.6%** |
+| Qwen3-30B-A3B v4 | MoE | 30B (3B active) | attention-only | 2 | H100 | ❌ −9.8pp (multihop 0/9 catastrophic) | ✅ 131c | ✅ | 61.4% |
+| Qwen3-30B-A3B router-v1 | MoE | 30B (3B active) | attention + router (q/k/v/o + gate.weight) | 2 | H100 | ⚠️ partial: multihop 6/9 RECOVERED, datasheet still −4 | ✅ 141c | ✅ | 67.4% |
+| **Qwen3-30B-A3B full-v1** | MoE | 30B (3B active) | attention + router + packed experts (r=8 via target_parameters) | 2 | H100 | ❌ over-fit: rag_blog 3/3 → 0/3, datasheet 51 → 47/78 | ⚠️ 104c (over-terse) | ✅ | **62.9%** |
+
+**Reading the matrix (Tier 2.x complete 2026-05-07):**
+
+**For dense Qwen2.5:**
+- 7B v4 and 14B v4 at 2 epochs both lift their bases cleanly.
+- **32B v4 regresses −4.6pp from its 32B Instruct base (68.2% → 63.6%)** with EITHER recipe (3-epoch confound and 2-epoch CLEAN both = 63.6%). Apples-to-apples baseline confirmed 2026-05-07.
+- Per-category, the regression is a TRADE: +3 refusal calibration (32B base fabricates `made_up_peripheral` 3/9 of the time; FT recovers to 9/9), −3 numerical_precision (lost the 32B base's perfect 6/6), −3 rag_datasheet (over-fit cost retrieval), and either −3 multihop (2-ep CLEAN) or 0 multihop (3-ep CONF, but lost more datasheet to compensate).
+- **Hypothesis confirmed:** corpus-size-vs-param-count mismatch. 6,517 examples enough to lift 7B/14B but at 32B the recipe trades capability for safety, net-negative.
+- The v4 recipe is validated for the **7B–14B size range on dense Qwen2.5**. At 32B with this corpus, recipe is net-regressive.
+
+**For MoE Qwen3-30B-A3B:**
+- Attention-only LoRA breaks reasoning catastrophically (multihop 6/9 → 0/9).
+- **Adding the router (gate.weight via target_parameters)** recovers reasoning fully (6/9 again) and is the **recommended MoE recipe**. Domain knowledge (rag_datasheet) stays at v4 levels.
+- **Adding packed-expert FFN LoRA on top** (gate_up_proj + down_proj at r=8 via target_parameters on the 3D packed tensors) makes things WORSE: rag_blog 3/3 → 0/3, rag_datasheet 51 → 47/78. **Hypothesis: 374M trainable params over-fit the 6,517-example alpaca distribution, clipping the model's outputs too terse (104 char avg vs 141 router-v1) and breaking long-form retrieval.**
+- **Customer rule: for MoE bases at this corpus size, include the router but NOT the experts.**
+
+**Operational gotcha for Qwen3-MoE LoRA:** transformers' implementation packs all 128 experts of a layer into single 3D tensors `experts.gate_up_proj` and `experts.down_proj`. They do NOT appear as `experts[K].gate_proj` nn.Module children. peft's `target_modules` (which matches Linear modules) cannot reach them. Use `target_parameters` (ParamWrapper) instead. ParamWrapper requires `lora_dropout=0`.
+
+## Customer-template decision framework
+
+A prospect picking their own base + recipe locates themselves in the matrix:
+
+```
+1. What base architecture class? (dim 1)
+2. What size? (dim 2 — drives hardware)
+3. What corpus do you have? (dim 5)
+4. What's your hardware budget? (dim 8)
+5. Look up the closest filled cell. Does it match on dims 1, 2, 3?
+   YES → that recipe should work for you (caveat: voice and safety
+         depend on your corpus quality, not just architecture)
+   NO  → you're in an unfilled cell. See "Open cells" below.
+```
+
+## Open cells worth filling next
+
+In priority order — these are the cells where the matrix has its biggest blind spots.
+
+### Tier 2 (high-value, requires RunPod)
+
+| Cell | Hypothesis | Cost | Status |
+|---|---|---|---|
+| Qwen2.5-32B v4 (**2 epochs** — clean) | Recipe scales to dense Large | ~$15–25 | **Untested.** The 3-epoch run we have falsifies "more epochs always helps" but doesn't test recipe-fit at 32B. |
+| Qwen2.5-32B v4 (3 epochs) | Recipe scales with same hyperparams | ~$25 | **DONE 2026-05-06** — 63.6%. Tanked rag_datasheet (over-fit), but FIXED every safety/correctness regression of smaller v4s. Useful asymmetric data but NOT a clean v4 test. |
+| Qwen3-30B-A3B + (attention + router) LoRA | MoE-aware targets recover capability | ~$15–25 | **DONE 2026-05-06** — partial recovery: reasoning fixed (multihop 6/9), domain knowledge not (rag_datasheet 51/78 vs base 55/78). 67.4% headline (vs base 71.2%, vs v4 attn-only 61.4%). |
+| Qwen3-30B-A3B + (attention + router + experts) LoRA | Full-MoE LoRA recovers domain knowledge too | ~$25–35 | **Untested — promoted in priority** by router-v1 result |
+
+The middle row WAS the most diagnostic experiment. Outcome: **the failure decomposes into reasoning (router-fixable) and domain-knowledge (separately broken).** Customer rule update:
+> "MoE base + attention-only LoRA breaks reasoning. Add router (`target_parameters=['gate.weight']`) to recover reasoning. Add expert FFN LoRA to recover domain knowledge — currently untested."
+
+### Tier 3 (cross-family, local cost)
+
+| Cell | Hypothesis | Validates what |
+|---|---|---|
+| Llama-3-8B + v4 recipe | Recipe transfers across base families | "Not Qwen-specific" |
+| Mistral-7B + v4 recipe | Recipe transfers across base families | "Not Qwen-specific" |
+| Mixtral-8x7B + (attention + router) LoRA | MoE-aware recipe transfers across MoE families | "Not Qwen3-specific MoE failure" |
+
+### Tier 4 (recipe variants — change dims 4–6)
+
+| Variant | Changed dim | Validates what |
+|---|---|---|
+| DPO after SFT | dim 5 — adds preference data after SFT | Closes 14B v4 fabrication gap? |
+| Smaller corpus (1K examples) | dim 5 | Recipe still works with less data |
+| Mixed corpus (alpaca + raw text) | dim 5 | Style transfer with continued pretraining |
+| Higher rank (r=128) | dim 6 | Capacity vs over-fitting |
+
+## Reading the matrix
+
+Two patterns emerge from the validated cells:
+
+1. **Voice transfer is recipe-robust.** All three Skippy fine-tunes (including MoE v4) preserved voice. Dim 3 (LoRA targets) does not seem to gate voice transfer; dims 4–5 (loss masking + corpus shape) do most of the voice work.
+2. **Capability transfer is architecture-recipe-coupled.** Dense + attention-only LoRA = capability transferred. MoE + attention-only LoRA = capability regressed catastrophically on multihop. The hypothesis-to-test is whether MoE + (attention + router) LoRA recovers capability.
+
+If hypothesis #2 holds, the customer rule becomes:
+> "Your base is dense → attention-only LoRA is sufficient. Your base is MoE → include the router in your LoRA targets, or expect capability regression on multi-hop reasoning."
+
+If hypothesis #2 doesn't hold, we have a deeper finding: MoE bases as a class may resist LoRA-only fine-tuning and require full fine-tuning or alternative methods (DPO, RLHF).
+
+## What this doc is NOT
+
+- It's not a complete fine-tuning theory. We've validated 3 cells and have hypotheses about ~10 more.
+- It's not a recommendation that customers run all of Tier 2/3/4 — it's a map of where the holes are so they can decide which holes matter for their situation.
+- It's not stable across model generations. When Qwen ships Qwen4 or Llama ships v4, the matrix needs new rows. The dimensions stay; the cells age out.
+
+## Related
+
+- `eval/voice_metrics.py` — voice gate tooling
+- `eval/run_accuracy_eval.py` + `eval/compare_accuracy_runs.py` — capability gate tooling
+- `training/train_lora_v3.py` / `train_lora_14b_v4.py` / `training/pod/train_moe_lora.py` — recipe implementations for the three filled cells
+- Memory: `project_skippy_purpose.md` (why this taxonomy is the deliverable), `project_qwen25_7b_finetune.md` (full v1–v4 history of the dense Qwen2.5 cells), `project_voice_metrics.md` (voice gate findings)
