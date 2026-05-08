@@ -340,6 +340,52 @@ Full per-prompt judge data in `eval/results/judge_*.json`; methodology summary i
 
 ---
 
+## Grader-methodology findings
+
+Two independent lines of evidence show that the temp=0 substring grader measures something narrower than "capability." This section pairs them and draws the correct inference — one that applies specifically to fine-tune-vs-base comparisons, not to base model evaluation generally.
+
+### Finding 1 — Temperature sensitivity of fine-tuned models
+
+As part of the variance-bounds work (SK-P0-002), we ran 5 anchored models × 5 repetitions at temp=0.3 (stochastic sampling) and compared to their temp=0 (greedy) production scores:
+
+| Model | temp=0 (production) | temp=0.3 | Δ |
+|---|---:|---:|---:|
+| Qwen 7B base | 67.4% | 69.1% | +1.7pp |
+| Mistral 7B base | 63.5% | 60.6% | −2.9pp |
+| Skippy 7B v4 (Qwen FT) | 73.8% | 44.5% | **−29.3pp** |
+| Skippy Mistral v4 (Mistral FT) | 59.5% | 54.0% | **−5.5pp** |
+
+Base models are flat across temperature (σ ≈ 1.4–2.3pp, comparable to sampling noise). Fine-tuned models are not: Skippy 7B v4 loses 29pp when decoding becomes stochastic. The model's outputs still read as correct on many prompts — the issue is that they no longer phrase things in the narrow substring-matchable way the grader expects.
+
+**Interpretation:** Fine-tuned models learn the exact output phrasings that the substring grader matches at greedy decoding. When stochastic sampling deviates from those phrasings — even when the semantic content is correct — the grader fails the sample. The base model never learned those phrasings, so stochastic variation doesn't cost it anything.
+
+**Differential application to base vs fine-tune:** The substring grader at temp=0 measures "format-fidelity-or-correctness" — for base models, these correlate and the metric is stable. For fine-tuned models, they can decouple. A fine-tune that learned narrow output patterns matching the gold tokens at greedy decoding can score high on substring without underlying capability robustness. This means: substring eval is reliable for base model comparison; it is specifically fine-tune-vs-base comparisons where the metric becomes fragile.
+
+### Finding 2 — LLM-judge reversal on fine-tune vs base (see also LLM-judge section above)
+
+The Sonnet 4.6 judge (4-dim rubric: correctness, instruction-following, faithfulness, conciseness) gives the opposite direction from the substring grader on the v4-vs-base comparison:
+
+| | Substring rate | LLM-judge mean /8 | Direction |
+|---|---:|---:|---|
+| Qwen 7B Instruct base | 67.4% | **6.786** | judge prefers base |
+| Skippy 7B v4 (FT) | **73.8%** | 6.436 | substring prefers FT |
+
+Substring grader: FT wins by +3.2pp. LLM judge: base wins by 0.35 points. Two independently-constructed graders, opposite direction on the same comparison.
+
+The judge's preference for the base is concentrated in faithfulness (1.762 vs 1.333) — the stock Qwen is more grounded in retrieved context. The substring grader's preference for the FT is driven by domain-specific gold-token matching that the FT's trained phrasings hit more reliably at temp=0.
+
+### Paired interpretation
+
+Findings 1 and 2 are independent but tell the same story: **the +3.1pp substring headline for Skippy 7B v4 over its Qwen base is measuring training-induced phrasing consistency at greedy decoding, not a robust capability gain.** The headline may include a real component (the FT genuinely improves refusal calibration and domain formatting), but its magnitude is not cleanly separable from the grader artifact.
+
+This does not mean the fine-tune is worse. The shipping decision for Skippy 7B v4 is driven by the three-gate framework — the FT passes the safety gate (9/9 refusal vs 6/9 for several stock bases) and the voice gate (a 12× response-length reduction from v1). The substring gain is corroborating, not the deciding factor.
+
+**For gotcha #7 (recipe transfer):** the cross-family deltas (Qwen +3.1pp/+5.3pp vs Mistral −3.8pp/Llama −3.0pp) are measured by the same potentially-format-biased grader. The directional split — Qwen gains, non-Qwen regresses — may be more reliable than the magnitudes. See the gotcha #7 section for the preliminary framing.
+
+**Cross-reference:** Any claim in this paper of the form "+N.Npp vs base" for a fine-tuned model should be read in light of this section. The number is a real measurement; what it measures is narrower than "capability gain."
+
+---
+
 ## Cost arc: when to ship vs iterate
 
 Iteration costs in this campaign, sorted cheapest-to-most-expensive:
