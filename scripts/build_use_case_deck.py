@@ -787,9 +787,9 @@ def slide9_model_comparison():
     rows = [
         ("Qwen 2.5 1.5B Instruct",          "Dense", "0.9 GB",   "112 tok/s",  "Fits",        "Fine for narrow tasks; weak at reasoning"),
         ("Qwen 2.5 3B Instruct",             "Dense", "1.9 GB",   "53 tok/s",   "Fits",        "Good trade for edge QA"),
-        ("Mistral 7B v0.3 Instruct Q4",      "Dense", "4.4 GB",   "23 tok/s",   "Fits",        "Cross-family baseline (Skippy eval: 60.6%)"),
-        ("Llama-3.1 8B Instruct Q4",         "Dense", "4.9 GB",   "21 tok/s",   "Fits",        "Cross-family baseline (Skippy eval: 56.8%)"),
-        ("★ Qwen 2.5 7B v4 (production)",     "Dense", "4.7 GB",   "21 tok/s",   "Fits",        "Production fine-tune; 70.5% Skippy eval"),
+        ("Mistral 7B v0.3 Instruct Q4",      "Dense", "4.4 GB",   "23 tok/s",   "Fits",        "Cross-family baseline (Skippy eval: 63.5%)"),
+        ("Llama-3.1 8B Instruct Q4",         "Dense", "4.9 GB",   "21 tok/s",   "Fits",        "Cross-family baseline (Skippy eval: 59.5%)"),
+        ("★ Qwen 2.5 7B v4 (production)",     "Dense", "4.7 GB",   "21 tok/s",   "Fits",        "Production fine-tune; 73.8% Skippy eval"),
         ("Qwen 2.5 14B Instruct Q4",         "Dense", "8.7 GB",   "12 tok/s",   "Fits (tight)", "v4 candidate not shipped (fabrication failure)"),
         ("Qwen 2.5 32B Instruct Q4",         "Dense", "19 GB",    "5 tok/s",    "16GB: No",    "Recipe overruns this corpus at 32B"),
         ("Qwen 3 30B-A3B (MoE, 8/128)",       "MoE",   "16 GB",    "~37 tok/s", "16GB: Tight", "Active 1.5 GB; recipe needs router LoRA"),
@@ -1046,7 +1046,7 @@ def slide_skippy_moe_upgrade():
         ("Decode tok/s (5090)",   "85–140 sustained",                   "155 avg · 192 peak"),
         ("Fine-tune method",      "Full LoRA on 5090 (~4 h)",           "QLoRA attention-only on H100 (5 h)"),
         ("Training cost",         "electricity on 5090 (~$0)",          "$15 on RunPod H100 (cloud)"),
-        ("v4 Skippy eval (132)",  "72.7% (14B v4 — fabrication ⚠️)",     "61.4% (MoE v4 — recipe MoE-incompatible)"),
+        ("v4 Skippy eval (132)",  "76.2% (14B v4 — fabrication ⚠️)",     "64.3% (MoE v4 — recipe MoE-incompatible)"),
     ]
     add_table(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(3.8),
               ["Dimension", "14B dense candidate", "30B-A3B MoE candidate"],
@@ -1075,15 +1075,15 @@ def slide_v4_campaign_final():
               "Six fine-tunes across Qwen2.5 dense + Qwen3-A3B MoE — one production model, four useful failure-data points")
 
     headline_rows = [
-        ("Qwen2.5-7B Instruct (stock)",                        "Dense / 7B",       "67.4%",   "—",          "base reference"),
-        ("Qwen2.5-7B v4 ★ PRODUCTION",                          "Dense / 7B",       "70.5%",   "+3.1pp",     "voice ✓ safety ✓ — ships"),
-        ("Qwen2.5-14B v4",                                      "Dense / 14B",      "72.7%",   "+5.3pp",     "best headline; fabricates fictional peripherals 0/3"),
-        ("Qwen2.5-32B Instruct (stock)",                        "Dense / 32B",      "68.2%",   "—",          "base reference"),
-        ("Qwen2.5-32B v4 (clean, 2 ep)",                        "Dense / 32B",      "63.6%",   "−4.6pp",     "recipe overruns this corpus at 32B (param:data ratio)"),
-        ("Qwen3-30B-A3B Instruct-2507 (stock)",                 "MoE / 30B-A3B",    "71.2%",   "—",          "base reference"),
-        ("Qwen3-30B-A3B v4 (attention-only)",                   "MoE / 30B-A3B",    "61.4%",   "−9.8pp",     "catastrophic on multihop (0/9) — recipe MoE-incompatible"),
-        ("Qwen3-30B-A3B v4 + router LoRA",                      "MoE / 30B-A3B",    "67.4%",   "−3.8pp",     "router recovers reasoning — recommended MoE recipe"),
-        ("Qwen3-30B-A3B v4 + router + experts",                 "MoE / 30B-A3B",    "62.9%",   "−8.3pp",     "expert LoRA over-fits 6.5K-example corpus"),
+        ("Qwen2.5-7B Instruct (stock)",                        "Dense / 7B",       "70.6%",   "—",          "base reference"),
+        ("Qwen2.5-7B v4 ★ PRODUCTION",                          "Dense / 7B",       "73.8%",   "+3.2pp",     "voice ✓ safety ✓ — ships"),
+        ("Qwen2.5-14B v4",                                      "Dense / 14B",      "76.2%",   "+5.6pp",     "best headline; fabricates fictional peripherals 0/3"),
+        ("Qwen2.5-32B Instruct (stock)",                        "Dense / 32B",      "71.4%",   "—",          "base reference"),
+        ("Qwen2.5-32B v4 (clean, 2 ep)",                        "Dense / 32B",      "66.7%",   "−4.7pp",     "recipe overruns this corpus at 32B (param:data ratio)"),
+        ("Qwen3-30B-A3B Instruct-2507 (stock)",                 "MoE / 30B-A3B",    "74.6%",   "—",          "base reference"),
+        ("Qwen3-30B-A3B v4 (attention-only)",                   "MoE / 30B-A3B",    "64.3%",   "−10.3pp",     "catastrophic on multihop (0/9) — recipe MoE-incompatible"),
+        ("Qwen3-30B-A3B v4 + router LoRA",                      "MoE / 30B-A3B",    "70.6%",   "−4.0pp",     "router recovers reasoning — recommended MoE recipe"),
+        ("Qwen3-30B-A3B v4 + router + experts",                 "MoE / 30B-A3B",    "65.9%",   "−8.7pp",     "expert LoRA over-fits 6.5K-example corpus"),
     ]
     add_table(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(3.7),
               ["Model / configuration", "Arch / size", "Pass rate", "vs base", "Story"],
@@ -1119,9 +1119,9 @@ def slide_cross_family_baselines():
               "5090 perf is family-invariant; quality is not — same hardware, different starting points")
 
     rows = [
-        ("Qwen2.5-7B Instruct",          "67.4%",   "6/6",   "5/9",    "3/6",   "9/9",   "0/6",   "reference"),
-        ("Mistral 7B v0.3 Instruct",     "60.6%",   "6/6",   "6/9",    "0/6",   "6/9",   "0/6",   "−6.8pp; refusal calibration off"),
-        ("Llama-3.1 8B Instruct",        "56.8%",   "6/6",   "6/9",    "1/6",   "6/9",   "0/6",   "−10.6pp; reasoning gap dominates"),
+        ("Qwen2.5-7B Instruct",          "70.6%",   "6/6",   "5/9",    "3/6",   "9/9",   "0/6",   "reference"),
+        ("Mistral 7B v0.3 Instruct",     "63.5%",   "6/6",   "6/9",    "0/6",   "6/9",   "0/6",   "−6.8pp; refusal calibration off"),
+        ("Llama-3.1 8B Instruct",        "59.5%",   "6/6",   "6/9",    "1/6",   "6/9",   "0/6",   "−10.6pp; reasoning gap dominates"),
     ]
     add_table(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(1.7),
               ["Stock base", "Headline", "coding", "multihop", "reasoning", "refusal", "persona", "Note"],
@@ -1251,7 +1251,7 @@ def slide_fabrication_skippy_choice():
             "Production today: Qwen 2.5 7B v4",
             fill=SURFACE, border=ACCENT2, size=13, bold=True)
     add_text(s, Inches(0.7), Inches(1.95), Inches(5.6), Inches(2.2), [
-        "• Pass rate: 70.5% (vs 14B v4's 72.7%)",
+        "• Pass rate: 73.8% (vs 14B v4's 76.2%)",
         "• Made-up-peripheral: 9/9 ✓",
         "• Voice gate: ✓",
         "• Refusal: 9/9 ✓",
@@ -1267,7 +1267,7 @@ def slide_fabrication_skippy_choice():
             "Documented unblock for 14B v4 promotion",
             fill=SURFACE, border=ACCENT3, size=13, bold=True)
     add_text(s, Inches(7.0), Inches(1.95), Inches(5.6), Inches(2.2), [
-        "14B v4 has higher headline (72.7%) and better",
+        "14B v4 has higher headline (76.2%) and better",
         "domain retrieval. The blocker is fabrication safety.",
         "",
         "Required to promote 14B v4 to production:",
@@ -1328,8 +1328,8 @@ def slide_recipe_taxonomy():
         "Dense 32B (corpus-too-small), 14B-fabricates",
         "",
         "Open Tier 3 cells (cross-family — baselines just landed):",
-        "• Llama-3.1 8B + v4 recipe — stock 56.8%, FT TBD",
-        "• Mistral 7B v0.3 + v4 recipe — stock 60.6%, FT TBD",
+        "• Llama-3.1 8B + v4 recipe — stock 59.5%, FT TBD",
+        "• Mistral 7B v0.3 + v4 recipe — stock 63.5%, FT TBD",
     ], size=12)
 
     add_box(s, Inches(0.5), Inches(5.55), Inches(12.3), Inches(1.45),
@@ -1380,7 +1380,7 @@ def slide_voice_gate():
             "Finding 2 — headline winners can fail voice",
             fill=SURFACE, border=ACCENT3, size=12, bold=True)
     add_text(s, Inches(7.0), Inches(5.15), Inches(5.6), Inches(1.5), [
-        "Stock Instruct-2507 scores 71.2% (highest of all",
+        "Stock Instruct-2507 scores 74.6% (highest of all",
         "evaluated models) but FAILS the voice gate —",
         "335-char default cadence, 1.65 bolds/response,",
         "emojis, marketing tone.",
@@ -1401,14 +1401,14 @@ def slide14_takeaways():
 
     add_bullets(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(5.6), [
         "Skippy is a template, not a finished product. The fine-tune IS the demo: customers swap Kyle's voice for their domain (defect-tracking, internal codebase, NDA docs) using the same recipe.",
-        "Production model is Qwen 2.5 7B v4 (70.5%) — chosen because it passes all three gates (capability + voice + safety). 14B v4 scores higher (72.7%) but fabricates fictional peripherals; not shipped.",
+        "Production model is Qwen 2.5 7B v4 (73.8%) — chosen because it passes all three gates (capability + voice + safety). 14B v4 scores higher (76.2%) but fabricates fictional peripherals; not shipped.",
         "Dense recipe validated 7B–14B; does NOT extend to 32B with a 6.5K-example corpus. At 32B the recipe trades capability for safety calibration, net regressive. Param:data ratio matters.",
         "MoE recipe is architecture-coupled: attention-only LoRA breaks reasoning catastrophically; adding the router (target_parameters=['gate.weight']) recovers it; adding expert FFN LoRA over-fits at this corpus size.",
         "Voice transfer is recipe-robust. All four v4 fine-tunes (7B, 14B, MoE, MoE-router) preserved Skippy's voice — voice is not architecture-coupled.",
         "Confident fabrication is industry-wide — Qwen 32B / Llama 8B / Mistral 7B all fabricate fictional peripherals 3/9 of the time. Customer playbook is LAYERED defense (RAG-grounded refusal data + system grounding enforcement); ship-smaller is the deployment shortcut.",
         "Bandwidth physics still holds — Skippy is BW-bound, not compute-bound; 200 TOPS over-provisioned, 100.8 GB/s usable (75% util) is the real constraint. MoE wins decode-per-active-byte.",
         "Cross-family on 5090: 7B-class dense Q4_K_M decode is family-invariant within ~7% (170-185 tok/s across Qwen / Mistral / Llama). Performance follows GGUF size, not vendor.",
-        "Cross-family on quality is NOT invariant: same eval, Qwen 7B = 67.4% / Mistral 7B = 60.6% / Llama 3.1 8B = 56.8%. Pick base for quality, not for tok/s.",
+        "Cross-family on quality is NOT invariant: same eval, Qwen 7B = 70.6% / Mistral 7B = 63.5% / Llama 3.1 8B = 59.5%. Pick base for quality, not for tok/s.",
         "Substring eval is gameable — verbose models incidentally hit gold tokens; concise correct models miss. Track capability + voice + safety as three independent gates.",
         "Sizer/perf-model methodology: cross-class analytic fallback over-projected Llama-3.1 8B by 1.95× on 5090. Use measured per-(base, hardware) anchors, not extrapolation.",
     ], size=12)
