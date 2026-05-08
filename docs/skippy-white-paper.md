@@ -289,6 +289,55 @@ A typical evaluation report shows all three gates side-by-side. The shipping dec
 
 For Skippy, the v4 7B model passes all three. Other candidates each fail at least one — 14B v4 fails the safety gate (fabrication on made-up peripherals); 7B v1 fails the voice gate (rambles 12.5× longer than the v4 sweet spot); MoE-router fails the capability gate (multi-hop recovers but datasheet retrieval still −4 from base).
 
+### LLM-judge tertiary corroboration (intra-iteration ordering validation, N=3 Skippy iterations)
+
+After shipping the substring + voice + safety three-gate framework, we ran a Sonnet-4.6-as-judge tertiary grader over a 42-sample held-out subset of the eval, with a 4-dimensional rubric (correctness, instruction-following, faithfulness, conciseness; each 0-2; total 0-8). Ran on seven anchored models. Two findings worth surfacing.
+
+**Finding A — substring grading is gameable, validated by N=3 Skippy iterations.**
+
+For the v1/v3/v4 ordering, the substring grader and the LLM-judge disagree on which model is best:
+
+| | Substring rate | LLM-judge mean / 8 | Substring rank | Judge rank |
+|---|---:|---:|:---:|:---:|
+| Skippy 7B v1 (rambling, 1912-char avg) | **78.6%** | **4.735** | 🥇 highest | 🥉 lowest |
+| Skippy 7B v3 (terse, over-refuses) | 61.1% | 5.333 | last | mid |
+| Skippy 7B v4 ★ (production) | 73.8% | **6.436** | mid | 🥇 highest |
+
+The judge ranking matches the campaign team's qualitative intuition (v4 is better than v3 is better than v1 — v1 just got lucky on substring matches because it was rambling). The 1.7-point gap between v1 (4.735) and v4 (6.436) on a 0-8 scale is not a rounding-error result; it is concentrated in the conciseness dimension (v1 = 0.676, v4 = 1.872 — a 1.2-point gap on a 0-2 scale). **Substring grading on its own would have shipped v1.** The voice gate caught it (v1's 1912-char vs v4's 157-char average), and the LLM-judge confirms the catch was correct.
+
+This is independent corroboration of gotcha #1 (substring grader is gameable) — same direction, different methodology.
+
+**Finding B — graders disagree on Qwen v4-vs-base. The two graders measure different things.**
+
+For the production fine-tune comparison (Skippy 7B v4 vs its Qwen 7B Instruct base), the graders disagree on direction:
+
+| | Substring rate | LLM-judge mean / 8 | Substring direction | Judge direction |
+|---|---:|---:|:---:|:---:|
+| Qwen 7B Instruct (stock base) | 70.6% | **6.786** | base | judge prefers base |
+| Skippy 7B v4 (FT) | **73.8%** | 6.436 | substring prefers FT | |
+
+Substring says the fine-tune is +3.2pp better than the base. The judge says the base is 0.35 points better than the fine-tune (≈ 4% relative on the 0-8 scale). Per-dimension, the judge's preference for the base is concentrated in faithfulness (1.762 vs 1.333) — the judge sees the stock Qwen as more grounded in retrieved context than the fine-tune.
+
+**Honest framing: the two graders measure different things.** The substring grader rewards hitting domain-specific gold tokens (Skippy's voice + Skippy's domain knowledge — both shaped by the fine-tune). The LLM-judge rewards general-purpose response quality (correctness, instruction-following, faithfulness, conciseness — dimensions where a stock high-quality base model can compete with a fine-tune that traded breadth for domain narrowness).
+
+This is not an indictment of the v4 fine-tune. It is an honest data point: **for users whose use case overlaps Skippy's domain, the fine-tune wins (per substring grader); for users whose use case is general-purpose, the stock base may be equivalent or better (per LLM-judge).** Both are true. Neither is "the" answer. The team continues to ship 7B v4 because the safety gate (9/9 vs 6/9 fabrication on made-up peripherals — the stock base is one of the cross-family bases that fabricates) tips the decision, but customers should know that on a generalist eval the stock base would not look worse.
+
+**Caveat — asymmetric dropout across the judge runs.** Out of 42 prompts attempted per model, the Pydantic schema validator (the judge sometimes returns out-of-range scores) silently dropped:
+
+| Model | Kept samples | Pydantic dropouts |
+|---|---:|---:|
+| Qwen 7B base | 42 / 42 | 0 |
+| Qwen 32B base | 41 / 42 | 1 |
+| Mistral 7B base | 39 / 42 | 3 |
+| Skippy 7B v1 | **34 / 42** | **8** |
+| Skippy 7B v3 | 18 / 42 | 0 (24 rate-limited; separate issue) |
+| Skippy 7B v4 | 39 / 42 | 3 |
+| Skippy Mistral v4 | 40 / 42 | 2 |
+
+v1's 8 Pydantic dropouts are the worst-case asymmetry. The plausible mechanism is: v1's responses were so degenerate that the judge couldn't fit the rubric (returned 3 instead of 0-2, schema-validator-rejected). If correct, v1's 4.735 mean is biased *upward* — the worst v1 samples were dropped, making the v1 < v4 ranking even stronger than the data shows. The Mistral comparison (3 vs 2 dropouts) is roughly symmetric and the 5.500 vs 5.718 numbers stand as descriptively comparable.
+
+Full per-prompt judge data in `eval/results/judge_*.json`; methodology summary in `eval/JUDGE_SUMMARY.md`.
+
 ---
 
 ## Cost arc: when to ship vs iterate
