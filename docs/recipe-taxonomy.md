@@ -1,12 +1,25 @@
 # Skippy fine-tuning recipe taxonomy
 
-A "recipe" is a point in 8-dimensional space. Two recipes that match on all 8 dimensions should produce the same outcomes (capability gain, voice transfer, safety profile). Two recipes that differ on any dimension are different experiments, even if everything else looks similar.
+A "recipe" is a point in **6-dimensional space** (rescoped 2026-05-08 per
+SK-P1-001 in `REMEDIATION_PLAN.md`). Two recipes that match on all 6
+functional dimensions should produce equivalent outcomes (capability gain,
+voice transfer, safety profile) **modulo seed variance** (see "Reproducibility
+scope" below). Two recipes that differ on any dimension are different
+experiments, even if everything else looks similar.
 
-This doc defines the dimensions, names the cells we've filled, and flags the cells worth filling next. It's both Skippy's design space and the customer-template a fine-tuning prospect uses to locate themselves.
+Hardware tier and validation gates were previously labeled as "dimensions
+7 and 8" but they are not recipe inputs. Hardware is a feasibility
+constraint (does the recipe fit?). Validation gates are how we judge a
+recipe's outcome (did it work?). Both are documented below as separate
+concepts after the 6 functional dimensions.
 
-## The 8 dimensions
+This doc defines the dimensions, names the cells we've filled, and flags
+the cells worth filling next. It's both Skippy's design space and the
+customer-template a fine-tuning prospect uses to locate themselves.
 
-### 1. Base architecture class
+## The 6 functional dimensions
+
+### 1. Base architecture class (and tokenizer / chat template)
 
 | Class | Examples | Routing computation |
 |---|---|---|
@@ -15,6 +28,16 @@ This doc defines the dimensions, names the cells we've filled, and flags the cel
 | Hybrid | Mamba+attention, Jamba | Different per-layer |
 
 The MoE distinction is load-bearing: routers and expert FFNs are computational pathways that don't exist on a dense base, and LoRA target choices that are "complete" on dense are "incomplete" on MoE.
+
+**Tokenizer / chat template — sub-field, sometimes load-bearing.** The base
+architecture choice carries an associated tokenizer + default chat template.
+Some templates ship without `{% generation %}` markers (Mistral 7B v0.3,
+Qwen3-30B-A3B), and trl's `assistant_only_loss=True` (dim 4 below) requires
+those markers. The training pipeline patches them in. The Mistral v4 cell's
+−4.0pp regression is suspected to involve the patched-template +
+assistant_only_loss interaction (untested — see SK-P2-001 in
+`REMEDIATION_PLAN.md`). Customer rule: when crossing tokenizer/template
+boundaries, run a recipe-variant with full-sequence loss as a control.
 
 ### 2. Base size class
 
@@ -49,7 +72,7 @@ The MoE-router and MoE-expert targets only exist on sparse architectures. **Atte
 
 Skippy v4 uses assistant-only. v1/v2 used full-sequence (and produced over-generation as a result).
 
-### 5. Corpus shape
+### 5. Corpus shape — and corpus size
 
 | Shape | Format | Skippy v4 had |
 |---|---|---|
@@ -60,6 +83,14 @@ Skippy v4 uses assistant-only. v1/v2 used full-sequence (and produced over-gener
 | Mixed (instruction + RAG-grounded) | instruction with retrieved context in prompt | none |
 
 Corpus shape interacts strongly with loss masking. Pure-instruction + assistant-only loss is the v4 cell.
+
+**Corpus size is a sub-field that materially shifts recipe outcomes.**
+Skippy v4 used 6,517 total examples across all filled cells. The 32B v4
+regression is attributed to corpus-size-vs-param-count mismatch — the
+recipe lifts at 7B/14B but trades capability for safety calibration at
+32B. Customer rule: doubling corpus size may unlock cells that currently
+regress (32B); halving corpus size may make 7B regress like 32B does
+(untested). Treat corpus size as a knob, not a frozen parameter.
 
 ### 6. Hyperparameters
 
@@ -77,7 +108,7 @@ The numeric levers, with v4's choices:
 | Optimizer | paged_adamw_8bit | adamw / adamw_8bit / paged variants |
 | Quant for training | bf16 (7B/MoE), nf4 (14B QLoRA) | bf16 / nf4 / int8 |
 
-### 7. Evaluation gates
+## Validation gates (not a recipe dimension — judging the recipe's outcome)
 
 A recipe must pass all three gates to count as "validated":
 
@@ -89,13 +120,44 @@ A recipe must pass all three gates to count as "validated":
 
 A recipe that passes voice but fails capability (e.g., MoE v4) is "voice-validated, capability-incompatible" — useful failure data, not a generic regression.
 
-### 8. Hardware tier
+A tertiary capability gate — LLM-as-judge — is queued as SK-P1-002 in the
+remediation plan (Sonnet 4.6 or 4.7 evaluating against a held-out subset
+with a faithfulness rubric). Substring grading is gameable; voice + safety
+catch their specific failure modes; LLM-judge would cover "wrong-but-
+confidently-stated answer that hits the gold tokens."
+
+## Feasibility constraints (not a recipe dimension — does the recipe fit?)
+
+Hardware tier is a constraint on which recipes are runnable, not a recipe
+input. Two recipes matching on all 6 functional dimensions should produce
+equivalent outcomes regardless of training GPU.
 
 | Tier | Train cost (per recipe attempt) | Wall time |
 |---|---|---|
 | Local 5090 (32GB) | $0 | 45–90 min for 7B QLoRA, 70 min for 14B QLoRA |
 | RunPod H100 (80GB) | ~$15–25 | 4–5 hr for 30B-MoE |
 | RunPod A100 cluster | $50+ | varies |
+
+## Reproducibility scope
+
+Two recipes matching on all 6 functional dimensions should produce
+equivalent outcomes **modulo seed variance**. The bound is currently
+unmeasured — variance-bounds runs are queued as SK-P0-002 in the
+remediation plan (5 anchored runs × 5 repetitions each, per `eval/
+EVAL_SET_CHANGELOG.md` methodology version). Until those runs land,
+treat any single-run delta of <2pp as "directional, within sampling
+variance" rather than a load-bearing finding. Examples that need
+calibration once variance bounds exist:
+
+- Qwen 7B v4 vs base: +3.2pp — likely above noise, not yet certified
+- Mistral v4 vs base: −4.0pp — borderline; needs ≥2σ verification
+- 32B v4 vs base: −4.7pp — borderline; needs verification
+- MoE attention-only vs base: −10.3pp — comfortably above noise, certifiable
+- MoE +router vs MoE base: −4.0pp — borderline
+
+The tighter the variance bound, the more cells become "certified above
+noise" rather than "directional." This is methodology hygiene, not a
+finding-shifter.
 
 ## Skippy matrix — filled cells
 

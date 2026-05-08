@@ -227,6 +227,38 @@ The hypothesis we have, untested: Mistral's chat template required `{% generatio
 
 ---
 
+## Eval set composition — known limitations
+
+A transparency note before the verification framework. The v2 eval set has
+44 prompts × 3 samples = 132 raw samples (126 active after the persona
+quarantine of 2026-05-08). Sample counts per category are deliberately
+not balanced — they reflect what the campaign team thought mattered most
+to test:
+
+| Category | Prompts | Samples | Share of eval |
+|---|---:|---:|---:|
+| `rag_datasheet` | 26 | 78 | 61.9% |
+| `multihop` | 3 | 9 | 7.1% |
+| `refusal` | 3 | 9 | 7.1% |
+| `coding` | 2 | 6 | 4.8% |
+| `general` | 2 | 6 | 4.8% |
+| `numerical_precision` | 2 | 6 | 4.8% |
+| `reasoning` | 2 | 6 | 4.8% |
+| `rag_blog` | 1 | 3 | 2.4% |
+| `rag_email` | 1 | 3 | 2.4% |
+| `persona` | 2 | 6 | (quarantined) |
+
+Implications a reviewer should weigh:
+
+1. **Headline pass rate is dominated by `rag_datasheet`** (~62% weight). A model that gains +3 in datasheet and loses −3 elsewhere shows flat headline despite directional change. Always inspect per-category alongside the headline.
+2. **Per-category deltas in small categories (3-6 samples) are inherently noisy.** A 1-sample swing in `rag_blog` (n=3) shows as 33pp; the same swing in `rag_datasheet` (n=78) shows as 1.3pp. Apples-to-apples comparison should use absolute pass count, not per-category percentage.
+3. **The `reasoning` category is binary-ish across base families** — Qwen 7B base 6/6, Mistral 7B v0.3 0/6, Llama-3.1 8B 1/6. This is a chain-of-thought-presence detector, not a graded score, and shouldn't be weighted equally with categories that produce continuous variation.
+4. **Customers replicating this recipe should rebuild the eval set against their own corpus shape with balanced sample sizes.** Skippy's eval is dominated by NXP datasheet retrieval because that's what the test author needed to verify. A defect-tracking team's eval should be dominated by defect-record retrieval. The same recipe will produce different headlines on differently-shaped evals.
+
+This composition does not invalidate the campaign's findings — the load-bearing claims (ship-smaller, recipe-architecture-coupling, voice-transfers-recipe-robustly) survive direction-wise even after rebalancing. But customers adopting this recipe template should not expect headline numbers to transfer; they should expect the category-Δ *pattern* to transfer (or not, per gotcha #7).
+
+---
+
 ## A verification framework
 
 Three gates, three independent measurements. A model that fails any one of them does not ship.
