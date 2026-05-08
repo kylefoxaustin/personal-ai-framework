@@ -45,6 +45,8 @@ The judge rewards semantic quality; the grader rewards format match. They diverg
 
 **Together, A and B tell the same story:** temp=0 substring grader pass rate is a measure of training-induced phrasing consistency, not a robust measure of general capability gain.
 
+**Critical nuance — differential application to base vs fine-tune models:** The format-fidelity characterisation applies specifically to fine-tune-vs-base comparisons. For base models (Qwen 7B base: +1.7pp at temp=0.3; Mistral 7B base: 0pp), the substring grader at temp=0 is reasonably stable — format-fidelity and correctness are not yet decoupled. For fine-tuned models (Skippy 7B v4: −26pp at temp=0.3), they decouple sharply. The correct unpacking: "The substring grader at temp=0 measures format-fidelity-or-correctness; for base models these correlate, but for fine-tunes they can decouple. A fine-tune that learned narrow output patterns matching the gold tokens at greedy decoding can score high on substring without underlying capability robustness." This prevents 'substring is bad' overclaiming — substring is reliable for base evaluation; it is specifically fine-tune-vs-base comparisons where the metric becomes fragile.
+
 ---
 
 ## Task 1: Mistral Full-Seq Falsification — Pipeline Bug Scope
@@ -140,9 +142,13 @@ train_loss=0.8024 vs Qwen v4 0.676. Higher loss may indicate weaker signal uptak
 - **Not "gotcha #7 stands" as an established fact.** Both individual cross-family deltas are below 2σ, and the grader methodology is under scrutiny.
 - **Not "the fine-tune adds nothing."** The Qwen N=2 gains are real measurements; the question is what they measure.
 
-### Proposed framing (preliminary, not final)
+### Proposed framing (reviewer-approved, awaiting Kyle sign-off)
 
-> "Preliminary evidence suggests the v4 recipe may be architecture-coupled: Qwen 7B and 14B show consistent gains (+3.1pp, +5.3pp) while Mistral-7B and Llama-3.1-8B show slight regressions (−3.8pp, −3.0pp). All four deltas are below the estimated 2σ noise threshold individually. Customers targeting non-Qwen bases should treat recipe transfer as unvalidated. **Note:** the substring grader's format-fidelity bias (evidenced by 26pp temperature sensitivity and LLM-judge reversal) means the absolute magnitude of these deltas should be interpreted cautiously — the directional split may be more reliable than the headline numbers."
+> "Preliminary observation, N=2 within Qwen (lifts: +3.1pp 7B, +5.3pp 14B) and N=2 across non-Qwen (regressions: −3.8pp Mistral, −3.0pp Llama), directionally consistent within each group with a sign-pattern that varies by family group. Magnitudes are small (3–5pp). The underlying substring-lift premise is itself fragile under non-greedy sampling and alternative grading. Treat as preliminary signal worth flagging to customers, not as an established characterization of recipe transfer.
+>
+> **What would upgrade this to 'established':** a third non-Qwen family that also regresses (Phi, Yi, Gemma — any), pushing to N=3; or a Qwen v4 that regresses on a different corpus, which would falsify the simpler 'Qwen fine-tunes learn the substring grader's tells' alternative explanation.
+>
+> **Mistral template-confound disclosure:** Mistral required `{% generation %}` marker patching that Qwen and Llama did not. Whether the −3.8pp Mistral regression is a recipe-architecture interaction or a template-patch-architecture interaction is not fully disentangled (a Mistral assistant-only run with delimiter-based masking would separate them — not run here). Llama used ChatML-like templates and did not need patching, so the −3.0pp Llama result is the cleaner non-Qwen data point. Mistral is corroborating but template-confounded."
 
 ---
 
@@ -161,7 +167,7 @@ train_loss=0.8024 vs Qwen v4 0.676. Higher loss may indicate weaker signal uptak
 - [x] Temp regimes kept separate in all claims
 - [x] "Gotcha #7 stands" language removed; preliminary framing substituted
 - [ ] Kyle reviews revised framing direction
-- [ ] External reviewer signs off on revised doc
+- [x] External reviewer signs off on revised doc (2026-05-08 — all 3 Qs answered; framing direction approved; Mistral confound disclosed; differential format-fidelity nuance added)
 - [ ] White paper gains a "Grader-Methodology Findings" section (temperature + LLM-judge paired)
 - [ ] [backend] SHARED-P0-001 un-held
 
