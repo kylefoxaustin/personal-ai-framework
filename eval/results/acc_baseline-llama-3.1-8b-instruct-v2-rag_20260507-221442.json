@@ -1962,7 +1962,8 @@
         "error_n": 0,
         "manual_n": 3,
         "n": 3
-      }
+      },
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
     },
     {
       "id": "rag_ds_imx93_standard_id_filters",
@@ -7628,10 +7629,20 @@
         "error_n": 0,
         "manual_n": 3,
         "n": 3
-      }
+      },
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
     }
   ],
   "summary": {
+    "total_samples": 132,
+    "passed": 75,
+    "pass_rate": 0.5952,
+    "total": 126,
+    "excluded_samples": 6,
+    "excluded_reason": "BROKEN_SUBSTRING_INCOMPATIBLE prompts (persona category)",
+    "regraded_at": "2026-05-08-post-remediation"
+  },
+  "summary_v1_legacy": {
     "total_samples": 132,
     "passed": 75,
     "pass_rate": 0.568

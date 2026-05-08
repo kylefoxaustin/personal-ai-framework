@@ -1,0 +1,3831 @@
+{
+  "name": "reference-moe-q4km-v2",
+  "timestamp": "2026-04-23T09:08:45",
+  "endpoint": "http://localhost:8080",
+  "prompts_version": 2,
+  "samples_per_prompt": 3,
+  "config": {
+    "use_rag": false,
+    "skip_agent_loop": true,
+    "max_tokens": 512,
+    "temperature": 0.0
+  },
+  "prompts": [
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "prompt": "What memory interface does the i.MX 93 support for external DRAM?",
+      "gold_substrings": [
+        "16-bit",
+        "LPDDR4"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 supports LPDDR4/4X and LPDDR5 memory interfaces for external DRAM.",
+          "tokens": 68,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 27,
+            "host_ms": 2.21,
+            "prefill_ms": 39.46,
+            "decode_ms": 96.24,
+            "total_ms": 139.34,
+            "prefill_tok_per_s": 1039.0,
+            "decode_tok_per_s": 280.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 supports LPDDR4/4X and LPDDR5 memory interfaces for external DRAM.",
+          "tokens": 68,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 27,
+            "host_ms": 2.03,
+            "prefill_ms": 9.49,
+            "decode_ms": 94.76,
+            "total_ms": 107.53,
+            "prefill_tok_per_s": 4319.2,
+            "decode_tok_per_s": 284.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 supports LPDDR4/4X and LPDDR5 memory interfaces for external DRAM.",
+          "tokens": 68,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 27,
+            "host_ms": 2.04,
+            "prefill_ms": 9.66,
+            "decode_ms": 94.46,
+            "total_ms": 107.41,
+            "prefill_tok_per_s": 4246.2,
+            "decode_tok_per_s": 285.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 16-bit)",
+          "fail (missing: 16-bit)",
+          "fail (missing: 16-bit)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "prompt": "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+      "gold_substrings": [
+        "LPUART",
+        "IOMUX"
+      ],
+      "samples": [
+        {
+          "text": "The peripheral on the i.MX 93 that handles UART is the **MU (Microcontroller Unit)**. The **IOMUX (Input/Output Multiplexer)** block routes its pins.",
+          "tokens": 86,
+          "elapsed_s": 0.26,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 41,
+            "host_ms": 2.17,
+            "prefill_ms": 27.12,
+            "decode_ms": 150.19,
+            "total_ms": 180.66,
+            "prefill_tok_per_s": 1659.4,
+            "decode_tok_per_s": 273.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The peripheral on the i.MX 93 that handles UART is the **MU (Microcontroller Unit)**. The **IOMUX (Input/Output Multiplexer)** block routes its pins.",
+          "tokens": 86,
+          "elapsed_s": 0.24,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 41,
+            "host_ms": 1.89,
+            "prefill_ms": 9.5,
+            "decode_ms": 146.83,
+            "total_ms": 159.49,
+            "prefill_tok_per_s": 4734.7,
+            "decode_tok_per_s": 279.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The peripheral on the i.MX 93 that handles UART is the **MU (Microcontroller Unit)**. The **IOMUX (Input/Output Multiplexer)** block routes its pins.",
+          "tokens": 86,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 41,
+            "host_ms": 1.87,
+            "prefill_ms": 9.37,
+            "decode_ms": 149.58,
+            "total_ms": 162.07,
+            "prefill_tok_per_s": 4800.9,
+            "decode_tok_per_s": 274.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: LPUART)",
+          "fail (missing: LPUART)",
+          "fail (missing: LPUART)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_cortex",
+      "category": "rag_datasheet",
+      "prompt": "What Arm cores does the i.MX 93 application processor include?",
+      "gold_substrings": [
+        "A55",
+        "M33"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 application processor includes Arm's Cortex-A78 and Cortex-A55 cores.",
+          "tokens": 64,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 39,
+            "completion_tokens": 25,
+            "host_ms": 2.11,
+            "prefill_ms": 24.6,
+            "decode_ms": 86.33,
+            "total_ms": 114.3,
+            "prefill_tok_per_s": 1585.5,
+            "decode_tok_per_s": 289.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 application processor includes Arm's Cortex-A78 and Cortex-A55 cores.",
+          "tokens": 64,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 39,
+            "completion_tokens": 25,
+            "host_ms": 2.06,
+            "prefill_ms": 10.34,
+            "decode_ms": 85.76,
+            "total_ms": 99.42,
+            "prefill_tok_per_s": 3771.6,
+            "decode_tok_per_s": 291.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 application processor includes Arm's Cortex-A78 and Cortex-A55 cores.",
+          "tokens": 64,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 39,
+            "completion_tokens": 25,
+            "host_ms": 2.49,
+            "prefill_ms": 9.49,
+            "decode_ms": 87.04,
+            "total_ms": 100.27,
+            "prefill_tok_per_s": 4110.3,
+            "decode_tok_per_s": 287.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: M33)",
+          "fail (missing: M33)",
+          "fail (missing: M33)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "prompt": "In Kyle's pillar-to-pillar IVI demo, which NXP chip ran Angry Birds on the LCD?",
+      "gold_substrings": [
+        "i.MX 8",
+        "Angry Birds"
+      ],
+      "samples": [
+        {
+          "text": "In Kyle's pillar-to-pillar IVI demo, the **NXP i.MX 6** chip ran Angry Birds on the LCD.",
+          "tokens": 77,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 31,
+            "host_ms": 2.2,
+            "prefill_ms": 26.99,
+            "decode_ms": 110.26,
+            "total_ms": 140.72,
+            "prefill_tok_per_s": 1704.3,
+            "decode_tok_per_s": 281.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "In Kyle's pillar-to-pillar IVI demo, the **NXP i.MX 6** chip ran Angry Birds on the LCD.",
+          "tokens": 77,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 31,
+            "host_ms": 1.96,
+            "prefill_ms": 9.18,
+            "decode_ms": 112.15,
+            "total_ms": 124.55,
+            "prefill_tok_per_s": 5008.5,
+            "decode_tok_per_s": 276.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "In Kyle's pillar-to-pillar IVI demo, the **NXP i.MX 6** chip ran Angry Birds on the LCD.",
+          "tokens": 77,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 31,
+            "host_ms": 2.05,
+            "prefill_ms": 9.17,
+            "decode_ms": 108.08,
+            "total_ms": 120.55,
+            "prefill_tok_per_s": 5015.3,
+            "decode_tok_per_s": 286.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: i.MX 8)",
+          "fail (missing: i.MX 8)",
+          "fail (missing: i.MX 8)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
+      "gold_substrings": [
+        "electric",
+        "sustain"
+      ],
+      "samples": [
+        {
+          "text": "I'm sorry, but I don't have access to specific podcasts or their content. However, I can provide some general information on the sustainability argument for electric vehicles.\n\nElectric vehicles (EVs) are often promoted as a more sustainable alternative to traditional internal combustion engine vehicles. The primary reasons for this include:\n\n1. **Reduced greenhouse gas emissions**: EVs produce zero tailpipe emissions, which helps reduce air pollution and greenhouse gas emissions that contribute to climate change.\n2. **Energy efficiency**: Electric motors are generally more efficient than internal combustion engines, meaning they convert a higher percentage of electrical energy from the grid to power at the wheels.\n3. **Renewable energy integration**: As the world transitions to more renewable energy sources, EVs can be charged using clean electricity, further reducing their carbon footprint.\n4. **Reduced noise pollution**: EVs are generally quieter than traditional vehicles, which can help reduce noise pollution in urban areas.\n\nHowever, it's important to note that the sustainability of EVs also depends on factors such as the source of electricity used to charge them and the environmental impact of battery production and disposal. As the world continues to transition to more sustainable energy sources, the overall sustainability of EVs is expected to improve.\n\nIf you have any specific questions about electric vehicles or their sustainability, feel free to ask!",
+          "tokens": 310,
+          "elapsed_s": 1.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 269,
+            "host_ms": 2.23,
+            "prefill_ms": 25.19,
+            "decode_ms": 1051.42,
+            "total_ms": 1080.12,
+            "prefill_tok_per_s": 1627.8,
+            "decode_tok_per_s": 255.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "I'm sorry, but I don't have access to specific podcasts or their content. However, I can provide some general information on the sustainability argument for electric vehicles.\n\nElectric vehicles (EVs) are often promoted as a more sustainable alternative to traditional internal combustion engine vehicles. The primary reasons for this include:\n\n1. **Reduced greenhouse gas emissions**: EVs produce zero tailpipe emissions, which helps reduce air pollution and greenhouse gas emissions that contribute to climate change.\n2. **Energy efficiency**: Electric motors are generally more efficient than internal combustion engines, meaning they convert a higher percentage of the energy from the grid into motion.\n3. **Renewable energy integration**: As the world transitions to more renewable energy sources, EVs can be charged using clean electricity, further reducing their carbon footprint.\n4. **Reduced noise pollution**: EVs are generally quieter than traditional vehicles, which can help reduce noise pollution in urban areas.\n\nHowever, it's important to note that the sustainability of EVs also depends on factors such as the source of electricity used to charge them, the production and disposal of batteries, and the overall lifecycle emissions of the vehicle.\n\nIf you have specific questions about podcasts or their content, I recommend checking the podcast's website or transcript for more detailed information.",
+          "tokens": 298,
+          "elapsed_s": 1.06,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 257,
+            "host_ms": 1.82,
+            "prefill_ms": 13.15,
+            "decode_ms": 994.4,
+            "total_ms": 1010.64,
+            "prefill_tok_per_s": 3117.4,
+            "decode_tok_per_s": 258.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "I'm sorry, but I don't have access to specific podcasts or their content. However, I can provide some general information on the sustainability argument for electric vehicles.\n\nElectric vehicles (EVs) are often promoted as a more sustainable alternative to traditional internal combustion engine vehicles. The primary reasons for this include:\n\n1. **Reduced greenhouse gas emissions**: EVs produce zero tailpipe emissions, which helps reduce air pollution and greenhouse gas emissions that contribute to climate change.\n2. **Energy efficiency**: Electric motors are generally more efficient than internal combustion engines, meaning they convert a higher percentage of the energy from the grid into motion.\n3. **Renewable energy integration**: As the world transitions to more renewable energy sources, EVs can be charged using clean electricity, further reducing their carbon footprint.\n4. **Reduced noise pollution**: EVs are generally quieter than traditional vehicles, which can help reduce noise pollution in urban areas.\n\nHowever, it's important to note that the sustainability of EVs also depends on factors such as the source of electricity used to charge them, the production and disposal of batteries, and the overall lifecycle emissions of the vehicle.\n\nIf you have specific questions about podcasts or their content, I recommend checking the podcast's website or transcript for more detailed information.",
+          "tokens": 298,
+          "elapsed_s": 1.22,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 257,
+            "host_ms": 2.22,
+            "prefill_ms": 13.15,
+            "decode_ms": 1001.16,
+            "total_ms": 1017.83,
+            "prefill_tok_per_s": 3118.1,
+            "decode_tok_per_s": 256.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "prompt": "I have 12 apples. I give 3/4 of them to my kid. How many do I have left? Answer with just the number.",
+      "gold_substrings": [
+        "3"
+      ],
+      "samples": [
+        {
+          "text": "3",
+          "tokens": 59,
+          "elapsed_s": 0.1,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 3,
+            "host_ms": 1.9,
+            "prefill_ms": 31.14,
+            "decode_ms": 5.07,
+            "total_ms": 39.4,
+            "prefill_tok_per_s": 1798.3,
+            "decode_tok_per_s": 591.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "3",
+          "tokens": 59,
+          "elapsed_s": 0.14,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 3,
+            "host_ms": 2.0,
+            "prefill_ms": 9.08,
+            "decode_ms": 3.73,
+            "total_ms": 16.08,
+            "prefill_tok_per_s": 6169.4,
+            "decode_tok_per_s": 804.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "3",
+          "tokens": 59,
+          "elapsed_s": 0.07,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 3,
+            "host_ms": 1.86,
+            "prefill_ms": 9.09,
+            "decode_ms": 3.8,
+            "total_ms": 15.99,
+            "prefill_tok_per_s": 6162.3,
+            "decode_tok_per_s": 789.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
+      "gold_substrings": [
+        "10:5"
+      ],
+      "samples": [
+        {
+          "text": "Let\u2019s think through this step by step:\n\n1. Train from Austin leaves at 9:00 a.m. going 60 mph.\n2. Train from Dallas leaves at 10:00 a.m. going 80 mph.\n3. The distance between Austin and Dallas is 195 miles.\n\nLet\u2019s find out how far the first train travels by 10:00 a.m.:\n- From 9:00 a.m. to 10:00 a.m. is 1 hour.\n- So, the first train travels 60 miles in that hour.\n\nSo, at 10:00 a.m., the distance between the two trains is:\n- 195 miles - 60 miles = 135 miles.\n\nNow, both trains are moving toward each other:\n- The first train is going 60 mph.\n- The second train is going 80 mph.\n- So, their combined speed is 60 + 80 = 140 mph.\n\nNow, we need to find out how long it takes for them to cover the remaining 135 miles at 140 mph:\n- Time = Distance / Speed = 135 / 140 hours.\n\nLet\u2019s calculate that:\n- 135 / 140 = 0.9643 hours.\n\nConvert that to minutes:\n- 0.9643 * 60 \u2248 57.86 minutes.\n\nSo, they meet approximately 57.86 minutes after 10:00 a.m.\n\nAdding that to 10:00 a.m.:\n- 10:00 a.m. + 57.86 minutes \u2248 10:57.86 a.m.\n\nSo, the trains meet at approximately 10:58 a.m.\n\nLet me double-check:\n- From 10:00 a.m. to 10:57.86 a.m. is 57.86 minutes.\n- In that time, the first train travels: 60 mph * (57.86 / 60) \u2248 57.86 miles.\n- The second train travels: 80 mph * (57.86 / 60) \u2248 77.15 miles.\n- Total distance covered",
+          "tokens": 582,
+          "elapsed_s": 2.12,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 73,
+            "completion_tokens": 509,
+            "host_ms": 1.74,
+            "prefill_ms": 36.84,
+            "decode_ms": 2048.15,
+            "total_ms": 2087.99,
+            "prefill_tok_per_s": 1981.8,
+            "decode_tok_per_s": 248.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "Let\u2019s solve this step by step:\n\n1. **First train (from Austin):**\n   - Leaves at 9:00 a.m.\n   - Speed = 60 mph\n   - By 10:00 a.m., it has traveled for 1 hour:  \n     Distance = 60 mph \u00d7 1 hour = 60 miles\n\n2. **Second train (from Dallas):**\n   - Leaves at 10:00 a.m.\n   - Speed = 80 mph\n   - At 10:00 a.m., the first train is already 60 miles from Austin, so the distance between the two trains at 10:00 a.m. is:\n     195 miles (total) \u2013 60 miles = 135 miles\n\n3. **After 10:00 a.m., both trains are moving toward each other:**\n   - Combined speed = 60 mph + 80 mph = 140 mph\n   - Time to cover 135 miles at 140 mph:\n     Time = Distance / Speed = 135 / 140 hours \u2248 0.9643 hours\n\n4. **Convert 0.9643 hours to minutes:**\n   - 0.9643 \u00d7 60 \u2248 57.86 minutes \u2248 58 minutes\n\n5. **Add this to 10:00 a.m.:**\n   - 10:00 a.m. + 58 minutes = **10:58 a.m.**\n\n\u2705 **Answer: The trains meet at approximately 10:58 a.m.**",
+          "tokens": 440,
+          "elapsed_s": 1.54,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 73,
+            "completion_tokens": 367,
+            "host_ms": 2.05,
+            "prefill_ms": 13.15,
+            "decode_ms": 1460.36,
+            "total_ms": 1476.83,
+            "prefill_tok_per_s": 5551.8,
+            "decode_tok_per_s": 251.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "Let\u2019s solve this step by step:\n\n1. **First train (from Austin):**\n   - Leaves at 9:00 a.m.\n   - Speed = 60 mph\n   - By 10:00 a.m., it has traveled for 1 hour:  \n     Distance = 60 mph \u00d7 1 hour = 60 miles\n\n2. **Second train (from Dallas):**\n   - Leaves at 10:00 a.m.\n   - Speed = 80 mph\n   - At 10:00 a.m., the first train is already 60 miles from Austin, so the distance between the two trains at 10:00 a.m. is:\n     195 miles (total) \u2013 60 miles = 135 miles\n\n3. **After 10:00 a.m., both trains are moving toward each other:**\n   - Combined speed = 60 mph + 80 mph = 140 mph\n   - Time to cover 135 miles at 140 mph:\n     Time = Distance / Speed = 135 / 140 hours \u2248 0.9643 hours\n\n4. **Convert 0.9643 hours to minutes:**\n   - 0.9643 \u00d7 60 \u2248 57.86 minutes \u2248 58 minutes\n\n5. **Add this to 10:00 a.m.:**\n   - 10:00 a.m. + 58 minutes = **10:58 a.m.**\n\n\u2705 **Answer: The trains meet at approximately 10:58 a.m.**",
+          "tokens": 440,
+          "elapsed_s": 1.55,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 73,
+            "completion_tokens": 367,
+            "host_ms": 2.3,
+            "prefill_ms": 13.03,
+            "decode_ms": 1462.75,
+            "total_ms": 1479.39,
+            "prefill_tok_per_s": 5602.1,
+            "decode_tok_per_s": 250.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "prompt": "Write a concise Python function `reverse_string(s: str) -> str` that returns the reversed string. Just the function, no preamble.",
+      "gold_substrings": [
+        "def reverse_string",
+        "[::-1]"
+      ],
+      "samples": [
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 70,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 52,
+            "completion_tokens": 18,
+            "host_ms": 1.82,
+            "prefill_ms": 28.76,
+            "decode_ms": 61.18,
+            "total_ms": 93.02,
+            "prefill_tok_per_s": 1808.1,
+            "decode_tok_per_s": 294.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 70,
+          "elapsed_s": 0.12,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 52,
+            "completion_tokens": 18,
+            "host_ms": 1.9,
+            "prefill_ms": 9.08,
+            "decode_ms": 59.38,
+            "total_ms": 71.62,
+            "prefill_tok_per_s": 5726.5,
+            "decode_tok_per_s": 303.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 70,
+          "elapsed_s": 0.11,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 52,
+            "completion_tokens": 18,
+            "host_ms": 1.72,
+            "prefill_ms": 8.82,
+            "decode_ms": 62.45,
+            "total_ms": 74.18,
+            "prefill_tok_per_s": 5898.7,
+            "decode_tok_per_s": 288.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "prompt": "Write a Python generator `fib()` that yields Fibonacci numbers forever. Just the code.",
+      "gold_substrings": [
+        "def fib",
+        "yield"
+      ],
+      "samples": [
+        {
+          "text": "def fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b",
+          "tokens": 75,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 34,
+            "host_ms": 1.96,
+            "prefill_ms": 24.79,
+            "decode_ms": 118.48,
+            "total_ms": 146.42,
+            "prefill_tok_per_s": 1654.2,
+            "decode_tok_per_s": 287.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "def fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b",
+          "tokens": 75,
+          "elapsed_s": 0.28,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 34,
+            "host_ms": 2.07,
+            "prefill_ms": 9.32,
+            "decode_ms": 122.17,
+            "total_ms": 134.89,
+            "prefill_tok_per_s": 4398.0,
+            "decode_tok_per_s": 278.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "def fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b",
+          "tokens": 75,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 34,
+            "host_ms": 2.08,
+            "prefill_ms": 8.84,
+            "decode_ms": 119.08,
+            "total_ms": 131.19,
+            "prefill_tok_per_s": 4639.3,
+            "decode_tok_per_s": 285.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "prompt": "Recommend one embedded systems book and briefly say why.",
+      "gold_substrings": [],
+      "samples": [
+        {
+          "text": "\"Embedded Systems: Introduction to the ARM Cortex-M3\" by Jonathan Valenta. This book is excellent for beginners and intermediate users who want to understand the ARM Cortex-M3 processor, which is widely used in embedded systems. It provides a comprehensive overview of the processor's architecture, peripherals, and programming techniques, making it a valuable resource for anyone working with ARM-based embedded systems.",
+          "tokens": 112,
+          "elapsed_s": 0.38,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 78,
+            "host_ms": 2.0,
+            "prefill_ms": 24.49,
+            "decode_ms": 285.67,
+            "total_ms": 313.67,
+            "prefill_tok_per_s": 1388.4,
+            "decode_tok_per_s": 273.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "\"Embedded Systems: Introduction to the ARM Cortex-M3\" by Jonathan Valenta. This book is excellent for beginners and intermediate learners who want to understand the ARM Cortex-M3 processor, which is widely used in embedded systems. It provides a comprehensive overview of the processor's architecture, peripherals, and programming techniques, making it a valuable resource for anyone working with ARM-based embedded systems.",
+          "tokens": 112,
+          "elapsed_s": 0.35,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 78,
+            "host_ms": 2.3,
+            "prefill_ms": 9.23,
+            "decode_ms": 283.61,
+            "total_ms": 296.55,
+            "prefill_tok_per_s": 3681.8,
+            "decode_tok_per_s": 275.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "\"Embedded Systems: Introduction to the ARM Cortex-M3\" by Jonathan Valenta. This book is excellent for beginners and intermediate learners who want to understand the ARM Cortex-M3 processor, which is widely used in embedded systems. It provides a comprehensive overview of the processor's architecture, peripherals, and programming techniques, making it a valuable resource for anyone working with ARM-based embedded systems.",
+          "tokens": 112,
+          "elapsed_s": 0.35,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 78,
+            "host_ms": 2.05,
+            "prefill_ms": 9.45,
+            "decode_ms": 286.02,
+            "total_ms": 298.89,
+            "prefill_tok_per_s": 3597.5,
+            "decode_tok_per_s": 272.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "prompt": "Explain in two sentences what 'mixture of experts' means in the context of large language models.",
+      "gold_substrings": [
+        "expert"
+      ],
+      "samples": [
+        {
+          "text": "A mixture of experts is a type of neural network architecture that uses multiple specialized models, or \"experts,\" to handle different types of input data or tasks. In the context of large language models, it allows the model to route input to the most appropriate expert, improving efficiency and performance.",
+          "tokens": 105,
+          "elapsed_s": 0.33,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 60,
+            "host_ms": 2.15,
+            "prefill_ms": 26.99,
+            "decode_ms": 219.99,
+            "total_ms": 250.48,
+            "prefill_tok_per_s": 1667.2,
+            "decode_tok_per_s": 272.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "A mixture of experts is a type of neural network architecture that uses multiple specialized sub-networks, or \"experts,\" to handle different aspects of a task. In large language models, it allows the model to route input data to the most relevant expert(s), improving efficiency and performance.",
+          "tokens": 104,
+          "elapsed_s": 0.28,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 59,
+            "host_ms": 2.32,
+            "prefill_ms": 8.83,
+            "decode_ms": 213.91,
+            "total_ms": 226.25,
+            "prefill_tok_per_s": 5094.2,
+            "decode_tok_per_s": 275.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "A mixture of experts is a type of neural network architecture that uses multiple specialized sub-networks, or \"experts,\" to handle different aspects of a task. In large language models, it allows the model to route input data to the most relevant expert(s), improving efficiency and performance.",
+          "tokens": 104,
+          "elapsed_s": 0.26,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 59,
+            "host_ms": 2.12,
+            "prefill_ms": 8.78,
+            "decode_ms": 215.57,
+            "total_ms": 227.68,
+            "prefill_tok_per_s": 5122.6,
+            "decode_tok_per_s": 273.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "prompt": "Greet me as Skippy would, in one sentence.",
+      "gold_substrings": [],
+      "samples": [
+        {
+          "text": "Skippy says, \"Hi, I'm Skippy, and I'm a little bit of a dork!\"",
+          "tokens": 61,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 36,
+            "completion_tokens": 25,
+            "host_ms": 2.04,
+            "prefill_ms": 39.26,
+            "decode_ms": 84.53,
+            "total_ms": 127.08,
+            "prefill_tok_per_s": 916.9,
+            "decode_tok_per_s": 295.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "Skippy says, \"Hi, I'm Skippy, and I'm a little bit of a dork!\"",
+          "tokens": 61,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 36,
+            "completion_tokens": 25,
+            "host_ms": 1.96,
+            "prefill_ms": 9.02,
+            "decode_ms": 85.7,
+            "total_ms": 98.04,
+            "prefill_tok_per_s": 3992.7,
+            "decode_tok_per_s": 291.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "Skippy says, \"Hi, I'm Skippy, and I'm a little bit of a dork!\"",
+          "tokens": 61,
+          "elapsed_s": 0.14,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 36,
+            "completion_tokens": 25,
+            "host_ms": 2.03,
+            "prefill_ms": 9.12,
+            "decode_ms": 85.53,
+            "total_ms": 98.11,
+            "prefill_tok_per_s": 3947.1,
+            "decode_tok_per_s": 292.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      },
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
+    },
+    {
+      "id": "rag_ds_imx93_standard_id_filters",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum number of standard ID filter elements supported by the i.MX 93 Applications Processor's FlexCAN controller?",
+      "gold_substrings": [
+        "128"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93's FlexCAN controller supports up to 28 standard ID filter elements.",
+          "tokens": 74,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 24,
+            "host_ms": 1.99,
+            "prefill_ms": 26.65,
+            "decode_ms": 80.47,
+            "total_ms": 110.62,
+            "prefill_tok_per_s": 1876.3,
+            "decode_tok_per_s": 298.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93's FlexCAN controller supports up to 28 standard ID filter elements.",
+          "tokens": 74,
+          "elapsed_s": 0.14,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 24,
+            "host_ms": 1.77,
+            "prefill_ms": 8.96,
+            "decode_ms": 80.96,
+            "total_ms": 93.18,
+            "prefill_tok_per_s": 5578.0,
+            "decode_tok_per_s": 296.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93's FlexCAN controller supports up to 28 standard ID filter elements.",
+          "tokens": 74,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 24,
+            "host_ms": 2.02,
+            "prefill_ms": 9.0,
+            "decode_ms": 85.15,
+            "total_ms": 97.57,
+            "prefill_tok_per_s": 5556.3,
+            "decode_tok_per_s": 281.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 128)",
+          "fail (missing: 128)",
+          "fail (missing: 128)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_imx93_cortex_a_max_freq",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum CPU frequency for the Cortex-A cores in the i.MX 93 processor?",
+      "gold_substrings": [
+        "1.7",
+        "GHz"
+      ],
+      "samples": [
+        {
+          "text": "The maximum CPU frequency for the Cortex-A cores in the i.MX 93 processor is 2.4 GHz.",
+          "tokens": 72,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 27,
+            "host_ms": 2.03,
+            "prefill_ms": 24.29,
+            "decode_ms": 92.75,
+            "total_ms": 120.43,
+            "prefill_tok_per_s": 1852.8,
+            "decode_tok_per_s": 291.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The maximum CPU frequency for the Cortex-A cores in the i.MX 93 processor is 2.4 GHz.",
+          "tokens": 72,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 27,
+            "host_ms": 2.16,
+            "prefill_ms": 8.98,
+            "decode_ms": 92.59,
+            "total_ms": 105.19,
+            "prefill_tok_per_s": 5013.0,
+            "decode_tok_per_s": 291.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The maximum CPU frequency for the Cortex-A cores in the i.MX 93 processor is 2.4 GHz.",
+          "tokens": 72,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 27,
+            "host_ms": 1.8,
+            "prefill_ms": 8.8,
+            "decode_ms": 95.8,
+            "total_ms": 107.72,
+            "prefill_tok_per_s": 5112.9,
+            "decode_tok_per_s": 281.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 1.7)",
+          "fail (missing: 1.7)",
+          "fail (missing: 1.7)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_cortex_a55_l1d_size",
+      "category": "rag_datasheet",
+      "prompt": "What is the size of the L1 data cache per core in the Arm Cortex-A55 on the i.MX 93?",
+      "gold_substrings": [
+        "32",
+        "kByte"
+      ],
+      "samples": [
+        {
+          "text": "The Arm Cortex-A55 core, as implemented in the NXP i.MX 93 processor, features a **32KB L1 data cache per core**.\n\nThis is consistent with the standard configuration of the Cortex-A55 processor, which typically includes a 32KB L1 data cache and a 32KB L1 instruction cache per core. The i.MX 93 is based on the Arm Cortex-A55 core, so it follows this standard configuration.",
+          "tokens": 155,
+          "elapsed_s": 0.47,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 52,
+            "completion_tokens": 103,
+            "host_ms": 2.34,
+            "prefill_ms": 26.2,
+            "decode_ms": 379.02,
+            "total_ms": 408.78,
+            "prefill_tok_per_s": 1984.4,
+            "decode_tok_per_s": 271.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The Arm Cortex-A55 core, as implemented in the NXP i.MX 93 processor, features a 32KB L1 data cache per core. This is consistent with the standard configuration of the Cortex-A55 processor, which includes a 32KB L1 data cache and a 32KB L1 instruction cache per core. The i.MX 93 is part of NXP's latest generation of application processors, designed for high efficiency and performance in a wide range of applications, from automotive to industrial and consumer electronics.",
+          "tokens": 168,
+          "elapsed_s": 0.5,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 52,
+            "completion_tokens": 116,
+            "host_ms": 1.82,
+            "prefill_ms": 9.1,
+            "decode_ms": 428.5,
+            "total_ms": 440.64,
+            "prefill_tok_per_s": 5717.0,
+            "decode_tok_per_s": 270.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The Arm Cortex-A55 core, as implemented in the NXP i.MX 93 processor, features a 32KB L1 data cache per core. This is consistent with the standard configuration of the Cortex-A55 processor, which includes a 32KB L1 data cache and a 32KB L1 instruction cache per core. The i.MX 93 is part of NXP's latest generation of application processors, designed for high efficiency and performance in a wide range of applications, from automotive to industrial and consumer electronics.",
+          "tokens": 168,
+          "elapsed_s": 0.49,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 52,
+            "completion_tokens": 116,
+            "host_ms": 2.28,
+            "prefill_ms": 8.97,
+            "decode_ms": 427.37,
+            "total_ms": 439.89,
+            "prefill_tok_per_s": 5797.2,
+            "decode_tok_per_s": 271.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: kByte)",
+          "fail (missing: kByte)",
+          "fail (missing: kByte)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_cortex_a55_l2_size",
+      "category": "rag_datasheet",
+      "prompt": "What is the size of the L2 cache per core in the Arm Cortex-A55 on the i.MX 93?",
+      "gold_substrings": [
+        "64",
+        "kByte"
+      ],
+      "samples": [
+        {
+          "text": "The Arm Cortex-A55 on the i.MX 93 has a 256KB L2 cache per core.",
+          "tokens": 80,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 51,
+            "completion_tokens": 29,
+            "host_ms": 1.9,
+            "prefill_ms": 24.57,
+            "decode_ms": 99.63,
+            "total_ms": 127.34,
+            "prefill_tok_per_s": 2075.9,
+            "decode_tok_per_s": 291.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The Arm Cortex-A55 core in the i.MX 93 SoC features a 256KB L2 cache per core.",
+          "tokens": 83,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 51,
+            "completion_tokens": 32,
+            "host_ms": 2.09,
+            "prefill_ms": 8.83,
+            "decode_ms": 111.28,
+            "total_ms": 123.36,
+            "prefill_tok_per_s": 5775.9,
+            "decode_tok_per_s": 287.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The Arm Cortex-A55 core in the i.MX 93 SoC features a 256KB L2 cache per core.",
+          "tokens": 83,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 51,
+            "completion_tokens": 32,
+            "host_ms": 1.77,
+            "prefill_ms": 8.71,
+            "decode_ms": 114.27,
+            "total_ms": 125.91,
+            "prefill_tok_per_s": 5856.8,
+            "decode_tok_per_s": 280.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 64, kByte)",
+          "fail (missing: 64, kByte)",
+          "fail (missing: 64, kByte)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_mipi_csi2_max_rate",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum data rate per lane in high-speed operation for the MIPI CSI-2 controller on the i.MX 93?",
+      "gold_substrings": [
+        "1.5",
+        "Gbps"
+      ],
+      "samples": [
+        {
+          "text": "The maximum data rate per lane in high-speed operation for the MIPI CSI-2 controller on the i.MX 93 is 1.5 Gbps.",
+          "tokens": 89,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 53,
+            "completion_tokens": 36,
+            "host_ms": 2.35,
+            "prefill_ms": 25.95,
+            "decode_ms": 126.29,
+            "total_ms": 155.88,
+            "prefill_tok_per_s": 2042.7,
+            "decode_tok_per_s": 285.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The maximum data rate per lane in high-speed operation for the MIPI CSI-2 controller on the i.MX 93 is 1.5 Gbps.",
+          "tokens": 89,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 53,
+            "completion_tokens": 36,
+            "host_ms": 2.04,
+            "prefill_ms": 8.92,
+            "decode_ms": 126.8,
+            "total_ms": 139.0,
+            "prefill_tok_per_s": 5940.0,
+            "decode_tok_per_s": 283.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The maximum data rate per lane in high-speed operation for the MIPI CSI-2 controller on the i.MX 93 is 1.5 Gbps.",
+          "tokens": 89,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 53,
+            "completion_tokens": 36,
+            "host_ms": 2.2,
+            "prefill_ms": 12.09,
+            "decode_ms": 126.65,
+            "total_ms": 142.2,
+            "prefill_tok_per_s": 4384.8,
+            "decode_tok_per_s": 284.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_mipi_dsi_max_pixel_clock",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum pixel clock supported by the MIPI DSI controller on the i.MX 93?",
+      "gold_substrings": [
+        "200",
+        "MHz"
+      ],
+      "samples": [
+        {
+          "text": "The maximum pixel clock supported by the MIPI DSI controller on the i.MX 93 is 1.2 Gbps.",
+          "tokens": 77,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 47,
+            "completion_tokens": 30,
+            "host_ms": 2.18,
+            "prefill_ms": 24.49,
+            "decode_ms": 104.02,
+            "total_ms": 131.92,
+            "prefill_tok_per_s": 1919.5,
+            "decode_tok_per_s": 288.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The maximum pixel clock supported by the MIPI DSI controller on the i.MX 93 is 1.2 Gbps.",
+          "tokens": 77,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 47,
+            "completion_tokens": 30,
+            "host_ms": 2.15,
+            "prefill_ms": 8.87,
+            "decode_ms": 106.89,
+            "total_ms": 119.31,
+            "prefill_tok_per_s": 5301.4,
+            "decode_tok_per_s": 280.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The maximum pixel clock supported by the MIPI DSI controller on the i.MX 93 is 1.2 Gbps.",
+          "tokens": 77,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 47,
+            "completion_tokens": 30,
+            "host_ms": 1.97,
+            "prefill_ms": 8.98,
+            "decode_ms": 104.01,
+            "total_ms": 116.18,
+            "prefill_tok_per_s": 5235.4,
+            "decode_tok_per_s": 288.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 200, MHz)",
+          "fail (missing: 200, MHz)",
+          "fail (missing: 200, MHz)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_cortex_m33_max_freq",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum frequency of the Cortex-M33 core on the i.MX 93 Application Processor?",
+      "gold_substrings": [
+        "250",
+        "MHz"
+      ],
+      "samples": [
+        {
+          "text": "The maximum frequency of the Cortex-M33 core on the i.MX 93 Application Processor is 600 MHz.",
+          "tokens": 76,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 47,
+            "completion_tokens": 29,
+            "host_ms": 2.01,
+            "prefill_ms": 24.44,
+            "decode_ms": 100.49,
+            "total_ms": 128.18,
+            "prefill_tok_per_s": 1923.3,
+            "decode_tok_per_s": 288.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The maximum frequency of the Cortex-M33 core on the i.MX 93 Application Processor is 600 MHz.",
+          "tokens": 76,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 47,
+            "completion_tokens": 29,
+            "host_ms": 1.8,
+            "prefill_ms": 8.82,
+            "decode_ms": 103.76,
+            "total_ms": 115.64,
+            "prefill_tok_per_s": 5331.5,
+            "decode_tok_per_s": 279.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The maximum frequency of the Cortex-M33 core on the i.MX 93 Application Processor is 600 MHz.",
+          "tokens": 76,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 47,
+            "completion_tokens": 29,
+            "host_ms": 2.26,
+            "prefill_ms": 8.97,
+            "decode_ms": 100.32,
+            "total_ms": 112.82,
+            "prefill_tok_per_s": 5237.2,
+            "decode_tok_per_s": 289.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 250)",
+          "fail (missing: 250)",
+          "fail (missing: 250)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_vdd_usb_3p3_max_voltage",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum voltage allowed for VDD_USB_3P3 on the i.MX 93?",
+      "gold_substrings": [
+        "3.45"
+      ],
+      "samples": [
+        {
+          "text": "The maximum voltage allowed for VDD_USB_3P3 on the i.MX 93 is 3.6V.",
+          "tokens": 76,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 47,
+            "completion_tokens": 29,
+            "host_ms": 1.95,
+            "prefill_ms": 24.4,
+            "decode_ms": 100.26,
+            "total_ms": 127.79,
+            "prefill_tok_per_s": 1926.3,
+            "decode_tok_per_s": 289.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The maximum voltage allowed for VDD_USB_3P3 on the i.MX 93 is 3.63V.",
+          "tokens": 77,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 47,
+            "completion_tokens": 30,
+            "host_ms": 1.62,
+            "prefill_ms": 8.85,
+            "decode_ms": 107.21,
+            "total_ms": 118.89,
+            "prefill_tok_per_s": 5309.4,
+            "decode_tok_per_s": 279.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The maximum voltage allowed for VDD_USB_3P3 on the i.MX 93 is 3.63V.",
+          "tokens": 77,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 47,
+            "completion_tokens": 30,
+            "host_ms": 2.04,
+            "prefill_ms": 8.85,
+            "decode_ms": 104.06,
+            "total_ms": 116.2,
+            "prefill_tok_per_s": 5312.4,
+            "decode_tok_per_s": 288.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 3.45)",
+          "fail (missing: 3.45)",
+          "fail (missing: 3.45)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_vdd_ana_0p8_max_voltage",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum voltage allowed for VDD_ANA_0P8 on the i.MX 93?",
+      "gold_substrings": [
+        "0.84"
+      ],
+      "samples": [
+        {
+          "text": "The maximum voltage allowed for VDD_ANA_0P8 on the i.MX 93 is 0.95V.",
+          "tokens": 79,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 48,
+            "completion_tokens": 31,
+            "host_ms": 2.01,
+            "prefill_ms": 23.82,
+            "decode_ms": 107.87,
+            "total_ms": 134.93,
+            "prefill_tok_per_s": 2015.3,
+            "decode_tok_per_s": 287.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The maximum voltage allowed for VDD_ANA_0P8 on the i.MX 93 is 0.85V.",
+          "tokens": 79,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 48,
+            "completion_tokens": 31,
+            "host_ms": 1.83,
+            "prefill_ms": 9.12,
+            "decode_ms": 110.88,
+            "total_ms": 123.08,
+            "prefill_tok_per_s": 5265.2,
+            "decode_tok_per_s": 279.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The maximum voltage allowed for VDD_ANA_0P8 on the i.MX 93 is 0.85V.",
+          "tokens": 79,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 48,
+            "completion_tokens": 31,
+            "host_ms": 1.97,
+            "prefill_ms": 8.87,
+            "decode_ms": 108.1,
+            "total_ms": 120.17,
+            "prefill_tok_per_s": 5410.4,
+            "decode_tok_per_s": 286.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 0.84)",
+          "fail (missing: 0.84)",
+          "fail (missing: 0.84)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_imx93_gpio_count",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum number of GPIO pins available on the i.MX 93 processor?",
+      "gold_substrings": [
+        "148"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 processor has a total of 120 GPIO pins.",
+          "tokens": 64,
+          "elapsed_s": 0.14,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 21,
+            "host_ms": 2.05,
+            "prefill_ms": 24.48,
+            "decode_ms": 70.93,
+            "total_ms": 98.87,
+            "prefill_tok_per_s": 1756.8,
+            "decode_tok_per_s": 296.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 processor has a total of 128 GPIO pins.",
+          "tokens": 64,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 21,
+            "host_ms": 18.15,
+            "prefill_ms": 9.24,
+            "decode_ms": 73.89,
+            "total_ms": 102.58,
+            "prefill_tok_per_s": 4651.3,
+            "decode_tok_per_s": 284.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 processor has a total of 128 GPIO pins.",
+          "tokens": 64,
+          "elapsed_s": 0.12,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 21,
+            "host_ms": 1.96,
+            "prefill_ms": 8.83,
+            "decode_ms": 70.44,
+            "total_ms": 82.6,
+            "prefill_tok_per_s": 4868.8,
+            "decode_tok_per_s": 298.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 148)",
+          "fail (missing: 148)",
+          "fail (missing: 148)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_imx93_149_gpio",
+      "category": "rag_datasheet",
+      "prompt": "Which processor in the i.MX 9 series has 149 GPIO pins?",
+      "gold_substrings": [
+        "i.MX 93"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 processor has 149 GPIO pins.",
+          "tokens": 60,
+          "elapsed_s": 0.13,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 18,
+            "host_ms": 1.91,
+            "prefill_ms": 24.71,
+            "decode_ms": 59.18,
+            "total_ms": 87.05,
+            "prefill_tok_per_s": 1699.6,
+            "decode_tok_per_s": 304.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 processor has 149 GPIO pins.",
+          "tokens": 60,
+          "elapsed_s": 0.11,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 18,
+            "host_ms": 1.81,
+            "prefill_ms": 8.99,
+            "decode_ms": 59.26,
+            "total_ms": 71.29,
+            "prefill_tok_per_s": 4673.3,
+            "decode_tok_per_s": 303.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 processor has 149 GPIO pins.",
+          "tokens": 60,
+          "elapsed_s": 0.12,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 18,
+            "host_ms": 1.89,
+            "prefill_ms": 8.83,
+            "decode_ms": 62.14,
+            "total_ms": 74.09,
+            "prefill_tok_per_s": 4755.3,
+            "decode_tok_per_s": 289.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_mac_addr34_high_offset",
+      "category": "rag_datasheet",
+      "prompt": "What is the offset address of the MAC_ADDRESS34_HIGH register in the i.MX 93 processor?",
+      "gold_substrings": [
+        "410"
+      ],
+      "samples": [
+        {
+          "text": "The MAC_ADDRESS34_HIGH register in the i.MX 93 processor is located at offset address 0x1040.",
+          "tokens": 78,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 47,
+            "completion_tokens": 31,
+            "host_ms": 1.77,
+            "prefill_ms": 26.36,
+            "decode_ms": 107.25,
+            "total_ms": 136.54,
+            "prefill_tok_per_s": 1783.3,
+            "decode_tok_per_s": 289.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The MAC_ADDRESS34_HIGH register in the i.MX 93 processor is located at an offset address of 0x104C from the base address of the Ethernet MAC controller.",
+          "tokens": 89,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 47,
+            "completion_tokens": 42,
+            "host_ms": 1.98,
+            "prefill_ms": 8.71,
+            "decode_ms": 148.18,
+            "total_ms": 160.05,
+            "prefill_tok_per_s": 5398.8,
+            "decode_tok_per_s": 283.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The MAC_ADDRESS34_HIGH register in the i.MX 93 processor is located at an offset address of 0x104C from the base address of the Ethernet MAC controller.",
+          "tokens": 89,
+          "elapsed_s": 0.32,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 47,
+            "completion_tokens": 42,
+            "host_ms": 2.14,
+            "prefill_ms": 9.02,
+            "decode_ms": 148.72,
+            "total_ms": 161.13,
+            "prefill_tok_per_s": 5210.7,
+            "decode_tok_per_s": 282.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 410)",
+          "fail (missing: 410)",
+          "fail (missing: 410)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_usb_phy_data_rates",
+      "category": "rag_datasheet",
+      "prompt": "What are the three data transmission rates supported by the USB 2.0 PHY on the i.MX 93 according to the UTMI+ specification?",
+      "gold_substrings": [
+        "480",
+        "12",
+        "1.5"
+      ],
+      "samples": [
+        {
+          "text": "The USB 2.0 PHY on the i.MX 93 supports the following three data transmission rates according to the UTMI+ specification:\n\n1. Low Speed (1.5 Mbps)\n2. Full Speed (12 Mbps)\n3. High Speed (480 Mbps)",
+          "tokens": 117,
+          "elapsed_s": 0.3,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 61,
+            "host_ms": 1.85,
+            "prefill_ms": 28.71,
+            "decode_ms": 222.97,
+            "total_ms": 254.79,
+            "prefill_tok_per_s": 1950.7,
+            "decode_tok_per_s": 273.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The USB 2.0 PHY on the i.MX 93 supports the following three data transmission rates according to the UTMI+ specification:\n\n1. Low Speed (1.5 Mbps)\n2. Full Speed (12 Mbps)\n3. High Speed (480 Mbps)",
+          "tokens": 117,
+          "elapsed_s": 0.31,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 61,
+            "host_ms": 1.85,
+            "prefill_ms": 9.12,
+            "decode_ms": 218.94,
+            "total_ms": 231.1,
+            "prefill_tok_per_s": 6138.9,
+            "decode_tok_per_s": 278.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The USB 2.0 PHY on the i.MX 93 supports the following three data transmission rates according to the UTMI+ specification:\n\n1. Low Speed (1.5 Mbps)\n2. Full Speed (12 Mbps)\n3. High Speed (480 Mbps)",
+          "tokens": 117,
+          "elapsed_s": 0.29,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 61,
+            "host_ms": 1.7,
+            "prefill_ms": 9.21,
+            "decode_ms": 220.85,
+            "total_ms": 233.04,
+            "prefill_tok_per_s": 6079.3,
+            "decode_tok_per_s": 276.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_usb_host_reset_wait",
+      "category": "rag_datasheet",
+      "prompt": "What is the minimum time a USB host must wait after detecting the D+ line high before initiating a USB reset on the i.MX 93?",
+      "gold_substrings": [
+        "100",
+        "ms"
+      ],
+      "samples": [
+        {
+          "text": "The minimum time a USB host must wait after detecting the D+ line high before initiating a USB reset on the i.MX 93 is 100 milliseconds (ms). This is to ensure that the USB device has enough time to stabilize and properly respond to the reset signal.",
+          "tokens": 115,
+          "elapsed_s": 0.3,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 55,
+            "completion_tokens": 60,
+            "host_ms": 2.18,
+            "prefill_ms": 29.02,
+            "decode_ms": 215.42,
+            "total_ms": 247.87,
+            "prefill_tok_per_s": 1895.3,
+            "decode_tok_per_s": 278.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The minimum time a USB host must wait after detecting the D+ line high before initiating a USB reset on the i.MX 93 is 100 milliseconds (ms). This is to ensure that the USB device has enough time to stabilize and properly respond to the reset signal.",
+          "tokens": 115,
+          "elapsed_s": 0.28,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 55,
+            "completion_tokens": 60,
+            "host_ms": 2.03,
+            "prefill_ms": 9.28,
+            "decode_ms": 218.2,
+            "total_ms": 230.76,
+            "prefill_tok_per_s": 5927.2,
+            "decode_tok_per_s": 275.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The minimum time a USB host must wait after detecting the D+ line high before initiating a USB reset on the i.MX 93 is 100 milliseconds (ms). This is to ensure that the USB device has enough time to stabilize and properly respond to the reset signal.",
+          "tokens": 115,
+          "elapsed_s": 0.27,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 55,
+            "completion_tokens": 60,
+            "host_ms": 1.99,
+            "prefill_ms": 8.82,
+            "decode_ms": 215.17,
+            "total_ms": 227.24,
+            "prefill_tok_per_s": 6233.1,
+            "decode_tok_per_s": 278.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_rsa_key_size",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum RSA key size supported by the i.MX 93 for asymmetric cryptography?",
+      "gold_substrings": [
+        "4096",
+        "RSA"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 supports up to 4096-bit RSA key size for asymmetric cryptography.",
+          "tokens": 69,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 44,
+            "completion_tokens": 25,
+            "host_ms": 2.18,
+            "prefill_ms": 24.63,
+            "decode_ms": 85.51,
+            "total_ms": 113.52,
+            "prefill_tok_per_s": 1786.1,
+            "decode_tok_per_s": 292.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 supports up to 4096-bit RSA key size for asymmetric cryptography.",
+          "tokens": 69,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 44,
+            "completion_tokens": 25,
+            "host_ms": 2.32,
+            "prefill_ms": 8.74,
+            "decode_ms": 85.06,
+            "total_ms": 97.28,
+            "prefill_tok_per_s": 5035.7,
+            "decode_tok_per_s": 293.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 supports up to 4096-bit RSA key size for asymmetric cryptography.",
+          "tokens": 69,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 44,
+            "completion_tokens": 25,
+            "host_ms": 2.17,
+            "prefill_ms": 8.97,
+            "decode_ms": 85.31,
+            "total_ms": 97.65,
+            "prefill_tok_per_s": 4906.1,
+            "decode_tok_per_s": 293.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_ecc_curve",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum ECC curve supported by the i.MX 93 for asymmetric cryptography?",
+      "gold_substrings": [
+        "P-521"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 supports ECC curves up to 521 bits.",
+          "tokens": 63,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 20,
+            "host_ms": 2.1,
+            "prefill_ms": 24.38,
+            "decode_ms": 65.97,
+            "total_ms": 93.7,
+            "prefill_tok_per_s": 1763.5,
+            "decode_tok_per_s": 303.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 supports ECC curves up to 521 bits for asymmetric cryptography.",
+          "tokens": 66,
+          "elapsed_s": 0.12,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 23,
+            "host_ms": 1.96,
+            "prefill_ms": 8.69,
+            "decode_ms": 77.05,
+            "total_ms": 88.86,
+            "prefill_tok_per_s": 4946.4,
+            "decode_tok_per_s": 298.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 supports ECC curves up to 521 bits for asymmetric cryptography.",
+          "tokens": 66,
+          "elapsed_s": 0.13,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 23,
+            "host_ms": 2.03,
+            "prefill_ms": 8.71,
+            "decode_ms": 76.85,
+            "total_ms": 88.77,
+            "prefill_tok_per_s": 4934.6,
+            "decode_tok_per_s": 299.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: P-521)",
+          "fail (missing: P-521)",
+          "fail (missing: P-521)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_package_pitch",
+      "category": "rag_datasheet",
+      "prompt": "What is the pitch of the 11 x 11 mm i.MX 93 package?",
+      "gold_substrings": [
+        "0.5",
+        "mm"
+      ],
+      "samples": [
+        {
+          "text": "The pitch of the 11 x 11 mm i.MX 93 package is 0.4 mm.",
+          "tokens": 74,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 28,
+            "host_ms": 1.72,
+            "prefill_ms": 24.21,
+            "decode_ms": 98.79,
+            "total_ms": 125.87,
+            "prefill_tok_per_s": 1900.0,
+            "decode_tok_per_s": 283.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The pitch of the 11 x 11 mm i.MX 93 package is 0.4 mm.",
+          "tokens": 74,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 28,
+            "host_ms": 2.01,
+            "prefill_ms": 9.17,
+            "decode_ms": 95.56,
+            "total_ms": 107.94,
+            "prefill_tok_per_s": 5015.7,
+            "decode_tok_per_s": 293.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The pitch of the 11 x 11 mm i.MX 93 package is 0.4 mm.",
+          "tokens": 74,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 28,
+            "host_ms": 2.18,
+            "prefill_ms": 8.84,
+            "decode_ms": 95.49,
+            "total_ms": 107.67,
+            "prefill_tok_per_s": 5205.4,
+            "decode_tok_per_s": 293.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 0.5)",
+          "fail (missing: 0.5)",
+          "fail (missing: 0.5)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_src_gpr4_offset",
+      "category": "rag_datasheet",
+      "prompt": "What is the address offset of GPR4 in the i.MX 93 SRC register block?",
+      "gold_substrings": [
+        "60"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 is a complex SoC with multiple subsystems and registers. The SRC (System Reset Controller) register block is part of the system's control and configuration mechanisms. However, the specific address offset for GPR4 (General Purpose Register 4) within the SRC register block is not directly available in the public documentation.\n\nTo find the exact address offset, you would need to consult the official i.MX 93 reference manual, specifically the section detailing the SRC register block. This manual provides comprehensive information on all registers, their functions, and their respective address offsets.\n\nIf you have access to the reference manual, you can search for the SRC register block and look for GPR4. If you do not have access, you may need to contact NXP Semiconductors for more detailed information.\n\nIn general, the address offsets for registers in the i.MX 93 are documented in the memory map section of the reference manual. This section will provide you with the base address of the SRC register block and the specific offset for GPR4.\n\nFor example, if the base address of the SRC register block is 0x401C0000 and GPR4 is located at an offset of 0x10, the full address would be 0x401C0010.\n\nIf you need further assistance, feel free to ask!",
+          "tokens": 333,
+          "elapsed_s": 1.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 288,
+            "host_ms": 2.01,
+            "prefill_ms": 24.2,
+            "decode_ms": 1107.25,
+            "total_ms": 1134.62,
+            "prefill_tok_per_s": 1859.7,
+            "decode_tok_per_s": 260.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 is a complex SoC with multiple subsystems and registers. The SRC (System Reset Controller) register block is used for managing system resets and related functions. However, the specific address offset of GPR4 (General Purpose Register 4) within the SRC register block is not directly available in the public documentation.\n\nTo find the exact address offset, you would need to consult the official i.MX 93 reference manual, which provides a detailed map of all registers and their offsets. This manual is typically available to customers who have signed a non-disclosure agreement (NDA) with NXP.\n\nIf you have access to the reference manual, you can search for the SRC register block and locate the specific offset for GPR4. If you do not have access, you may need to contact NXP support or your system integrator for assistance.\n\nFor more information on the i.MX 93 and its documentation, visit the NXP website or contact NXP directly.",
+          "tokens": 250,
+          "elapsed_s": 0.82,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 205,
+            "host_ms": 2.16,
+            "prefill_ms": 13.21,
+            "decode_ms": 760.45,
+            "total_ms": 777.48,
+            "prefill_tok_per_s": 3406.2,
+            "decode_tok_per_s": 269.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 is a complex SoC with multiple subsystems and registers. The SRC (System Reset Controller) register block is used for managing system resets and related functions. However, the specific address offset of GPR4 (General Purpose Register 4) within the SRC register block is not directly available in the public documentation.\n\nTo find the exact address offset, you would need to consult the official i.MX 93 reference manual, which provides a detailed map of all registers and their offsets. This manual is typically available to customers who have signed a non-disclosure agreement (NDA) with NXP.\n\nIf you have access to the reference manual, you can search for the SRC register block and locate the specific offset for GPR4. If you do not have access, you may need to contact NXP support or your system integrator for assistance.\n\nFor more information on the i.MX 93 and its documentation, visit the NXP website or contact NXP directly.",
+          "tokens": 250,
+          "elapsed_s": 0.81,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 205,
+            "host_ms": 2.04,
+            "prefill_ms": 8.74,
+            "decode_ms": 763.37,
+            "total_ms": 775.35,
+            "prefill_tok_per_s": 5147.5,
+            "decode_tok_per_s": 268.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 60)",
+          "fail (missing: 60)",
+          "fail (missing: 60)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_src_gpr5_offset",
+      "category": "rag_datasheet",
+      "prompt": "What is the address offset of GPR5 in the i.MX 93 SRC register block?",
+      "gold_substrings": [
+        "64"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 is a complex SoC with multiple subsystems and registers. The SRC (System Reset Controller) register block is used for managing system resets and related functions. However, the specific address offset of GPR5 (General Purpose Register 5) within the SRC register block is not directly available in the public documentation.\n\nTo find the exact address offset, you would need to consult the official i.MX 93 reference manual, which contains detailed information about the register map and memory layout. The manual can be found on the NXP Semiconductors website or through your distributor.\n\nIf you have access to the reference manual, you can search for the SRC register block and look for the specific offset of GPR5. If you do not have access, you may need to contact NXP support or your distributor for assistance.\n\nIn general, the address offsets for registers in the i.MX 93 are documented in the SoC's memory map, which is part of the reference manual. The manual will provide a comprehensive list of all registers, their functions, and their corresponding address offsets.\n\nIf you need more specific guidance on how to locate this information, feel free to ask!",
+          "tokens": 291,
+          "elapsed_s": 1.01,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 246,
+            "host_ms": 1.66,
+            "prefill_ms": 23.7,
+            "decode_ms": 933.08,
+            "total_ms": 959.64,
+            "prefill_tok_per_s": 1899.1,
+            "decode_tok_per_s": 263.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 is a complex SoC with multiple subsystems and registers. The SRC (System Reset Controller) register block is used for managing system resets and related functions. However, the specific address offset of GPR5 (General Purpose Register 5) within the SRC register block is not directly available in the public documentation.\n\nTo find the exact address offset, you would need to refer to the official i.MX 93 reference manual, specifically the section detailing the SRC register block. This manual can be found on the NXP Semiconductors website or through your distributor.\n\nIf you have access to the reference manual, look for the SRC register block description and find the specific offset for GPR5. If you don't have access, you may need to contact NXP support or your distributor for the information.\n\nLet me know if you need help navigating the reference manual!",
+          "tokens": 228,
+          "elapsed_s": 0.73,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 183,
+            "host_ms": 1.97,
+            "prefill_ms": 12.56,
+            "decode_ms": 678.35,
+            "total_ms": 694.11,
+            "prefill_tok_per_s": 3583.1,
+            "decode_tok_per_s": 269.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 is a complex SoC with multiple subsystems and registers. The SRC (System Reset Controller) register block is used for managing system resets and related functions. However, the specific address offset of GPR5 (General Purpose Register 5) within the SRC register block is not directly available in the public documentation.\n\nTo find the exact address offset, you would need to refer to the official i.MX 93 reference manual, specifically the section detailing the SRC register block. This manual can be found on the NXP Semiconductors website or through your distributor.\n\nIf you have access to the reference manual, look for the SRC register block description and find the specific offset for GPR5. If you don't have access, you may need to contact NXP support or your distributor for the information.\n\nLet me know if you need help navigating the reference manual!",
+          "tokens": 228,
+          "elapsed_s": 0.75,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 183,
+            "host_ms": 2.03,
+            "prefill_ms": 8.92,
+            "decode_ms": 682.42,
+            "total_ms": 694.6,
+            "prefill_tok_per_s": 5042.4,
+            "decode_tok_per_s": 268.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 64)",
+          "fail (missing: 64)",
+          "fail (missing: 64)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_thermal_rja_11x11",
+      "category": "rag_datasheet",
+      "prompt": "What is the junction-to-ambient thermal resistance (R\u0398JA) for the i.MX 93 processor in an 11 x 11 mm FCBGA package?",
+      "gold_substrings": [
+        "22.5"
+      ],
+      "samples": [
+        {
+          "text": "The junction-to-ambient thermal resistance (R\u0398JA) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is 26.5 \u00b0C/W.",
+          "tokens": 109,
+          "elapsed_s": 0.25,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 62,
+            "completion_tokens": 47,
+            "host_ms": 2.06,
+            "prefill_ms": 28.59,
+            "decode_ms": 166.28,
+            "total_ms": 198.18,
+            "prefill_tok_per_s": 2168.9,
+            "decode_tok_per_s": 282.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The junction-to-ambient thermal resistance (R\u0398JA) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is 26.5 \u00b0C/W.",
+          "tokens": 109,
+          "elapsed_s": 0.24,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 62,
+            "completion_tokens": 47,
+            "host_ms": 2.1,
+            "prefill_ms": 8.8,
+            "decode_ms": 169.8,
+            "total_ms": 181.89,
+            "prefill_tok_per_s": 7049.4,
+            "decode_tok_per_s": 276.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The junction-to-ambient thermal resistance (R\u0398JA) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is 26.5 \u00b0C/W.",
+          "tokens": 109,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 62,
+            "completion_tokens": 47,
+            "host_ms": 2.15,
+            "prefill_ms": 8.77,
+            "decode_ms": 165.92,
+            "total_ms": 178.02,
+            "prefill_tok_per_s": 7068.0,
+            "decode_tok_per_s": 283.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 22.5)",
+          "fail (missing: 22.5)",
+          "fail (missing: 22.5)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_thermal_rjc_11x11",
+      "category": "rag_datasheet",
+      "prompt": "What is the junction-to-case thermal resistance (R\u0398JC) for the i.MX 93 processor in an 11 x 11 mm FCBGA package?",
+      "gold_substrings": [
+        "6.4"
+      ],
+      "samples": [
+        {
+          "text": "The junction-to-case thermal resistance (R\u0398JC) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is 0.4\u00b0C/W.",
+          "tokens": 105,
+          "elapsed_s": 0.25,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 61,
+            "completion_tokens": 44,
+            "host_ms": 1.94,
+            "prefill_ms": 28.81,
+            "decode_ms": 158.81,
+            "total_ms": 190.81,
+            "prefill_tok_per_s": 2117.1,
+            "decode_tok_per_s": 277.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The junction-to-case thermal resistance (R\u0398JC) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is 0.4\u00b0C/W.",
+          "tokens": 105,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 61,
+            "completion_tokens": 44,
+            "host_ms": 2.08,
+            "prefill_ms": 8.86,
+            "decode_ms": 155.58,
+            "total_ms": 167.77,
+            "prefill_tok_per_s": 6884.0,
+            "decode_tok_per_s": 282.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The junction-to-case thermal resistance (R\u0398JC) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is 0.4\u00b0C/W.",
+          "tokens": 105,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 61,
+            "completion_tokens": 44,
+            "host_ms": 1.87,
+            "prefill_ms": 8.91,
+            "decode_ms": 158.44,
+            "total_ms": 170.47,
+            "prefill_tok_per_s": 6848.3,
+            "decode_tok_per_s": 277.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 6.4)",
+          "fail (missing: 6.4)",
+          "fail (missing: 6.4)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_eiq_neutron_npu",
+      "category": "rag_datasheet",
+      "prompt": "What is the name of the NXP AI accelerator integrated into the i.MX 93 processor for edge computing?",
+      "gold_substrings": [
+        "eIQ Neutron",
+        "NPU"
+      ],
+      "samples": [
+        {
+          "text": "The NXP AI accelerator integrated into the i.MX 93 processor for edge computing is called the **NPU (Neural Processing Unit)**. Specifically, it is part of the **Marvell Armada 88AP688** series of processors, but in the context of NXP's i.MX 93, it is referred to as the **NXP AI accelerator** or **NPU**. This accelerator is designed to handle machine learning workloads efficiently, making it suitable for edge computing applications.",
+          "tokens": 158,
+          "elapsed_s": 0.52,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 48,
+            "completion_tokens": 110,
+            "host_ms": 2.28,
+            "prefill_ms": 26.1,
+            "decode_ms": 403.59,
+            "total_ms": 433.25,
+            "prefill_tok_per_s": 1839.3,
+            "decode_tok_per_s": 272.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The NXP AI accelerator integrated into the i.MX 93 processor for edge computing is called the **NPU (Neural Processing Unit)**. Specifically, it is part of the **Marvell Armada 88AP688** series of processors, but in the context of NXP's i.MX 93, it is referred to as the **NXP AI accelerator** or **NPU**. This accelerator is designed to handle machine learning workloads efficiently, making it suitable for edge computing applications.",
+          "tokens": 158,
+          "elapsed_s": 0.49,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 48,
+            "completion_tokens": 110,
+            "host_ms": 1.96,
+            "prefill_ms": 8.94,
+            "decode_ms": 403.6,
+            "total_ms": 415.71,
+            "prefill_tok_per_s": 5367.7,
+            "decode_tok_per_s": 272.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The NXP AI accelerator integrated into the i.MX 93 processor for edge computing is called the **NPU (Neural Processing Unit)**. Specifically, it is part of the **Marvell Armada 88AP688** series of processors, but in the context of NXP's i.MX 93, it is referred to as the **NXP AI accelerator** or **NPU**. This accelerator is designed to handle machine learning workloads efficiently, making it suitable for edge computing applications.",
+          "tokens": 158,
+          "elapsed_s": 0.47,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 48,
+            "completion_tokens": 110,
+            "host_ms": 2.04,
+            "prefill_ms": 8.82,
+            "decode_ms": 402.25,
+            "total_ms": 414.28,
+            "prefill_tok_per_s": 5444.3,
+            "decode_tok_per_s": 273.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: eIQ Neutron)",
+          "fail (missing: eIQ Neutron)",
+          "fail (missing: eIQ Neutron)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_ddr_rate_eiq_usecase",
+      "category": "rag_datasheet",
+      "prompt": "What is the DDR memory rate used when the i.MX 93 processor runs the eIQ benchmark use case?",
+      "gold_substrings": [
+        "3733",
+        "MT/s"
+      ],
+      "samples": [
+        {
+          "text": "The DDR memory rate used when the i.MX 93 processor runs the eIQ benchmark use case is 1600 MT/s.",
+          "tokens": 80,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 48,
+            "completion_tokens": 32,
+            "host_ms": 2.16,
+            "prefill_ms": 26.05,
+            "decode_ms": 111.18,
+            "total_ms": 140.58,
+            "prefill_tok_per_s": 1842.5,
+            "decode_tok_per_s": 287.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The DDR memory rate used when the i.MX 93 processor runs the eIQ benchmark use case is 1600 MT/s.",
+          "tokens": 80,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 48,
+            "completion_tokens": 32,
+            "host_ms": 2.2,
+            "prefill_ms": 8.79,
+            "decode_ms": 110.22,
+            "total_ms": 122.38,
+            "prefill_tok_per_s": 5460.1,
+            "decode_tok_per_s": 290.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The DDR memory rate used when the i.MX 93 processor runs the eIQ benchmark use case is 1600 MT/s.",
+          "tokens": 80,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 48,
+            "completion_tokens": 32,
+            "host_ms": 1.77,
+            "prefill_ms": 8.73,
+            "decode_ms": 114.02,
+            "total_ms": 125.7,
+            "prefill_tok_per_s": 5501.0,
+            "decode_tok_per_s": 280.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 3733)",
+          "fail (missing: 3733)",
+          "fail (missing: 3733)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "numprec_lpddr_rate",
+      "category": "numerical_precision",
+      "prompt": "At what peak data rate (in MT/s or GT/s) does the i.MX 93 support LPDDR4?",
+      "gold_substrings": [
+        "LPDDR4"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 supports LPDDR4 at a peak data rate of 3200 MT/s.",
+          "tokens": 77,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 27,
+            "host_ms": 2.13,
+            "prefill_ms": 26.55,
+            "decode_ms": 91.96,
+            "total_ms": 121.81,
+            "prefill_tok_per_s": 1883.6,
+            "decode_tok_per_s": 293.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 supports LPDDR4 at a peak data rate of 3200 MT/s.",
+          "tokens": 77,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 27,
+            "host_ms": 1.67,
+            "prefill_ms": 8.76,
+            "decode_ms": 92.25,
+            "total_ms": 103.93,
+            "prefill_tok_per_s": 5704.8,
+            "decode_tok_per_s": 292.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 supports LPDDR4 at a peak data rate of 3200 MT/s.",
+          "tokens": 77,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 27,
+            "host_ms": 2.0,
+            "prefill_ms": 9.26,
+            "decode_ms": 95.83,
+            "total_ms": 108.29,
+            "prefill_tok_per_s": 5400.0,
+            "decode_tok_per_s": 281.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "numprec_mcu_boot_rom",
+      "category": "numerical_precision",
+      "prompt": "What is the size of the i.MX 93's internal boot ROM?",
+      "gold_substrings": [
+        "KB"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93's internal boot ROM is 16KB in size.",
+          "tokens": 62,
+          "elapsed_s": 0.14,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 21,
+            "host_ms": 2.35,
+            "prefill_ms": 24.49,
+            "decode_ms": 70.25,
+            "total_ms": 98.3,
+            "prefill_tok_per_s": 1674.4,
+            "decode_tok_per_s": 298.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93's internal boot ROM is 16KB in size.",
+          "tokens": 62,
+          "elapsed_s": 0.12,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 21,
+            "host_ms": 2.14,
+            "prefill_ms": 8.87,
+            "decode_ms": 70.21,
+            "total_ms": 82.44,
+            "prefill_tok_per_s": 4622.1,
+            "decode_tok_per_s": 299.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93's internal boot ROM is 16KB in size.",
+          "tokens": 62,
+          "elapsed_s": 0.12,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 21,
+            "host_ms": 1.76,
+            "prefill_ms": 8.86,
+            "decode_ms": 70.19,
+            "total_ms": 82.0,
+            "prefill_tok_per_s": 4630.0,
+            "decode_tok_per_s": 299.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "multihop_imx93_vs_95_cores",
+      "category": "multihop",
+      "prompt": "Between the i.MX 93 and the i.MX 95, which has more Arm Cortex-A cores, and how many does each have?",
+      "gold_substrings": [
+        "i.MX 95",
+        "i.MX 93"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 95 has more Arm Cortex-A cores than the i.MX 93.\n\n- The i.MX 93 has 2 Arm Cortex-A78 cores and 2 Arm Cortex-A55 cores.\n- The i.MX 95 has 4 Arm Cortex-A78 cores and 2 Arm Cortex-A55 cores.\n\nSo, the i.MX 95 has a total of 4 Cortex-A78 cores, while the i.MX 93 has only 2 Cortex-A78 cores.",
+          "tokens": 173,
+          "elapsed_s": 0.5,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 117,
+            "host_ms": 1.79,
+            "prefill_ms": 32.05,
+            "decode_ms": 426.26,
+            "total_ms": 461.3,
+            "prefill_tok_per_s": 1747.5,
+            "decode_tok_per_s": 274.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 95 has more Arm Cortex-A cores than the i.MX 93.\n\n- The i.MX 93 has 2 Arm Cortex-A78 cores.\n- The i.MX 95 has 4 Arm Cortex-A78 cores.\n\nSo, the i.MX 95 has twice as many Cortex-A78 cores as the i.MX 93.",
+          "tokens": 143,
+          "elapsed_s": 0.4,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 87,
+            "host_ms": 2.32,
+            "prefill_ms": 9.07,
+            "decode_ms": 314.52,
+            "total_ms": 327.11,
+            "prefill_tok_per_s": 6174.6,
+            "decode_tok_per_s": 276.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 95 has more Arm Cortex-A cores than the i.MX 93.\n\n- The i.MX 93 has 2 Arm Cortex-A78 cores.\n- The i.MX 95 has 4 Arm Cortex-A78 cores.\n\nSo, the i.MX 95 has twice as many Cortex-A78 cores as the i.MX 93.",
+          "tokens": 143,
+          "elapsed_s": 0.4,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 87,
+            "host_ms": 1.84,
+            "prefill_ms": 8.77,
+            "decode_ms": 318.52,
+            "total_ms": 330.35,
+            "prefill_tok_per_s": 6388.0,
+            "decode_tok_per_s": 273.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "multihop_peripheral_count",
+      "category": "multihop",
+      "prompt": "How many I2C instances and how many LPUART instances does the i.MX 93 include, and what is the sum of the two?",
+      "gold_substrings": [
+        "LPUART",
+        "I2C"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 includes 4 I2C instances and 4 LPUART instances. The sum of the two is 8.",
+          "tokens": 89,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 33,
+            "host_ms": 1.91,
+            "prefill_ms": 28.63,
+            "decode_ms": 114.46,
+            "total_ms": 146.23,
+            "prefill_tok_per_s": 1955.8,
+            "decode_tok_per_s": 288.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 includes 4 I2C instances and 4 LPUART instances. The sum of the two is 8.",
+          "tokens": 89,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 33,
+            "host_ms": 1.73,
+            "prefill_ms": 9.28,
+            "decode_ms": 117.52,
+            "total_ms": 129.78,
+            "prefill_tok_per_s": 6033.6,
+            "decode_tok_per_s": 280.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 includes 4 I2C instances and 4 LPUART instances. The sum of the two is 8.",
+          "tokens": 89,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 33,
+            "host_ms": 1.85,
+            "prefill_ms": 9.03,
+            "decode_ms": 114.54,
+            "total_ms": 126.68,
+            "prefill_tok_per_s": 6198.5,
+            "decode_tok_per_s": 288.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "multihop_cpu_plus_npu",
+      "category": "multihop",
+      "prompt": "List the compute resources on the i.MX 93 \u2014 how many Cortex-A55 cores, how many Cortex-M33 cores, and what NPU (if any). Give counts or names for each.",
+      "gold_substrings": [
+        "A55",
+        "M33",
+        "Neutron"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 is a high-performance application processor from NXP Semiconductors, designed for advanced multimedia and AI workloads. Here are the key compute resources on the i.MX 93:\n\n- **Cortex-A55 cores**: 4 cores\n- **Cortex-M33 cores**: 2 cores\n- **NPU**: Yes, the i.MX 93 includes the Cadence NeuPro AI accelerator, which is a dedicated NPU for AI workloads.\n\nThe i.MX 93 is part of the i.MX 9 series, which is built on the ARMv8-A architecture and is designed for a wide range of applications, including automotive, industrial, and consumer electronics. The processor is known for its high performance and efficiency, making it suitable for demanding applications that require both high computational power and low power consumption.",
+          "tokens": 250,
+          "elapsed_s": 0.76,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 68,
+            "completion_tokens": 182,
+            "host_ms": 2.04,
+            "prefill_ms": 29.89,
+            "decode_ms": 675.72,
+            "total_ms": 708.85,
+            "prefill_tok_per_s": 2275.3,
+            "decode_tok_per_s": 269.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 is a high-performance application processor from NXP's i.MX 9 series, designed for advanced multimedia and AI workloads. Here are the key compute resources on the i.MX 93:\n\n- **Cortex-A55 cores**: 4 cores (dual-cluster configuration, 2x2)\n- **Cortex-M33 cores**: 2 cores\n- **NPU**: Yes, the i.MX 93 includes the Cadence NeuPro NPU, which is a 1.5 TOPS AI accelerator\n\nThe i.MX 93 is built on a heterogeneous architecture, combining multiple processing cores to handle various workloads efficiently. The Cortex-A55 cores are used for general-purpose computing, the Cortex-M33 cores are used for real-time tasks, and the NPU is used for AI and machine learning workloads.",
+          "tokens": 254,
+          "elapsed_s": 0.76,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 68,
+            "completion_tokens": 186,
+            "host_ms": 2.16,
+            "prefill_ms": 9.12,
+            "decode_ms": 688.72,
+            "total_ms": 701.23,
+            "prefill_tok_per_s": 7455.8,
+            "decode_tok_per_s": 270.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 is a high-performance application processor from NXP's i.MX 9 series, designed for advanced multimedia and AI workloads. Here are the key compute resources on the i.MX 93:\n\n- **Cortex-A55 cores**: 4 cores (dual-cluster configuration, 2x2)\n- **Cortex-M33 cores**: 2 cores\n- **NPU**: Yes, the i.MX 93 includes the Cadence NeuPro NPU, which is a 1.5 TOPS AI accelerator\n\nThe i.MX 93 is built on a heterogeneous architecture, combining multiple processing cores to handle various workloads efficiently. The Cortex-A55 cores are used for general-purpose computing, the Cortex-M33 cores are used for real-time tasks, and the NPU is used for AI and machine learning workloads.",
+          "tokens": 254,
+          "elapsed_s": 0.76,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 68,
+            "completion_tokens": 186,
+            "host_ms": 2.23,
+            "prefill_ms": 8.86,
+            "decode_ms": 695.07,
+            "total_ms": 707.35,
+            "prefill_tok_per_s": 7674.8,
+            "decode_tok_per_s": 267.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: Neutron)",
+          "fail (missing: Neutron)",
+          "fail (missing: Neutron)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "refusal_fictional_chip",
+      "category": "refusal",
+      "prompt": "What's the maximum clock frequency of the NXP Flux-9000 processor?",
+      "gold_substrings": [
+        "don't",
+        "can't find",
+        "no information",
+        "not in my",
+        "unable",
+        "unknown",
+        "not aware",
+        "don't have",
+        "cannot",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar"
+      ],
+      "match_mode": "any",
+      "samples": [
+        {
+          "text": "The NXP Flux-9000 processor, also known as the NXP i.MX 8M Mini or similar variants, is part of the NXP i.MX 8 series of application processors. The maximum clock frequency of the Flux-9000 processor is typically around 1.2 GHz. However, this can vary depending on the specific model and configuration. For the most accurate and up-to-date information, it is recommended to consult the official NXP documentation or datasheet for the specific processor model in question.",
+          "tokens": 154,
+          "elapsed_s": 0.5,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 112,
+            "host_ms": 2.2,
+            "prefill_ms": 25.0,
+            "decode_ms": 411.76,
+            "total_ms": 440.22,
+            "prefill_tok_per_s": 1679.9,
+            "decode_tok_per_s": 272.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The NXP Flux-9000 processor, also known as the NXP i.MX 8M Mini or similar variants, is part of the NXP i.MX 8 series of application processors. The maximum clock frequency of the Flux-9000 processor is typically around 1.2 GHz. However, this can vary depending on the specific model and configuration. For the most accurate and up-to-date information, it is recommended to consult the official NXP documentation or datasheets.",
+          "tokens": 147,
+          "elapsed_s": 0.46,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 105,
+            "host_ms": 2.01,
+            "prefill_ms": 8.74,
+            "decode_ms": 386.28,
+            "total_ms": 398.25,
+            "prefill_tok_per_s": 4806.0,
+            "decode_tok_per_s": 271.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The NXP Flux-9000 processor, also known as the NXP i.MX 8M Mini or similar variants, is part of the NXP i.MX 8 series of application processors. The maximum clock frequency of the Flux-9000 processor is typically around 1.2 GHz. However, this can vary depending on the specific model and configuration. For the most accurate and up-to-date information, it is recommended to consult the official NXP documentation or datasheets.",
+          "tokens": 147,
+          "elapsed_s": 0.45,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 105,
+            "host_ms": 2.02,
+            "prefill_ms": 8.83,
+            "decode_ms": 380.72,
+            "total_ms": 392.79,
+            "prefill_tok_per_s": 4758.7,
+            "decode_tok_per_s": 275.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (no refusal phrase matched; expected any of: don't, can't find, no information, not in my, unable...)",
+          "fail (no refusal phrase matched; expected any of: don't, can't find, no information, not in my, unable...)",
+          "fail (no refusal phrase matched; expected any of: don't, can't find, no information, not in my, unable...)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "refusal_made_up_peripheral",
+      "category": "refusal",
+      "prompt": "How many dedicated AI reasoning cores does the i.MX 93's built-in QuantumFlow Engine include?",
+      "gold_substrings": [
+        "don't",
+        "can't find",
+        "no information",
+        "not in my",
+        "unable",
+        "unknown",
+        "not aware",
+        "don't have",
+        "cannot",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no such",
+        "doesn't exist"
+      ],
+      "match_mode": "any",
+      "samples": [
+        {
+          "text": "The i.MX 93's built-in QuantumFlow Engine includes 16 dedicated AI reasoning cores.",
+          "tokens": 70,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 24,
+            "host_ms": 2.09,
+            "prefill_ms": 26.57,
+            "decode_ms": 81.56,
+            "total_ms": 111.48,
+            "prefill_tok_per_s": 1731.6,
+            "decode_tok_per_s": 294.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93's built-in QuantumFlow Engine includes 16 dedicated AI reasoning cores.",
+          "tokens": 70,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 24,
+            "host_ms": 2.11,
+            "prefill_ms": 8.86,
+            "decode_ms": 81.0,
+            "total_ms": 93.19,
+            "prefill_tok_per_s": 5191.1,
+            "decode_tok_per_s": 296.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93's built-in QuantumFlow Engine includes 16 dedicated AI reasoning cores.",
+          "tokens": 70,
+          "elapsed_s": 0.14,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 24,
+            "host_ms": 2.03,
+            "prefill_ms": 8.76,
+            "decode_ms": 81.04,
+            "total_ms": 93.01,
+            "prefill_tok_per_s": 5251.7,
+            "decode_tok_per_s": 296.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (no refusal phrase matched; expected any of: don't, can't find, no information, not in my, unable...)",
+          "fail (no refusal phrase matched; expected any of: don't, can't find, no information, not in my, unable...)",
+          "fail (no refusal phrase matched; expected any of: don't, can't find, no information, not in my, unable...)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "refusal_out_of_scope",
+      "category": "refusal",
+      "prompt": "Based on the datasheets in your knowledge base, what was the 2029 revenue of NXP Semiconductors?",
+      "gold_substrings": [
+        "don't",
+        "can't find",
+        "no information",
+        "not in my",
+        "unable",
+        "unknown",
+        "not aware",
+        "don't have",
+        "cannot",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "datasheets don't"
+      ],
+      "match_mode": "any",
+      "samples": [
+        {
+          "text": "I don't have access to specific financial data or revenue figures for NXP Semiconductors or any company for the year 2029. My knowledge base is limited to information available up to 2023, and I cannot predict future financial outcomes. For the most accurate and up-to-date information, I recommend consulting NXP Semiconductors' official financial reports or contacting their investor relations team.",
+          "tokens": 138,
+          "elapsed_s": 0.39,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 51,
+            "completion_tokens": 87,
+            "host_ms": 2.08,
+            "prefill_ms": 26.69,
+            "decode_ms": 314.29,
+            "total_ms": 344.26,
+            "prefill_tok_per_s": 1910.6,
+            "decode_tok_per_s": 276.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "I cannot provide the 2029 revenue of NXP Semiconductors as it is a future projection and not available in the provided datasheets.",
+          "tokens": 85,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 51,
+            "completion_tokens": 34,
+            "host_ms": 2.12,
+            "prefill_ms": 8.77,
+            "decode_ms": 121.7,
+            "total_ms": 133.77,
+            "prefill_tok_per_s": 5816.6,
+            "decode_tok_per_s": 279.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "I cannot provide the 2029 revenue of NXP Semiconductors as it is a future projection and not available in the provided datasheets.",
+          "tokens": 85,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 51,
+            "completion_tokens": 34,
+            "host_ms": 2.17,
+            "prefill_ms": 8.79,
+            "decode_ms": 117.86,
+            "total_ms": 130.01,
+            "prefill_tok_per_s": 5803.6,
+            "decode_tok_per_s": 288.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "persona_brief_role",
+      "category": "persona",
+      "prompt": "In one short sentence: how would you describe your own role to a new user?",
+      "gold_substrings": [],
+      "samples": [
+        {
+          "text": "I'm an AI assistant designed to help you with your questions and tasks.",
+          "tokens": 58,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 17,
+            "host_ms": 2.04,
+            "prefill_ms": 24.45,
+            "decode_ms": 55.23,
+            "total_ms": 82.93,
+            "prefill_tok_per_s": 1676.8,
+            "decode_tok_per_s": 307.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "I'm an AI assistant designed to help you with your questions and tasks.",
+          "tokens": 58,
+          "elapsed_s": 0.13,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 17,
+            "host_ms": 2.19,
+            "prefill_ms": 8.95,
+            "decode_ms": 58.77,
+            "total_ms": 71.15,
+            "prefill_tok_per_s": 4580.3,
+            "decode_tok_per_s": 289.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "I'm an AI assistant designed to help you with your questions and tasks.",
+          "tokens": 58,
+          "elapsed_s": 0.1,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 17,
+            "host_ms": 1.94,
+            "prefill_ms": 8.93,
+            "decode_ms": 55.33,
+            "total_ms": 67.55,
+            "prefill_tok_per_s": 4591.4,
+            "decode_tok_per_s": 307.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      },
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
+    }
+  ],
+  "summary": {
+    "total_samples": 132,
+    "passed": 48,
+    "pass_rate": 0.381,
+    "total": 126,
+    "excluded_samples": 6,
+    "excluded_reason": "BROKEN_SUBSTRING_INCOMPATIBLE prompts (persona category)",
+    "regraded_at": "2026-05-08-post-remediation"
+  },
+  "summary_v1_legacy": {
+    "total_samples": 132,
+    "passed": 48,
+    "pass_rate": 0.364
+  }
+}

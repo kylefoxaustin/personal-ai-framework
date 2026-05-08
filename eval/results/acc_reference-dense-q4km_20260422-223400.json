@@ -1,0 +1,1055 @@
+{
+  "name": "reference-dense-q4km",
+  "timestamp": "2026-04-22T22:26:01",
+  "endpoint": "http://localhost:8080",
+  "prompts_version": 1,
+  "samples_per_prompt": 3,
+  "config": {
+    "use_rag": false,
+    "skip_agent_loop": true,
+    "max_tokens": 512,
+    "temperature": 0.0
+  },
+  "prompts": [
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "prompt": "What memory interface does the i.MX 93 support for external DRAM?",
+      "gold_substrings": [
+        "16-bit",
+        "LPDDR4"
+      ],
+      "samples": [
+        {
+          "text": ".MX 93 support for external DRAM? system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system",
+          "tokens": 557,
+          "elapsed_s": 12.94,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 514,
+            "host_ms": 11.09,
+            "prefill_ms": 109.18,
+            "decode_ms": 12542.52,
+            "total_ms": 12662.99,
+            "prefill_tok_per_s": 393.9,
+            "decode_tok_per_s": 41.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": ".MX 93 support for external DRAM? system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system",
+          "tokens": 557,
+          "elapsed_s": 12.34,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 514,
+            "host_ms": 2.2,
+            "prefill_ms": 9.9,
+            "decode_ms": 12279.04,
+            "total_ms": 12291.33,
+            "prefill_tok_per_s": 4343.5,
+            "decode_tok_per_s": 41.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": ".MX 93 support for external DRAM? system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system",
+          "tokens": 557,
+          "elapsed_s": 12.4,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 514,
+            "host_ms": 2.32,
+            "prefill_ms": 9.96,
+            "decode_ms": 12330.62,
+            "total_ms": 12343.07,
+            "prefill_tok_per_s": 4317.5,
+            "decode_tok_per_s": 41.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 16-bit, LPDDR4)",
+          "fail (missing: 16-bit, LPDDR4)",
+          "fail (missing: 16-bit, LPDDR4)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "prompt": "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+      "gold_substrings": [
+        "LPUART",
+        "IOMUX"
+      ],
+      "samples": [
+        {
+          "text": ".MX 93 handles UART, and what IP block routes its pins? itsulture a tele toget et\u0016\u043d\u043e\u0439\u0016\u000eth\f posto that\u0440\u0443\u043f att\nmarginationsleg\nequation comfd\u000fteen\u001b\u001b virtue\u001bemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aem",
+          "tokens": 564,
+          "elapsed_s": 11.5,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 514,
+            "host_ms": 2.04,
+            "prefill_ms": 16.05,
+            "decode_ms": 11358.74,
+            "total_ms": 11377.04,
+            "prefill_tok_per_s": 3114.7,
+            "decode_tok_per_s": 45.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": ".MX 93 handles UART, and what IP block routes its pins? itsulture a tele toget et\u0016\u043d\u043e\u0439\u0016\u000eth\f posto that\u0440\u0443\u043f att\nemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001a",
+          "tokens": 563,
+          "elapsed_s": 11.36,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 513,
+            "host_ms": 2.09,
+            "prefill_ms": 10.04,
+            "decode_ms": 11320.59,
+            "total_ms": 11332.91,
+            "prefill_tok_per_s": 4980.1,
+            "decode_tok_per_s": 45.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": ".MX 93 handles UART, and what IP block routes its pins? itsulture a tele toget et\u0016\u043d\u043e\u0439\u0016\u000eth\f posto that\u0440\u0443\u043f att\nemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001a",
+          "tokens": 563,
+          "elapsed_s": 11.42,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 513,
+            "host_ms": 1.9,
+            "prefill_ms": 10.24,
+            "decode_ms": 11348.51,
+            "total_ms": 11360.83,
+            "prefill_tok_per_s": 4884.8,
+            "decode_tok_per_s": 45.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: LPUART, IOMUX)",
+          "fail (missing: LPUART, IOMUX)",
+          "fail (missing: LPUART, IOMUX)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_cortex",
+      "category": "rag_datasheet",
+      "prompt": "What Arm cores does the i.MX 93 application processor include?",
+      "gold_substrings": [
+        "A55",
+        "M33"
+      ],
+      "samples": [
+        {
+          "text": ".MX 93 application processor include?\u001dLLNKRA@;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\"NKI\u0016\u001d(\tATPN=JAP;O=HAO=@IEJ0K\u0016'UHA\"KT/AJP\u00160DQ&QH\u000e\u000f\r\u000f\u0016\u0011\u0012\u0016\f\u0015\u000e\f\f\u0015/Q>FA?P\u0016\"3\u0016\u001dLLNKRA@$E'UHA\b,HA=OA=LLNKRA\n0D=JGO\b/=J@AAL",
+          "tokens": 555,
+          "elapsed_s": 11.23,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 513,
+            "host_ms": 2.3,
+            "prefill_ms": 14.87,
+            "decode_ms": 11175.8,
+            "total_ms": 11193.15,
+            "prefill_tok_per_s": 2824.1,
+            "decode_tok_per_s": 45.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": ".MX 93 application processor include?\u001dLLNKRA@;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\"NKI\u0016\u001d(\tATPN=JAP;O=HAO=@IEJ0K\u0016'UHA\"KT/AJP\u00160DQ&QH\u000e\u000f\r\u000f\u0016\u0011\u0012\u0016\f\u0015\u000e\f\f\u0015/Q>FA?P\u0016\"3\u0016\u001dLLNKRA@$E'UHA\b,HA=OA=LLNKRA\n0D=JGO\b/=J@AAL",
+          "tokens": 555,
+          "elapsed_s": 11.25,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 513,
+            "host_ms": 1.98,
+            "prefill_ms": 10.01,
+            "decode_ms": 11179.69,
+            "total_ms": 11191.85,
+            "prefill_tok_per_s": 4195.1,
+            "decode_tok_per_s": 45.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": ".MX 93 application processor include?\u001dLLNKRA@;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\"NKI\u0016\u001d(\tATPN=JAP;O=HAO=@IEJ0K\u0016'UHA\"KT/AJP\u00160DQ&QH\u000e\u000f\r\u000f\u0016\u0011\u0012\u0016\f\u0015\u000e\f\f\u0015/Q>FA?P\u0016\"3\u0016\u001dLLNKRA@$E'UHA\b,HA=OA=LLNKRA\n0D=JGO\b/=J@AAL",
+          "tokens": 555,
+          "elapsed_s": 11.23,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 513,
+            "host_ms": 2.12,
+            "prefill_ms": 9.79,
+            "decode_ms": 11165.05,
+            "total_ms": 11177.12,
+            "prefill_tok_per_s": 4290.2,
+            "decode_tok_per_s": 45.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: A55, M33)",
+          "fail (missing: A55, M33)",
+          "fail (missing: A55, M33)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "prompt": "In Kyle's pillar-to-pillar IVI demo, which NXP chip ran Angry Birds on the LCD?",
+      "gold_substrings": [
+        "i.MX 8",
+        "Angry Birds"
+      ],
+      "samples": [
+        {
+          "text": ". system\n makeQways name is Assistant. You are a helpful AI assistant.\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NX",
+          "tokens": 570,
+          "elapsed_s": 15.38,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 57,
+            "completion_tokens": 513,
+            "host_ms": 2.11,
+            "prefill_ms": 17.2,
+            "decode_ms": 15305.83,
+            "total_ms": 15325.34,
+            "prefill_tok_per_s": 3314.6,
+            "decode_tok_per_s": 33.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": ". system\n makeQways name is Assistant. You are a helpful AI assistant.\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NX",
+          "tokens": 570,
+          "elapsed_s": 15.38,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 57,
+            "completion_tokens": 513,
+            "host_ms": 2.29,
+            "prefill_ms": 9.94,
+            "decode_ms": 15321.75,
+            "total_ms": 15334.16,
+            "prefill_tok_per_s": 5732.0,
+            "decode_tok_per_s": 33.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": ". system\n makeQways name is Assistant. You are a helpful AI assistant.\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LCD?\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NX",
+          "tokens": 570,
+          "elapsed_s": 15.41,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 57,
+            "completion_tokens": 513,
+            "host_ms": 2.04,
+            "prefill_ms": 9.86,
+            "decode_ms": 15348.17,
+            "total_ms": 15360.23,
+            "prefill_tok_per_s": 5779.5,
+            "decode_tok_per_s": 33.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: i.MX 8, Angry Birds)",
+          "fail (missing: i.MX 8, Angry Birds)",
+          "fail (missing: i.MX 8, Angry Birds)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
+      "gold_substrings": [
+        "electric",
+        "sustain"
+      ],
+      "samples": [
+        {
+          "text": ". system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp",
+          "tokens": 559,
+          "elapsed_s": 14.45,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 513,
+            "host_ms": 1.97,
+            "prefill_ms": 15.63,
+            "decode_ms": 14387.25,
+            "total_ms": 14405.05,
+            "prefill_tok_per_s": 2943.6,
+            "decode_tok_per_s": 35.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": ". system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp",
+          "tokens": 559,
+          "elapsed_s": 14.39,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 513,
+            "host_ms": 1.76,
+            "prefill_ms": 9.99,
+            "decode_ms": 14354.99,
+            "total_ms": 14366.94,
+            "prefill_tok_per_s": 4603.1,
+            "decode_tok_per_s": 35.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": ". system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp system\n make destination for Philipp",
+          "tokens": 559,
+          "elapsed_s": 14.74,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 513,
+            "host_ms": 2.53,
+            "prefill_ms": 9.79,
+            "decode_ms": 14668.27,
+            "total_ms": 14680.8,
+            "prefill_tok_per_s": 4698.9,
+            "decode_tok_per_s": 35.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: electric, sustain)",
+          "fail (missing: electric, sustain)",
+          "fail (missing: electric, sustain)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "prompt": "I have 12 apples. I give 3/4 of them to my kid. How many do I have left? Answer with just the number.",
+      "gold_substrings": [
+        "3"
+      ],
+      "samples": [
+        {
+          "text": ". g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left",
+          "tokens": 572,
+          "elapsed_s": 14.56,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 59,
+            "completion_tokens": 513,
+            "host_ms": 2.11,
+            "prefill_ms": 16.8,
+            "decode_ms": 14492.69,
+            "total_ms": 14511.78,
+            "prefill_tok_per_s": 3512.4,
+            "decode_tok_per_s": 35.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": ". g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left?",
+          "tokens": 572,
+          "elapsed_s": 12.33,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 59,
+            "completion_tokens": 513,
+            "host_ms": 2.21,
+            "prefill_ms": 9.63,
+            "decode_ms": 12269.77,
+            "total_ms": 12281.79,
+            "prefill_tok_per_s": 6123.7,
+            "decode_tok_per_s": 41.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": ". g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left? Answer with just the number. g system\n makeQne a helpful AI assistant. I give 3/4 of them to my kid. How many do I have left?",
+          "tokens": 572,
+          "elapsed_s": 12.21,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 59,
+            "completion_tokens": 513,
+            "host_ms": 2.06,
+            "prefill_ms": 10.03,
+            "decode_ms": 12140.44,
+            "total_ms": 12152.75,
+            "prefill_tok_per_s": 5883.5,
+            "decode_tok_per_s": 42.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
+      "gold_substrings": [
+        "10:5"
+      ],
+      "samples": [
+        {
+          "text": ". system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark",
+          "tokens": 590,
+          "elapsed_s": 14.23,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 77,
+            "completion_tokens": 513,
+            "host_ms": 2.2,
+            "prefill_ms": 19.9,
+            "decode_ms": 14150.61,
+            "total_ms": 14172.94,
+            "prefill_tok_per_s": 3869.2,
+            "decode_tok_per_s": 36.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": ". system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark",
+          "tokens": 590,
+          "elapsed_s": 14.26,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 77,
+            "completion_tokens": 513,
+            "host_ms": 1.99,
+            "prefill_ms": 9.86,
+            "decode_ms": 14168.98,
+            "total_ms": 14181.04,
+            "prefill_tok_per_s": 7808.4,
+            "decode_tok_per_s": 36.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": ". system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark system\n makeQneark",
+          "tokens": 590,
+          "elapsed_s": 14.3,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 77,
+            "completion_tokens": 513,
+            "host_ms": 2.21,
+            "prefill_ms": 9.85,
+            "decode_ms": 14233.51,
+            "total_ms": 14245.79,
+            "prefill_tok_per_s": 7815.7,
+            "decode_tok_per_s": 36.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 10:5)",
+          "fail (missing: 10:5)",
+          "fail (missing: 10:5)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "prompt": "Write a concise Python function `reverse_string(s: str) -> str` that returns the reversed string. Just the function, no preamble.",
+      "gold_substrings": [
+        "def reverse_string",
+        "[::-1]"
+      ],
+      "samples": [
+        {
+          "text": ".................................................................................................................................................................................................................................................................",
+          "tokens": 574,
+          "elapsed_s": 9.75,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 60,
+            "completion_tokens": 514,
+            "host_ms": 1.75,
+            "prefill_ms": 16.83,
+            "decode_ms": 9683.27,
+            "total_ms": 9702.05,
+            "prefill_tok_per_s": 3565.8,
+            "decode_tok_per_s": 53.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": ".................................................................................................................................................................................................................................................................",
+          "tokens": 574,
+          "elapsed_s": 9.73,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 60,
+            "completion_tokens": 514,
+            "host_ms": 2.22,
+            "prefill_ms": 9.68,
+            "decode_ms": 9678.93,
+            "total_ms": 9691.04,
+            "prefill_tok_per_s": 6198.9,
+            "decode_tok_per_s": 53.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": ".................................................................................................................................................................................................................................................................",
+          "tokens": 574,
+          "elapsed_s": 9.72,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 60,
+            "completion_tokens": 514,
+            "host_ms": 1.97,
+            "prefill_ms": 9.68,
+            "decode_ms": 9664.57,
+            "total_ms": 9676.46,
+            "prefill_tok_per_s": 6199.1,
+            "decode_tok_per_s": 53.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: def reverse_string, [::-1])",
+          "fail (missing: def reverse_string, [::-1])",
+          "fail (missing: def reverse_string, [::-1])"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "prompt": "Write a Python generator `fib()` that yields Fibonacci numbers forever. Just the code.",
+      "gold_substrings": [
+        "def fib",
+        "yield"
+      ],
+      "samples": [
+        {
+          "text": ". system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92",
+          "tokens": 561,
+          "elapsed_s": 14.29,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 48,
+            "completion_tokens": 513,
+            "host_ms": 2.11,
+            "prefill_ms": 15.35,
+            "decode_ms": 14213.71,
+            "total_ms": 14231.36,
+            "prefill_tok_per_s": 3126.6,
+            "decode_tok_per_s": 36.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": ". system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92",
+          "tokens": 561,
+          "elapsed_s": 14.42,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 48,
+            "completion_tokens": 513,
+            "host_ms": 2.07,
+            "prefill_ms": 9.68,
+            "decode_ms": 14338.31,
+            "total_ms": 14350.26,
+            "prefill_tok_per_s": 4961.0,
+            "decode_tok_per_s": 35.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": ". system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92. system\n makeQne\u4e92",
+          "tokens": 561,
+          "elapsed_s": 14.45,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 48,
+            "completion_tokens": 513,
+            "host_ms": 1.97,
+            "prefill_ms": 9.82,
+            "decode_ms": 14411.06,
+            "total_ms": 14423.05,
+            "prefill_tok_per_s": 4889.8,
+            "decode_tok_per_s": 35.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: def fib, yield)",
+          "fail (missing: def fib, yield)",
+          "fail (missing: def fib, yield)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "prompt": "What's one well-regarded book for someone new to embedded systems?",
+      "gold_substrings": [],
+      "samples": [
+        {
+          "text": ". system\n makeQne\u4e92\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nACL\nAC",
+          "tokens": 555,
+          "elapsed_s": 10.88,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 513,
+            "host_ms": 1.93,
+            "prefill_ms": 14.81,
+            "decode_ms": 10830.95,
+            "total_ms": 10847.84,
+            "prefill_tok_per_s": 2835.4,
+            "decode_tok_per_s": 47.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": ". system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system",
+          "tokens": 556,
+          "elapsed_s": 15.55,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 514,
+            "host_ms": 2.07,
+            "prefill_ms": 9.84,
+            "decode_ms": 15483.03,
+            "total_ms": 15495.11,
+            "prefill_tok_per_s": 4270.0,
+            "decode_tok_per_s": 33.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": ". system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system\n makeQick name is Assistant. You are a helpful AI assistant. system",
+          "tokens": 556,
+          "elapsed_s": 15.32,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 514,
+            "host_ms": 1.88,
+            "prefill_ms": 9.69,
+            "decode_ms": 15253.06,
+            "total_ms": 15264.81,
+            "prefill_tok_per_s": 4332.2,
+            "decode_tok_per_s": 33.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "prompt": "Briefly explain what an MoE (mixture-of-experts) model is and one reason it's appealing vs a dense model of similar quality.",
+      "gold_substrings": [
+        "expert"
+      ],
+      "samples": [
+        {
+          "text": ".ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason",
+          "tokens": 573,
+          "elapsed_s": 15.47,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 60,
+            "completion_tokens": 513,
+            "host_ms": 2.24,
+            "prefill_ms": 16.94,
+            "decode_ms": 15399.0,
+            "total_ms": 15418.38,
+            "prefill_tok_per_s": 3541.5,
+            "decode_tok_per_s": 33.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": ".ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason",
+          "tokens": 573,
+          "elapsed_s": 15.91,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 60,
+            "completion_tokens": 513,
+            "host_ms": 1.81,
+            "prefill_ms": 9.69,
+            "decode_ms": 15836.67,
+            "total_ms": 15848.41,
+            "prefill_tok_per_s": 6194.1,
+            "decode_tok_per_s": 32.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": ".ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason itc Islam Features appealing vs a dense model of similar quality.ly what an MoE (mixture-of-experts) model is and one reason",
+          "tokens": 573,
+          "elapsed_s": 15.56,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 60,
+            "completion_tokens": 513,
+            "host_ms": 1.78,
+            "prefill_ms": 9.74,
+            "decode_ms": 15497.65,
+            "total_ms": 15509.37,
+            "prefill_tok_per_s": 6160.4,
+            "decode_tok_per_s": 33.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "prompt": "In two sentences, introduce yourself as Skippy. Stay in character.",
+      "gold_substrings": [
+        "Skippy"
+      ],
+      "samples": [
+        {
+          "text": ". g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g",
+          "tokens": 553,
+          "elapsed_s": 13.65,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 513,
+            "host_ms": 1.78,
+            "prefill_ms": 14.47,
+            "decode_ms": 13568.74,
+            "total_ms": 13585.15,
+            "prefill_tok_per_s": 2764.7,
+            "decode_tok_per_s": 37.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": ". g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g",
+          "tokens": 553,
+          "elapsed_s": 13.65,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 513,
+            "host_ms": 1.81,
+            "prefill_ms": 9.71,
+            "decode_ms": 13605.68,
+            "total_ms": 13617.37,
+            "prefill_tok_per_s": 4117.5,
+            "decode_tok_per_s": 37.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": ". g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g\r\n\f\n\f g",
+          "tokens": 553,
+          "elapsed_s": 13.64,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 513,
+            "host_ms": 2.28,
+            "prefill_ms": 9.99,
+            "decode_ms": 13596.86,
+            "total_ms": 13609.31,
+            "prefill_tok_per_s": 4005.1,
+            "decode_tok_per_s": 37.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: Skippy)",
+          "fail (missing: Skippy)",
+          "fail (missing: Skippy)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
+    }
+  ],
+  "summary": {
+    "total_samples": 36,
+    "passed": 6,
+    "pass_rate": 0.1818,
+    "total": 33,
+    "excluded_samples": 3,
+    "excluded_reason": "BROKEN_SUBSTRING_INCOMPATIBLE prompts (persona category)",
+    "regraded_at": "2026-05-08-post-remediation"
+  },
+  "summary_v1_legacy": {
+    "total_samples": 36,
+    "passed": 6,
+    "pass_rate": 0.167
+  }
+}

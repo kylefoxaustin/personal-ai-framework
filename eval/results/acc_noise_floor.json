@@ -1,0 +1,201 @@
+{
+  "reference": "reference-moe-q4km",
+  "candidate": "reference-moe-q4km-rerun",
+  "reference_timestamp": "2026-04-22T22:22:40",
+  "candidate_timestamp": "2026-04-22T22:23:30",
+  "diffs": [
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "n_samples": 3,
+      "ref_pass_n": 0,
+      "cand_pass_n": 0,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "n_samples": 3,
+      "ref_pass_n": 0,
+      "cand_pass_n": 0,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "rag_imx93_cortex",
+      "category": "rag_datasheet",
+      "n_samples": 3,
+      "ref_pass_n": 0,
+      "cand_pass_n": 0,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "n_samples": 3,
+      "ref_pass_n": 0,
+      "cand_pass_n": 0,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "n_samples": 3,
+      "ref_pass_n": 0,
+      "cand_pass_n": 0,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    }
+  ],
+  "by_category": {
+    "coding": {
+      "n_prompts": 2,
+      "total_pass_delta": 0,
+      "jaccard_p50": 1.0,
+      "exact_match_p50": 1.0
+    },
+    "general": {
+      "n_prompts": 2,
+      "total_pass_delta": 0,
+      "jaccard_p50": 1.0,
+      "exact_match_p50": 1.0
+    },
+    "persona": {
+      "n_prompts": 1,
+      "total_pass_delta": 0,
+      "jaccard_p50": 1.0,
+      "exact_match_p50": 1.0
+    },
+    "rag_email": {
+      "n_prompts": 1,
+      "total_pass_delta": 0,
+      "jaccard_p50": 1.0,
+      "exact_match_p50": 1.0
+    },
+    "rag_blog": {
+      "n_prompts": 1,
+      "total_pass_delta": 0,
+      "jaccard_p50": 1.0,
+      "exact_match_p50": 1.0
+    },
+    "rag_datasheet": {
+      "n_prompts": 3,
+      "total_pass_delta": 0,
+      "jaccard_p50": 1.0,
+      "exact_match_p50": 1.0
+    },
+    "reasoning": {
+      "n_prompts": 2,
+      "total_pass_delta": 0,
+      "jaccard_p50": 1.0,
+      "exact_match_p50": 1.0
+    }
+  },
+  "headline": {
+    "ref_pass_rate": 0.583,
+    "cand_pass_rate": 0.583,
+    "pass_rate_delta_pp": 0.0
+  }
+}

@@ -224,8 +224,9 @@ RECIPE_COLS = ["cell_name", "base_arch_class", "base_size_class",
 # ============================================================
 
 METHODOLOGY_ROWS = [
-    ("Eval prompt set",           "v2 (eval/prompts_v2.json)", "44 prompts × 3 samples = 132 substring-graded scores per run."),
-    ("Categories",                "10 (9 in some legacy entries)", "coding, general, multihop, numerical_precision, persona, rag_blog, rag_datasheet, rag_email, reasoning, refusal."),
+    ("Methodology version",       "2026-05-08-post-remediation", "Bumped after SK-P0-001 (persona quarantined). See eval/EVAL_SET_CHANGELOG.md."),
+    ("Eval prompt set",           "v2 (eval/prompts_v2.json)", "42 active prompts × 3 samples = 126 substring-graded scores per run. (Was 44 × 3 = 132 pre-2026-05-08; persona×2 quarantined as BROKEN_SUBSTRING_INCOMPATIBLE.)"),
+    ("Categories",                "9 active + 1 broken-quarantined", "Active: coding, general, multihop, numerical_precision, rag_blog, rag_datasheet, rag_email, reasoning, refusal. Quarantined: persona (substring grader can't capture; voice metric tool measures it instead)."),
     ("Grading method",            "Substring matching", "Each prompt has a list of gold substrings; case-insensitive; match_mode='all' = every substring must appear."),
     ("RAG configuration",         "Hybrid retrieval, top-k", "ChromaDB semantic + BM25 + cross-encoder reranker; top-k chunks injected into prompt."),
     ("RAG corpus",                 "61K+ documents",        "i.MX datasheets (NXP), email archive, blog posts, code, internal notes."),

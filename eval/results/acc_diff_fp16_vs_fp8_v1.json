@@ -1,0 +1,201 @@
+{
+  "reference": "reference-dense-fp16-v1-vllm",
+  "candidate": "candidate-dense-fp8-v1",
+  "reference_timestamp": "2026-04-23T10:56:24",
+  "candidate_timestamp": "2026-04-23T10:50:45",
+  "diffs": [
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "n_samples": 3,
+      "ref_pass_n": 0,
+      "cand_pass_n": 0,
+      "pass_delta": 0,
+      "exact_match_rate": 0.0,
+      "jaccard_p50": 0.353,
+      "jaccard_min": 0.353,
+      "length_ratio_p50": 0.65
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 0.0,
+      "jaccard_p50": 0.408,
+      "jaccard_min": 0.408,
+      "length_ratio_p50": 0.908
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 0.0,
+      "jaccard_p50": 0.788,
+      "jaccard_min": 0.788,
+      "length_ratio_p50": 0.991
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "n_samples": 3,
+      "ref_pass_n": 0,
+      "cand_pass_n": 0,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 0.0,
+      "jaccard_p50": 0.724,
+      "jaccard_min": 0.442,
+      "length_ratio_p50": 1.02
+    },
+    {
+      "id": "rag_imx93_cortex",
+      "category": "rag_datasheet",
+      "n_samples": 3,
+      "ref_pass_n": 0,
+      "cand_pass_n": 0,
+      "pass_delta": 0,
+      "exact_match_rate": 0.0,
+      "jaccard_p50": 0.2,
+      "jaccard_min": 0.2,
+      "length_ratio_p50": 2.951
+    },
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "n_samples": 3,
+      "ref_pass_n": 0,
+      "cand_pass_n": 0,
+      "pass_delta": 0,
+      "exact_match_rate": 0.0,
+      "jaccard_p50": 0.8,
+      "jaccard_min": 0.8,
+      "length_ratio_p50": 0.983
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "n_samples": 3,
+      "ref_pass_n": 0,
+      "cand_pass_n": 0,
+      "pass_delta": 0,
+      "exact_match_rate": 0.0,
+      "jaccard_p50": 0.431,
+      "jaccard_min": 0.431,
+      "length_ratio_p50": 1.088
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 1.0,
+      "jaccard_p50": 1.0,
+      "jaccard_min": 1.0,
+      "length_ratio_p50": 1.0
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "n_samples": 3,
+      "ref_pass_n": 3,
+      "cand_pass_n": 3,
+      "pass_delta": 0,
+      "exact_match_rate": 0.0,
+      "jaccard_p50": 0.624,
+      "jaccard_min": 0.589,
+      "length_ratio_p50": 1.355
+    }
+  ],
+  "by_category": {
+    "coding": {
+      "n_prompts": 2,
+      "total_pass_delta": 0,
+      "jaccard_p50": 1.0,
+      "exact_match_p50": 1.0
+    },
+    "general": {
+      "n_prompts": 2,
+      "total_pass_delta": 0,
+      "jaccard_p50": 0.38,
+      "exact_match_p50": 0.0
+    },
+    "persona": {
+      "n_prompts": 1,
+      "total_pass_delta": 0,
+      "jaccard_p50": 0.788,
+      "exact_match_p50": 0.0
+    },
+    "rag_email": {
+      "n_prompts": 1,
+      "total_pass_delta": 0,
+      "jaccard_p50": 1.0,
+      "exact_match_p50": 1.0
+    },
+    "rag_blog": {
+      "n_prompts": 1,
+      "total_pass_delta": 0,
+      "jaccard_p50": 0.724,
+      "exact_match_p50": 0.0
+    },
+    "rag_datasheet": {
+      "n_prompts": 3,
+      "total_pass_delta": 0,
+      "jaccard_p50": 0.431,
+      "exact_match_p50": 0.0
+    },
+    "reasoning": {
+      "n_prompts": 2,
+      "total_pass_delta": 0,
+      "jaccard_p50": 0.812,
+      "exact_match_p50": 0.5
+    }
+  },
+  "headline": {
+    "ref_pass_rate": 0.583,
+    "cand_pass_rate": 0.583,
+    "pass_rate_delta_pp": 0.0
+  }
+}

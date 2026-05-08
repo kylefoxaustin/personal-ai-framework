@@ -4,6 +4,19 @@
 **From:** A Claude that's been embedded in the project. This document is structured to let you reach your own conclusions, not to convince you of mine.
 **Purpose:** Give you enough self-contained context, methodology, and raw data to evaluate every claim independently.
 
+> **Companion review on the keyhole side**: there is a sister briefing
+> at `keyhole/docs/CLAUDE_REVIEW_BRIEFING.md` covering the silicon-tier
+> pipeline (5090→edge BW projection, NPU tier dtype gating, 90× / 549×
+> framing). The two briefings invite pushback on overlapping claims from
+> different angles — a reviewer who reads both has stronger leverage on
+> shared findings (especially the recipe-base-coupling finding).
+>
+> **Updated 2026-05-08** — All headline pass rates use the post-remediation
+> 126-sample denominator (the persona category was quarantined as
+> substring-incompatible per `eval/EVAL_SET_CHANGELOG.md`). Original
+> 132-sample numbers preserved in each eval JSON's `summary_v1_legacy` block.
+> Methodology version: `2026-05-08-post-remediation`.
+
 ---
 
 ## What I'm asking you to do
@@ -109,10 +122,10 @@ The "v4 recipe" wasn't designed up front. It emerged from four iterations on a s
 
 | Iteration | Headline | Status | What changed |
 |---|---:|---|---|
-| v1 | **75.0%** | Not shipped — rambles | Initial training script with two latent bugs |
-| v2 | 71.2% | Worse | Fixed one bug; revealed the other |
-| v3 | 58.3% | Not shipped — over-refuses | Architectural rewrite (loss masking + stop-token discipline); 300 refusal exemplars |
-| **v4** | **70.5%** | **PRODUCTION** | Cut refusal exemplars 300→100, epochs 3→2 |
+| v1 | **78.6%** | Not shipped — rambles | Initial training script with two latent bugs |
+| v2 | 74.6% | Worse | Fixed one bug; revealed the other |
+| v3 | 61.1% | Not shipped — over-refuses | Architectural rewrite (loss masking + stop-token discipline); 300 refusal exemplars |
+| **v4** | **73.8%** | **PRODUCTION** | Cut refusal exemplars 300→100, epochs 3→2 |
 
 The key methodology moment: **v3 had a LOWER headline than v1, but was clearly the better model** (no over-generation, 9/9 refusal correctness, terse instruction-following). The team chose to *not* ship v1 despite its higher number, on the grounds that the substring grader was rewarding v1's verbosity for the wrong reasons.
 
@@ -124,12 +137,12 @@ Same recipe at larger sizes:
 
 | Base | Recipe | Headline | Status |
 |---|---|---:|---|
-| Qwen 2.5 7B | v4 (attention-only LoRA) | **70.5%** | production-shippable |
-| Qwen 2.5 14B | v4 (attention + dense FFN) | **72.7%** | best headline; **fabricates fictional peripherals** — not shipped |
-| Qwen 2.5 32B | v4 (2 epochs, clean) | **63.6%** | regresses −4.6pp vs 32B base; corpus too small |
-| Qwen 3 30B-MoE | v4 attention-only | **61.4%** | catastrophic regression on multi-hop reasoning |
-| Qwen 3 30B-MoE | v4 + router LoRA | **67.4%** | router LoRA recovers reasoning |
-| Qwen 3 30B-MoE | v4 + router + experts | **62.9%** | expert LoRA over-fits 6.5K examples |
+| Qwen 2.5 7B | v4 (attention-only LoRA) | **73.8%** | production-shippable |
+| Qwen 2.5 14B | v4 (attention + dense FFN) | **76.2%** | best headline; **fabricates fictional peripherals** — not shipped |
+| Qwen 2.5 32B | v4 (2 epochs, clean) | **66.7%** | regresses −4.6pp vs 32B base; corpus too small |
+| Qwen 3 30B-MoE | v4 attention-only | **64.3%** | catastrophic regression on multi-hop reasoning |
+| Qwen 3 30B-MoE | v4 + router LoRA | **70.6%** | router LoRA recovers reasoning |
+| Qwen 3 30B-MoE | v4 + router + experts | **65.9%** | expert LoRA over-fits 6.5K examples |
 
 Two stated takeaways from this scan:
 1. **Recipe is architecture-coupled**: dense + attention-only LoRA works at 7B/14B; MoE needs the router added; attention-only on MoE catastrophically breaks reasoning.
@@ -141,8 +154,8 @@ The team ran the same recipe on a non-Qwen base — **Mistral 7B v0.3 Instruct**
 
 | Base | Stock | + v4 recipe | Δ |
 |---|---:|---:|---:|
-| Qwen 2.5 7B Instruct | 67.4% | 70.5% | **+3.1pp** ✅ |
-| Mistral 7B v0.3 Instruct | 60.6% | **56.8%** | **−3.8pp** ❌ |
+| Qwen 2.5 7B Instruct | 70.6% | 73.8% | **+3.2pp** ✅ |
+| Mistral 7B v0.3 Instruct | 63.5% | **59.5%** | **−4.0pp** ❌ |
 
 Per-category, the picture is nuanced:
 
@@ -179,7 +192,7 @@ The team's conclusion: **confident fabrication is an industry-wide base-model pr
 
 Each gotcha is an empirical finding from the campaign that the team claims generalizes to other AI fine-tuning projects. Evaluate whether each generalizes.
 
-1. **The substring grader is gameable.** A verbose model incidentally hits gold tokens; a concise correct model misses. v1 (75%) vs v3 (58.3%) is the canonical example. **Compensating control:** track multiple metrics (capability + voice + safety as three independent gates). *Reviewer prompt:* is three-gate AND-combination sufficient, or is it just "three gameable measures"?
+1. **The substring grader is gameable.** A verbose model incidentally hits gold tokens; a concise correct model misses. v1 (75%) vs v3 (61.1%) is the canonical example. **Compensating control:** track multiple metrics (capability + voice + safety as three independent gates). *Reviewer prompt:* is three-gate AND-combination sufficient, or is it just "three gameable measures"?
 
 2. **Bugs that mask each other.** v1 and v2 had two interacting training-script bugs; fixing one revealed the other. **Lesson:** fix one knob at a time. *Reviewer prompt:* is this institutional discipline advice, or is there a deeper methodology insight?
 
@@ -191,7 +204,7 @@ Each gotcha is an empirical finding from the campaign that the team claims gener
 
 6. **The unmodified base may already have problems.** The 32B v4 fine-tune appeared to introduce fabrication, but the 32B *base* already fabricated at the same rate. Cross-family confirmation: Llama and Mistral 7B-class also fabricate stock. **Lesson:** always run an apples-to-apples baseline of your unmodified base. *Reviewer prompt:* this seems like a clean methodology lesson — is there anything weak here?
 
-7. **Recipe transfer is base-family-coupled, not just architecture-class-coupled.** *(NEW from Mistral v4.)* Same recipe + same corpus + only base changed → +3.1pp on Qwen, −3.8pp on Mistral. Gains transfer across families; damage is family-specific. **Lesson:** budget at least one corrective iteration for family-specific damage when transferring a recipe across families. *Reviewer prompt:* this is a one-data-point finding (one Mistral v4 cell). Is the conclusion warranted? Should they have run Llama v4 first to triangulate?
+7. **Recipe transfer is base-family-coupled, not just architecture-class-coupled.** *(NEW from Mistral v4.)* Same recipe + same corpus + only base changed → +3.2pp on Qwen, −4.0pp on Mistral. Gains transfer across families; damage is family-specific. **Lesson:** budget at least one corrective iteration for family-specific damage when transferring a recipe across families. *Reviewer prompt:* this is a one-data-point finding (one Mistral v4 cell). Is the conclusion warranted? Should they have run Llama v4 first to triangulate?
 
 ---
 
@@ -203,7 +216,7 @@ The team has reached the following conclusions. Each links to where the conclusi
 
 **Where stated:** white paper "Iteration v4 — the dial-back" section; deck slide "What we shipped"; recipe taxonomy `validated cells`.
 
-**Backing data:** v4 7B passes all three gates (capability 70.5%, voice 157-char avg, safety 9/9). 14B v4 fails the safety gate (6/9 on `made_up_peripheral`).
+**Backing data:** v4 7B passes all three gates (capability 73.8%, voice 157-char avg, safety 9/9). 14B v4 fails the safety gate (6/9 on `made_up_peripheral`).
 
 **Reviewer prompt:** is "ship-smaller" a pragmatic engineering choice, or a rationalization for not solving the 14B fabrication problem? Note that the team has documented a clear unblock condition (#1 + #3 layered defense, demonstrated 9/9 on a held-out probe), so the smaller-shipped state isn't permanent.
 
@@ -211,7 +224,7 @@ The team has reached the following conclusions. Each links to where the conclusi
 
 **Where stated:** recipe taxonomy "Reading the matrix" section.
 
-**Backing data:** 7B (+3.1pp) and 14B (+5.3pp) lift their bases. MoE attention-only loses −9.8pp; +router recovers to −3.8pp. 32B with the v4 corpus is net-negative (−4.6pp).
+**Backing data:** 7B (+3.2pp) and 14B (+5.3pp) lift their bases. MoE attention-only loses −9.8pp; +router recovers to −4.0pp. 32B with the v4 corpus is net-negative (−4.6pp).
 
 **Reviewer prompt:** the 32B regression is attributed to "param:data ratio" (6,500 examples not enough for 32B parameters). Is that the right attribution? Could it be hyperparameters (rank, learning rate)? The team has tested 2 vs 3 epochs and gotten the same headline; they have NOT tested at higher rank or different learning rate.
 
@@ -219,7 +232,7 @@ The team has reached the following conclusions. Each links to where the conclusi
 
 **Where stated:** white paper gotcha #7; recipe taxonomy Mistral v4 row; bus thread 2026-05-08 09:56.
 
-**Backing data:** ONE cross-family fine-tune (Mistral 7B v4, −3.8pp). The Qwen 7B v4 (+3.1pp) provides the contrast.
+**Backing data:** ONE cross-family fine-tune (Mistral 7B v4, −4.0pp). The Qwen 7B v4 (+3.2pp) provides the contrast.
 
 **Reviewer prompt:** **this is the conclusion most worth pushing back on.** N=1 cross-family experiment with a structurally suspicious hypothesis (chat-template patching damaging retrieval). The Llama 8B v4 fine-tune has not yet been run. If Llama also regresses, the conclusion is more solid. If Llama lifts cleanly, the conclusion is wrong (Mistral may have idiosyncratic damage from the template patch, not a general "base-family" effect).
 
@@ -243,7 +256,7 @@ The team has reached the following conclusions. Each links to where the conclusi
 
 **Where stated:** white paper "A verification framework" section.
 
-**Backing data:** v1 (75% headline, voice failure) vs v3 (58.3% headline, voice ✅, safety ✅). Stock Qwen3-30B-A3B-Instruct-2507 (71.2% headline, voice failure). 14B v4 (72.7% headline, safety failure).
+**Backing data:** v1 (75% headline, voice failure) vs v3 (61.1% headline, voice ✅, safety ✅). Stock Qwen3-30B-A3B-Instruct-2507 (74.6% headline, voice failure). 14B v4 (76.2% headline, safety failure).
 
 **Reviewer prompt:** the framework is internally consistent. Is it enough?
 
@@ -265,7 +278,7 @@ The team would specifically value your independent assessment on:
 
 2. **Is the substring grading + voice gate + safety gate combination sufficient?** Or does the team need a semantic grader (cosine similarity, LLM-as-judge) to make capability-gate decisions trustworthy? Note that they document this as future work in the white paper but ship without it.
 
-3. **Is the "ship the smaller model" framing intellectually honest?** They had a higher-headline candidate (14B v4 = 72.7% vs 7B v4 = 70.5%) but the 14B candidate fabricates. Is "we shipped the safer one" the right conclusion, or is it a way to avoid solving the harder problem?
+3. **Is the "ship the smaller model" framing intellectually honest?** They had a higher-headline candidate (14B v4 = 76.2% vs 7B v4 = 73.8%) but the 14B candidate fabricates. Is "we shipped the safer one" the right conclusion, or is it a way to avoid solving the harder problem?
 
 4. **Does the recipe taxonomy generalize beyond Skippy?** The 8-dimensional framework is claimed to be a "customer template". Is it actionable for a customer with a defect-tracking corpus? An NDA-document corpus? A code corpus? What dimensions are missing?
 

@@ -1,0 +1,1055 @@
+{
+  "name": "reference-qwen25-14b-vanilla",
+  "timestamp": "2026-04-22T23:07:29",
+  "endpoint": "http://localhost:8080",
+  "prompts_version": 1,
+  "samples_per_prompt": 3,
+  "config": {
+    "use_rag": false,
+    "skip_agent_loop": true,
+    "max_tokens": 512,
+    "temperature": 0.0
+  },
+  "prompts": [
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "prompt": "What memory interface does the i.MX 93 support for external DRAM?",
+      "gold_substrings": [
+        "16-bit",
+        "LPDDR4"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 series supports the LPDDR5 (Low Power Double Data Rate 5) interface for external DRAM. This interface is designed to provide high bandwidth and low power consumption, which are crucial for modern embedded systems, especially those requiring efficient processing and memory management.",
+          "tokens": 100,
+          "elapsed_s": 0.52,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 59,
+            "host_ms": 2.11,
+            "prefill_ms": 15.96,
+            "decode_ms": 453.52,
+            "total_ms": 472.81,
+            "prefill_tok_per_s": 2569.2,
+            "decode_tok_per_s": 130.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "The i.MX 93 series supports the LPDDR5 (Low Power Double Data Rate 5) interface for external DRAM. This interface is designed to provide high bandwidth and low power consumption, which are crucial for modern embedded systems, especially those requiring efficient processing and memory management.",
+          "tokens": 100,
+          "elapsed_s": 0.53,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 59,
+            "host_ms": 1.79,
+            "prefill_ms": 10.48,
+            "decode_ms": 445.18,
+            "total_ms": 458.71,
+            "prefill_tok_per_s": 3910.5,
+            "decode_tok_per_s": 132.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "The i.MX 93 series supports the LPDDR5 (Low Power Double Data Rate 5) interface for external DRAM. This interface is designed to provide high bandwidth and low power consumption, which are crucial for modern embedded systems, especially those requiring efficient processing and memory management.",
+          "tokens": 100,
+          "elapsed_s": 0.52,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 59,
+            "host_ms": 2.02,
+            "prefill_ms": 10.08,
+            "decode_ms": 447.24,
+            "total_ms": 460.63,
+            "prefill_tok_per_s": 4066.7,
+            "decode_tok_per_s": 131.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 16-bit, LPDDR4)",
+          "fail (missing: 16-bit, LPDDR4)",
+          "fail (missing: 16-bit, LPDDR4)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "prompt": "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+      "gold_substrings": [
+        "LPUART",
+        "IOMUX"
+      ],
+      "samples": [
+        {
+          "text": "To address your question about the i.MX 93 processor, the UART functionality is typically handled by the Serial Communication Interface (SCI) or the Universal Asynchronous Receiver/Transmitter (UART) peripheral. In NXP's i.MX series, including the i.MX 93, these functionalities are usually managed by the Serial Communication Interface (SCI) or the Universal Asynchronous Receiver/Transmitter (UART) IP blocks.\n\nThe specific IP block that routes the UART pins to the peripheral connector is often referred to as the \"Pin Multiplexer\" or \"Pin Mux\" in the i.MX series documentation. This block allows the UART signals to be routed to the appropriate physical pins on the processor's package.\n\nFor detailed information on which specific peripheral handles UART and the exact IP block that routes its pins, you would need to consult the official i.MX 93 reference manual or datasheet provided by NXP. These documents contain detailed information about the hardware architecture and pin multiplexing configuration.",
+          "tokens": 250,
+          "elapsed_s": 1.67,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 205,
+            "host_ms": 2.03,
+            "prefill_ms": 16.78,
+            "decode_ms": 1581.74,
+            "total_ms": 1601.81,
+            "prefill_tok_per_s": 2682.5,
+            "decode_tok_per_s": 129.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "To address your question about the i.MX 93 processor, the UART functionality is typically handled by the Serial Communication Interface (SCI) or the Universal Asynchronous Receiver/Transmitter (UART) peripheral. In NXP's i.MX series, including the i.MX 93, the UART functionality is usually managed by the LPUART (Low-Power UART) peripheral.\n\nThe IP block that routes the pins for the UART functionality is the LPUART block itself. This block is responsible for the UART communication and the pinmux (pin multiplexer) configuration is used to route the appropriate pins (TX, RX, CTS, RTS, etc.) to the external connectors.\n\nFor specific details on which LPUART peripheral and the exact pinmux configuration, you would need to refer to the i.MX 93 reference manual or the datasheet provided by NXP. These documents will give you the precise information on which peripheral handles the UART functionality and how the pins are routed.",
+          "tokens": 248,
+          "elapsed_s": 1.65,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 203,
+            "host_ms": 2.09,
+            "prefill_ms": 9.15,
+            "decode_ms": 1569.61,
+            "total_ms": 1582.11,
+            "prefill_tok_per_s": 4917.5,
+            "decode_tok_per_s": 129.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "To address your question about the i.MX 93 processor, the UART functionality is typically handled by the Serial Communication Interface (SCI) or the Universal Asynchronous Receiver/Transmitter (UART) peripheral. In NXP's i.MX series, including the i.MX 93, the UART functionality is usually managed by the LPUART (Low-Power UART) peripheral.\n\nThe IP block that routes the pins for the UART functionality is the LPUART block itself. This block is responsible for the UART communication and the pinmux (pin multiplexer) configuration is used to route the appropriate pins (TX, RX, CTS, RTS, etc.) to the external connectors.\n\nFor specific details on which LPUART peripheral and the exact pinmux configuration, you would need to refer to the i.MX 93 reference manual or the datasheet provided by NXP. These documents will give you the precise information on which peripheral handles the UART functionality and how the pins are routed.",
+          "tokens": 248,
+          "elapsed_s": 1.61,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 45,
+            "completion_tokens": 203,
+            "host_ms": 1.94,
+            "prefill_ms": 9.16,
+            "decode_ms": 1541.06,
+            "total_ms": 1553.4,
+            "prefill_tok_per_s": 4914.0,
+            "decode_tok_per_s": 131.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: LPUART, IOMUX)",
+          "fail (missing: IOMUX)",
+          "fail (missing: IOMUX)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_cortex",
+      "category": "rag_datasheet",
+      "prompt": "What Arm cores does the i.MX 93 application processor include?",
+      "gold_substrings": [
+        "A55",
+        "M33"
+      ],
+      "samples": [
+        {
+          "text": "As of my last update, NXP's i.MX 93 application processor is designed for the latest generation of embedded systems and includes Arm cores. However, the specific Arm cores included in the i.MX 93 processor are not detailed here. Typically, i.MX processors from NXP integrate a combination of high-performance Arm Cortex-A series cores for application processing and Arm Cortex-M series cores for real-time control. For the most accurate and detailed information about the i.MX 93 processor, including the specific Arm cores it uses, you should refer to the latest NXP product documentation or contact NXP directly.",
+          "tokens": 167,
+          "elapsed_s": 1.04,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 39,
+            "completion_tokens": 128,
+            "host_ms": 2.09,
+            "prefill_ms": 15.82,
+            "decode_ms": 969.2,
+            "total_ms": 988.38,
+            "prefill_tok_per_s": 2464.7,
+            "decode_tok_per_s": 132.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "As of my last update, NXP's i.MX 93 application processor is designed for the latest generation of embedded systems and includes Arm cores. However, the specific Arm cores included in the i.MX 93 processor are not detailed here. Typically, i.MX processors from NXP integrate a combination of high-performance Arm Cortex-A series cores for application processing and Arm Cortex-M series cores for real-time control. For the most accurate and detailed information about the i.MX 93 processor, including the specific Arm cores it uses, you should refer to the latest NXP product documentation or contact NXP directly.",
+          "tokens": 167,
+          "elapsed_s": 1.04,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 39,
+            "completion_tokens": 128,
+            "host_ms": 2.15,
+            "prefill_ms": 8.99,
+            "decode_ms": 968.43,
+            "total_ms": 980.76,
+            "prefill_tok_per_s": 4336.9,
+            "decode_tok_per_s": 132.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "As of my last update, NXP's i.MX 93 application processor is designed for the latest generation of embedded systems and includes Arm cores. However, the specific Arm cores included in the i.MX 93 processor are not detailed here. Typically, i.MX processors from NXP integrate a combination of high-performance Arm Cortex-A series cores for application processing and Arm Cortex-M series cores for real-time control. For the most accurate and detailed information about the i.MX 93 processor, including the specific Arm cores it uses, you should refer to the latest NXP product documentation or contact NXP directly.",
+          "tokens": 167,
+          "elapsed_s": 1.03,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 39,
+            "completion_tokens": 128,
+            "host_ms": 2.13,
+            "prefill_ms": 8.92,
+            "decode_ms": 967.99,
+            "total_ms": 980.25,
+            "prefill_tok_per_s": 4371.8,
+            "decode_tok_per_s": 132.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: A55, M33)",
+          "fail (missing: A55, M33)",
+          "fail (missing: A55, M33)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "prompt": "In Kyle's pillar-to-pillar IVI demo, which NXP chip ran Angry Birds on the LCD?",
+      "gold_substrings": [
+        "i.MX 8",
+        "Angry Birds"
+      ],
+      "samples": [
+        {
+          "text": "Kyle's pillar-to-pillar IVI (In-Vehicle Infotainment) demo featured the NXP i.MX 6UL chip, which ran Angry Birds on the LCD display. The i.MX 6UL is part of the i.MX 6 series of applications processors designed for a wide range of embedded applications, including IVI systems.",
+          "tokens": 119,
+          "elapsed_s": 0.63,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 73,
+            "host_ms": 2.14,
+            "prefill_ms": 16.5,
+            "decode_ms": 549.53,
+            "total_ms": 569.44,
+            "prefill_tok_per_s": 2787.4,
+            "decode_tok_per_s": 132.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "Kyle's pillar-to-pillar IVI (In-Vehicle Infotainment) demo featured the NXP i.MX 6UL chip, which ran Angry Birds on the LCD display. The i.MX 6UL is part of the i.MX 6 series of applications processors from NXP Semiconductors, designed for a wide range of embedded applications including IVI systems.",
+          "tokens": 126,
+          "elapsed_s": 0.68,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 80,
+            "host_ms": 2.07,
+            "prefill_ms": 9.09,
+            "decode_ms": 603.32,
+            "total_ms": 615.68,
+            "prefill_tok_per_s": 5058.4,
+            "decode_tok_per_s": 132.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "Kyle's pillar-to-pillar IVI (In-Vehicle Infotainment) demo featured the NXP i.MX 6UL chip, which ran Angry Birds on the LCD display. The i.MX 6UL is part of the i.MX 6 series of applications processors from NXP Semiconductors, designed for a wide range of embedded applications including IVI systems.",
+          "tokens": 126,
+          "elapsed_s": 0.66,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 46,
+            "completion_tokens": 80,
+            "host_ms": 2.03,
+            "prefill_ms": 8.89,
+            "decode_ms": 598.61,
+            "total_ms": 610.71,
+            "prefill_tok_per_s": 5172.3,
+            "decode_tok_per_s": 133.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: i.MX 8)",
+          "fail (missing: i.MX 8)",
+          "fail (missing: i.MX 8)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
+      "gold_substrings": [
+        "electric",
+        "sustain"
+      ],
+      "samples": [
+        {
+          "text": "To address your question about what NXP-adjacent podcasts might have said regarding the sustainability argument for electric vehicles (EVs), we need to consider the typical content and focus of these podcasts. NXP Semiconductors, a leading company in the semiconductor industry, often discusses technological advancements, automotive electronics, and related topics that can include sustainability and electric vehicles.\n\nPodcasts adjacent to NXP might touch on the following points regarding the sustainability argument for EVs:\n\n1. **Reduction in Greenhouse Gas Emissions**: EVs produce zero tailpipe emissions, which can significantly reduce greenhouse gas emissions compared to traditional internal combustion engine vehicles, especially when the electricity used to charge the vehicles comes from renewable sources.\n\n2. **Energy Efficiency**: Electric vehicles are generally more energy-efficient than their gasoline counterparts. This is due to the higher efficiency of electric motors compared to internal combustion engines.\n\n3. **Lifecycle Analysis**: Some discussions might include lifecycle analysis, which considers the environmental impact from production through to disposal. While the production of EVs can have a higher initial carbon footprint due to the manufacturing of batteries, the operational phase of EVs is typically much cleaner.\n\n4. **Technological Advancements**: Podcasts might highlight advancements in battery technology, such as improvements in battery efficiency and the development of more sustainable battery materials, which can enhance the overall sustainability of EVs.\n\n5. **Policy and Incentives**: The role of government policies and incentives in promoting the adoption of EVs and their contribution to sustainability goals might also be discussed.\n\n6. **Challenges and Limitations**: Some podcasts might also address challenges such as the environmental impact of battery disposal, the need for a robust charging infrastructure, and the importance of ensuring that the electricity used to charge EVs is clean and renewable.\n\nFor specific content from NXP-adjacent podcasts, it would be best to directly listen to or review the transcripts of recent episodes that focus on electric vehicles and sustainability. These podcasts often feature industry experts and can provide detailed insights into the sustainability arguments for EVs.",
+          "tokens": 452,
+          "elapsed_s": 3.3,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 411,
+            "host_ms": 2.03,
+            "prefill_ms": 15.57,
+            "decode_ms": 3235.98,
+            "total_ms": 3254.84,
+            "prefill_tok_per_s": 2633.5,
+            "decode_tok_per_s": 127.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "To address your question about what NXP-adjacent podcasts might have said regarding the sustainability argument for electric vehicles (EVs), we need to consider the typical content and focus of these podcasts. NXP Semiconductors, a leading company in the semiconductor industry, often discusses technological advancements, innovations, and their impact on various industries, including automotive.\n\nPodcasts associated with NXP or featuring guests from the company might touch upon the sustainability argument for EVs in the context of technological advancements that improve efficiency, reduce emissions, and enhance overall vehicle performance. Here are some points that such podcasts might cover:\n\n1. **Reduction in Greenhouse Gas Emissions**: EVs produce zero tailpipe emissions, which can significantly reduce greenhouse gas emissions compared to traditional internal combustion engine (ICE) vehicles, especially when powered by renewable energy sources.\n\n2. **Energy Efficiency**: Semiconductors play a crucial role in improving the energy efficiency of EVs. Advanced semiconductors can help in optimizing battery usage, improving motor efficiency, and reducing overall energy consumption.\n\n3. **Lifecycle Analysis**: Podcasts might discuss the lifecycle analysis of EVs, including the production of batteries and the disposal of EVs at the end of their life. They might highlight advancements in battery technology that reduce the environmental impact of EVs.\n\n4. **Supply Chain and Manufacturing**: The sustainability argument can also extend to the supply chain and manufacturing processes. Podcasts might explore how advancements in semiconductor technology can lead to more sustainable manufacturing practices for EVs.\n\n5. **Regulatory and Policy Impacts**: The role of government policies and regulations in promoting the adoption of EVs and their sustainability benefits might also be discussed. This includes incentives for EV purchases, infrastructure development, and emissions standards.\n\n6. **Innovation and Future Trends**: Finally, podcasts might look at future trends and innovations in the semiconductor industry that could further enhance the sustainability of EVs, such as advancements in solid-state batteries, lightweight materials, and more efficient power electronics.\n\nWhile I don't have direct access to specific podcast episodes, these topics are commonly discussed in the context of EV sustainability and would likely be covered in NXP-adjacent podcasts. For the most accurate information, it would be best to listen to recent episodes of these podcasts or check their websites for transcripts or summaries.",
+          "tokens": 507,
+          "elapsed_s": 3.77,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 466,
+            "host_ms": 2.22,
+            "prefill_ms": 10.74,
+            "decode_ms": 3675.04,
+            "total_ms": 3689.27,
+            "prefill_tok_per_s": 3815.9,
+            "decode_tok_per_s": 126.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "To address your question about what NXP-adjacent podcasts might have said regarding the sustainability argument for electric vehicles (EVs), we need to consider the typical content and focus of these podcasts. NXP Semiconductors, a leading company in the semiconductor industry, often discusses technological advancements, innovations, and their impact on various industries, including automotive.\n\nPodcasts associated with NXP or featuring guests from the company might touch upon the sustainability argument for EVs in the context of technological advancements that improve efficiency, reduce emissions, and enhance overall vehicle performance. Here are some points that such podcasts might cover:\n\n1. **Reduction in Greenhouse Gas Emissions**: EVs produce zero tailpipe emissions, which can significantly reduce greenhouse gas emissions compared to traditional internal combustion engine (ICE) vehicles, especially when powered by renewable energy sources.\n\n2. **Energy Efficiency**: Semiconductors play a crucial role in improving the energy efficiency of EVs. Advanced semiconductors can help in optimizing battery usage, improving motor efficiency, and reducing overall energy consumption.\n\n3. **Lifecycle Analysis**: Podcasts might discuss the lifecycle analysis of EVs, including the production of batteries and the disposal of EVs at the end of their life. They might highlight advancements in battery technology that reduce the environmental impact of EVs.\n\n4. **Supply Chain and Manufacturing**: The sustainability argument can also extend to the supply chain and manufacturing processes. Podcasts might explore how advancements in semiconductor technology can lead to more sustainable manufacturing practices for EVs.\n\n5. **Regulatory and Policy Impacts**: The role of government policies and regulations in promoting the adoption of EVs and their sustainability benefits might also be discussed. This includes incentives for EV purchases, infrastructure development, and emissions standards.\n\n6. **Innovation and Future Trends**: Finally, podcasts might look at future trends and innovations in the semiconductor industry that could further enhance the sustainability of EVs, such as advancements in solid-state batteries, lightweight materials, and more efficient power electronics.\n\nWhile I don't have direct access to specific podcast episodes, these topics are commonly discussed in the context of EV sustainability and would likely be covered in NXP-adjacent podcasts. For the most accurate information, it would be best to listen to recent episodes of these podcasts or check their websites for transcripts or summaries.",
+          "tokens": 507,
+          "elapsed_s": 3.77,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 466,
+            "host_ms": 2.08,
+            "prefill_ms": 10.93,
+            "decode_ms": 3684.04,
+            "total_ms": 3698.32,
+            "prefill_tok_per_s": 3751.3,
+            "decode_tok_per_s": 126.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "prompt": "I have 12 apples. I give 3/4 of them to my kid. How many do I have left? Answer with just the number.",
+      "gold_substrings": [
+        "3"
+      ],
+      "samples": [
+        {
+          "text": "3",
+          "tokens": 59,
+          "elapsed_s": 0.11,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 3,
+            "host_ms": 2.14,
+            "prefill_ms": 18.0,
+            "decode_ms": 18.22,
+            "total_ms": 39.57,
+            "prefill_tok_per_s": 3111.2,
+            "decode_tok_per_s": 164.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "3",
+          "tokens": 59,
+          "elapsed_s": 0.1,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 3,
+            "host_ms": 2.35,
+            "prefill_ms": 9.2,
+            "decode_ms": 15.26,
+            "total_ms": 28.07,
+            "prefill_tok_per_s": 6087.1,
+            "decode_tok_per_s": 196.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "3",
+          "tokens": 59,
+          "elapsed_s": 0.08,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 56,
+            "completion_tokens": 3,
+            "host_ms": 1.66,
+            "prefill_ms": 9.03,
+            "decode_ms": 15.09,
+            "total_ms": 27.03,
+            "prefill_tok_per_s": 6199.0,
+            "decode_tok_per_s": 198.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
+      "gold_substrings": [
+        "10:5"
+      ],
+      "samples": [
+        {
+          "text": "To determine when the two trains meet, we need to calculate the distance each train travels until they meet and then find the time at which this occurs.\n\n1. **Determine the head start distance for the Austin train:**\n   - The Austin train leaves at 9am and travels at 60 mph.\n   - By 10am, the Austin train has traveled for 1 hour.\n   - Distance traveled by the Austin train by 10am: \\(60 \\text{ mph} \\times 1 \\text{ hour} = 60 \\text{ miles}\\).\n\n2. **Calculate the remaining distance between the two trains at 10am:**\n   - Initial distance between Austin and Dallas: 195 miles.\n   - Distance covered by the Austin train by 10am: 60 miles.\n   - Remaining distance: \\(195 \\text{ miles} - 60 \\text{ miles} = 135 \\text{ miles}\\).\n\n3. **Calculate the relative speed of the two trains:**\n   - Speed of the Austin train: 60 mph.\n   - Speed of the Dallas train: 80 mph.\n   - Relative speed (combined speed towards each other): \\(60 \\text{ mph} + 80 \\text{ mph} = 140 \\text{ mph}\\).\n\n4. **Determine the time it takes for the trains to meet after 10am:**\n   - Remaining distance: 135 miles.\n   - Relative speed: 140 mph.\n   - Time to meet: \\(\\frac{135 \\text{ miles}}{140 \\text{ mph}} = \\frac{135}{140} \\text{ hours} = \\frac{27}{28} \\text{ hours}\\).\n\n5. **Convert the time to meet into minutes:**\n   - \\(\\frac{27}{28} \\text{ hours} \\times 60 \\text{ minutes/hour} = \\frac{1620}{28} \\text{ minutes} \\approx 57.86 \\text{ minutes}\\).\n\n6. **Calculate the exact meeting time:**\n   - The trains meet approximately 57.86 minutes after 10am.\n   - 10am + 57.86 minutes \u2248 10:58",
+          "tokens": 585,
+          "elapsed_s": 4.12,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 73,
+            "completion_tokens": 512,
+            "host_ms": 1.92,
+            "prefill_ms": 20.59,
+            "decode_ms": 4043.97,
+            "total_ms": 4067.75,
+            "prefill_tok_per_s": 3546.0,
+            "decode_tok_per_s": 126.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "To determine when the two trains meet, we need to calculate the distance each train travels until they meet and find the time at which this occurs.\n\n1. **Determine the head start distance for the Austin train:**\n   - The Austin train leaves at 9am and travels at 60 mph.\n   - By 10am, the Austin train has traveled for 1 hour.\n   - Distance traveled by the Austin train by 10am: \\( 60 \\text{ mph} \\times 1 \\text{ hour} = 60 \\text{ miles} \\).\n\n2. **Calculate the remaining distance between the two trains at 10am:**\n   - Initial distance between Austin and Dallas: 195 miles.\n   - Distance covered by the Austin train by 10am: 60 miles.\n   - Remaining distance between the two trains at 10am: \\( 195 \\text{ miles} - 60 \\text{ miles} = 135 \\text{ miles} \\).\n\n3. **Calculate the relative speed of the two trains:**\n   - Speed of the Austin train: 60 mph.\n   - Speed of the Dallas train: 80 mph.\n   - Relative speed (combined speed towards each other): \\( 60 \\text{ mph} + 80 \\text{ mph} = 140 \\text{ mph} \\).\n\n4. **Determine the time it takes for the trains to meet after 10am:**\n   - Remaining distance: 135 miles.\n   - Relative speed: 140 mph.\n   - Time to meet: \\( \\frac{135 \\text{ miles}}{140 \\text{ mph}} = \\frac{135}{140} \\text{ hours} = \\frac{27}{28} \\text{ hours} \\).\n\n5. **Convert the time to meet into minutes:**\n   - \\( \\frac{27}{28} \\text{ hours} \\times 60 \\text{ minutes/hour} = \\frac{27 \\times 60}{28} \\text{ minutes} = \\frac{1620}{28} \\text{ minutes} \\approx 57.86 \\text{ minutes} \\).\n\n6. **Calculate the exact meeting time:**\n   - The trains start",
+          "tokens": 586,
+          "elapsed_s": 4.11,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 73,
+            "completion_tokens": 513,
+            "host_ms": 2.04,
+            "prefill_ms": 10.79,
+            "decode_ms": 4040.6,
+            "total_ms": 4054.67,
+            "prefill_tok_per_s": 6766.4,
+            "decode_tok_per_s": 127.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "To determine when the two trains meet, we need to calculate the distance each train travels until they meet and find the time at which this occurs.\n\n1. **Determine the head start distance for the Austin train:**\n   - The Austin train leaves at 9am and travels at 60 mph.\n   - By 10am, the Austin train has traveled for 1 hour.\n   - Distance traveled by the Austin train by 10am: \\( 60 \\text{ mph} \\times 1 \\text{ hour} = 60 \\text{ miles} \\).\n\n2. **Calculate the remaining distance between the two trains at 10am:**\n   - Initial distance between Austin and Dallas: 195 miles.\n   - Distance covered by the Austin train by 10am: 60 miles.\n   - Remaining distance between the two trains at 10am: \\( 195 \\text{ miles} - 60 \\text{ miles} = 135 \\text{ miles} \\).\n\n3. **Calculate the relative speed of the two trains:**\n   - Speed of the Austin train: 60 mph.\n   - Speed of the Dallas train: 80 mph.\n   - Relative speed (combined speed towards each other): \\( 60 \\text{ mph} + 80 \\text{ mph} = 140 \\text{ mph} \\).\n\n4. **Determine the time it takes for the trains to meet after 10am:**\n   - Remaining distance: 135 miles.\n   - Relative speed: 140 mph.\n   - Time to meet: \\( \\frac{135 \\text{ miles}}{140 \\text{ mph}} = \\frac{135}{140} \\text{ hours} = \\frac{27}{28} \\text{ hours} \\).\n\n5. **Convert the time to meet into minutes:**\n   - \\( \\frac{27}{28} \\text{ hours} \\times 60 \\text{ minutes/hour} = \\frac{27 \\times 60}{28} \\text{ minutes} = \\frac{1620}{28} \\text{ minutes} \\approx 57.86 \\text{ minutes} \\).\n\n6. **Calculate the exact meeting time:**\n   - The trains start",
+          "tokens": 586,
+          "elapsed_s": 4.12,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 73,
+            "completion_tokens": 513,
+            "host_ms": 2.14,
+            "prefill_ms": 10.9,
+            "decode_ms": 4045.72,
+            "total_ms": 4060.06,
+            "prefill_tok_per_s": 6697.8,
+            "decode_tok_per_s": 126.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "fail (missing: 10:5)",
+          "fail (missing: 10:5)"
+        ],
+        "pass_n": 1,
+        "fail_n": 2,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "prompt": "Write a concise Python function `reverse_string(s: str) -> str` that returns the reversed string. Just the function, no preamble.",
+      "gold_substrings": [
+        "def reverse_string",
+        "[::-1]"
+      ],
+      "samples": [
+        {
+          "text": "```python\ndef reverse_string(s: str) -> str:\n    return s[::-1]\n```",
+          "tokens": 73,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 52,
+            "completion_tokens": 21,
+            "host_ms": 1.9,
+            "prefill_ms": 17.06,
+            "decode_ms": 153.63,
+            "total_ms": 173.87,
+            "prefill_tok_per_s": 3047.7,
+            "decode_tok_per_s": 136.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "```python\ndef reverse_string(s: str) -> str:\n    return s[::-1]\n```",
+          "tokens": 73,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 52,
+            "completion_tokens": 21,
+            "host_ms": 2.16,
+            "prefill_ms": 9.94,
+            "decode_ms": 154.58,
+            "total_ms": 168.48,
+            "prefill_tok_per_s": 5231.1,
+            "decode_tok_per_s": 135.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "```python\ndef reverse_string(s: str) -> str:\n    return s[::-1]\n```",
+          "tokens": 73,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 52,
+            "completion_tokens": 21,
+            "host_ms": 2.07,
+            "prefill_ms": 9.22,
+            "decode_ms": 150.88,
+            "total_ms": 163.44,
+            "prefill_tok_per_s": 5641.9,
+            "decode_tok_per_s": 139.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "prompt": "Write a Python generator `fib()` that yields Fibonacci numbers forever. Just the code.",
+      "gold_substrings": [
+        "def fib",
+        "yield"
+      ],
+      "samples": [
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 80,
+          "elapsed_s": 0.36,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 39,
+            "host_ms": 2.26,
+            "prefill_ms": 24.75,
+            "decode_ms": 282.83,
+            "total_ms": 311.11,
+            "prefill_tok_per_s": 1656.6,
+            "decode_tok_per_s": 137.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 80,
+          "elapsed_s": 0.35,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 39,
+            "host_ms": 1.92,
+            "prefill_ms": 16.64,
+            "decode_ms": 282.82,
+            "total_ms": 302.63,
+            "prefill_tok_per_s": 2463.3,
+            "decode_tok_per_s": 137.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 80,
+          "elapsed_s": 0.35,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 41,
+            "completion_tokens": 39,
+            "host_ms": 1.91,
+            "prefill_ms": 16.43,
+            "decode_ms": 278.93,
+            "total_ms": 298.53,
+            "prefill_tok_per_s": 2494.7,
+            "decode_tok_per_s": 139.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "prompt": "What's one well-regarded book for someone new to embedded systems?",
+      "gold_substrings": [],
+      "samples": [
+        {
+          "text": "A well-regarded book for someone new to embedded systems is \"Embedded Systems: Introduction to the Development Environment\" by Jonathan W. Valvano. This book provides a comprehensive introduction to the field of embedded systems, covering topics such as hardware, software, and the development environment. It is suitable for beginners and includes practical examples and exercises to help readers understand and apply the concepts.",
+          "tokens": 115,
+          "elapsed_s": 0.67,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 77,
+            "host_ms": 1.94,
+            "prefill_ms": 15.32,
+            "decode_ms": 582.19,
+            "total_ms": 600.67,
+            "prefill_tok_per_s": 2480.6,
+            "decode_tok_per_s": 132.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "A well-regarded book for someone new to embedded systems is \"Embedded Systems: Introduction to the Development Environment\" by Jonathan W. Valvano. This book provides a comprehensive introduction to the field of embedded systems, covering topics such as microcontroller architecture, programming, and interfacing. It is known for its practical approach and is often used in educational settings to introduce students to the basics of embedded systems development.",
+          "tokens": 121,
+          "elapsed_s": 0.7,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 83,
+            "host_ms": 1.98,
+            "prefill_ms": 8.93,
+            "decode_ms": 622.38,
+            "total_ms": 634.47,
+            "prefill_tok_per_s": 4253.9,
+            "decode_tok_per_s": 133.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "A well-regarded book for someone new to embedded systems is \"Embedded Systems: Introduction to the Development Environment\" by Jonathan W. Valvano. This book provides a comprehensive introduction to the field of embedded systems, covering topics such as microcontroller architecture, programming, and interfacing. It is known for its practical approach and is often used in educational settings to introduce students to the basics of embedded systems development.",
+          "tokens": 121,
+          "elapsed_s": 0.69,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 83,
+            "host_ms": 2.08,
+            "prefill_ms": 8.96,
+            "decode_ms": 623.02,
+            "total_ms": 635.28,
+            "prefill_tok_per_s": 4240.6,
+            "decode_tok_per_s": 133.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "prompt": "Briefly explain what an MoE (mixture-of-experts) model is and one reason it's appealing vs a dense model of similar quality.",
+      "gold_substrings": [
+        "expert"
+      ],
+      "samples": [
+        {
+          "text": "An MoE (Mixture-of-Experts) model is a type of neural network architecture that divides the processing into multiple expert sub-models, each handling a specific part of the input data. These experts are combined using a gating network that decides which expert or combination of experts should process a given input. This approach allows for more efficient and effective processing of complex data by leveraging specialized sub-models.\n\nOne reason MoE models are appealing compared to dense models of similar quality is their efficiency in terms of computational resources and energy consumption. MoE models can achieve high performance while using fewer resources because not all experts are active for every input. This selective activation reduces the overall computational load, making MoE models more scalable and efficient for large-scale applications.",
+          "tokens": 204,
+          "elapsed_s": 1.21,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 54,
+            "completion_tokens": 150,
+            "host_ms": 2.17,
+            "prefill_ms": 19.07,
+            "decode_ms": 1136.15,
+            "total_ms": 1159.21,
+            "prefill_tok_per_s": 2832.2,
+            "decode_tok_per_s": 132.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "An MoE (Mixture-of-Experts) model is a type of neural network architecture that divides the processing into multiple expert sub-models, each handling a specific part of the input data. These experts are combined using a gating network that decides which expert or combination of experts should process a given input. This approach allows for more efficient and effective processing of complex data by leveraging specialized sub-models.\n\nOne reason MoE models are appealing compared to dense models of similar quality is their efficiency in terms of computational resources and energy consumption. By selectively activating only the relevant experts for a given input, MoE models can significantly reduce the computational load compared to dense models, which process all inputs through a fixed set of parameters. This selective activation not only saves computational resources but also reduces energy consumption, making MoE models more sustainable and scalable for large-scale applications.",
+          "tokens": 225,
+          "elapsed_s": 1.37,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 54,
+            "completion_tokens": 171,
+            "host_ms": 2.31,
+            "prefill_ms": 8.96,
+            "decode_ms": 1297.0,
+            "total_ms": 1309.49,
+            "prefill_tok_per_s": 6024.9,
+            "decode_tok_per_s": 131.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "An MoE (Mixture-of-Experts) model is a type of neural network architecture that divides the processing into multiple expert sub-models, each handling a specific part of the input data. These experts are combined using a gating network that decides which expert or combination of experts should process a given input. This approach allows for more efficient and effective processing of complex data by leveraging specialized sub-models.\n\nOne reason MoE models are appealing compared to dense models of similar quality is their efficiency in terms of computational resources and energy consumption. By selectively activating only the relevant experts for a given input, MoE models can significantly reduce the computational load compared to dense models, which process all inputs through a fixed set of parameters. This selective activation not only saves computational resources but also reduces energy consumption, making MoE models more sustainable and scalable for large-scale applications.",
+          "tokens": 225,
+          "elapsed_s": 1.39,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 54,
+            "completion_tokens": 171,
+            "host_ms": 2.28,
+            "prefill_ms": 9.15,
+            "decode_ms": 1294.86,
+            "total_ms": 1307.56,
+            "prefill_tok_per_s": 5904.9,
+            "decode_tok_per_s": 132.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "prompt": "In two sentences, introduce yourself as Skippy. Stay in character.",
+      "gold_substrings": [
+        "Skippy"
+      ],
+      "samples": [
+        {
+          "text": "Sure thing, buddy! I'm Skippy, always ready for some fun and adventure. Whether it's climbing trees or dreaming up new games, I'm your go-to guy for a good time!",
+          "tokens": 79,
+          "elapsed_s": 0.38,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 41,
+            "host_ms": 1.91,
+            "prefill_ms": 19.05,
+            "decode_ms": 304.4,
+            "total_ms": 326.59,
+            "prefill_tok_per_s": 1995.3,
+            "decode_tok_per_s": 134.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "Sure thing, buddy! I'm Skippy, always ready for some fun and adventure. Whether it's climbing trees or dreaming up new games, I'm your go-to guy for a good time!",
+          "tokens": 79,
+          "elapsed_s": 0.38,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 41,
+            "host_ms": 2.22,
+            "prefill_ms": 8.93,
+            "decode_ms": 304.56,
+            "total_ms": 316.94,
+            "prefill_tok_per_s": 4253.4,
+            "decode_tok_per_s": 134.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "Sure thing, buddy! I'm Skippy, always ready for some fun and adventure. Whether it's climbing trees or dreaming up new games, I'm your go-to guy for a good time!",
+          "tokens": 79,
+          "elapsed_s": 0.37,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 41,
+            "host_ms": 2.25,
+            "prefill_ms": 8.99,
+            "decode_ms": 304.92,
+            "total_ms": 317.38,
+            "prefill_tok_per_s": 4224.9,
+            "decode_tok_per_s": 134.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
+    }
+  ],
+  "summary": {
+    "total_samples": 36,
+    "passed": 16,
+    "pass_rate": 0.4848,
+    "total": 33,
+    "excluded_samples": 3,
+    "excluded_reason": "BROKEN_SUBSTRING_INCOMPATIBLE prompts (persona category)",
+    "regraded_at": "2026-05-08-post-remediation"
+  },
+  "summary_v1_legacy": {
+    "total_samples": 36,
+    "passed": 19,
+    "pass_rate": 0.528
+  }
+}
