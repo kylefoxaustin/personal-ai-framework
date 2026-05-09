@@ -109,4 +109,65 @@ The reviewer signed off on the N=5 reframe as **committable as preliminary on th
 
 ---
 
+## Q5 Verdict — asymmetry confirmed across N=5 (2026-05-09 follow-up)
+
+Per the reviewer's Q5 sequencing recommendation, we ran `claude-sonnet-4-6` LLM-judge on all 5 base+v4 pairs the same day (~$4 Sonnet API, ~3h wall time including a fresh 14B base eval).
+
+### Verdict
+
+**Asymmetry hypothesis confirmed across the full N=5.**
+
+| Family | Substring Δ | Direction | Judge base /8 | Judge v4 /8 | Judge Δ |
+|---|---:|---|---:|---:|---:|
+| Qwen 2.5 7B | +3.1pp | lift | 6.786 | 6.436 | **−0.350** |
+| Qwen 2.5 14B | +8.7pp | lift | 6.816 | 6.816 | **±0.000** |
+| Gemma 2 9B | +3.2pp | lift | 6.718 | 6.098 | **−0.620** |
+| Mistral 7B v0.3 | −3.8pp | regress | 5.718 | 5.500 | **−0.218** |
+| Llama 3.1 8B | −3.2pp | regress | 5.951 | 4.786 | **−1.165** |
+
+All 3 substring lifts erase or reverse on the judge. Both substring regressions hold or widen. Mechanism is consistent across lift cells: faithfulness to RAG context drops on v4, while conciseness and instruction-following hold — the substring grader does not penalise the faithfulness loss because trained phrasings still match gold tokens.
+
+### Data correction (Qwen 14B base reasoning floor)
+
+Running the asymmetry test required a fresh 14B base eval. The resulting baseline measurement corrects three values previously reported on the gotcha #7 N=5 table:
+
+| | Old (interpolated) | New (apples-to-apples) |
+|---|---|---|
+| Qwen 14B reasoning | 6/6 | **3/6** (intermediate) |
+| Qwen 14B refusal | 6/9 | **9/9** |
+| Qwen 14B Δ headline | +5.3pp | **+8.7pp** |
+
+This refines the predictor-vs-proxy caveat the reviewer asked for in Q1: "reasoning floor predicts the direction" was correct as a directional claim across the cells we had measured, but at intermediate band (3/6) the substring still lifted — the predictor is therefore "≤1/6 reasoning → regress; ≥3/6 reasoning → substring lift," not the cleaner "6/6 vs 0–1/6" split the prior data suggested. The asymmetry hypothesis (Q2) is **strengthened** by this correction: 14B's substring lift is exactly the kind of lift the asymmetry predicted would erase on the judge — and it did (Δ=0.000).
+
+### Customer-template guidance — strengthened
+
+The recipe-taxonomy hedge was:
+
+> "...In our N=5 sample, bases with stock reasoning at ceiling (6/6) lifted with the v4 recipe; bases at floor (0–1/6) regressed. Bases in the intermediate range (2–5/6) have not been characterized."
+
+It now becomes (post-judge-verdict):
+
+> "Run a stock baseline on your eval before transferring this recipe to a new base. In our N=5 sample, bases with stock reasoning at floor (0–1/6) regressed on substring AND on a semantic LLM-judge. Bases at intermediate (3/6) or ceiling (6/6) lifted on substring, but the lift erased on the judge. Treat substring lifts on this recipe as format-fidelity-likely until a semantic-rubric judge corroborates; treat substring regressions as real capability damage."
+
+### Files / artifacts
+
+- Full per-cell + per-dimension analysis: `eval/results/asymmetry_n5_judge_vs_substring.md`
+- 6 new judge JSONs: `eval/results/judge_n5_*` (4 from N=5 lifts/regresses) + `eval/results/judge_n5_{base,v4}_qwen25_14b_*` (the new 14B pair)
+- Reused 4 judge JSONs from 2026-05-08 (Qwen 7B + Mistral pairs)
+- 1 new accuracy eval JSON: `acc_baseline-qwen2.5-14b-instruct-v2-rag_20260509-131410.json`
+- 1 new GGUF: `qwen2.5-14b-instruct-stock-q4_k_m.gguf` (8.4G)
+
+All pushed to `gdrive:skippy_files/personal-ai-assistant/`.
+
+### Status
+
+- White paper § 7 asymmetry disclosure updated from "hypothesis with test status named" to "tested and confirmed across N=5"
+- Gotcha #7 doc Addendum table corrected for 14B; Judge-on-N=5 verdict subsection added
+- Customer-template wording in `recipe-taxonomy.md` strengthened
+- Production llm-server restored to 7B v4 (`kyle-7b-v4-q4_k_m.gguf`) and verified healthy after the temporary 14B Instruct base swap
+
+**N=6 sequencing (next week):** with the asymmetry confirmed, an N=6 fine-tune is no longer load-bearing for the framing. It is now an "is the substring predictor sound at intermediate band on a different family" data point — useful but not blocking. Phi-3-mini and Yi-1.5-9B-Chat are downloaded; stock-baseline measurement still pending Kyle's go (`eval/RUNBOOK_n6_stock_baselines.md`).
+
+---
+
 *Document location: `docs/REVIEWER_UPDATE_N5.md`*
