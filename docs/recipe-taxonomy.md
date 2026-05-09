@@ -210,6 +210,14 @@ A prospect picking their own base + recipe locates themselves in the matrix:
    NO  → you're in an unfilled cell. See "Open cells" below.
 ```
 
+### Transferring v4 to a new base (procedure-first, predictor-soft)
+
+The headline split across our N=5 cross-family v4 runs is reasoning-floor-coupled (see gotcha #7 in the white paper and `docs/GOTCHA_7_RESOLUTION.md`). The customer-facing guidance we publish from this — pending N=6 confirmation — is **procedure-first**:
+
+> Run a stock baseline on your eval before transferring this recipe to a new base. In our N=5 sample, bases with stock reasoning at ceiling (6/6) lifted with the v4 recipe (Qwen 2.5 7B/14B, Gemma 2 9B; +3.1 to +5.3pp). Bases at floor (0–1/6) regressed (Mistral 7B v0.3, Llama 3.1 8B; −3.2 to −4.0pp). Bases in the intermediate range (2–5/6) have not been characterized. Treat the recipe as untested for intermediate-reasoning bases and budget a full iteration cycle.
+
+The procedural part (run a stock baseline first, check the reasoning category specifically) is solid regardless of how the predictor evolves. The predictive part is hedged because the predictor itself is at N=5 — clean directional split with no exceptions, but not statistical evidence and not yet ruled out as an observable proxy for some other base property (overall capability, instruction-tuning recipe similarity, eval-corpus overlap).
+
 ## Open cells worth filling next
 
 In priority order — these are the cells where the matrix has its biggest blind spots.
@@ -251,7 +259,7 @@ Three patterns emerge from the validated cells:
 
 1. **Voice transfer is recipe-robust.** All Skippy fine-tunes (including MoE v4) preserved voice. Dim 3 (LoRA targets) does not seem to gate voice transfer; dims 4–5 (loss masking + corpus shape) do most of the voice work.
 2. **Capability transfer is architecture-recipe-coupled.** Dense + attention-only LoRA = capability transferred on Qwen. MoE + attention-only LoRA = capability regressed catastrophically on multihop. MoE + (attention + router) = recommended MoE recipe.
-3. **Recipe transfer is base-capability-coupled (revised at N=5; supersedes the N=2 architecture-coupling reading).** Qwen 7B/14B and Gemma 2 9B all gain (+3.1pp, +5.3pp, +3.2pp). Mistral 7B v0.3 and Llama 3.1 8B both regress (−4.0pp, −3.2pp). The clean predictor is **stock reasoning capability**: bases that ship 6/6 reasoning (Qwen 2.5 7B/14B, Gemma 2 9B) lift on the v4 recipe; bases that ship 0–1/6 reasoning (Mistral, Llama) regress. Architecture-family is not the discriminator — Gemma is non-Qwen and lifts; Llama is non-Qwen and regresses. The gain pattern (refusal, rag_email, numerical_precision) transfers cleanly across all 5 families; the damage pattern (rag_datasheet, coding, rag_blog) appears only when the base lacks reasoning headroom. See `docs/GOTCHA_7_RESOLUTION.md` for full framing and the revised hypothesis.
+3. **Recipe transfer is base-capability-coupled (revised at N=5; supersedes the N=2 architecture-coupling reading).** Qwen 7B/14B and Gemma 2 9B all gain (+3.1pp, +5.3pp, +3.2pp). Mistral 7B v0.3 and Llama 3.1 8B both regress (−4.0pp, −3.2pp). The cleanest predictor we've identified is **stock reasoning capability**: bases that ship 6/6 reasoning (Qwen 2.5 7B/14B, Gemma 2 9B) lift on the v4 recipe; bases that ship 0–1/6 reasoning (Mistral, Llama) regress. Architecture-family is not the discriminator — Gemma is non-Qwen and lifts; Llama is non-Qwen and regresses. The gain pattern (refusal, rag_email, numerical_precision) transfers cleanly across all 5 families; the damage pattern (rag_datasheet, coding, rag_blog) appears only when the base lacks reasoning headroom. **At N=5 we cannot rule out alternative predictors that happen to correlate with reasoning floor in this sample** (overall base capability, training-data overlap, instruction-tuning recipe similarity to v4 targets — see white paper § 7 caveat). Treat as a strong directional indicator, not a causal claim. See `docs/GOTCHA_7_RESOLUTION.md` for full framing and the revised hypothesis.
 
 If hypothesis #2 holds, the customer rule becomes:
 > "Your base is dense → attention-only LoRA is sufficient. Your base is MoE → include the router in your LoRA targets, or expect capability regression on multi-hop reasoning."
