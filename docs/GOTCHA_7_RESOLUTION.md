@@ -173,4 +173,32 @@ train_loss=0.8024 vs Qwen v4 0.676. Higher loss may indicate weaker signal uptak
 
 ---
 
+## Addendum: N=3 update — architecture-coupling reading falsified (2026-05-08 ~23:50)
+
+A third non-Qwen family was added per the reviewer-blessed upgrade criterion ("a third non-Qwen family that also regresses"). The selected base was **Gemma 2 9B Instruct** (Google) — chosen as the cleanest possible non-Qwen data point: different template format from both Qwen (ChatML) and Mistral/Llama (`[INST]`-style), uses `<start_of_turn>`/`<end_of_turn>` markers, and **no `{% generation %}` patch needed**. Same hyperparameters, same 6,517-example corpus, same assistant-only loss, same 5090 hardware.
+
+**Result:** Gemma 2 9B v4 = **82/126 = 65.1%** vs stock 78/126 = 61.9%, a **+3.2pp lift** — same magnitude as Qwen 7B v4 lifted from its base.
+
+This **falsifies the architecture-coupling reading at N=2**. Across N=5 cross-family v4 runs:
+
+| Base | Stock reasoning | Stock refusal | v4 Δheadline |
+|---|---:|---:|---:|
+| Qwen 2.5 7B | 6/6 | 9/9 | +3.1pp |
+| Qwen 2.5 14B | 6/6 | 6/9 | +5.3pp |
+| Gemma 2 9B | 6/6 | 9/9 | **+3.2pp** |
+| Mistral 7B v0.3 | 0/6 | 6/9 | −4.0pp |
+| Llama 3.1 8B | 1/6 | 6/9 | −3.2pp |
+
+The discriminator is **stock reasoning capability**, not architecture family or template format. The three bases that ship 6/6 reasoning all lift; the two that ship 0–1/6 reasoning both regress. Refusal floor and template format are not the discriminators (Qwen 14B is 6/9 stock refusal and lifts; Gemma is non-Qwen with non-ChatML template and lifts).
+
+**Revised framing for the gotcha (supersedes the N=2 family-coupled reading above):**
+
+> "Recipe transfer is base-capability-coupled. Across N=5 cross-family v4 runs, the v4 recipe lifts headline (+3.1 to +5.3pp) on bases whose stock reasoning is at ceiling (6/6) and regresses (−3.2 to −4.0pp) on bases whose stock reasoning is at floor (0–1/6). Architecture family is not the discriminator. The gain pattern (refusal/persona/rag_email) transfers cleanly across all 5 families; the damage pattern (rag_datasheet/coding/rag_blog) appears only when the base lacks reasoning headroom. Strong directional signal — every base point lines up with the reasoning-floor predictor — but N=5 is not statistical evidence. A sixth point with stock reasoning at 3–4/6 (intermediate) would be the highest-information next data point to falsify or confirm."
+
+The damage-portion of the original gotcha (gains transfer, damage is base-specific) survives unchanged. What changed is the predictor of *which way the headline moves*.
+
+White paper § 7 and § "Cross-family baselines" updated to reflect this revision. Recipe taxonomy Tier 3 dispatch table marked complete with Gemma row added. Customer template should advise: **before transferring this recipe to a new base, run a stock baseline on your eval and check the reasoning category specifically; predict the direction from the reasoning floor, not from the family name.**
+
+---
+
 *Document location: `docs/GOTCHA_7_RESOLUTION.md`*
