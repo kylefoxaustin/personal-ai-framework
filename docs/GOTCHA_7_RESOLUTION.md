@@ -201,4 +201,40 @@ White paper § 7 and § "Cross-family baselines" updated to reflect this revisio
 
 ---
 
+## Reviewer follow-up — N=5 reframe sign-off (2026-05-09)
+
+The reviewer who signed off on the N=2 framing reviewed the N=5 reframe (per `docs/REVIEWER_UPDATE_N5.md`). Verdict: **committable as preliminary on the customer-template publication**, with two structural additions and a softer customer-template predictive claim, all folded in below.
+
+### Predictor vs proxy (structural caveat)
+
+At N=5, "reasoning floor predicts the direction" is the cleanest predictor we've identified, **not necessarily the predictor**. Stock overall pass rate doesn't cleanly split this sample (Gemma 61.9% lifts, Mistral 60.6% regresses — opposite-direction calls on a 1.3pp gap), so reasoning floor is meaningfully sharper than obvious alternatives. But other things that correlate with reasoning floor in this sample (overall base capability, training-data overlap, instruction-tuning recipe similarity to v4 targets) could be the actual driver, with reasoning-floor as an observable proxy.
+
+**Framing language now used in white paper § 7:** *"Across N=5, lift/regress correlates perfectly with stock reasoning category performance (6/6 lifts; 0–1/6 regresses). This is consistent with a base-capability-coupling hypothesis. At N=5 we cannot rule out alternative predictors that happen to correlate with reasoning floor in this sample. Treat as a strong directional indicator, not a causal claim."*
+
+### Lift-vs-regress asymmetry (hypothesis with test status)
+
+The grader-methodology caveat (SK-P0-002 + SK-P1-002) may apply asymmetrically across N=5. **Lifts** (high-reasoning bases) learn the corpus's phrasings well — could be partly format-fidelity, as cautioned for N=2 Qwen. **Regressions** (low-reasoning bases) learn the corpus less crisply (higher train_loss; e.g., Llama 0.8024 vs Qwen 7B 0.676), so format-fidelity cannot explain the regression — it must be capability damage on rag_datasheet/coding/rag_blog. If the asymmetry holds, the regressions are stronger evidence than the lifts in the N=5 picture.
+
+**Test status:** judge data exists for one lift cell only (Qwen 7B; judge reverses the substring grader's verdict, consistent with the format-fidelity reading). The asymmetry has not been tested across the full N=5. The train_loss → memorization mechanism is plausible but not airtight (could be memorization difference *or* gradient-flow / base-loss-landscape difference; we are not leaning on train_loss as the mechanism).
+
+**Disclosure carried inline in white paper § 7** (not a footnote): *"Plausibly, the lifts are partly format-fidelity (per our SK-P0-002 + SK-P1-002 caveat) and the regressions are more interpretable as capability damage on real categories. If that asymmetry holds, the regressions are the stronger evidence in the N=5 picture. We have judge data on one lift cell (Qwen 7B); the asymmetry has not been tested across the full N=5."*
+
+### Customer-template guidance (procedure promoted; predictive claim softened)
+
+`docs/recipe-taxonomy.md` now uses the hedged wording: *"Run a stock baseline on your eval before transferring this recipe to a new base. In our N=5 sample, bases with stock reasoning at ceiling (6/6) lifted with the v4 recipe; bases at floor (0–1/6) regressed. Bases in the intermediate range (2–5/6) have not been characterized. Treat the recipe as untested for intermediate-reasoning bases and budget a full iteration cycle."* The procedure (run baseline first, check reasoning category) is solid regardless of how the predictor evolves; the predictive claim stays hedged until N=6.
+
+This supersedes the earlier line in the Addendum that read "predict the direction from the reasoning floor, not from the family name" — the new wording is procedure-first.
+
+### Next-step sequence (this week → next week)
+
+1. **Judge-on-N=5** (this week, ~$5–10 Sonnet, ~2–3h API). Tests the central asymmetry hypothesis. Runbook: `eval/RUNBOOK_judge_n5.md`.
+2. **Stock-baseline measurement of Phi-3-mini + Yi-9B** (local 5090) before any N=6 fine-tune. Whichever lands at 3–4/6 reasoning is the intermediate-band candidate; if neither, identify a different base. Reviewer's blind preference: Phi-3-mini (different family — Microsoft, distinct from Qwen/Mistral/Llama/Gemma — and smaller param regime, 3.8B, which tests size as a confound too). Runbook: `eval/RUNBOOK_n6_stock_baselines.md`.
+3. **N=6 fine-tune** on the chosen base (next week). Falsifies or confirms the reasoning-floor predictor.
+
+### Status
+
+Customer-template publication of the N=5 reframe is **unlocked** post this commit. The N=2 framing earlier in this document remains as a stepping stone; supersession is documented in the Addendum + this follow-up (no re-litigation per reviewer: *"that's framing being correctly updated when new data fired."*).
+
+---
+
 *Document location: `docs/GOTCHA_7_RESOLUTION.md`*
