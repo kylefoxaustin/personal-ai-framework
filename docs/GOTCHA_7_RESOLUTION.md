@@ -184,12 +184,14 @@ This **falsifies the architecture-coupling reading at N=2**. Across N=5 cross-fa
 | Base | Stock reasoning | Stock refusal | v4 Δheadline |
 |---|---:|---:|---:|
 | Qwen 2.5 7B | 6/6 | 9/9 | +3.1pp |
-| Qwen 2.5 14B | 6/6 | 6/9 | +5.3pp |
+| Qwen 2.5 14B † | 3/6 | 9/9 | +8.7pp |
 | Gemma 2 9B | 6/6 | 9/9 | **+3.2pp** |
 | Mistral 7B v0.3 | 0/6 | 6/9 | −4.0pp |
 | Llama 3.1 8B | 1/6 | 6/9 | −3.2pp |
 
-The discriminator is **stock reasoning capability**, not architecture family or template format. The three bases that ship 6/6 reasoning all lift; the two that ship 0–1/6 reasoning both regress. Refusal floor and template format are not the discriminators (Qwen 14B is 6/9 stock refusal and lifts; Gemma is non-Qwen with non-ChatML template and lifts).
+† Qwen 14B base values updated 2026-05-09 from a fresh apples-to-apples baseline (`acc_baseline-qwen2.5-14b-instruct-v2-rag_20260509-131410.json`); replaces earlier interpolated values (6/6 reasoning, 6/9 refusal, +5.3pp Δ). The corrected 3/6 reasoning makes 14B an *intermediate*-band base that lifted on substring — refining the predictor below.
+
+The cleanest predictor of *substring* direction is **stock reasoning capability**, not architecture family or template format. Bases at 6/6 stock reasoning (Qwen 7B, Gemma 2 9B) lift on substring; the intermediate Qwen 14B (3/6 stock reasoning, post-correction) also lifts; bases at 0–1/6 stock reasoning (Mistral, Llama) regress. Refusal floor and template format are not the discriminators (Qwen 14B is 9/9 stock refusal and lifts; Gemma is non-Qwen with non-ChatML template and lifts). **However**, the substring-direction predictor only describes which way the substring grader moves — see the Judge-on-N=5 Verdict section above for what the LLM-judge says about whether those substring lifts are real semantic gains.
 
 **Revised framing for the gotcha (supersedes the N=2 family-coupled reading above):**
 
@@ -198,6 +200,34 @@ The discriminator is **stock reasoning capability**, not architecture family or 
 The damage-portion of the original gotcha (gains transfer, damage is base-specific) survives unchanged. What changed is the predictor of *which way the headline moves*.
 
 White paper § 7 and § "Cross-family baselines" updated to reflect this revision. Recipe taxonomy Tier 3 dispatch table marked complete with Gemma row added. Customer template should advise: **before transferring this recipe to a new base, run a stock baseline on your eval and check the reasoning category specifically; predict the direction from the reasoning floor, not from the family name.**
+
+---
+
+## Judge-on-N=5 verdict — asymmetry hypothesis confirmed (2026-05-09)
+
+Per the reviewer's Q5 sequencing (judge first, then N=6), we ran `claude-sonnet-4-6` LLM-judge on all 5 base+v4 pairs (~$4 total, ~3h wall time). Verdict: **the lift-vs-regress asymmetry is confirmed across the full N=5.**
+
+| Family | Substring Δ | Substring direction | Judge base /8 | Judge v4 /8 | Judge Δ | Verdict |
+|---|---:|---|---:|---:|---:|---|
+| Qwen 2.5 7B | +3.1pp | lift | 6.786 | 6.436 | **−0.350** | substring lift reverses |
+| Qwen 2.5 14B | +8.7pp | lift | 6.816 | 6.816 | **±0.000** | substring lift erased |
+| Gemma 2 9B | +3.2pp | lift | 6.718 | 6.098 | **−0.620** | substring lift reverses (strong) |
+| Mistral 7B v0.3 | −3.8pp | regress | 5.718 | 5.500 | **−0.218** | regress holds on judge |
+| Llama 3.1 8B | −3.2pp | regress | 5.951 | 4.786 | **−1.165** | regress widens on judge |
+
+**No lift cell is corroborated by the judge. Both regress cells are corroborated.**
+
+The mechanism is consistent: across all three lift cells, **faithfulness to RAG context drops on v4** (Qwen 7B −0.43, Qwen 14B −0.26, Gemma −0.20), while conciseness and instruction-following hold or improve. The substring grader does not penalise the faithfulness loss because the trained phrasings still match gold tokens; the judge does. On the regress cells, correctness AND faithfulness drop, plus (for Llama) conciseness collapses.
+
+This **promotes the asymmetry disclosure from "hypothesis with test status named" to "tested and confirmed across the full N=5."** The reviewer's Q2 wording can drop the "we have judge data on one lift cell only" hedge; the new wording (carried inline in white paper § 7):
+
+> "Tested across N=5: all 3 substring lifts (Qwen 7B, Qwen 14B, Gemma) erase or reverse on the LLM-judge; both substring regressions (Mistral, Llama) hold or widen. The asymmetry is confirmed: substring lifts on this recipe should be treated as format-fidelity-likely until a semantic-rubric judge corroborates; substring regressions are real capability damage."
+
+**Customer-template guidance strengthens to:**
+
+> "Run a stock baseline on your eval before transferring this recipe to a new base. In our N=5 sample, bases with stock reasoning at floor (0–1/6) regressed on substring AND on a semantic LLM-judge. Bases at intermediate (3/6) or ceiling (6/6) lifted on substring, but the lift erased on the judge. Treat substring lifts on this recipe as format-fidelity-likely until a semantic-rubric judge corroborates; treat substring regressions as real capability damage."
+
+Full per-cell + per-dimension analysis: `eval/results/asymmetry_n5_judge_vs_substring.md`. Judge JSONs pushed to `gdrive:skippy_files/personal-ai-assistant/eval-results/`.
 
 ---
 
