@@ -123,4 +123,37 @@ All three sharpenings folded in this commit. Cross-judge corroboration tracked a
 
 ---
 
+## Q3 stock-baseline track — completed (2026-05-09)
+
+Per the reviewer's Q3 hybrid recommendation (parallel to publication), we ran stock baselines on **Phi-3-mini-4k-instruct, Yi-1.5-9B-Chat, and Gemma 2 2B-it** — apples-to-apples (temp=0, RAG=on, `eval/prompts_v2.json`, 132-sample basis), local 5090, no API spend.
+
+### Stock-baseline results
+
+| Base | Total (post-regrade /126) | Reasoning /6 | Refusal /9 | Verdict |
+|---|---:|---:|---:|---|
+| Phi-3-mini-4k-instruct | 12/126 = 9.5% | **3/6** | 0/9 | **Disqualified for N=6 fine-tune** — 4K context window saturated by RAG (rag_datasheet 0/78). Any FT-vs-base comparison would be context-broken vs context-broken, not stock-vs-FT capability. A Phi-3-mini-128k variant would be needed. |
+| Yi-1.5-9B-Chat | 86/126 = 68.3% | **3/6** | 6/9 | **Best N=6 fine-tune candidate.** Solid stock baseline, intermediate reasoning band, no context handicap, different family (01.AI). |
+| Gemma 2 2B-it | 72/126 = 57.1% | **3/6** | 6/9 | Viable as a size-confound point within the Gemma family. Optional secondary N=6 candidate. |
+
+**All three landed at 3/6 reasoning** — the same intermediate band as Qwen 14B. No 4/6 or 5/6 candidate emerged from this trio. The 4/6 and 5/6 reasoning bands remain uncharacterized.
+
+### Updated recommendation on N=6 sequencing
+
+If/when we run an N=6 fine-tune, **Yi-1.5-9B-Chat is the cleanest candidate** — it tests "does the v4 recipe lift on a *different family* at 3/6 reasoning, the way Qwen 14B did?" Same band, different family lineage (01.AI vs Alibaba), no context-window confound, comparable size to existing Gemma 9B baseline (clean size comparison).
+
+The fine-tune itself is **not blocking customer-template publication** (already unlocked). It's queued as "useful when a specific question emerges" — e.g., NXP-internal review asking about Yi or Phi specifically, or a customer hitting an intermediate-band base.
+
+**To fully characterize the predictor across all bands**, future work would still need at least one base measured at 2/6, 4/6, and 5/6 reasoning. None of our three candidates landed in those bands. A wider candidate sweep is downstream methodology hardening, not blocking.
+
+### Files / artefacts
+
+- `eval/results/stock_baselines_n6_candidates.md` — full per-cell + per-category breakdown
+- 3 baseline eval JSONs in `eval/results/`
+- 3 stock GGUFs in `models/{phi-3-mini-4k-hf,yi-1.5-9b-chat-hf,gemma-2-2b-it-hf}/`
+- Pushed (or pushing) to `gdrive:skippy_files/personal-ai-assistant/`
+
+Production llm-server temporarily swapped through Phi → Yi → Gemma 2 2B for the eval cycle, then restored to 7B v4 (verified healthy each time).
+
+---
+
 *Document location: `docs/REVIEWER_FOLLOWUP_JUDGE_VERDICT.md`*
