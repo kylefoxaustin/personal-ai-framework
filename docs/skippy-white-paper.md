@@ -148,7 +148,8 @@ v4 worked at 7B parameters. Did it scale? We ran the same recipe at 14B, 30B spa
 | Qwen3 **30B-MoE** | v4 + router + experts | **65.9%** | extra capacity *over-fits* and breaks blog retrieval |
 | Qwen2.5 **32B** | v4 | **66.7%** | **regresses −4.7pp from 32B base; trades capability for safety** |
 | Mistral **7B v0.3** | v4 | **59.5%** | **regresses −4.0pp; recipe transfers gains but damages retrieval on non-Qwen base** |
-| Llama **3.1 8B** | v4 | **56.3%** | **regresses −3.2pp; same sign as Mistral; cleaner data point (no template patch needed); N=2 non-Qwen directional pattern** |
+| Llama **3.1 8B** | v4 | **56.3%** | **regresses −3.2pp; same sign as Mistral; cleaner data point (no template patch needed)** |
+| Gemma **2 9B** | v4 | **65.1%** | **lifts +3.2pp from stock; breaks the N=2 non-Qwen regression pattern; cleanest non-Qwen data point (different template format, no ChatML, no patch)** |
 
 The recipe that won at 7B and 14B did NOT extend cleanly. The MoE base failed catastrophically with the simple recipe; needed an architecture-aware variant. The 32B dense base did something subtler — apples-to-apples vs the unmodified Qwen2.5-32B-Instruct (71.4% on the same eval), the fine-tune produced a 4.6pp regression. Per-category, the trade was clean: it FIXED a refusal-calibration failure (the same `made_up_peripheral` fabrication present in both the 14B fine-tune AND the 32B stock base, where stock 32B fabricated 3/9, FT recovered to 9/9), but cost ~9 sample-equivalents across numerical_precision, rag_datasheet, and multihop. The recipe is trading capability for safety calibration at this corpus size, and at 32B the trade is net-negative.
 
@@ -216,15 +217,29 @@ This matters for two reasons:
 
 A second confirmation showed up when we ran cross-family baselines (see "Cross-family baselines" section below): Llama-3.1 8B Instruct and Mistral 7B v0.3 Instruct, completely unmodified, *also* score 6/9 on the same `made_up_peripheral` adversarial probe — the exact failure mode our 14B v4 fine-tune showed. Qwen2.5-7B Instruct stock is the outlier at 9/9. The base model's refusal-calibration baseline is family-specific; some bases will need more refusal data than others to reach the same gate, and you cannot tell which without running the baseline first.
 
-### 7. Recipe transfer is base-family-coupled, not just architecture-class-coupled
+### 7. Recipe transfer is base-capability-coupled (revised; supersedes the architecture-coupling reading)
 
-When we ran the v4 recipe on Mistral 7B v0.3 — same hyperparameters, same corpus, same loss masking, only the base model changed — we expected a roughly Qwen-shaped gain pattern with maybe a smaller magnitude. We got something different: the *gains* transferred cleanly (refusal +3, rag_email +3, numerical_precision +3 — same lifts the recipe produces on Qwen), but three categories that the Qwen v4 fine-tune held or improved *regressed* on Mistral. Coding fell 6/6 → 3/6. rag_blog fell 3/3 → 0/3. rag_datasheet fell 53/78 → 45/78. Net headline: 63.5% → 59.5%, a 3.8-point regression on a base that was already weaker than Qwen.
+The first version of this gotcha (drafted at N=2 non-Qwen) read: "recipe transfer is base-family-coupled, not just architecture-class-coupled." That framing was correct as a refutation of "transfers cleanly across families" but it implied a weaker hypothesis — *family identity* — than the data supports. With Gemma 2 9B v4 added as a third non-Qwen point and lifting +3.2pp (matching Qwen 7B's lift magnitude), the family-coupled framing no longer holds. We update the hypothesis accordingly.
 
-The pattern is informative: gains are family-portable, damage is family-specific. The same recipe that lifted the Qwen 7B base by 3.1 points dropped the Mistral 7B base by 3.8 points, while producing identical category-level *gains*. The recipe didn't fail to transfer — it transferred *and* introduced a separate failure mode that wasn't present on Qwen.
+**What we measured (N=5 cross-family v4 runs):**
 
-The hypothesis we have, untested: Mistral's chat template required `{% generation %}` marker patching to enable assistant-only loss masking (a known training-pipeline requirement when the stock template doesn't ship with the markers, similar to what we hit on Qwen3-MoE). The patched template plus assistant-only loss may interact with Mistral's `[INST]`/`[/INST]` formatting differently than the same combination interacted with Qwen2.5's ChatML, in a way that re-weights the model away from retrieval-following at inference. Falsifying or confirming that takes one more training run with full-sequence loss instead of assistant-only — outside the scope of this campaign, queued as Tier 4 work in the recipe taxonomy.
+| Base | Stock reasoning | Stock refusal | v4 Δheadline |
+|---|---:|---:|---:|
+| Qwen 2.5 7B | 6/6 | 9/9 | **+3.1pp** |
+| Qwen 2.5 14B | 6/6 | 6/9 | **+5.3pp** |
+| Gemma 2 9B | 6/6 | 9/9 | **+3.2pp** |
+| Mistral 7B v0.3 | 0/6 | 6/9 | **−4.0pp** |
+| Llama 3.1 8B | 1/6 | 6/9 | **−3.2pp** |
 
-**What to do**: when transferring a fine-tune recipe across base families, *expect the gain pattern to transfer cleanly and budget for at least one corrective iteration to address family-specific damage.* A recipe declared "validated" on one family is not validated on another until you've run the apples-to-apples baseline AND the FT on the same eval. The headline number can hide a useful-gain plus damaging-side-effect combination that nets to "regression" but is actually composed of two independent effects.
+The split is clean: the three bases that ship 6/6 reasoning (Qwen 2.5 7B/14B, Gemma 2 9B) all lift on the v4 recipe; the two bases that ship 0–1/6 reasoning (Mistral, Llama) both regress. The 14B Qwen lifts despite 6/9 stock refusal, so refusal alone doesn't explain the split — reasoning-floor does.
+
+**Revised hypothesis:** the v4 recipe lifts headline on bases whose reasoning floor is already at ceiling. The recipe re-weights the model toward refusal calibration, persona, and rag_email by spending capacity that the high-reasoning bases have to spare. On bases whose reasoning is already 0–1/6, the same re-weighting comes out of categories the recipe needs to keep — coding, rag_blog, rag_datasheet — and the headline regresses. The damage-portion of the gotcha (gains transfer, damage is base-specific) is still load-bearing; what changed is the predictor of *which way the headline moves*.
+
+**What this means for the previous template-patch hypothesis.** With Mistral alone we had a confound (Mistral required the `{% generation %}` template patch; the patch could have been the regression cause). Llama did not need the patch and still regressed. Gemma did not need the patch and lifted. So template-patching is not the discriminator — base-capability is.
+
+**What to do**: before transferring a recipe to a new base family, run the stock baseline on your eval and look at the reasoning category specifically. If the base is at ceiling (5/6 or 6/6), expect the recipe to lift. If the base is at floor (0–1/6), expect it to regress and budget for at least one corrective iteration. A recipe declared "validated" on one base is not validated on another until you've run the apples-to-apples baseline AND the FT on the same eval. The headline number can hide a useful-gain plus damaging-side-effect combination; the side effect's magnitude correlates with stock reasoning capability, in our data.
+
+**Caveat on N**: this is N=5 (3 lifts vs 2 regresses) along the proposed predictor. Strong as a directional signal — every base point lines up with the reasoning-floor hypothesis — but not statistical evidence. A sixth point with stock reasoning at 3–4/6 (intermediate) would be the highest-information next data point to falsify or confirm.
 
 ---
 
@@ -256,7 +271,7 @@ Implications a reviewer should weigh:
 3. **The `reasoning` category is binary-ish across base families** — Qwen 7B base 6/6, Mistral 7B v0.3 0/6, Llama-3.1 8B 1/6. This is a chain-of-thought-presence detector, not a graded score, and shouldn't be weighted equally with categories that produce continuous variation.
 4. **Customers replicating this recipe should rebuild the eval set against their own corpus shape with balanced sample sizes.** Skippy's eval is dominated by NXP datasheet retrieval because that's what the test author needed to verify. A defect-tracking team's eval should be dominated by defect-record retrieval. The same recipe will produce different headlines on differently-shaped evals.
 
-This composition does not invalidate the campaign's findings — the load-bearing claims (ship-smaller, recipe-architecture-coupling, voice-transfers-recipe-robustly) survive direction-wise even after rebalancing. But customers adopting this recipe template should not expect headline numbers to transfer; they should expect the category-Δ *pattern* to transfer (or not, per gotcha #7).
+This composition does not invalidate the campaign's findings — the load-bearing claims (ship-smaller, recipe-base-capability-coupling, voice-transfers-recipe-robustly) survive direction-wise even after rebalancing. But customers adopting this recipe template should not expect headline numbers to transfer; they should expect the category-Δ *pattern* to transfer (or not, per gotcha #7).
 
 ---
 
@@ -381,7 +396,7 @@ Findings 1 and 2 are independent but tell the same story: **the +3.1pp substring
 
 This does not mean the fine-tune is worse. The shipping decision for Skippy 7B v4 is driven by the three-gate framework — the FT passes the safety gate (9/9 refusal vs 6/9 for several stock bases) and the voice gate (a 12× response-length reduction from v1). The substring gain is corroborating, not the deciding factor.
 
-**For gotcha #7 (recipe transfer):** the cross-family deltas (Qwen +3.1pp/+5.3pp vs Mistral −3.8pp/Llama −3.0pp) are measured by the same potentially-format-biased grader. The directional split — Qwen gains, non-Qwen regresses — may be more reliable than the magnitudes. See the gotcha #7 section for the preliminary framing.
+**For gotcha #7 (recipe transfer):** the cross-family deltas (Qwen +3.1pp/+5.3pp, Gemma +3.2pp vs Mistral −4.0pp/Llama −3.2pp) are measured by the same potentially-format-biased grader. The split — three families gain, two regress, with no architecture-family pattern surviving N=3 — is the load-bearing finding; the magnitudes are less reliable than the directional split. See the gotcha #7 section for revised framing.
 
 **Cross-reference:** Any claim in this paper of the form "+N.Npp vs base" for a fine-tuned model should be read in light of this section. The number is a real measurement; what it measures is narrower than "capability gain."
 
@@ -468,7 +483,7 @@ Generalizing: when a fine-tune plateaus or regresses going up the size axis, the
 We're not done. The customer-template story (recipe taxonomy + verified cells + known-failure cells) is a deliverable in its own right — a defect-tracking team or an internal-knowledge-base team can take this matrix, locate themselves in it, and predict their fine-tune outcome before paying for cloud GPU.
 
 Open work:
-- Cross-architecture-family validation (does the recipe transfer to Llama 3 or Mistral, or is it Qwen-specific?) — **complete.** Both Mistral 7B v0.3 v4 (−4.0pp) and Llama 3.1 8B v4 (−3.2pp) regressed vs their bases. Directionally consistent N=2 non-Qwen pattern. See "Cross-family baselines" section and gotcha #7. The recipe is validated on Qwen 7B–14B; non-Qwen transfer should be treated as unvalidated until a corrective iteration is run.
+- Cross-architecture-family validation (does the recipe transfer to Llama 3 or Mistral, or is it Qwen-specific?) — **complete (N=3).** Mistral 7B v0.3 v4 (−4.0pp) and Llama 3.1 8B v4 (−3.2pp) regressed; **Gemma 2 9B v4 lifted (+3.2pp)** — same magnitude as Qwen 7B v4 lifted from its base. The N=2 non-Qwen regression pattern did not survive N=3: cross-family transfer is **mixed**, not architecture-coupled. See "Cross-family baselines" section and gotcha #7. The recipe is validated on Qwen 7B–14B and Gemma 2 9B; Mistral and Llama transfer should be treated as unvalidated until a corrective iteration is run.
 - A semantic grader replacement for substring matching, to fix the v3-was-better-but-scored-lower problem at the eval layer
 - RAG-grounded refusal data for the 14B fabrication problem — teaching the model that "no relevant context retrieved" → refuse
 - A standardized cost ledger so the next product team using this recipe can budget without rediscovering our numbers
@@ -487,30 +502,31 @@ Before training a Llama-3 or Mistral version of Skippy, we need to know what the
 |---|---:|---:|
 | Qwen2.5-7B Instruct (existing baseline) | 70.6% (89/132) | — |
 | Mistral 7B v0.3 Instruct | 63.5% (80/132) | −6.8 pp |
+| Gemma 2 9B Instruct | 61.9% (78/126 post-regrade; 59.1% raw 78/132) | −7.5 pp |
 | Llama-3.1 8B Instruct | 59.5% (75/132) | −10.6 pp |
 
 The headline spread is meaningful but doesn't tell you much on its own — the eval is built around our domain corpus and Qwen2.5 has favorable RAG-following behavior. The interesting question is whether the per-category profile is **the same shape with smaller magnitude** (which would say "v4 should transfer") or **a different shape** (which would say "each base needs a recipe variant").
 
 ### Per-category profile
 
-| Category | Llama-3.1 8B | Mistral 7B v0.3 | Qwen2.5-7B base |
-|---|---:|---:|---:|
-| coding | 6/6 ✓ | 6/6 ✓ | 6/6 ✓ |
-| general | 3/6 | 3/6 | 3/6 |
-| multihop | 6/9 | 6/9 | 5/9 |
-| numerical_precision | 4/6 | 3/6 | 3/6 |
-| persona | 0/6 | 0/6 | 0/6 |
-| rag_blog | 3/3 ✓ | 3/3 ✓ | 3/3 ✓ |
-| rag_datasheet | 45/78 | 53/78 | 54/78 |
-| rag_email | 1/3 | 0/3 | 0/3 |
-| reasoning | 1/6 | 0/6 | **6/6** |
-| refusal | 6/9 | 6/9 | **9/9** |
+| Category | Llama-3.1 8B | Mistral 7B v0.3 | Gemma 2 9B | Qwen2.5-7B base |
+|---|---:|---:|---:|---:|
+| coding | 6/6 ✓ | 6/6 ✓ | **6/6 ✓** | 6/6 ✓ |
+| general | 3/6 | 3/6 | 3/6 | 3/6 |
+| multihop | 6/9 | 6/9 | 6/9 | 5/9 |
+| numerical_precision | 4/6 | 3/6 | 3/6 | 3/6 |
+| persona | 0/6 | 0/6 | 0/6 | 0/6 |
+| rag_blog | 3/3 ✓ | 3/3 ✓ | 3/3 ✓ | 3/3 ✓ |
+| rag_datasheet | 45/78 | 53/78 | 42/78 | 54/78 |
+| rag_email | 1/3 | 0/3 | 0/3 | 0/3 |
+| reasoning | 1/6 | 0/6 | **6/6** | **6/6** |
+| refusal | 6/9 | 6/9 | **9/9** | **9/9** |
 
-Three things jump out:
+Four things jump out:
 
-1. **The cross-family gap is NOT uniform.** Llama beats Qwen on multihop AND numerical_precision. The headline deficit is concentrated in `rag_datasheet` and `reasoning`. Calling Llama "weaker" without a category breakdown would be wrong.
-2. **Reasoning is the biggest cross-family delta.** Qwen2.5 scores 6/6 on the reasoning category; Llama scores 1/6, Mistral 0/6. This is the chain-of-thought training Qwen ships with, visible in pass rate.
-3. **Refusal calibration differs by family.** Qwen2.5-7B already passes 9/9 on adversarial fictional-product probes. Llama and Mistral both score 6/9 — the *same* failure mode that 14B v4 introduced is *already present* in the unmodified Llama and Mistral bases. This was the gotcha #6 finding (the unmodified base may already have problems) repeating across families.
+1. **The cross-family gap is NOT uniform.** Llama beats Qwen on multihop AND numerical_precision. Gemma matches Qwen on reasoning, refusal, AND multihop. The headline deficit for Llama/Mistral is concentrated in `rag_datasheet` and `reasoning`; Gemma's deficit is concentrated in `rag_datasheet` only. Calling any of them "weaker" without a category breakdown would be wrong.
+2. **Reasoning splits the families into two camps.** Qwen2.5 and Gemma 2 both score 6/6 on the reasoning category; Llama scores 1/6, Mistral 0/6. The chain-of-thought training Qwen and Gemma ship with is visible in pass rate. This is also the variable that best predicts whether the v4 recipe lifts or regresses on the family — see the recipe-transfer analysis below.
+3. **Refusal calibration differs by family.** Qwen2.5-7B and Gemma 2-9B both pass 9/9 on adversarial fictional-product probes. Llama and Mistral both score 6/9 — the *same* failure mode that 14B v4 introduced is *already present* in the unmodified Llama and Mistral bases. This was the gotcha #6 finding (the unmodified base may already have problems) repeating across families. Notably the bases that already pass 9/9 stock are also the bases the v4 recipe lifts (Qwen, Gemma); the bases at 6/9 stock are the ones the recipe regresses (Mistral, Llama).
 4. **Persona is 0/6 for every stock base.** No off-the-shelf model writes in Skippy's voice — this is what fine-tuning has to produce, and it's measurable. The persona gate is not a fine-tune-vs-fine-tune question; it's a does-fine-tune-do-anything-at-all question.
 
 ### What this implies for the v4 recipe transfer question
@@ -560,9 +576,24 @@ We ran the v4 recipe on Llama 3.1 8B Instruct (same hyperparameters, same corpus
 
 The same damage pattern as Mistral: categories the recipe gains on transfer cleanly (refusal, persona, rag_email); categories it might damage are family-specific (rag_datasheet, coding).
 
-**Llama is the cleaner non-Qwen data point.** Llama 3.1 uses ChatML-like templates and did not require the `{% generation %}` patch that Mistral needed — so the Llama regression is not confounded by the template-patch interaction. The −3.2pp Llama result and the −4.0pp Mistral result tell the same directional story by independent means.
+**Llama is a cleaner non-Qwen data point than Mistral.** Llama 3.1 uses ChatML-like templates and did not require the `{% generation %}` patch that Mistral needed — so the Llama regression is not confounded by the template-patch interaction. The −3.2pp Llama result and the −4.0pp Mistral result tell the same directional story by independent means.
 
-Together, N=2 non-Qwen families both regress while N=2 Qwen families gain. See gotcha #7 and the Grader-Methodology Findings section for framing caveats on these numbers.
+### Gemma 2 9B v4 — pre-registered prediction falsified in direction, breaks the cross-family pattern
+
+To push the cross-family question past N=2, we ran the v4 recipe on Gemma 2 9B Instruct (Google) — a third non-Qwen family chosen specifically to be the cleanest possible data point: different template format from both Qwen (ChatML) and Llama/Mistral (`[INST]`-style), `<start_of_turn>`/`<end_of_turn>` markers, and no `{% generation %}` patch needed (trl ships `gemma_training_chat_template` with the markers in place). Same hyperparameters, same 6,517-example corpus, same assistant-only loss. Result: **82/126 = 65.1%** — a **+3.2pp lift** above the 61.9% Gemma stock baseline. Same magnitude as Qwen 7B v4's lift from its base.
+
+| Prediction | Gemma v4 actual | Status |
+|---|---|---|
+| Recipe regresses (consistent with Mistral + Llama) | **+3.2pp lift** | ❌ **falsified** — recipe lifts on a non-Qwen family |
+| Coding/reasoning/refusal already maxed by stock Gemma | held at 100% | ✅ confirmed — all three categories are 6/6 stock and 6/6 v4 |
+
+The lift is concentrated where the stock Gemma had headroom: numerical_precision (3/6 → 5/6, +33pp) and rag_datasheet (42/78 → 48/78, +7.7pp). One catastrophic regression appears: rag_blog (3/3 → 0/3) — the same pattern the Mistral v4 ran into on retrieval categories. So the *damage profile* is partially family-coupled (rag_blog is a hot spot for non-Qwen v4 transfer regardless of whether headline lifts or regresses), but the *headline direction* is not.
+
+**What this means for gotcha #7:** the architecture-coupling hypothesis (suggested by N=2 non-Qwen regression) does not survive the third data point. The recipe transfers headline-positively to two families that ship reasoning capability already at ceiling (Qwen2.5, Gemma 2) and headline-negatively to two families that don't (Mistral, Llama). A revised hypothesis: **base-capability ceiling matters more than architecture family.** Bases that already pass 100% on coding/reasoning/refusal have headroom on the categories the recipe lifts (numerical_precision, datasheet retrieval, refusal calibration) without losing the categories it gates on. Bases that don't already pass those high-floor categories appear to "spend" them when the recipe pushes refusal/persona/rag_email upward.
+
+This is preliminary — N=3 by 2 vs 1 split is not statistical evidence — but it falsifies the simpler "Qwen vs everyone else" framing. Customer rule update: cross-family transfer is **mixed**, not architecture-coupled. Predict from per-category stock profile (does the base already max coding/reasoning/refusal?), not from family name.
+
+Together: 3 of 5 cross-family families lift on the v4 recipe (Qwen 7B/14B, Gemma); 2 of 5 regress (Mistral, Llama). See gotcha #7 and the Grader-Methodology Findings section for framing caveats on these numbers.
 
 ---
 

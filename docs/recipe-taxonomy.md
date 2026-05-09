@@ -176,8 +176,9 @@ The cells we've actually run. All share dims 4 (assistant-only loss), 5 (alpaca 
 | Qwen3-30B-A3B router-v1 | MoE | 30B (3B active) | attention + router (q/k/v/o + gate.weight) | 2 | H100 | ⚠️ partial: multihop 6/9 RECOVERED, datasheet still −4 | ✅ 141c | ✅ | 70.6% |
 | **Qwen3-30B-A3B full-v1** | MoE | 30B (3B active) | attention + router + packed experts (r=8 via target_parameters) | 2 | H100 | ❌ over-fit: rag_blog 3/3 → 0/3, datasheet 51 → 47/78 | ⚠️ 104c (over-terse) | ✅ | **65.9%** |
 | **Mistral-7B-v0.3 v4** | dense | 7B | attention + dense FFN | 2 | 5090 | ❌ −4.0pp: gains transfer (refusal/email/numerical +3 each) but recipe damages retrieval (datasheet −8, blog −3, coding −3) | ✅ refusal 9/9 | ✅ | **59.5%** |
+| **Gemma-2-9B-it v4** | dense | 9B | attention + dense FFN | 2 | 5090 | ✅ **+3.2pp**: same magnitude as Qwen 7B v4 lift; numerical_precision +33pp, rag_datasheet +7.7pp; one regression (rag_blog 3/3→0/3) | ✅ | ✅ refusal 9/9 (already 9/9 stock) | **65.1%** |
 
-**Reading the matrix (Tier 3 cross-family validation complete 2026-05-08):**
+**Reading the matrix (Tier 3 cross-family validation complete 2026-05-08, N=3 non-Qwen):**
 
 **For dense Qwen2.5:**
 - 7B v4 and 14B v4 at 2 epochs both lift their bases cleanly.
@@ -230,7 +231,8 @@ The middle row WAS the most diagnostic experiment. Outcome: **the failure decomp
 | Cell | Hypothesis | Validates what | Status |
 |---|---|---|---|
 | Mistral-7B v0.3 + v4 recipe | Recipe transfers across base families | "Not Qwen-specific" | ✅ DONE 2026-05-08 — **PARTIALLY transfers**: gains (refusal/email/numerical) clean across families; recipe damages retrieval categories on Mistral (rag_datasheet −8, rag_blog −3, coding −3). Net headline regression −3.8pp. Filed as filled negative-transfer cell — recipe is base-family-coupled. |
-| Llama-3.1 8B + v4 recipe | Recipe transfers across base families | "Not Qwen-specific" | ✅ DONE 2026-05-08 — **NEGATIVE TRANSFER**: 71/126 = 56.3% (−3.2pp vs 59.5% base). Same sign as Mistral (−3.8pp). Gains (refusal 6/9→9/9, persona, rag_email) transfer cleanly; retrieval regresses. Llama is the **cleaner non-Qwen data point** — used ChatML-like template, no `{% generation %}` patch needed (unlike Mistral). Pre-registered prediction (ceiling 60-63%) falsified in the same direction as Mistral. |
+| Llama-3.1 8B + v4 recipe | Recipe transfers across base families | "Not Qwen-specific" | ✅ DONE 2026-05-08 — **NEGATIVE TRANSFER**: 71/126 = 56.3% (−3.2pp vs 59.5% base). Same sign as Mistral (−3.8pp). Gains (refusal 6/9→9/9, persona, rag_email) transfer cleanly; retrieval regresses. Llama is the **cleaner non-Qwen data point** than Mistral — used ChatML-like template, no `{% generation %}` patch needed (unlike Mistral). Pre-registered prediction (ceiling 60-63%) falsified in the same direction as Mistral. |
+| Gemma-2 9B + v4 recipe | Recipe transfers across base families (third non-Qwen) | "N=2 non-Qwen regression survives N=3" | ✅ DONE 2026-05-08 — **POSITIVE TRANSFER**: 82/126 = 65.1% (+3.2pp vs 61.9% base). Same magnitude as Qwen 7B v4's lift. Gemma was chosen as the cleanest possible non-Qwen data point: different template format (`<start_of_turn>` markers, not ChatML or `[INST]`), no `{% generation %}` patch needed. **Falsifies the architecture-coupling reading at N=2**. The clean predictor across all five families (Qwen 7B/14B, Gemma, Mistral, Llama) is stock reasoning capability — bases at 6/6 reasoning lift; bases at 0–1/6 regress. See gotcha #7. |
 | Mixtral-8x7B + (attention + router) LoRA | MoE-aware recipe transfers across MoE families | "Not Qwen3-specific MoE failure" | ⏸️ Untested |
 
 ### Tier 4 (recipe variants — change dims 4–6)
@@ -249,7 +251,7 @@ Three patterns emerge from the validated cells:
 
 1. **Voice transfer is recipe-robust.** All Skippy fine-tunes (including MoE v4) preserved voice. Dim 3 (LoRA targets) does not seem to gate voice transfer; dims 4–5 (loss masking + corpus shape) do most of the voice work.
 2. **Capability transfer is architecture-recipe-coupled.** Dense + attention-only LoRA = capability transferred on Qwen. MoE + attention-only LoRA = capability regressed catastrophically on multihop. MoE + (attention + router) = recommended MoE recipe.
-3. **Recipe transfer is base-family-coupled (preliminary, N=2).** Qwen 7B and 14B both gain (+3.1pp, +5.3pp). Mistral 7B v0.3 and Llama 3.1 8B both regress (−4.0pp, −3.2pp). The gain pattern (refusal, rag_email, numerical_precision) transfers cleanly across families; the damage pattern (rag_datasheet, coding, rag_blog) is family-specific. Llama is the cleaner non-Qwen data point (no template patch needed). Both non-Qwen regressions are individually below 2σ but directionally consistent. See `docs/GOTCHA_7_RESOLUTION.md` for full framing and upgrade criteria.
+3. **Recipe transfer is base-capability-coupled (revised at N=5; supersedes the N=2 architecture-coupling reading).** Qwen 7B/14B and Gemma 2 9B all gain (+3.1pp, +5.3pp, +3.2pp). Mistral 7B v0.3 and Llama 3.1 8B both regress (−4.0pp, −3.2pp). The clean predictor is **stock reasoning capability**: bases that ship 6/6 reasoning (Qwen 2.5 7B/14B, Gemma 2 9B) lift on the v4 recipe; bases that ship 0–1/6 reasoning (Mistral, Llama) regress. Architecture-family is not the discriminator — Gemma is non-Qwen and lifts; Llama is non-Qwen and regresses. The gain pattern (refusal, rag_email, numerical_precision) transfers cleanly across all 5 families; the damage pattern (rag_datasheet, coding, rag_blog) appears only when the base lacks reasoning headroom. See `docs/GOTCHA_7_RESOLUTION.md` for full framing and the revised hypothesis.
 
 If hypothesis #2 holds, the customer rule becomes:
 > "Your base is dense → attention-only LoRA is sufficient. Your base is MoE → include the router in your LoRA targets, or expect capability regression on multi-hop reasoning."
