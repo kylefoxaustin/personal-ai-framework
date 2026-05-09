@@ -191,6 +191,8 @@ This **falsifies the architecture-coupling reading at N=2**. Across N=5 cross-fa
 
 † Qwen 14B base values updated 2026-05-09 from a fresh apples-to-apples baseline (`acc_baseline-qwen2.5-14b-instruct-v2-rag_20260509-131410.json`); replaces earlier interpolated values (6/6 reasoning, 6/9 refusal, +5.3pp Δ). The corrected 3/6 reasoning makes 14B an *intermediate*-band base that lifted on substring — refining the predictor below.
 
+**Data provenance audit (2026-05-09):** all eval headlines in the N=5 matrix derive from apples-to-apples runs through the same eval pipeline (temp=0, RAG=on, `eval/prompts_v2.json`, 132-sample basis). Qwen 14B was previously cited from interpolated data; corrected and re-measured 2026-05-09. **No other cells used interpolated values** — verified by inspection of each base JSON's `config` block (Qwen 7B base 2026-05-01, Mistral base 2026-05-07, Llama base 2026-05-07, Gemma base 2026-05-08, Qwen 14B base 2026-05-09).
+
 The cleanest predictor of *substring* direction is **stock reasoning capability**, not architecture family or template format. Bases at 6/6 stock reasoning (Qwen 7B, Gemma 2 9B) lift on substring; the intermediate Qwen 14B (3/6 stock reasoning, post-correction) also lifts; bases at 0–1/6 stock reasoning (Mistral, Llama) regress. Refusal floor and template format are not the discriminators (Qwen 14B is 9/9 stock refusal and lifts; Gemma is non-Qwen with non-ChatML template and lifts). **However**, the substring-direction predictor only describes which way the substring grader moves — see the Judge-on-N=5 Verdict section above for what the LLM-judge says about whether those substring lifts are real semantic gains.
 
 **Revised framing for the gotcha (supersedes the N=2 family-coupled reading above):**
@@ -215,9 +217,13 @@ Per the reviewer's Q5 sequencing (judge first, then N=6), we ran `claude-sonnet-
 | Mistral 7B v0.3 | −3.8pp | regress | 5.718 | 5.500 | **−0.218** | regress holds on judge |
 | Llama 3.1 8B | −3.2pp | regress | 5.951 | 4.786 | **−1.165** | regress widens on judge |
 
-**No lift cell is corroborated by the judge. Both regress cells are corroborated.**
+**Across all five cells, every judge-Δ is ≤ 0.** The v4 recipe produced no LLM-judge-corroborated capability gain in any cell tested. Lift cells go to flat-or-negative on judge; regress cells go further negative. Substring lifts aren't just "uncorroborated" — they are affirmatively contradicted by the judge.
+
+**Lift magnitude on substring does not correlate with judge-Δ.** Qwen 14B has the largest substring lift in the dataset (+8.7pp) and the most "evaporative" judge result (Δ=±0.000). A bigger substring lift did not produce a bigger judge result. If anything, larger substring lifts are larger format-fidelity artifacts, not larger capability gains. This is load-bearing for how customers should read v4 numbers.
 
 The mechanism is consistent: across all three lift cells, **faithfulness to RAG context drops on v4** (Qwen 7B −0.43, Qwen 14B −0.26, Gemma −0.20), while conciseness and instruction-following hold or improve. The substring grader does not penalise the faithfulness loss because the trained phrasings still match gold tokens; the judge does. On the regress cells, correctness AND faithfulness drop, plus (for Llama) conciseness collapses.
+
+**Methodology hardening on the path forward.** This is a single-judge result (`claude-sonnet-4-6`); a single judge carries a "what if the judge has a systematic bias" risk. **Cross-judge corroboration with a non-Anthropic model (GPT-4, DeepSeek, Llama-405B-judge) is the highest-value single hardening and is queued as future work, not blocking customer-template publication.** Judge-at-temp=0.3 was considered and is *not* worth running — temp=0.3 already shows fine-tune fragility (SK-P0-002), and rerunning judge there conflates two confounds rather than separating them. Production decoding regime (temp=0) is the right metric to keep judge orthogonal at.
 
 This **promotes the asymmetry disclosure from "hypothesis with test status named" to "tested and confirmed across the full N=5."** The reviewer's Q2 wording can drop the "we have judge data on one lift cell only" hedge; the new wording (carried inline in white paper § 7):
 
