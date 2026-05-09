@@ -1071,45 +1071,54 @@ SLIDES.append(slide_skippy_moe_upgrade)
 
 def slide_v4_campaign_final():
     s = add_blank()
-    add_title(s, "v4 campaign final — recipe transfer is architecture-coupled",
-              "Six fine-tunes across Qwen2.5 dense + Qwen3-A3B MoE — one production model, four useful failure-data points")
+    add_title(s, "v4 campaign final — recipe transfer is architecture- and family-coupled",
+              "Qwen gains scale 7B–14B. MoE needs router. Non-Qwen families regress (preliminary N=2 signal — see grader-methodology note).")
 
     headline_rows = [
-        ("Qwen2.5-7B Instruct (stock)",                        "Dense / 7B",       "70.6%",   "—",          "base reference"),
-        ("Qwen2.5-7B v4 ★ PRODUCTION",                          "Dense / 7B",       "73.8%",   "+3.2pp",     "voice ✓ safety ✓ — ships"),
-        ("Qwen2.5-14B v4",                                      "Dense / 14B",      "76.2%",   "+5.6pp",     "best headline; fabricates fictional peripherals 0/3"),
-        ("Qwen2.5-32B Instruct (stock)",                        "Dense / 32B",      "71.4%",   "—",          "base reference"),
-        ("Qwen2.5-32B v4 (clean, 2 ep)",                        "Dense / 32B",      "66.7%",   "−4.7pp",     "recipe overruns this corpus at 32B (param:data ratio)"),
-        ("Qwen3-30B-A3B Instruct-2507 (stock)",                 "MoE / 30B-A3B",    "74.6%",   "—",          "base reference"),
-        ("Qwen3-30B-A3B v4 (attention-only)",                   "MoE / 30B-A3B",    "64.3%",   "−10.3pp",     "catastrophic on multihop (0/9) — recipe MoE-incompatible"),
-        ("Qwen3-30B-A3B v4 + router LoRA",                      "MoE / 30B-A3B",    "70.6%",   "−4.0pp",     "router recovers reasoning — recommended MoE recipe"),
-        ("Qwen3-30B-A3B v4 + router + experts",                 "MoE / 30B-A3B",    "65.9%",   "−8.7pp",     "expert LoRA over-fits 6.5K-example corpus"),
+        ("Qwen2.5-7B Instruct (stock)",          "Dense / 7B",      "70.6%",  "—",        "base reference"),
+        ("Qwen2.5-7B v4 ★ PRODUCTION",           "Dense / 7B",      "73.8%",  "+3.2pp",   "voice ✓ safety ✓ — ships"),
+        ("Qwen2.5-14B v4",                        "Dense / 14B",     "76.2%",  "+5.6pp",   "best headline; fabricates fictional peripherals 0/3"),
+        ("Qwen2.5-32B Instruct (stock)",          "Dense / 32B",     "71.4%",  "—",        "base reference"),
+        ("Qwen2.5-32B v4 (clean, 2 ep)",          "Dense / 32B",     "66.7%",  "−4.7pp",   "recipe overruns corpus at 32B (param:data ratio)"),
+        ("Qwen3-30B-A3B Instruct-2507 (stock)",   "MoE / 30B-A3B",  "74.6%",  "—",        "base reference"),
+        ("Qwen3-30B-A3B v4 (attention-only)",     "MoE / 30B-A3B",  "64.3%",  "−10.3pp",  "catastrophic on multihop (0/9) — recipe MoE-incompatible"),
+        ("Qwen3-30B-A3B v4 + router LoRA ✓",     "MoE / 30B-A3B",  "70.6%",  "−4.0pp",   "router recovers reasoning — recommended MoE recipe"),
+        ("Qwen3-30B-A3B v4 + router + experts",  "MoE / 30B-A3B",  "65.9%",  "−8.7pp",   "expert LoRA over-fits 6.5K-example corpus"),
+        ("Mistral 7B v0.3 v4  [non-Qwen]",       "Dense / 7B",      "59.5%",  "−4.0pp",   "gains transfer; retrieval regresses; template-confound possible"),
+        ("Llama-3.1 8B v4  [non-Qwen, clean]",   "Dense / 8B",      "56.3%",  "−3.2pp",   "same pattern; no template patch — cleaner data point"),
     ]
-    add_table(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(3.7),
+    add_table(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(4.2),
               ["Model / configuration", "Arch / size", "Pass rate", "vs base", "Story"],
-              headline_rows, font_size=11, highlight_rows={1, 7})
+              headline_rows, font_size=10, highlight_rows={1, 7})
 
-    add_box(s, Inches(0.5), Inches(5.25), Inches(6.0), Inches(1.7),
+    add_box(s, Inches(0.5), Inches(5.75), Inches(3.9), Inches(1.1),
             "Dense rule (validated 7B–14B)",
-            fill=SURFACE, border=ACCENT2, size=12, bold=True)
-    add_text(s, Inches(0.7), Inches(5.75), Inches(5.6), Inches(1.3), [
-        "• Attention-only LoRA, r=64, 100 refusal exemplars, 2 epochs",
-        "• Lifts capability AND preserves voice at 7B + 14B",
-        "• At 32B with 6.5K examples, recipe TRADES capability for safety calibration — net regressive",
-    ], size=11)
+            fill=SURFACE, border=ACCENT2, size=11, bold=True)
+    add_text(s, Inches(0.65), Inches(6.15), Inches(3.65), Inches(0.75), [
+        "• r=64, 100 refusal exemplars, 2 epochs",
+        "• Lifts 7B + 14B; trades at 32B (param:data ratio)",
+    ], size=10)
 
-    add_box(s, Inches(6.8), Inches(5.25), Inches(6.0), Inches(1.7),
+    add_box(s, Inches(4.55), Inches(5.75), Inches(3.9), Inches(1.1),
             "MoE rule (validated)",
-            fill=SURFACE, border=ACCENT3, size=12, bold=True)
-    add_text(s, Inches(7.0), Inches(5.75), Inches(5.6), Inches(1.3), [
-        "• Attention-only on MoE breaks reasoning catastrophically",
-        "• Add router (target_parameters=['gate.weight']) → recovers",
-        "• Adding expert FFN LoRA over-fits at this corpus size — exclude",
-    ], size=11)
+            fill=SURFACE, border=ACCENT3, size=11, bold=True)
+    add_text(s, Inches(4.7), Inches(6.15), Inches(3.65), Inches(0.75), [
+        "• Attn-only breaks reasoning — must add router",
+        "• Expert FFN LoRA over-fits — exclude",
+    ], size=10)
+
+    add_box(s, Inches(8.6), Inches(5.75), Inches(4.2), Inches(1.1),
+            "Cross-family rule (preliminary N=2)",
+            fill=SURFACE, border=ACCENT3, size=11, bold=True)
+    add_text(s, Inches(8.75), Inches(6.15), Inches(3.95), Inches(0.75), [
+        "• Qwen gains; Mistral + Llama both regress",
+        "• Gain pattern transfers; damage is family-specific",
+        "• Treat as unvalidated; N≥3 needed to establish",
+    ], size=10)
 
     add_text(s, Inches(0.5), Inches(7.0), Inches(12.3), Inches(0.35), [
-        "132-sample eval (44 prompts × 3 samples), v2-rag, Q4_K_M, hybrid retrieval. Same host (5090) for dense; H100 for 32B + MoE.",
-    ], size=10, color=MUTED)
+        "126-sample post-regrade eval, v2-rag, Q4_K_M, hybrid retrieval. 5090 for dense 7B/14B; H100 for 32B + MoE. Cross-family deltas: temp=0 substring — fragile under perturbation for fine-tunes (see grader-methodology section in white paper).",
+    ], size=9, color=MUTED)
 SLIDES.append(slide_v4_campaign_final)
 
 
@@ -1143,12 +1152,12 @@ def slide_cross_family_baselines():
             "Quality: NOT family-invariant",
             fill=SURFACE, border=ACCENT3, size=12, bold=True)
     add_text(s, Inches(7.0), Inches(3.85), Inches(5.6), Inches(1.4), [
-        "• Same 5090 budget, three different quality outcomes",
-        "• Reasoning is the biggest delta (Qwen 6/6 vs Llama 1/6)",
-        "• Refusal calibration differs by family — Llama and",
-        "   Mistral fabricate fictional peripherals out of the box",
-        "• Persona is 0/6 on every stock base — fine-tune is the",
-        "   ONLY way to get Skippy's voice (across all three families)",
+        "• Three quality outcomes from the same 5090 budget",
+        "• Reasoning: Qwen 6/6 vs Llama 1/6 vs Mistral 0/6",
+        "• Refusal: Llama/Mistral fabricate out of the box (3/9)",
+        "• Persona 0/6 every stock base — fine-tune required",
+        "• v4 FT: both non-Qwen regress (−4.0pp / −3.2pp)",
+        "  → preliminary cross-family N=2 signal",
     ], size=11)
 
     add_box(s, Inches(0.5), Inches(5.4), Inches(12.3), Inches(1.5),
@@ -1298,38 +1307,40 @@ SLIDES.append(slide_fabrication_skippy_choice)
 
 def slide_recipe_taxonomy():
     s = add_blank()
-    add_title(s, "Recipe as an 8-dimensional tuple — design space + customer template",
-              "Every fine-tune is a cell in a matrix. Two recipes that match on all 8 dims should produce the same outcome.")
+    add_title(s, "Recipe as a 6-dimensional tuple — design space + customer template",
+              "Every fine-tune is a cell in a matrix. Two recipes that match on all 6 dims should produce the same outcome.")
 
     add_box(s, Inches(0.5), Inches(1.4), Inches(6.0), Inches(4.0),
-            "The 8 dimensions",
+            "6 functional dimensions (define the recipe)",
             fill=SURFACE, border=ACCENT, size=13, bold=True)
     add_text(s, Inches(0.7), Inches(1.95), Inches(5.6), Inches(3.4), [
         "1. Base architecture class  (dense / MoE / hybrid)",
-        "2. Base size class  (edge ≤7B / mid 7-14B / large 14-32B / XL)",
+        "2. Base size class  (edge ≤7B / mid 7-14B / large 14-32B)",
         "3. LoRA target set  (attention / +FFN / +router / +experts)",
         "4. Loss masking  (full-seq / assistant-only / completion-only)",
         "5. Corpus shape  (instruction / +refusal / multi-turn / mixed)",
         "6. Hyperparameters  (rank, α, epochs, batch, LR, schedule)",
-        "7. Evaluation gates  (capability + voice + safety — all three)",
-        "8. Hardware tier  (5090 / H100 / multi-GPU)",
+        "",
+        "+ validation gates (did it work?): capability + voice + safety",
+        "+ hardware tier (does it fit?): 5090 / H100 / multi-GPU",
     ], size=12)
 
     add_box(s, Inches(6.8), Inches(1.4), Inches(6.0), Inches(4.0),
-            "Skippy matrix today",
+            "Skippy matrix — complete as of 2026-05-08",
             fill=SURFACE, border=ACCENT2, size=13, bold=True)
     add_text(s, Inches(7.0), Inches(1.95), Inches(5.6), Inches(3.4), [
         "Validated cells (3):",
-        "• Dense 7B + attention-only — production",
+        "• Dense 7B + attention-only — production ✓",
         "• Dense 14B + attention+FFN — voice ✓ safety ⚠️",
         "• MoE 30B-A3B + attention+router — partial recovery",
         "",
         "Failure-data cells (4): MoE attn-only, MoE +experts,",
         "Dense 32B (corpus-too-small), 14B-fabricates",
         "",
-        "Open Tier 3 cells (cross-family — baselines just landed):",
-        "• Llama-3.1 8B + v4 recipe — stock 59.5%, FT TBD",
-        "• Mistral 7B v0.3 + v4 recipe — stock 63.5%, FT TBD",
+        "Cross-family Tier 3 — DONE:",
+        "• Mistral 7B v0.3 v4: −4.0pp (damages retrieval)",
+        "• Llama 3.1 8B v4: −3.2pp (cleaner; no template confound)",
+        "→ Preliminary N=2 non-Qwen regression pattern",
     ], size=12)
 
     add_box(s, Inches(0.5), Inches(5.55), Inches(12.3), Inches(1.45),
@@ -1408,8 +1419,9 @@ def slide14_takeaways():
         "Confident fabrication is industry-wide — Qwen 32B / Llama 8B / Mistral 7B all fabricate fictional peripherals 3/9 of the time. Customer playbook is LAYERED defense (RAG-grounded refusal data + system grounding enforcement); ship-smaller is the deployment shortcut.",
         "Bandwidth physics still holds — Skippy is BW-bound, not compute-bound; 200 TOPS over-provisioned, 100.8 GB/s usable (75% util) is the real constraint. MoE wins decode-per-active-byte.",
         "Cross-family on 5090: 7B-class dense Q4_K_M decode is family-invariant within ~7% (170-185 tok/s across Qwen / Mistral / Llama). Performance follows GGUF size, not vendor.",
-        "Cross-family on quality is NOT invariant: same eval, Qwen 7B = 70.6% / Mistral 7B = 63.5% / Llama 3.1 8B = 59.5%. Pick base for quality, not for tok/s.",
-        "Substring eval is gameable — verbose models incidentally hit gold tokens; concise correct models miss. Track capability + voice + safety as three independent gates.",
+        "Cross-family stock quality is NOT invariant: Qwen 7B = 70.6% / Mistral 7B = 63.5% / Llama 3.1 8B = 59.5%. Pick base for quality, not tok/s.",
+        "Cross-family recipe transfer is preliminary (N=2): v4 on Mistral 7B (−4.0pp) and Llama 3.1 8B (−3.2pp) both regress. Gain pattern transfers cleanly; damage is family-specific. Llama is the cleaner point (no template-patch confound). Budget a corrective iteration before declaring the recipe valid on a non-Qwen base.",
+        "Substring eval is gameable — and specifically fragile for fine-tune-vs-base comparisons: fine-tunes drop ~26pp at temp=0.3; base models are flat. The grader measures format-fidelity-or-correctness; for fine-tunes these can decouple. An LLM judge gives the opposite direction on v4-vs-base. Treat FT headline gains as temp=0-scoped; track all three gates independently.",
         "Sizer/perf-model methodology: cross-class analytic fallback over-projected Llama-3.1 8B by 1.95× on 5090. Use measured per-(base, hardware) anchors, not extrapolation.",
     ], size=12)
 SLIDES.append(slide14_takeaways)
