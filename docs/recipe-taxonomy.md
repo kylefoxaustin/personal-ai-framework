@@ -168,6 +168,7 @@ The cells we've actually run. All share dims 4 (assistant-only loss), 5 (alpaca 
 | Cell name | Arch | Size | LoRA targets | Epochs | HW | Capability | Voice | Safety | Headline |
 |---|---|---|---|---|---|---|---|---|---:|
 | Qwen2.5-7B v4 | dense | 7B | attention-only | 2 | 5090 | ✅ +3.2pp | ✅ 157c | ⚠️ reasoning −3 vs base | **73.8%** |
+| **Llama-3.1-8B v4** | dense | 8B | attention + dense FFN | 2 | 5090 | ❌ −3.2pp: gains (refusal 9/9, persona, rag_email) transfer; recipe damages retrieval (rag_datasheet −8, coding −3) | ✅ | ✅ refusal 9/9 | **56.3%** |
 | Qwen2.5-14B v4 | dense | 14B | attention + dense FFN | 2 | 5090 | ✅ +5.6pp | ✅ 157c | ⚠️ fabricates `made_up_peripheral` 0/3 | **76.2%** |
 | Qwen2.5-32B v4 (3 ep CONFOUND) | dense | 32B | attention + dense FFN | **3 ⚠️** | H100 | ❓ no 32B base eval; tanked datasheet | ✅ 224c (loose) | ✅ all clean | 66.7% |
 | **Qwen2.5-32B v4 CLEAN** | dense | 32B | attention + dense FFN | 2 | H100 | ⚠️ plateau (corpus-too-small) | ✅ 152c | mixed (multihop 3/9) | **66.7%** |
@@ -176,7 +177,7 @@ The cells we've actually run. All share dims 4 (assistant-only loss), 5 (alpaca 
 | **Qwen3-30B-A3B full-v1** | MoE | 30B (3B active) | attention + router + packed experts (r=8 via target_parameters) | 2 | H100 | ❌ over-fit: rag_blog 3/3 → 0/3, datasheet 51 → 47/78 | ⚠️ 104c (over-terse) | ✅ | **65.9%** |
 | **Mistral-7B-v0.3 v4** | dense | 7B | attention + dense FFN | 2 | 5090 | ❌ −4.0pp: gains transfer (refusal/email/numerical +3 each) but recipe damages retrieval (datasheet −8, blog −3, coding −3) | ✅ refusal 9/9 | ✅ | **59.5%** |
 
-**Reading the matrix (Tier 3 cross-family validation started 2026-05-08):**
+**Reading the matrix (Tier 3 cross-family validation complete 2026-05-08):**
 
 **For dense Qwen2.5:**
 - 7B v4 and 14B v4 at 2 epochs both lift their bases cleanly.
@@ -229,7 +230,7 @@ The middle row WAS the most diagnostic experiment. Outcome: **the failure decomp
 | Cell | Hypothesis | Validates what | Status |
 |---|---|---|---|
 | Mistral-7B v0.3 + v4 recipe | Recipe transfers across base families | "Not Qwen-specific" | ✅ DONE 2026-05-08 — **PARTIALLY transfers**: gains (refusal/email/numerical) clean across families; recipe damages retrieval categories on Mistral (rag_datasheet −8, rag_blog −3, coding −3). Net headline regression −3.8pp. Filed as filled negative-transfer cell — recipe is base-family-coupled. |
-| Llama-3.1 8B + v4 recipe | Recipe transfers across base families | "Not Qwen-specific" | ⏸️ Stock baseline DONE (56.8%); FT not yet trained. Pre-registered prediction (white paper): headline ceiling 60-63% — likely also falsified per Mistral pattern. |
+| Llama-3.1 8B + v4 recipe | Recipe transfers across base families | "Not Qwen-specific" | ✅ DONE 2026-05-08 — **NEGATIVE TRANSFER**: 71/126 = 56.3% (−3.2pp vs 59.5% base). Same sign as Mistral (−3.8pp). Gains (refusal 6/9→9/9, persona, rag_email) transfer cleanly; retrieval regresses. Llama is the **cleaner non-Qwen data point** — used ChatML-like template, no `{% generation %}` patch needed (unlike Mistral). Pre-registered prediction (ceiling 60-63%) falsified in the same direction as Mistral. |
 | Mixtral-8x7B + (attention + router) LoRA | MoE-aware recipe transfers across MoE families | "Not Qwen3-specific MoE failure" | ⏸️ Untested |
 
 ### Tier 4 (recipe variants — change dims 4–6)
@@ -244,10 +245,11 @@ The middle row WAS the most diagnostic experiment. Outcome: **the failure decomp
 
 ## Reading the matrix
 
-Two patterns emerge from the validated cells:
+Three patterns emerge from the validated cells:
 
-1. **Voice transfer is recipe-robust.** All three Skippy fine-tunes (including MoE v4) preserved voice. Dim 3 (LoRA targets) does not seem to gate voice transfer; dims 4–5 (loss masking + corpus shape) do most of the voice work.
-2. **Capability transfer is architecture-recipe-coupled.** Dense + attention-only LoRA = capability transferred. MoE + attention-only LoRA = capability regressed catastrophically on multihop. The hypothesis-to-test is whether MoE + (attention + router) LoRA recovers capability.
+1. **Voice transfer is recipe-robust.** All Skippy fine-tunes (including MoE v4) preserved voice. Dim 3 (LoRA targets) does not seem to gate voice transfer; dims 4–5 (loss masking + corpus shape) do most of the voice work.
+2. **Capability transfer is architecture-recipe-coupled.** Dense + attention-only LoRA = capability transferred on Qwen. MoE + attention-only LoRA = capability regressed catastrophically on multihop. MoE + (attention + router) = recommended MoE recipe.
+3. **Recipe transfer is base-family-coupled (preliminary, N=2).** Qwen 7B and 14B both gain (+3.1pp, +5.3pp). Mistral 7B v0.3 and Llama 3.1 8B both regress (−4.0pp, −3.2pp). The gain pattern (refusal, rag_email, numerical_precision) transfers cleanly across families; the damage pattern (rag_datasheet, coding, rag_blog) is family-specific. Llama is the cleaner non-Qwen data point (no template patch needed). Both non-Qwen regressions are individually below 2σ but directionally consistent. See `docs/GOTCHA_7_RESOLUTION.md` for full framing and upgrade criteria.
 
 If hypothesis #2 holds, the customer rule becomes:
 > "Your base is dense → attention-only LoRA is sufficient. Your base is MoE → include the router in your LoRA targets, or expect capability regression on multi-hop reasoning."

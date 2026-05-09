@@ -148,6 +148,7 @@ v4 worked at 7B parameters. Did it scale? We ran the same recipe at 14B, 30B spa
 | Qwen3 **30B-MoE** | v4 + router + experts | **65.9%** | extra capacity *over-fits* and breaks blog retrieval |
 | Qwen2.5 **32B** | v4 | **66.7%** | **regresses −4.7pp from 32B base; trades capability for safety** |
 | Mistral **7B v0.3** | v4 | **59.5%** | **regresses −4.0pp; recipe transfers gains but damages retrieval on non-Qwen base** |
+| Llama **3.1 8B** | v4 | **56.3%** | **regresses −3.2pp; same sign as Mistral; cleaner data point (no template patch needed); N=2 non-Qwen directional pattern** |
 
 The recipe that won at 7B and 14B did NOT extend cleanly. The MoE base failed catastrophically with the simple recipe; needed an architecture-aware variant. The 32B dense base did something subtler — apples-to-apples vs the unmodified Qwen2.5-32B-Instruct (71.4% on the same eval), the fine-tune produced a 4.6pp regression. Per-category, the trade was clean: it FIXED a refusal-calibration failure (the same `made_up_peripheral` fabrication present in both the 14B fine-tune AND the 32B stock base, where stock 32B fabricated 3/9, FT recovered to 9/9), but cost ~9 sample-equivalents across numerical_precision, rag_datasheet, and multihop. The recipe is trading capability for safety calibration at this corpus size, and at 32B the trade is net-negative.
 
@@ -467,7 +468,7 @@ Generalizing: when a fine-tune plateaus or regresses going up the size axis, the
 We're not done. The customer-template story (recipe taxonomy + verified cells + known-failure cells) is a deliverable in its own right — a defect-tracking team or an internal-knowledge-base team can take this matrix, locate themselves in it, and predict their fine-tune outcome before paying for cloud GPU.
 
 Open work:
-- Cross-architecture-family validation (does the recipe transfer to Llama 3 or Mistral, or is it Qwen-specific?) — **stock baselines just landed; see next section.** v4 fine-tunes on these bases are open-cell Tier 3.
+- Cross-architecture-family validation (does the recipe transfer to Llama 3 or Mistral, or is it Qwen-specific?) — **complete.** Both Mistral 7B v0.3 v4 (−4.0pp) and Llama 3.1 8B v4 (−3.2pp) regressed vs their bases. Directionally consistent N=2 non-Qwen pattern. See "Cross-family baselines" section and gotcha #7. The recipe is validated on Qwen 7B–14B; non-Qwen transfer should be treated as unvalidated until a corrective iteration is run.
 - A semantic grader replacement for substring matching, to fix the v3-was-better-but-scored-lower problem at the eval layer
 - RAG-grounded refusal data for the 14B fabrication problem — teaching the model that "no relevant context retrieved" → refuse
 - A standardized cost ledger so the next product team using this recipe can budget without rediscovering our numbers
@@ -545,6 +546,23 @@ This is a new finding worth promoting to its own gotcha (added below): **recipe 
 The hypothesis we have, untested: Mistral's chat template required `{% generation %}` marker patching before assistant-only loss could work (similar to Qwen3-MoE). The patched template + the loss-masking strategy may interact differently with Mistral's `[INST]`/`[/INST]` formatting than with Qwen's ChatML markers, in a way that biases retrieval-following. Verifying or falsifying that requires running v4 on Mistral with full-sequence loss instead of assistant-only — separate iteration, not done here.
 
 The cell is added to the recipe taxonomy as a **filled negative-transfer cell**: Mistral 7B v0.3 + v4 recipe = recipe damages retrieval, gains refusal/email/numerical-precision; net regression. Customer rule: if your base is non-Qwen dense, expect the gain pattern to transfer but budget for at least one corrective iteration on retrieval categories before declaring the recipe valid for that family.
+
+### Llama 3.1 8B v4 — pre-registered prediction confirmed in direction, falsified in magnitude
+
+We ran the v4 recipe on Llama 3.1 8B Instruct (same hyperparameters, same corpus, assistant-only loss). Result: **71/126 = 56.3%** — a **−3.2pp regression** from the 59.5% Llama stock baseline.
+
+| Prediction | Llama v4 actual | Status |
+|---|---|---|
+| Refusal lift (recipe-driven) | +3 (6/9 → 9/9) | ✅ confirmed |
+| Reasoning won't move | flat (1/6 → 1/6) | ✅ confirmed |
+| rag_email lift | +3 (1/3 → 3/3) | ✅ confirmed |
+| Headline ceiling 60–63% | 56.3% | ❌ **falsified** — regressed below stock baseline |
+
+The same damage pattern as Mistral: categories the recipe gains on transfer cleanly (refusal, persona, rag_email); categories it might damage are family-specific (rag_datasheet, coding).
+
+**Llama is the cleaner non-Qwen data point.** Llama 3.1 uses ChatML-like templates and did not require the `{% generation %}` patch that Mistral needed — so the Llama regression is not confounded by the template-patch interaction. The −3.2pp Llama result and the −4.0pp Mistral result tell the same directional story by independent means.
+
+Together, N=2 non-Qwen families both regress while N=2 Qwen families gain. See gotcha #7 and the Grader-Methodology Findings section for framing caveats on these numbers.
 
 ---
 
