@@ -106,4 +106,69 @@ Holds: customer-template publication paused pending your call on Q3.
 
 ---
 
+## Reviewer Reply (2026-05-10) — two-factor framing + ship now + Phi-4 queued
+
+The reviewer adopted a sharper framing than any of my three Q1 proposals, recommended a specific candidate for Q2 (Phi-4), and overruled my Q3 default of (c) re-look in favor of (a) ship now.
+
+### Q1 verdict — two-factor model, not "intermediate is mixed"
+
+Reviewer's verbatim framing:
+
+> "The single-factor reasoning-floor predictor was falsified at the intermediate band by Yi-1.5-9B-Chat. The N=6 data is consistent with a two-factor refinement: lift on substring requires either ceiling stock reasoning (6/6) OR the base being family-matched to the corpus's source distribution (Qwen, in our case). Cross-family bases without ceiling reasoning regress, regardless of intermediate reasoning headroom. This refinement is preliminary at N=6 and predicts that a third cross-family intermediate-reasoning base should regress; that prediction has not been tested."
+
+Reviewer's reasoning for picking this framing over my proposals: parsimony + falsifiable prediction. The single-factor "intermediate is mixed" framing makes no prediction about anything outside the cells already measured. The two-factor model makes a clean falsifiable prediction about Phi-4 (or any third cross-family 3/6 base). It's "overfitting territory" at N=6 (two free parameters on a six-row dataset) but it's *the more useful working hypothesis* until N=7 lands.
+
+**Adopted in `recipe-taxonomy.md`, `docs/GOTCHA_7_RESOLUTION.md`, `docs/skippy-white-paper.md § 7`** — all three docs now lead the N=6 update with the two-factor model. Reviewer's exact customer-facing wording (with concrete numbers) is in `recipe-taxonomy.md`.
+
+### Q2 verdict — Phi-4 is the recommended third 3/6 cross-family base
+
+Three reasons reviewer named:
+
+1. Microsoft/Phi lineage is genuinely distinct from anything tested (Mistral-Nemo is still Mistral-family; DeepSeek-V2 is structurally different but came after most of the corpus content).
+2. Phi-4 is recent enough to be culturally interesting for an NXP audience asking "what about modern small models."
+3. 128K context matches Yi, controlling for the context-window confound that disqualified Phi-3-mini-4k.
+
+**Caveat from reviewer: don't make Q3 contingent on Q2.** Phi-4 is the highest-information next data point but is *not blocking publication*. Run in parallel. If Phi-4 regresses → two-factor model corroborated (N=7); if Phi-4 lifts → two-factor model breaks, "Yi-specific quirk" framing returns. Either way, update the published doc with the N=7 result.
+
+Phi-4 download queued; same pipeline as Yi (stock baseline → fine-tune → both judges → analysis).
+
+### Q3 verdict — ship now, NOT pause-for-re-look
+
+Reviewer overruled my default of (c) re-look. Verbatim:
+
+> "Hold for (c) re-review is review-hygiene theater unless the wording itself has problems."
+
+Also:
+
+> "The Yi −28.6pp number specifically deserves visibility in customer-facing material. A customer running this recipe in good faith on an intermediate cross-family base could ship a model 28pp worse than the base. That's not 'marginal' or 'preliminary' — it's a real-world risk the team has now characterized. Don't soften it."
+
+**Customer-template publication SHIPS** with the two-factor framing folded into commit `e0488e3` + the wording-tightening this commit applies. Yi −28.6pp is visible in customer-facing material; the two-factor model is presented as preliminary-but-load-bearing; Phi-4 is named as the falsification next step.
+
+### What ships in the published doc
+
+The customer-template subsection of `docs/recipe-taxonomy.md` is the customer-facing artifact. It now contains (verbatim, reviewer-tightened):
+
+> "Bases at floor stock reasoning (0–1/6, N=2: Mistral 7B, Llama 8B) regressed on substring AND on judge. Bases at ceiling stock reasoning (6/6, N=2: Qwen 7B, Gemma 9B) lifted on substring but the lift erased on judge. Bases at intermediate stock reasoning (3/6, N=2) split by family-match: Qwen 14B (Qwen-family, same as corpus source) lifted +8.7pp on substring; Yi-1.5-9B-Chat (cross-family) regressed −28.6pp with both judges corroborating. The N=6 data is consistent with a two-factor model: lift requires either ceiling reasoning OR family-match to the corpus source distribution. Customers fine-tuning cross-family bases without ceiling stock reasoning should expect regression on this recipe."
+
+### Sequencing recommendation (reviewer-adopted)
+
+1. **Ship customer-template publication now** with two-factor framing — done.
+2. **Queue Phi-4 in parallel** — stock baseline first, then fine-tune. Reviewer-named expected outcome: regression (corroborates two-factor model). Falsification outcome: lift (two-factor model breaks). Either way, update the published doc with N=7.
+3. **Mirror Yi result on keyhole side** with the same two-factor framing. The keyhole § 5.5 reference to gotcha #7 is now significantly more nuanced; that needs propagating. (This is for [backend] — green-lit in the bus message accompanying this commit.)
+
+### Credibility framing recorded
+
+> "The Yi catastrophic regression is the kind of result that, badly handled, would be buried; instead it's been promoted to a key data point. Take the credibility win on that."
+
+Recorded for the NXP-internal review framing.
+
+### Status
+
+- Customer-template publication of N=6 reframe is **shipped** (no more holds).
+- White paper § 7 + GOTCHA Addendum + recipe-taxonomy all updated to two-factor.
+- [backend] notified to mirror at keyhole § 5.5.
+- Phi-4 download/stock-baseline/fine-tune queued (separate workstream; not blocking).
+
+---
+
 *Document location: `docs/REVIEWER_FOLLOWUP_N6_YI.md`*
