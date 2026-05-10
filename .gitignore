@@ -59,3 +59,11 @@ knowledge/datasheets/**/*.pdf
 knowledge/datasheets/.datasheet_manifest.json
 knowledge/images/
 .skippy-env
+
+# Eval narrative drafts (deck/story content, not for public GitHub)
+eval/STORY_DRAFT.md
+eval/*_DRAFT.md
+eval/STORY*.md
+
+# Local API keys (DO NOT COMMIT)
+openaikey.txt

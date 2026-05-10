@@ -223,7 +223,25 @@ Per the reviewer's Q5 sequencing (judge first, then N=6), we ran `claude-sonnet-
 
 The mechanism is consistent: across all three lift cells, **faithfulness to RAG context drops on v4** (Qwen 7B −0.43, Qwen 14B −0.26, Gemma −0.20), while conciseness and instruction-following hold or improve. The substring grader does not penalise the faithfulness loss because the trained phrasings still match gold tokens; the judge does. On the regress cells, correctness AND faithfulness drop, plus (for Llama) conciseness collapses.
 
-**Methodology hardening on the path forward.** This is a single-judge result (`claude-sonnet-4-6`); a single judge carries a "what if the judge has a systematic bias" risk. **Cross-judge corroboration with a non-Anthropic model (GPT-4, DeepSeek, Llama-405B-judge) is the highest-value single hardening and is queued as future work, not blocking customer-template publication.** Judge-at-temp=0.3 was considered and is *not* worth running — temp=0.3 already shows fine-tune fragility (SK-P0-002), and rerunning judge there conflates two confounds rather than separating them. Production decoding regime (temp=0) is the right metric to keep judge orthogonal at.
+**Cross-judge corroboration — done 2026-05-10.** The Sonnet 4.6 result was re-judged on the same 10 (eval JSON, sample subset) pairs with `gpt-4o-2024-08-06` (~$5 OpenAI; same `JudgeScore` schema, same rubric, same seed). Verdict: **9 of 10 judge passes confirm v4 ≤ base.** Direction agrees on 4 of 5 cells; Gemma 2 9B disagrees (Sonnet −0.620, GPT-4o +0.119, divergence concentrated on the faithfulness dimension of RAG-cited responses).
+
+| Family | Sonnet Δ | GPT-4o Δ | Agree |
+|---|---:|---:|---|
+| Qwen 2.5 7B | −0.350 | −0.690 | ✓ both ≤ 0 |
+| Qwen 2.5 14B | ±0.000 | −0.214 | ✓ both ≤ 0 |
+| Gemma 2 9B | −0.620 | +0.119 | ✗ DISAGREE |
+| Mistral 7B v0.3 | −0.218 | −0.048 | ✓ both ≤ 0 |
+| Llama 3.1 8B | −1.165 | −1.524 | ✓ both ≤ 0 |
+
+The "every judge-Δ is ≤ 0" reading from the Sonnet-only run is **partially preserved**: directional claim holds for 4/5 cells under both judges, but Gemma 2 9B is judge-sensitive on the borderline. The two cell types most central to the customer-template framing are robust under cross-judge:
+
+- **Substring regressions are corroborated by both judges as real capability damage** (Mistral and Llama, Llama strongest).
+- **Two of three substring lifts (Qwen 2.5 7B and 14B) are corroborated by both judges as judge-flat-or-negative.** The Qwen 14B cell — biggest substring lift in the dataset (+8.7pp) — gets Sonnet ±0.000 and GPT-4o −0.214; both judges agree the substring lift does not produce a judge-corroborated capability gain.
+- **Gemma 2 9B is the judge-sensitive cell.** Single-judge results carry borderline-case sensitivity; the divergence between Sonnet and GPT-4o exposes that. The customer-template wording (`recipe-taxonomy.md`) calls this out and recommends running cross-judge corroboration for any cell whose deployment turns on a marginal Δ.
+
+Full cross-judge analysis with per-dimension breakdown: `eval/results/cross_judge_n5_gpt4o.md`.
+
+Judge-at-temp=0.3 was considered and is *not* worth running — temp=0.3 already shows fine-tune fragility (SK-P0-002), and rerunning judge there conflates two confounds rather than separating them. Production decoding regime (temp=0) is the right metric to keep judge orthogonal at.
 
 This **promotes the asymmetry disclosure from "hypothesis with test status named" to "tested and confirmed across the full N=5."** The reviewer's Q2 wording can drop the "we have judge data on one lift cell only" hedge; the new wording (carried inline in white paper § 7):
 
