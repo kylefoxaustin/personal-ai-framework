@@ -235,9 +235,9 @@ The mechanism is consistent: across all three lift cells, **faithfulness to RAG 
 
 The "every judge-Δ is ≤ 0" reading from the Sonnet-only run is **partially preserved**: directional claim holds for 4/5 cells under both judges, but Gemma 2 9B is judge-sensitive on the borderline. The two cell types most central to the customer-template framing are robust under cross-judge:
 
-- **Substring regressions are corroborated by both judges as real capability damage** (Mistral and Llama, Llama strongest).
+- **Cross-judge corroborates regression as real capability damage on Mistral and Llama** (both judges ≤ 0; Llama negative *more strongly* under GPT-4o than Sonnet — Sonnet −1.165, GPT-4o −1.524). If the regressions had been judge-bias artifacts, cross-judge would have surfaced disagreement; instead it doubled down. Mistral is small but negative under both. **Regression-as-real is the most strengthened claim under cross-judge.**
 - **Two of three substring lifts (Qwen 2.5 7B and 14B) are corroborated by both judges as judge-flat-or-negative.** The Qwen 14B cell — biggest substring lift in the dataset (+8.7pp) — gets Sonnet ±0.000 and GPT-4o −0.214; both judges agree the substring lift does not produce a judge-corroborated capability gain.
-- **Gemma 2 9B is the judge-sensitive cell.** Single-judge results carry borderline-case sensitivity; the divergence between Sonnet and GPT-4o exposes that. The customer-template wording (`recipe-taxonomy.md`) calls this out and recommends running cross-judge corroboration for any cell whose deployment turns on a marginal Δ.
+- **Gemma 2 9B is the judge-sensitive cell.** Note that the Sonnet-only verdict was Δ=−0.620 — *meaningfully negative*, not marginal-looking — and yet GPT-4o gave +0.119. The Gemma case demonstrates that **non-marginal-looking single-judge results can still be cross-judge unstable**. Surfacing the divergence is more honest than tidying it up; per-dimension breakdown shows the disagreement isolates to RAG-faithfulness scoring (see white paper § 7 for the four-row dimension table).
 
 Full cross-judge analysis with per-dimension breakdown: `eval/results/cross_judge_n5_gpt4o.md`.
 

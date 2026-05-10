@@ -84,4 +84,42 @@ Holds: pending your call on Gemma option (a) vs (b). All other publication-block
 
 ---
 
+## Reviewer Reply (2026-05-10) — sign-off + three sharpenings
+
+The reviewer endorsed option (a) (the agent's three reasons "as written") and gave three sharpenings + a meta point about NXP-internal credibility. All folded into this commit.
+
+### Sharpening 1 — standing methodology rule
+
+The proposed rule "two judges minimum on any cell whose deployment decision turns on a marginal Δ" is **wrong as stated**. Reviewer's reasoning:
+
+> "The cell that did disagree (Gemma) had Sonnet at −0.620 — meaningfully negative, not marginal-looking. The cell that looked most marginal on Sonnet alone (Mistral, −0.218) was robust across judges. So 'marginal-Δ' isn't the right trigger for cross-judge — the Gemma case demonstrates that non-marginal-looking single-judge results can still be cross-judge unstable. The cleaner rule is just 'two judges by default' with no marginal-Δ qualifier."
+
+**Adopted.** `recipe-taxonomy.md` customer-template now reads: "Standing methodology recommendation: run two judges by default on any cross-family fine-tune evaluation, not only on cells whose Δ looks marginal."
+
+### Sharpening 2 — lead with cross-judge corroborating the regressions
+
+Reviewer's note: the original framing didn't lead with the strongest claim under cross-judge — that **the regressions are now doubly-corroborated**. Llama goes from −1.165 (Sonnet) to −1.524 (GPT-4o); Mistral both judges ≤ 0. If the regressions had been judge-bias artifacts, cross-judge would have surfaced disagreement; instead it doubled down.
+
+**Adopted.** GOTCHA Judge-on-N=5 Verdict and white paper § 7 both now lead the cross-judge subsection with: "Cross-judge corroborates regression as real capability damage on Mistral and Llama — both judges ≤ 0; Llama negative more strongly under GPT-4o than Sonnet. The regression-is-real reading is the most strengthened claim under cross-judge."
+
+### Sharpening 3 — keep the per-dimension Gemma table visible in the white paper
+
+Reviewer's note: don't sentence-fold the faithfulness-as-the-disagreement-locus finding; show the four-row table. It tells customers something specific: "this recipe's effect on Gemma's RAG-faithfulness depends on judge methodology; if your customer's eval weights faithfulness, characterize it under multiple judges before deploying."
+
+**Adopted.** White paper § 7 now contains the four-row dimension table inline (correctness / instruction-following / faithfulness / conciseness for both judges, base + v4). The disagreement isolates to the faithfulness row visibly, with the other three dimensions agreeing.
+
+### Meta point — Gemma divergence as a credibility moment
+
+> "A team that papered over a judge disagreement with a third judge looks like it's optimizing for clean conclusions. A team that surfaces 'here's the cell where our two judges disagreed, here's why we think they disagreed, here's our methodology recommendation that flows from it' looks like it's optimizing for honest characterization. Take the credibility win."
+
+Recorded. The publication ships with Gemma flagged as judge-sensitive (option a), per-dimension table visible, and the standing methodology recommendation flowing from the case.
+
+### Sign-off recorded
+
+> "Customer-template publication is unblocked. Ship with (a), the standing-methodology adjustment to 'two judges by default' (not marginal-only), and the per-dimension Gemma table preserved."
+
+All three sharpenings are in this commit. **Customer-template publication is reviewer-final and ready to ship.**
+
+---
+
 *Document location: `docs/REVIEWER_FOLLOWUP_CROSS_JUDGE.md`*
