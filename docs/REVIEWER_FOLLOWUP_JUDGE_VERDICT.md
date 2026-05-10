@@ -156,4 +156,62 @@ Production llm-server temporarily swapped through Phi → Yi → Gemma 2 2B for 
 
 ---
 
+## Cross-judge corroboration completed (2026-05-10)
+
+Per the reviewer's Q1 future-work item — "Cross-judge corroboration with a non-Anthropic model (GPT-4 / DeepSeek / Llama-405B-judge) is the highest-value single hardening" — we ran `gpt-4o-2024-08-06` on the same 10 (eval JSON, sample subset) pairs with the same `JudgeScore` schema, prompt, and seed=42 sampler. Cost: ~$5 OpenAI (after a tier upgrade had time to propagate post-payment).
+
+### Verdict
+
+**9 of 10 judge passes confirm v4 ≤ base.** Direction agrees on 4 of 5 cells; Gemma 2 9B disagrees.
+
+| Family | Substring Δ | Sonnet Δ | GPT-4o Δ | Direction agree? |
+|---|---:|---:|---:|---|
+| Qwen 2.5 7B | +3.1pp | −0.350 | −0.690 | ✓ both ≤ 0 |
+| Qwen 2.5 14B | +8.7pp | ±0.000 | −0.214 | ✓ both ≤ 0 |
+| **Gemma 2 9B** | +3.2pp | **−0.620** | **+0.119** | **✗ DISAGREE** |
+| Mistral 7B v0.3 | −3.8pp | −0.218 | −0.048 | ✓ both ≤ 0 |
+| Llama 3.1 8B | −3.2pp | −1.165 | −1.524 | ✓ both ≤ 0 |
+
+### What this changes in the framing
+
+- **The "every judge-Δ is ≤ 0" sharper headline** from the Sonnet-only run is **partially preserved**. 9/10 judge passes hold; the Gemma cell is judge-sensitive on the borderline.
+- **The Qwen 14B "biggest substring lift, most evaporative" demonstration** — load-bearing for the white paper — is **robust under cross-judge** (Sonnet ±0.000, GPT-4o −0.214; both judges agree that the +8.7pp substring lift produces no judge-corroborated capability gain).
+- **Both regression cells (Mistral, Llama) are corroborated as real capability damage by both judges.** Llama is the strongest regression in the dataset on both metrics.
+- **The Gemma cell's judge-sensitivity is concentrated on the faithfulness dimension** of RAG-cited responses. Sonnet scores Gemma v4 *worse* on faithfulness (1.366 vs base 1.564); GPT-4o scores Gemma v4 *better* on faithfulness (1.262 vs base 1.024). Both judges agree on conciseness ≈ identity and v4 slightly worse on correctness + instruction-following. The judges are weighting RAG-citation faithfulness differently for this model's response style.
+
+### Customer-template wording — refined
+
+The Sonnet-only wording becomes:
+
+> "Across N=10 judge passes (5 cells × 2 judges, Sonnet 4.6 + GPT-4o), 9 of 10 confirm v4 ≤ base. The substring grader at temp=0 measures format fidelity, not capability lift, for fine-tunes on this recipe; substring lifts of +3.1 to +8.7pp do not correlate with judge-Δ. Two of three substring lifts (Qwen 2.5 7B, Qwen 2.5 14B) are corroborated by both judges as judge-flat-or-negative; the third (Gemma 2 9B) is judge-sensitive on the borderline (Sonnet judges v4 worse, GPT-4o judges v4 marginally better, divergence concentrated on RAG-faithfulness scoring). Substring regressions on Mistral and Llama are corroborated as real capability damage by both judges. Customers should expect the v4 recipe to teach voice and refusal patterns reliably across base families, but should not expect underlying capability lift on bases that already perform competently on the eval — and should run cross-judge corroboration for any cell whose deployment decision rests on a marginal judge result."
+
+Folded into `recipe-taxonomy.md`.
+
+### Methodology takeaway
+
+Cross-judge corroboration was the right call. The Gemma cell is exactly the kind of borderline result where single-judge findings carry interpretation risk. **For future fine-tune evaluations on this recipe: two judges minimum for any cell whose deployment turns on a marginal Δ; cross-judge cost ($5–10 per N=5 pass) is in the noise compared to fine-tune compute.**
+
+### Files / artefacts
+
+- 10 GPT-4o judge JSONs in `eval/results/judge_xj_*` (this run)
+- Cross-judge analysis: `eval/results/cross_judge_n5_gpt4o.md`
+- All pushed to `gdrive:skippy_files/personal-ai-assistant/eval-results/` (verified)
+
+### Open question for the reviewer
+
+The Gemma cell warrants attention if the customer-template publication goes to NXP-internal review imminently. Two paths:
+
+- **(a)** Flag explicitly as a known judge-sensitive cell with the divergence reading documented (current path; customer-template wording does this).
+- **(b)** Bring in a third judge (Llama-405B-judge via Together / Fireworks, or DeepSeek) on Gemma specifically to break the tie. Cost ~$1–2 for one cell.
+
+Reviewer's call. Default if no objection: (a).
+
+### Status
+
+- Cross-judge corroboration is **no longer future work** — it landed 2026-05-10.
+- Customer-template publication wording refined and committed.
+- White paper § 7 asymmetry paragraph and GOTCHA Judge-on-N=5 Verdict section both updated to reflect cross-judge.
+
+---
+
 *Document location: `docs/REVIEWER_FOLLOWUP_JUDGE_VERDICT.md`*
