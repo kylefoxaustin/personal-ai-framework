@@ -260,6 +260,20 @@ The N=6 data is consistent with a **two-factor model:**
 
 This model is parsimonious and **falsifiably predictive**: a third cross-family intermediate-reasoning base (Phi-4 queued as the recommended candidate) should regress if the model holds; if it lifts, the two-factor model breaks and the data reduces to "Yi has a specific quirk." The single-factor reasoning-floor predictor from N=5 was under-specified — Yi exposed that. The two-factor refinement is preliminary at N=6 but provides the cleaner working hypothesis until N=7 lands.
 
+### N=7 update — Phi-4 corroborates the two-factor model (2026-05-10)
+
+Phi-4 (Microsoft, 14B, 3/6 reasoning, cross-family) was the falsification test. Reviewer's pre-staged sequencing: *"If it regresses, two-factor model gets stronger evidence and you update the published doc with the N=7 corroboration."*
+
+**It regressed.** Phi-4 v4 substring −1.6pp (within noise floor σ≈1.4–2.3pp); both cross-judges corroborate at moderate magnitude (Sonnet Δ −0.627, GPT-4o Δ −0.834). **Two-factor model holds at 7/7 cells.** Yi is no longer an outlier on direction — Phi-4 is the second cross-family intermediate-reasoning base, and it also regresses.
+
+Yi remains an outlier on *substring magnitude* (−28.6pp catastrophic vs Phi-4's −1.6pp at noise floor), but both substring regression direction and judge corroboration match. **Substring magnitude does not predict capability damage magnitude** for cross-family intermediate-reasoning bases — Yi −28.6pp substring → −0.8 judge; Phi-4 −1.6pp substring → −0.8 judge. The judges give consistent signal across both; the substring grader is wildly inconsistent in magnitude on this base type.
+
+**13 of 14 judge passes confirm v4 ≤ base** (7 cells × 2 judges; only Gemma + GPT-4o is positive at +0.119, marginally).
+
+**Phi-4 also surfaces a new finding: hybrid damage profile.** Phi-4 loses both *correctness* (Sonnet −0.190, GPT-4o −0.381) AND *faithfulness* (Sonnet −0.369, GPT-4o −0.429) — the first cell where the damage profile mixes lift-cell (faithfulness drop) and regress-cell (correctness drop) mechanisms. **Substring grader's reliability as a regression detector varies by base type** — on cross-family intermediate-reasoning bases, judges are mandatory.
+
+Full per-cell + per-dimension Phi-4 analysis: `eval/results/phi4_n7_corroborates_two_factor.md`.
+
 **What survives unchanged** (in fact strengthened by Yi):
 
 - **Asymmetry hypothesis:** all 3 substring lifts erase or reverse on at least one judge; all 3 substring regressions are corroborated by GPT-4o (Sonnet covers 2 of 3). The Yi data fits the asymmetry pattern cleanly: substring regression confirmed by judge.
