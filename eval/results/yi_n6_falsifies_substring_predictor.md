@@ -7,7 +7,7 @@
 
 ## TL;DR
 
-**Yi v4 substring regressed −28.6pp** (86/126 = 68.3% → 50/126 = 39.7%) — the **largest substring regression in any v4 fine-tune in the dataset**. GPT-4o cross-judge corroborates: Δ −0.714 on the 0–8 total scale (correctness, instruction-following, conciseness all drop; faithfulness flat). Sonnet judge pending.
+**Yi v4 substring regressed −28.6pp** (86/126 = 68.3% → 50/126 = 39.7%) — the **largest substring regression in any v4 fine-tune in the dataset**. Both cross-judges corroborate: **Sonnet Δ −0.848, GPT-4o Δ −0.714**. The regression mechanism is consistent across judges: **correctness + instruction-following damage** (Sonnet correctness −0.470 / instruct −0.502; GPT-4o correctness −0.214 / instruct −0.476). Faithfulness *slightly improves* on v4 (Sonnet +0.091, GPT-4o +0.071) — a different mechanism from the lift cells (Qwen 7B / 14B / Gemma) where faithfulness *drops* on v4. **For Yi the recipe damages capability on the actual question; for the lift cells the recipe damages RAG-citation discipline.**
 
 This **falsifies the "≥3/6 reasoning → lift on substring" branch of the N=5 predictor.** Yi at 3/6 stock reasoning produced a stronger substring regression than any 0–1/6 cell in the dataset. The 3/6 band is now mixed-direction:
 
@@ -27,9 +27,9 @@ Within the same band, same recipe, the v4 outcome can flip from "biggest substri
 | Gemma 2 9B | 6/6 | +3.2pp | −0.620 | +0.119 | judge-sensitive (Sonnet erase, GPT-4o marginal lift) |
 | Mistral 7B v0.3 | 0/6 | −3.8pp | −0.218 | −0.048 | regress confirmed |
 | Llama 3.1 8B | 1/6 | −3.2pp | −1.165 | −1.524 | regress confirmed (strong) |
-| **Yi-1.5-9B-Chat** | **3/6** | **−28.6pp** | **(pending)** | **−0.714** | **regress confirmed (cross-judge); largest substring regression in dataset** |
+| **Yi-1.5-9B-Chat** | **3/6** | **−28.6pp** | **−0.848** | **−0.714** | **regress confirmed by both judges; largest substring regression in dataset** |
 
-Eleven of twelve judge passes (across the 5 cells where Sonnet is available + Yi GPT-4o-only) confirm v4 ≤ base. The Gemma cell remains the one judge-divergence; Yi adds a sixth cell of corroborated regression.
+Eleven of twelve judge passes confirm v4 ≤ base. The Gemma cell remains the one judge-divergence (GPT-4o gives +0.119 vs Sonnet −0.620); Yi adds a sixth cell of corroborated regression with both judges aligned (Sonnet −0.848, GPT-4o −0.714).
 
 ## Per-category breakdown — Yi base vs Yi v4
 
@@ -47,17 +47,19 @@ Eleven of twelve judge passes (across the 5 cells where Sonnet is available + Yi
 
 The recipe traded **+3 refusal calibration for −36 across coding / multihop / numerical_precision / rag_datasheet**. This is the same direction-of-trade as Mistral and Llama (gains on refusal/persona at the cost of retrieval/coding/multihop), but the magnitude is **roughly 7× larger** on the damage side than Mistral's regression.
 
-## Per-dimension breakdown — GPT-4o judge
+## Per-dimension breakdown — both judges (the regression mechanism)
 
-| Dimension (0–2) | Yi base | Yi v4 | Δ |
-|---|---:|---:|---:|
-| Correctness | 1.048 | 0.833 | −0.214 |
-| Instruction-following | 1.595 | 1.119 | **−0.476** |
-| Faithfulness to RAG context | 0.881 | 0.952 | +0.071 |
-| Conciseness | 1.833 | 1.738 | −0.095 |
-| **Total /8** | **5.357** | **4.643** | **−0.714** |
+| Dimension (0–2) | Yi base — Sonnet | Yi v4 — Sonnet | Δ Sonnet | Yi base — GPT-4o | Yi v4 — GPT-4o | Δ GPT-4o |
+|---|---:|---:|---:|---:|---:|---:|
+| Correctness | 1.275 | 0.805 | **−0.470** | 1.048 | 0.833 | **−0.214** |
+| Instruction-following | 1.600 | 1.098 | **−0.502** | 1.595 | 1.119 | **−0.476** |
+| Faithfulness to RAG context | 1.250 | 1.341 | **+0.091** | 0.881 | 0.952 | **+0.071** |
+| Conciseness | 1.625 | 1.659 | +0.034 | 1.833 | 1.738 | −0.095 |
+| **Total /8** | **5.750** | **4.902** | **−0.848** | **5.357** | **4.643** | **−0.714** |
 
-The judge corroborates the substring grader's "regression is real capability damage" reading. Instruction-following is the sharpest drop (−0.476) — consistent with Yi v4's catastrophic multihop failure (0/9) and rag_datasheet collapse. Faithfulness *slightly improves* on the judge (+0.071) — the recipe's RAG-citation pattern looks more honest to GPT-4o, even as the substring grader sees the responses fail to surface the gold tokens.
+**Both judges agree on the mechanism:** Yi v4's regression is concentrated on **correctness + instruction-following** (each judge sees ~−0.5 on instruction-following; correctness drops sharper under Sonnet, smaller under GPT-4o). Faithfulness to RAG context *slightly improves* on v4 under both judges — the v4 recipe's RAG-citation pattern actually looks marginally more disciplined to both judges, even as the substring grader sees rag_datasheet collapse (55/78 → 29/78).
+
+**Compare to the lift cells:** Qwen 7B / 14B / Gemma all *lose* faithfulness on v4 (Sonnet sees −0.198 to −0.429 on the lift cells' faithfulness dimension). **The regression mechanism differs from the lift mechanism.** Lift cells lose RAG-citation discipline (faithfulness drops, conciseness gains). Yi loses capability on the question itself (correctness + instruction-following drop, faithfulness slightly improves). Different damage profile, same recipe.
 
 ## Implications for the framing
 
@@ -94,6 +96,6 @@ Yi-1.5-9B-Chat is genuinely cross-family relative to the v4 training corpus (whi
 - `training/output/yi-v4/final/` — LoRA adapter (832 MB)
 - `training/logs/train_yi_v4_*.log` — training log
 
-Sonnet judges on Yi pending Kyle's Anthropic key availability. The customer-template wording above already accounts for the GPT-4o-only-on-Yi state and can be tightened once Sonnet runs.
+Both judges ran 2026-05-10 (Sonnet completed after Anthropic key was re-staged). Full cross-judge corroboration on Yi is now complete: both judges ≤ 0, both judges agree on mechanism (correctness + instruction-following damage, not faithfulness drop).
 
 Production llm-server cycled to Yi v4 for the eval, then restored to 7B v4 (verified healthy).

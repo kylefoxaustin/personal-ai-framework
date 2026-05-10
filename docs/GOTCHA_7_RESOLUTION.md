@@ -243,14 +243,14 @@ Full cross-judge analysis with per-dimension breakdown: `eval/results/cross_judg
 
 ### N=6 update — Yi-1.5-9B-Chat falsifies the "3/6 → lift" branch (2026-05-10)
 
-Per the reviewer's Q3 hybrid (b), we ran Yi-1.5-9B-Chat as the cleanest N=6 candidate (68.3% stock, 3/6 reasoning, no context handicap, different family). **Yi v4 substring regressed −28.6pp** (86/126 = 68.3% → 50/126 = 39.7%) — the largest substring regression in any v4 fine-tune in the dataset. GPT-4o cross-judge corroborates: Δ −0.714 (correctness, instruction-following, conciseness all drop; faithfulness flat). Sonnet judge pending Anthropic key access.
+Per the reviewer's Q3 hybrid (b), we ran Yi-1.5-9B-Chat as the cleanest N=6 candidate (68.3% stock, 3/6 reasoning, no context handicap, different family). **Yi v4 substring regressed −28.6pp** (86/126 = 68.3% → 50/126 = 39.7%) — the largest substring regression in any v4 fine-tune in the dataset. **Both cross-judges corroborate: Sonnet Δ −0.848, GPT-4o Δ −0.714.** The regression mechanism is consistent across judges: correctness + instruction-following damage (Sonnet correctness −0.470 / instruct −0.502; GPT-4o correctness −0.214 / instruct −0.476). Faithfulness slightly *improves* on v4 (Sonnet +0.091, GPT-4o +0.071) — a different mechanism from the lift cells (which lose faithfulness on v4).
 
 This **falsifies the "≥3/6 reasoning → lift on substring" branch of the N=5 predictor.** Yi at 3/6 stock reasoning produced a stronger substring regression than any 0–1/6 cell. The 3/6 band is now mixed-direction:
 
 | 3/6 cell | Substring Δ | GPT-4o Δ |
 |---|---:|---:|
-| Qwen 2.5 14B v4 | **+8.7pp** | −0.214 |
-| Yi-1.5-9B-Chat v4 | **−28.6pp** | **−0.714** |
+| Qwen 2.5 14B v4 | **+8.7pp** | Sonnet ±0.000 / GPT-4o −0.214 |
+| Yi-1.5-9B-Chat v4 | **−28.6pp** | **Sonnet −0.848 / GPT-4o −0.714** |
 
 Within the same band, same recipe, the v4 outcome can flip from "biggest substring lift" to "biggest substring regression". The substring-direction predictor at intermediate band has narrow validity — *which* base you pick matters as much as the band itself. Hypothesis: at 3/6 reasoning, *same-family-extension* bases (Qwen 14B is a size-extension of Qwen 7B base from the v4 corpus's origin) lift on substring while *true cross-family* bases regress. N=1 cross-family at 3/6 isn't enough to distinguish this from "Yi-specifically has a quirk."
 
