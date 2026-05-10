@@ -67,4 +67,64 @@ Optional next step (not asked): a fourth 3/6 cross-family base would consolidate
 
 ---
 
+## Reviewer Closure (2026-05-10)
+
+The reviewer declared closure on the gotcha #7 thread and added four substantive observations that we've folded into the published doc set.
+
+### Closure declared
+
+> "This is genuinely the right place to close. 7/7 cells fitting a two-factor model with a pre-registered falsifier corroborating is meaningfully stronger evidence than most internal-review-grade industry work, and the team has built the case methodically across the entire arc. Closure acknowledged."
+
+> "Gotcha #7 thread closed from my side. Customer-template publication confirmed at N=7."
+
+### Observation 1 — Substring-magnitude-unreliable finding deserves promotion
+
+Reviewer's verbatim:
+
+> "The substring-magnitude-unreliable finding ... is sharper than they're framing it. ... on cross-family intermediate-reasoning bases, the substring noise floor can completely hide real capability damage. A team without judges shipping Phi-4 v4 would have looked at a −1.6pp result within the σ≈1.4-2.3pp temp=0.3 noise floor and concluded 'essentially equivalent to base.' It's not. Both judges see a clear regression. This is a methodology finding worth promoting from 'buried in N=7 narrative' to the methodology section itself, alongside the temperature-sensitivity finding from earlier. The two together (substring fragility under temperature perturbation; substring can hide capability damage at noise-floor magnitudes on certain base types) tell a coherent story about when substring grading is reliable and when it isn't. **That story is the most valuable methodology contribution this whole campaign produced — bigger than gotcha #7 itself.**"
+
+**Adopted.** White paper § Grader-methodology findings now has a Finding 3 (substring unreliable on cross-family intermediate-reasoning bases) paired with Finding 1 (temperature sensitivity) and Finding 2 (LLM-judge reversal). The paired-interpretation paragraph is rewritten to include a "when substring is reliable" matrix across all three regimes.
+
+### Observation 2 — One untested cell in the two-factor space
+
+Reviewer's verbatim:
+
+> "The two-factor model covers all observed combinations except one: family-match base with low stock reasoning. Qwen 2.5 doesn't ship a base with 0-1/6 stock reasoning in the cells you've measured. The model predicts 'lift' via the family-match gate, but it's not tested. Smaller Qwen 2.5 sizes (1.5B, 0.5B) might fall in that band — or might not. Not a publication blocker. The current N=7 framing is honest about being preliminary. But if someone later asks 'have you tested all four corners of your two-factor space,' the answer is 'three of four corners directly; the fourth is predicted but unmeasured.' Worth a footnote in the methodology section so the model's coverage is transparent."
+
+**Adopted.** GOTCHA_7_RESOLUTION.md N=7 update subsection now has a coverage-transparency table showing the three measured corners + the one untested (family-match × low-reasoning) corner.
+
+### Observation 3 — No more 3/6 cross-family data needed
+
+> "The agent's recommendation against more 3/6 cross-family data is correct. Diminishing returns — N=3 to N=4 in the same band buys very little additional confidence. If anything else gets run later, the higher-information experiments are 2/6 or 4/6 reasoning band characterization (untested) or the Qwen-low-reasoning cell above. Defer all of these unless a specific question forces them."
+
+Confirmed. No further within-band 3/6 cross-family fine-tunes queued.
+
+### Observation 4 — Phi-4-as-alt-production-base is a v5 question
+
+> "Bonus observation on Phi-4 stock scoring highest is worth keeping in the working notes but I agree with the agent it's not actionable now. The implication ('Phi-4 might be a stronger production base if voice/persona could be transferred without the v4 recipe') opens a whole different campaign — DPO, small persona corpus, lighter-weight personality transfer methods. That's a Skippy v5 design question for another quarter, not a gotcha #7 question."
+
+Noted. Phi-4-as-alt-base observation parked in working notes for v5 design discussion.
+
+### NXP-internal framing recommendation
+
+> "For NXP-internal: this entire arc is itself a credibility story. 'Team identified a preliminary finding, applied increasingly rigorous methodology, falsified one branch, refined the model, corroborated the refinement with a pre-registered falsifier' is the kind of process narrative that builds trust. If the deck or briefing has room to surface the arc itself (not just the final result), that's worth doing. Reviewers care about whether the team will catch its own over-claims; this arc demonstrates yes."
+
+**Recorded for deck regen.** When the deck/briefing is next updated, consider surfacing the arc itself (N=2 architecture-coupling over-claim → N=5 reasoning-floor predictor → N=6 reframe with Yi falsifying it → N=7 two-factor model corroborated by Phi-4) as a process narrative alongside the final result. The arc demonstrates the team's self-correction discipline.
+
+### What this arc actually produced (reviewer's summary)
+
+> "The original gotcha #7 was a flawed N=1 over-claim that would have shipped to NXP. The current N=7 framing is a falsifiable two-factor model with cross-judge corroboration, surfaced methodology findings on substring fragility, an asymmetry hypothesis tested across families, and a customer-actionable rule for pre-deployment evaluation. That's a significantly more credible deliverable than what started this thread, and most of the value-add isn't in gotcha #7 itself — it's in the secondary methodology findings that came out of the rigor."
+
+### Final status
+
+- **Customer-template publication confirmed at N=7.** Reviewer-final wording in `recipe-taxonomy.md`.
+- **Grader-methodology section** of white paper now contains three findings (temperature-sensitivity, LLM-judge reversal, substring-unreliability-on-cross-family-intermediate) with paired interpretation as a "when substring is reliable" matrix.
+- **Coverage transparency** noted in GOTCHA Addendum (3/4 corners of two-factor space measured).
+- **Phi-4-as-alt-base** parked as v5 design question.
+- **Arc-as-credibility-story** recommendation logged for deck regen.
+
+Gotcha #7 thread closed. No further holds, no pending reviewer asks.
+
+---
+
 *Document location: `docs/REVIEWER_FOLLOWUP_N7_PHI4.md`*

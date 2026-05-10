@@ -409,9 +409,31 @@ Substring grader: FT wins by +3.2pp. LLM judge: base wins by 0.35 points. Two in
 
 The judge's preference for the base is concentrated in faithfulness (1.762 vs 1.333) — the stock Qwen is more grounded in retrieved context. The substring grader's preference for the FT is driven by domain-specific gold-token matching that the FT's trained phrasings hit more reliably at temp=0.
 
+### Finding 3 — Substring magnitude is unreliable on cross-family intermediate-reasoning bases
+
+From the N=7 cross-family campaign (gotcha #7): two cross-family bases at 3/6 stock reasoning fine-tuned with the same recipe produced very different substring outcomes but the *same* judge regression magnitude:
+
+| Cell | Substring Δ | Sonnet Δ | GPT-4o Δ |
+|---|---:|---:|---:|
+| Yi-1.5-9B-Chat v4 | **−28.6pp** | −0.848 | −0.714 |
+| Phi-4 (14B) v4 | **−1.6pp** | −0.627 | −0.834 |
+
+**~18× substring magnitude variance, similar judge regression magnitudes (~−0.7 to −0.9 on the 0–8 total scale).** Phi-4's −1.6pp is within the temp=0 noise floor (σ≈1.4–2.3pp from Finding 1). A team running substring-only on Phi-4 v4 would have looked at a noise-floor result and concluded "essentially equivalent to base"; both judges see clear capability damage. **Substring noise floor can completely hide real capability regression on this base type.**
+
+**Implication for customers:** the substring grader at temp=0 is reliable for *direction* on cross-family bases (Yi and Phi-4 both regressed in sign), but its *magnitude* is wildly unreliable — sometimes catastrophic (Yi), sometimes vanishing into noise (Phi-4). Capability damage that the substring grader cannot reliably surface is exactly the kind of risk a fine-tune deployment process should catch. The remedy is cross-judge by default.
+
 ### Paired interpretation
 
-Findings 1 and 2 are independent but tell the same story: **the +3.1pp substring headline for Skippy 7B v4 over its Qwen base is measuring training-induced phrasing consistency at greedy decoding, not a robust capability gain.** The headline may include a real component (the FT genuinely improves refusal calibration and domain formatting), but its magnitude is not cleanly separable from the grader artifact.
+Findings 1, 2, and 3 are independent but converge on a coherent picture of when the substring grader is reliable and when it isn't:
+
+| Regime | Substring reliable? | Why |
+|---|---|---|
+| Base-vs-base comparison at temp=0 | **Yes** | format-fidelity and correctness correlate on bases (Finding 1) |
+| Base-vs-FT comparison at temp=0 | **Direction only** | FT learns trained phrasings that match gold tokens (Findings 1+2) |
+| Base-vs-FT at temp>0 | **No** | FT loses phrasing alignment under stochastic sampling (Finding 1) |
+| Cross-family intermediate-reasoning base FT comparison | **Direction only; magnitude unreliable** | substring magnitude does not track judge magnitude (Finding 3) |
+
+**The +3.1pp substring headline for Skippy 7B v4 over its Qwen base is measuring training-induced phrasing consistency at greedy decoding, not a robust capability gain.** The headline may include a real component (the FT genuinely improves refusal calibration and domain formatting), but its magnitude is not cleanly separable from the grader artifact.
 
 This does not mean the fine-tune is worse. The shipping decision for Skippy 7B v4 is driven by the three-gate framework — the FT passes the safety gate (9/9 refusal vs 6/9 for several stock bases) and the voice gate (a 12× response-length reduction from v1). The substring gain is corroborating, not the deciding factor.
 
