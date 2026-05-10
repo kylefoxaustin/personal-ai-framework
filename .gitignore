@@ -67,3 +67,4 @@ eval/STORY*.md
 
 # Local API keys (DO NOT COMMIT)
 openaikey.txt
+anthropickey.txt
