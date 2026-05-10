@@ -270,6 +270,17 @@ Yi remains an outlier on *substring magnitude* (−28.6pp catastrophic vs Phi-4'
 
 **13 of 14 judge passes confirm v4 ≤ base** (7 cells × 2 judges; only Gemma + GPT-4o is positive at +0.119, marginally).
 
+**Coverage transparency (reviewer 2026-05-10 closure note):** the two-factor model has four corners. We have measured three:
+
+| Family-match | Stock reasoning | Predicted | Measured | N |
+|---|---|---|---|---:|
+| ✓ Qwen | 6/6 (ceiling) | lift | lift | 1 (Qwen 7B) |
+| ✓ Qwen | 0–1/6 (floor) | lift (via family-match gate) | **untested** | 0 |
+| ✗ cross-family | 6/6 (ceiling) | lift (via reasoning gate) | lift | 1 (Gemma 9B) |
+| ✗ cross-family | 0–1/6 (floor) | regress (no gate) | regress | 2 (Mistral, Llama) |
+
+The fourth corner — family-match base with low stock reasoning — is predicted lift via the family-match gate but is not directly tested in N=7. Qwen 2.5 doesn't ship a base at 0–1/6 stock reasoning in the cells measured; the 14B at 3/6 (intermediate) is the lowest-reasoning Qwen-family base we have. Smaller Qwen 2.5 sizes (1.5B, 0.5B) might fall in the low-reasoning band, or might not. **Not a publication blocker — the current framing is honest about being preliminary — but flagged here so the model's coverage is transparent.**
+
 **Phi-4 also surfaces a new finding: hybrid damage profile.** Phi-4 loses both *correctness* (Sonnet −0.190, GPT-4o −0.381) AND *faithfulness* (Sonnet −0.369, GPT-4o −0.429) — the first cell where the damage profile mixes lift-cell (faithfulness drop) and regress-cell (correctness drop) mechanisms. **Substring grader's reliability as a regression detector varies by base type** — on cross-family intermediate-reasoning bases, judges are mandatory.
 
 Full per-cell + per-dimension Phi-4 analysis: `eval/results/phi4_n7_corroborates_two_factor.md`.
