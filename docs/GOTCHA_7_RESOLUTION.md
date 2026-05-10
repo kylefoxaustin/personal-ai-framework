@@ -241,6 +241,31 @@ The "every judge-Δ is ≤ 0" reading from the Sonnet-only run is **partially pr
 
 Full cross-judge analysis with per-dimension breakdown: `eval/results/cross_judge_n5_gpt4o.md`.
 
+### N=6 update — Yi-1.5-9B-Chat falsifies the "3/6 → lift" branch (2026-05-10)
+
+Per the reviewer's Q3 hybrid (b), we ran Yi-1.5-9B-Chat as the cleanest N=6 candidate (68.3% stock, 3/6 reasoning, no context handicap, different family). **Yi v4 substring regressed −28.6pp** (86/126 = 68.3% → 50/126 = 39.7%) — the largest substring regression in any v4 fine-tune in the dataset. GPT-4o cross-judge corroborates: Δ −0.714 (correctness, instruction-following, conciseness all drop; faithfulness flat). Sonnet judge pending Anthropic key access.
+
+This **falsifies the "≥3/6 reasoning → lift on substring" branch of the N=5 predictor.** Yi at 3/6 stock reasoning produced a stronger substring regression than any 0–1/6 cell. The 3/6 band is now mixed-direction:
+
+| 3/6 cell | Substring Δ | GPT-4o Δ |
+|---|---:|---:|
+| Qwen 2.5 14B v4 | **+8.7pp** | −0.214 |
+| Yi-1.5-9B-Chat v4 | **−28.6pp** | **−0.714** |
+
+Within the same band, same recipe, the v4 outcome can flip from "biggest substring lift" to "biggest substring regression". The substring-direction predictor at intermediate band has narrow validity — *which* base you pick matters as much as the band itself. Hypothesis: at 3/6 reasoning, *same-family-extension* bases (Qwen 14B is a size-extension of Qwen 7B base from the v4 corpus's origin) lift on substring while *true cross-family* bases regress. N=1 cross-family at 3/6 isn't enough to distinguish this from "Yi-specifically has a quirk."
+
+**What survives unchanged** (in fact strengthened by Yi):
+
+- **Asymmetry hypothesis:** all 3 substring lifts erase or reverse on at least one judge; all 3 substring regressions are corroborated by GPT-4o (Sonnet covers 2 of 3). The Yi data fits the asymmetry pattern cleanly: substring regression confirmed by judge.
+- **"Lift magnitude does not predict capability gain":** Qwen 14B has the biggest substring lift in the dataset and the most evaporative judge result; Yi has the biggest substring regression and a corroborating judge regression. Substring magnitude tracks judge magnitude *only* on the regression side, not on the lift side.
+- **"Two judges by default" rule:** Yi reinforces this. A team that tested only on substring would have correctly seen the Yi regression but had no confirmation it was real capability damage; cross-judge gives that confirmation. A team running cross-judge on a cell that *did* substring-lift (Qwen 14B) would have correctly seen the lift erase.
+
+**What needs revising** (in customer template + § 5.5 mirror): the "≥3/6 lifts on substring" line. New wording in `recipe-taxonomy.md`: "Bases at intermediate stock reasoning (3/6) produced mixed substring direction: Qwen 14B lifted +8.7pp; Yi-1.5-9B-Chat regressed −28.6pp. Within the intermediate band, which base you pick matters as much as the band itself."
+
+Full per-cell + per-dimension Yi analysis: `eval/results/yi_n6_falsifies_substring_predictor.md`.
+
+**Reviewer re-look needed?** The customer-template wording the reviewer blessed at N=5 contained the "3/6 → lift" claim. Yi falsifies it. The replacement wording above is reviewer-pending. Holds: customer-template publication should pause for one round of reviewer eyes on the N=6 falsification before shipping.
+
 Judge-at-temp=0.3 was considered and is *not* worth running — temp=0.3 already shows fine-tune fragility (SK-P0-002), and rerunning judge there conflates two confounds rather than separating them. Production decoding regime (temp=0) is the right metric to keep judge orthogonal at.
 
 This **promotes the asymmetry disclosure from "hypothesis with test status named" to "tested and confirmed across the full N=5."** The reviewer's Q2 wording can drop the "we have judge data on one lift cell only" hedge; the new wording (carried inline in white paper § 7):
