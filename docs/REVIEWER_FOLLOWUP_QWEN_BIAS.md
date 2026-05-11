@@ -88,4 +88,83 @@ The substring grader's reliability depends on which family the corpus phrasings 
 
 ---
 
+## Reviewer Closure (2026-05-11) — substring-reliability arc closes here
+
+The reviewer accepted the post-closure FYI as the most valuable single output of the campaign and gave two framing sharpenings + three doc-change verdicts. All folded in.
+
+### Reviewer's verbatim closure framing
+
+> "The Qwen-family format bias finding is, in my read, the single most valuable methodology output of this entire campaign — more valuable than gotcha #7, more valuable than the two-factor model, more valuable than the asymmetry hypothesis. Customer-deployable, tool-grounded, mechanism-clear, and a generalizable lesson for any team running corpus-targeted fine-tuning evals."
+
+> "The substring-reliability arc closes here. The whole thread can probably close now unless something else surfaces."
+
+### Observation 1 — Retire the "v4 lifts capability" claim definitively
+
+Reviewer's verbatim:
+
+> "The 'v4 lifts capability' claim has now been definitively retired through the campaign arc. ... What started as a headline capability finding has been demonstrated through five independent methodology improvements to be a format-fidelity artifact. The production decision is unaffected because voice + safety carried real weight in the three-gate framework. But the 'v4 lifts capability' framing should now be retired definitively in the white paper — the campaign-level conclusion is 'v4 transfers voice and refines safety/refusal; substring-headline-capability gain on this corpus was a format-fidelity artifact specific to Qwen-shaped phrasings in the training data.'"
+
+**Adopted.** White paper § Grader-methodology Finding 4 now explicitly retires the v4-capability-lift framing with this exact campaign-level conclusion. Five-step erosion narrative documented (substring +3.1pp → LLM-judge −0.35 → temp=0.3 −29pp → cross-judge confirms → semantic regrade −4.8pp).
+
+### Observation 2 — "Family-match dissolves" framing is too strong
+
+Reviewer's verbatim:
+
+> "Slightly too strong. Qwen 14B still lifts under semantic (+4.8-5.5pp); Qwen 7B reverses; Gemma 9B still lifts. The cleaner read is 'the family-match branch was substantially overstated by substring grading but doesn't go to zero.' With N=2 Qwen-family cells under semantic going opposite directions, you can't characterize the family-match effect cleanly — the right framing is 'family-match as a substring-direction predictor was a substring-grading artifact; under semantic eval the within-family signal is mixed and undercharacterized.'"
+
+**Adopted.** The `recipe-taxonomy.md` customer-template "family-match dissolves" wording is replaced with reviewer's sharper "substantially overstated but doesn't go to zero" framing + "within-family signal is mixed and undercharacterized at N=2".
+
+### (a) Add Finding 4 with regrade aggregate table + tool pointer — ADOPTED
+
+Reviewer's verbatim:
+
+> "(a) Add Finding 4 — yes. This is the strongest single output of the entire campaign and it deserves a named finding with the regrade aggregate table. Specifically include the regrade tool pointer (eval/regrade_semantic.py) — customers running similar workflows will want to detect this on their own corpora, and giving them the tool is more useful than just naming the bias."
+
+White paper § Grader-methodology now has Finding 4 with the regrade aggregate table (Qwen-family DOWN / non-Qwen UP / cross-family split) + the tool pointer + the campaign-level "v4 retires capability claim" conclusion.
+
+### (b) Refine customer-template wording — ADOPTED with reviewer's sharper version
+
+Reviewer's verbatim suggested wording:
+
+> "Substring grading on this corpus is biased toward Qwen-family fine-tunes due to gold-token format-match. Under semantic regrade, only the ceiling-reasoning gate produces consistent lifts (Gemma 9B at 6/6 still lifts; Qwen 14B at 3/6 still lifts but smaller; Qwen 7B at 6/6 reverses to regression). Customers running this recipe on their own corpus should expect substring lifts on family-matched FTs to be partially or fully format-fidelity artifact, and should semantic-grade by default."
+
+**Adopted verbatim in `recipe-taxonomy.md`.**
+
+### (c) Skip 5th regime in matrix; add a one-line methodology note — ADOPTED
+
+Reviewer's verbatim:
+
+> "(c) 5th regime in the substring-reliability matrix — agree with the agent's call to skip. The matrix as published is corpus-agnostic; adding 'Qwen-family FT comparison' as a 5th regime over-fits the matrix to one campaign. The underlying insight belongs in the methodology section as a campaign-grounded finding, not in the published reliability matrix. The agent's instinct here is right — don't generalize from one campaign to a universal matrix entry.
+>
+> But there's a one-line methodology note worth adding (separate from the matrix): 'Substring grading is reliable for base-vs-base comparisons but unreliable for FT-vs-base comparisons when the corpus phrasings come from one model family. Customers running cross-family campaigns should validate substring with semantic grading before drawing FT-lift conclusions.' That's the durable methodology lesson from this campaign that transfers to other corpora."
+
+**Adopted.** Methodology note added to Finding 4 as the "generalizable methodology note (transfers to other corpora)" — preserves the durable lesson without over-fitting the published matrix to one campaign's corpus.
+
+### NXP-internal arc-erosion slide — reviewer-recommended
+
+Reviewer's verbatim:
+
+> "The arc itself is gold for an NXP audience. ... If the deck has room for an 'arc' slide showing the headline number eroding across cross-checks, that's a compelling visualization. 'Six successive methodology improvements moved the headline from +3.1pp to −4.8pp; production decision unaffected because we never relied on the headline alone' is the kind of slide that builds significant credibility."
+
+**Adopted.** Adding `slide_headline_erosion` to the deck — a five-checkpoint progression of the Skippy 7B v4 headline number with the production-decision-unaffected punchline.
+
+### Reviewer's reportable NXP framing (verbatim — for the deck speaker notes)
+
+> "We applied progressively rigorous methodology to a preliminary capability-lift finding. Each successive cross-check (LLM-judge, temperature sensitivity, cross-judge, semantic regrade) eroded the headline claim further. The final state: the recipe's value is voice transfer and safety calibration, not capability lift; substring grading was systematically biased toward family-matched fine-tunes due to gold-token format match. Production decision unaffected because the three-gate framework was designed exactly for this — substring failed silently, voice and safety carried the real signal."
+
+Demonstrates:
+- Team catches its own over-claims through iterative rigor
+- Three-gate decision framework prevents shipping on biased signals
+- Specific bias mechanism is named and tooled (`eval/regrade_semantic.py`)
+- Customer-actionable methodology guidance falls out cleanly
+
+### Status
+
+- White paper § Grader-methodology: Finding 4 added with campaign-level v4-capability-retirement + tool pointer + generalizable methodology note
+- recipe-taxonomy customer-template: reviewer's sharper wording adopted; "family-match dissolves" replaced with "substantially overstated; within-family signal mixed and undercharacterized at N=2"
+- Deck: `slide_headline_erosion` added (six checkpoints, +3.1 → −4.8pp arc, NXP-credibility framing)
+- Substring-reliability arc closes here. Thread closed.
+
+---
+
 *Document location: `docs/REVIEWER_FOLLOWUP_QWEN_BIAS.md`*

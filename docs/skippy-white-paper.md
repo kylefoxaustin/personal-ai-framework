@@ -422,9 +422,31 @@ From the N=7 cross-family campaign (gotcha #7): two cross-family bases at 3/6 st
 
 **Implication for customers:** the substring grader at temp=0 is reliable for *direction* on cross-family bases (Yi and Phi-4 both regressed in sign), but its *magnitude* is wildly unreliable — sometimes catastrophic (Yi), sometimes vanishing into noise (Phi-4). Capability damage that the substring grader cannot reliably surface is exactly the kind of risk a fine-tune deployment process should catch. The remedy is cross-judge by default.
 
+### Finding 4 — Substring grader has Qwen-family format bias (post-closure 2026-05-11)
+
+A bulk semantic regrade across all 33 catalog entries (`eval/regrade_semantic.py`, GPT-4o binary grader, ~$20 OpenAI, ~10 min parallel) revealed a stronger and more specific statement than Finding 3's "magnitude unreliable on cross-family intermediate-reasoning":
+
+**The substring grader at temp=0 has Qwen-family format bias.** The training corpus phrasings come from Qwen, so the gold substrings used by the grader are Qwen-shaped. This systematically rewards Qwen-style fine-tunes (which reproduce trained Qwen phrasings) and penalises non-Qwen bases (which phrase correct answers differently). The bias has *consistent sign* and *predicts which bases over- or under-grade*:
+
+| Cell category | Substring → Semantic delta (pattern) |
+|---|---|
+| **Qwen-family fine-tunes** | regrade DOWN sharply (−3 to −13pp). Skippy 7B v4 production: −10.3pp. 7B v1/v2/v3, 14B v1, MoE router-v1, MoE-thinking, Qwen3-30B-A3B Instruct-2507 (stock): −3 to −13pp. |
+| **Non-Qwen stock bases** | regrade UP (+1.6 to +6.0pp). Gemma 9B base: +6.0pp. Gemma 2B: +4.2pp. Mistral 7B: +2.4pp. Llama 8B: +1.6pp. Substring was being unfairly harsh on these. |
+| **Cross-family v4 fine-tunes** | split: Gemma v4 +5.4pp (only cross-family v4 lifter under semantic); Phi-4 v4 +0.8pp; Llama v4 +1.0pp; Mistral v4 ±0.0pp; Yi v4 −1.4pp. |
+
+The campaign-level consequence: **the "v4 lifts capability" framing is retired.** Across five independent methodology improvements (LLM-judge SK-P1-002 → temperature sensitivity SK-P0-002 → cross-judge → two-factor model at N=7 → bulk semantic regrade), the production Skippy 7B v4's headline +3.1pp substring lift over its Qwen 7B base eroded to a −4.8pp semantic regression. **The recipe's value is voice transfer and safety calibration, not capability lift; the substring-headline-capability gain on this corpus was a format-fidelity artifact specific to Qwen-shaped phrasings in the training data.**
+
+The production decision is unaffected — the three-gate framework (capability + voice + safety) was designed exactly for this. Substring failed silently across the campaign; voice (12× length reduction, persona alignment) and safety (refusal 9/9 vs 14B's 6/9 fabrication) carried the real signal.
+
+**Tool for customers:** `eval/regrade_semantic.py` runs the semantic regrade on any existing eval JSON (`acc_*.json`) at ~$0.66/eval with GPT-4o + prompt caching. Output JSON contains the original substring scores alongside new per-sample semantic verdicts + per-prompt + top-level semantic summaries. Customers running cross-family or corpus-targeted fine-tuning campaigns should run this by default before drawing FT-lift conclusions.
+
+**Generalizable methodology note (transfers to other corpora):** Substring grading is reliable for base-vs-base comparisons but unreliable for FT-vs-base comparisons when the corpus phrasings come from one model family. Customers running cross-family campaigns should validate substring with semantic grading before drawing FT-lift conclusions. This is the durable lesson from the Skippy-v4 campaign — the specific Qwen bias is one instance of a general pattern.
+
+Full bulk-regrade catalog + per-cell analysis: `eval/results/semantic_regrade_catalog.md`. Reviewer FYI: `docs/REVIEWER_FOLLOWUP_QWEN_BIAS.md`.
+
 ### Paired interpretation
 
-Findings 1, 2, and 3 are independent but converge on a coherent picture of when the substring grader is reliable and when it isn't:
+Findings 1, 2, 3, and 4 are independent but converge on a coherent picture of when the substring grader is reliable and when it isn't:
 
 | Regime | Substring reliable? | Why |
 |---|---|---|
