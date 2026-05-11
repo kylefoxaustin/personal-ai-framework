@@ -1496,6 +1496,57 @@ def slide_voice_gate():
 SLIDES.append(slide_voice_gate)
 
 
+def slide_headline_erosion():
+    s = add_blank()
+    add_title(s, "Headline erosion — five methodology improvements retired the v4 capability claim",
+              "Reviewer 2026-05-11: 'Six successive methodology improvements moved the headline from +3.1pp to −4.8pp. Production decision unaffected because we never relied on the headline alone.'")
+
+    erosion_rows = [
+        ("1. Substring grader at temp=0 (original headline)",         "+3.1pp",      "Skippy 7B v4 (73.8%) vs Qwen 7B base (70.6%). Looked like a clean capability lift."),
+        ("2. LLM-judge Sonnet 4.6 (SK-P1-002)",                        "−0.35 / 8",   "Judge reverses substring's verdict. Lift didn't survive ONE independent semantic grader."),
+        ("3. Temperature sensitivity at temp=0.3 (SK-P0-002)",         "−29.3pp",     "FT collapses to 44.5% when decoding becomes stochastic; base stays flat (69.1%). Lift didn't survive sampling perturbation."),
+        ("4. Cross-judge GPT-4o (added to Sonnet)",                    "−0.69 / 8",   "Both judges ≤ 0 on Qwen 7B v4. Lift didn't survive a SECOND independent judge."),
+        ("5. Two-factor model at N=7 (Yi + Phi-4 cross-family)",        "family-match",  "Substring lift requires ceiling reasoning OR family-match. Family-match was load-bearing for the Qwen 7B v4 lift."),
+        ("6. Bulk semantic regrade (Qwen-family bias identified)",     "−4.8pp",      "Substring's +3.1pp flips to a semantic −4.8pp regression. Sign reversal. Lift was a substring format-fidelity artifact specific to Qwen-shaped trained phrasings."),
+    ]
+    add_table(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(3.6),
+              ["Methodology checkpoint", "Headline at checkpoint", "What it showed"],
+              erosion_rows, font_size=10, highlight_rows={5})
+
+    # Bottom — three-gate framework saves the day
+    add_box(s, Inches(0.5), Inches(5.2), Inches(6.0), Inches(1.85),
+            "Why production decision was unaffected",
+            fill=SURFACE, border=ACCENT2, size=12, bold=True)
+    add_text(s, Inches(0.7), Inches(5.75), Inches(5.6), Inches(1.3), [
+        "The three-gate framework was designed exactly for this:",
+        "",
+        "  • Capability gate (substring) — failed silently",
+        "  • Voice gate (length, structure metrics) — PASSED ✓",
+        "  • Safety gate (refusal_made_up_peripheral 9/9) — PASSED ✓",
+        "",
+        "Skippy 7B v4 shipped because voice + safety carried real signal,",
+        "not because we trusted the substring headline alone.",
+    ], size=11)
+
+    add_box(s, Inches(6.8), Inches(5.2), Inches(6.0), Inches(1.85),
+            "What this demonstrates to a reviewer",
+            fill=SURFACE, border=ACCENT3, size=12, bold=True)
+    add_text(s, Inches(7.0), Inches(5.75), Inches(5.6), Inches(1.3), [
+        "• Team catches its own over-claims through iterative rigor",
+        "• Three-gate framework prevents shipping on biased signals",
+        "• Bias mechanism is named (Qwen-family format match)",
+        "  and tooled (eval/regrade_semantic.py)",
+        "• Customer-actionable methodology guidance falls out cleanly",
+        "",
+        "This is more credible than a clean '+3pp' headline would be.",
+    ], size=11)
+
+    add_text(s, Inches(0.5), Inches(7.15), Inches(12.3), Inches(0.3), [
+        "Full erosion arc + bulk regrade catalog: eval/results/semantic_regrade_catalog.md. Reviewer trail: docs/REVIEWER_FOLLOWUP_QWEN_BIAS.md.",
+    ], size=10, color=MUTED)
+SLIDES.append(slide_headline_erosion)
+
+
 def slide14_takeaways():
     s = add_blank()
     add_title(s, "Key takeaways",
@@ -1511,8 +1562,8 @@ def slide14_takeaways():
         "Bandwidth physics still holds — Skippy is BW-bound, not compute-bound; 200 TOPS over-provisioned, 100.8 GB/s usable (75% util) is the real constraint. MoE wins decode-per-active-byte.",
         "Cross-family on 5090: 7B-class dense Q4_K_M decode is family-invariant within ~7% (170-185 tok/s across Qwen / Mistral / Llama). Performance follows GGUF size, not vendor.",
         "Cross-family stock quality is NOT invariant: Qwen 7B = 70.6% / Mistral 7B = 63.5% / Llama 3.1 8B = 59.5% / Yi 1.5 9B = 68.3% / Phi-4 = 71.4% / Gemma 9B = 61.9%. Pick base for quality, not tok/s.",
-        "Cross-family recipe transfer is two-factor (reviewer-final at N=7): lift requires ceiling reasoning (6/6) OR family-match to the corpus source distribution. Both Qwen 7B/14B (Qwen-family) and Gemma 9B (6/6 ceiling) lift; Mistral / Llama / Yi / Phi-4 (cross-family, <6/6 reasoning) regress. Pre-registered falsifiers (Gemma at N=3, Phi-4 at N=7) both behaved as predicted.",
-        "Substring eval is gameable — and SPECIFICALLY UNRELIABLE on cross-family intermediate-reasoning bases. Yi v4 substring −28.6pp; Phi-4 v4 substring −1.6pp (within noise floor σ≈1.4–2.3pp). BOTH judges give the same regression magnitude (−0.7 to −0.9). Standing methodology = two judges by default. The substring-reliability matrix (4 regimes) is in the white paper Grader-methodology section; reviewer flagged this as 'the most valuable methodology contribution this campaign produced — bigger than gotcha #7 itself.'",
+        "Cross-family recipe transfer is two-factor on substring (reviewer-final at N=7): substring lift requires ceiling reasoning (6/6) OR family-match. Under semantic regrade the family-match gate is substantially overstated — Gemma 9B (6/6) still lifts under semantic; Qwen 14B (3/6) still lifts smaller; Qwen 7B (6/6) REVERSES to −4.8pp regression. The 'v4 lifts capability' framing is retired — the recipe's value is voice transfer and safety calibration, not capability lift; the substring-headline-capability gain was a format-fidelity artifact specific to Qwen-shaped phrasings in the training data.",
+        "Substring grader has Qwen-family format bias (campaign's most valuable methodology output per reviewer). Bulk regrade across 33 entries: Qwen-family FTs regrade DOWN sharply (production −10.3pp); non-Qwen stock bases regrade UP (+1.6 to +6.0pp); cross-family v4 fine-tunes split. Mechanism: gold substrings are Qwen-shaped because corpus is Qwen-shaped. Tool: eval/regrade_semantic.py (~$0.66/eval). Generalizable lesson: substring grading is reliable for base-vs-base but unreliable for FT-vs-base when corpus phrasings come from one model family. Customers running cross-family campaigns should semantic-grade by default.",
         "Sizer/perf-model methodology: cross-class analytic fallback over-projected Llama-3.1 8B by 1.95× on 5090. Use measured per-(base, hardware) anchors, not extrapolation.",
     ], size=12)
 SLIDES.append(slide14_takeaways)
