@@ -1124,22 +1124,26 @@ SLIDES.append(slide_v4_campaign_final)
 
 def slide_cross_family_baselines():
     s = add_blank()
-    add_title(s, "Cross-family baselines — what stock bases look like on Skippy's eval",
-              "5090 perf is family-invariant; quality is not — same hardware, different starting points")
+    add_title(s, "Cross-family baselines — N=7 stock bases on Skippy's eval",
+              "Quality varies sharply across families; 5090 performance is family-invariant. The reasoning floor × family-match split predicts v4 outcomes.")
 
     rows = [
-        ("Qwen2.5-7B Instruct",          "70.6%",   "6/6",   "5/9",    "3/6",   "9/9",   "0/6",   "reference"),
-        ("Mistral 7B v0.3 Instruct",     "63.5%",   "6/6",   "6/9",    "0/6",   "6/9",   "0/6",   "−6.8pp; refusal calibration off"),
-        ("Llama-3.1 8B Instruct",        "59.5%",   "6/6",   "6/9",    "1/6",   "6/9",   "0/6",   "−10.6pp; reasoning gap dominates"),
+        ("Qwen 2.5 7B Instruct",          "70.6%",   "6/6",   "5/9",    "3/6",   "9/9",   "Qwen",       "v4: +3.1pp lift (judge erases)"),
+        ("Qwen 2.5 14B Instruct",         "67.5%",   "6/6",   "6/9",    "3/6",   "9/9",   "Qwen",       "v4: +8.7pp lift (judge erases)"),
+        ("Gemma 2 9B Instruct",           "61.9%",   "6/6",   "6/9",    "6/6",   "9/9",   "cross",      "v4: +3.2pp lift (judge-sensitive)"),
+        ("Mistral 7B v0.3 Instruct",      "63.5%",   "6/6",   "6/9",    "0/6",   "6/9",   "cross",      "v4: −3.8pp regress (judges confirm)"),
+        ("Llama 3.1 8B Instruct",         "59.5%",   "6/6",   "6/9",    "1/6",   "6/9",   "cross",      "v4: −3.2pp regress (judges confirm strongly)"),
+        ("Yi-1.5-9B-Chat",                "68.3%",   "4/6",   "6/9",    "3/6",   "6/9",   "cross",      "v4: −28.6pp catastrophic (judges confirm)"),
+        ("Phi-4 (14B)",                   "71.4%",   "6/6",   "6/9",    "3/6",   "9/9",   "cross",      "v4: −1.6pp substring (judges show −0.8)"),
     ]
-    add_table(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(1.7),
-              ["Stock base", "Headline", "coding", "multihop", "reasoning", "refusal", "persona", "Note"],
-              rows, font_size=11, highlight_rows={0})
+    add_table(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(2.6),
+              ["Stock base", "Headline", "coding", "multihop", "reasoning", "refusal", "Family", "v4 outcome"],
+              rows, font_size=10, highlight_rows={0})
 
-    add_box(s, Inches(0.5), Inches(3.3), Inches(6.0), Inches(1.9),
+    add_box(s, Inches(0.5), Inches(4.2), Inches(6.0), Inches(2.0),
             "Performance: family-invariant on 5090",
             fill=SURFACE, border=ACCENT2, size=12, bold=True)
-    add_text(s, Inches(0.7), Inches(3.85), Inches(5.6), Inches(1.4), [
+    add_text(s, Inches(0.7), Inches(4.75), Inches(5.6), Inches(1.5), [
         "• Mistral 7B v0.3 Q4_K_M:  182.7 tok/s (4.37 GB)",
         "• Qwen 2.5 7B Q4_K_M:        183.9 tok/s (4.68 GB)",
         "• Llama-3.1 8B Q4_K_M:      171.0 tok/s (4.92 GB)",
@@ -1148,31 +1152,117 @@ def slide_cross_family_baselines():
         "(BW cost), not vendor or family.",
     ], size=11)
 
-    add_box(s, Inches(6.8), Inches(3.3), Inches(6.0), Inches(1.9),
-            "Quality: NOT family-invariant",
+    add_box(s, Inches(6.8), Inches(4.2), Inches(6.0), Inches(2.0),
+            "Quality: two-factor predictor (N=7)",
             fill=SURFACE, border=ACCENT3, size=12, bold=True)
-    add_text(s, Inches(7.0), Inches(3.85), Inches(5.6), Inches(1.4), [
-        "• Three quality outcomes from the same 5090 budget",
-        "• Reasoning: Qwen 6/6 vs Llama 1/6 vs Mistral 0/6",
-        "• Refusal: Llama/Mistral fabricate out of the box (3/9)",
-        "• Persona 0/6 every stock base — fine-tune required",
-        "• v4 FT: both non-Qwen regress (−4.0pp / −3.2pp)",
-        "  → preliminary cross-family N=2 signal",
+    add_text(s, Inches(7.0), Inches(4.75), Inches(5.6), Inches(1.5), [
+        "Lift on substring requires EITHER:",
+        "• ceiling stock reasoning (6/6) — Gemma 9B",
+        "• family-match to corpus source — Qwen 7B/14B",
+        "",
+        "Cross-family WITHOUT ceiling reasoning regress.",
+        "Phi-4 corroborated at 7/7 cells (no falsification).",
     ], size=11)
 
-    add_box(s, Inches(0.5), Inches(5.4), Inches(12.3), Inches(1.5),
-            "Methodology data point — measured anchors vs analytic projections",
-            fill=INK, border=ACCENT, size=12, bold=True)
-    add_text(s, Inches(0.7), Inches(5.9), Inches(11.9), Inches(1.0), [
-        "Cross-class fallback heuristic projected Llama-3.1 8B Q4_K_M at 332.79 tok/s on 5090.",
-        "Measured number: 171.0 tok/s.   Over-projection factor: 1.95×.",
-        "Sizer/perf-model accuracy depends on per-(base, hardware) measured anchors, not analytic extrapolation across model classes.",
-    ], size=12, color=ACCENT)
+    add_box(s, Inches(0.5), Inches(6.4), Inches(12.3), Inches(0.65),
+            "Across 7 cells × 2 judges (Sonnet + GPT-4o), 13 of 14 passes confirm v4 ≤ base. Substring magnitude unreliable on cross-family intermediate-reasoning (Yi −28.6 vs Phi-4 −1.6, same judge magnitude).",
+            fill=INK, border=ACCENT, size=11, bold=True)
 
-    add_text(s, Inches(0.5), Inches(7.0), Inches(12.3), Inches(0.35), [
-        "Stock baselines measured 2026-05-07 on RTX 5090 via llama-cpp-python. Same 132-sample v2-rag eval, Q4_K_M GGUF, n_ctx=16384.",
+    add_text(s, Inches(0.5), Inches(7.15), Inches(12.3), Inches(0.3), [
+        "Stock baselines + v4 fine-tunes evaluated 2026-05-07 → 2026-05-10 on RTX 5090, Q4_K_M GGUF, 132-sample v2-rag eval. Phi-4 used QLoRA nf4.",
     ], size=10, color=MUTED)
 SLIDES.append(slide_cross_family_baselines)
+
+
+def slide_two_factor_methodology():
+    s = add_blank()
+    add_title(s, "Two-factor recipe predictor + when substring grading is reliable",
+              "Reviewer 2026-05-10: 'The substring-reliability story is the most valuable methodology contribution this campaign produced — bigger than gotcha #7 itself.'")
+
+    # Left column — two-factor model with cell colors
+    add_box(s, Inches(0.5), Inches(1.4), Inches(6.0), Inches(3.4),
+            "Two-factor model (N=7 corroborated)",
+            fill=SURFACE, border=ACCENT2, size=12, bold=True)
+    add_text(s, Inches(0.7), Inches(1.95), Inches(5.6), Inches(2.85), [
+        "Lift on substring requires:",
+        "  • ceiling stock reasoning (6/6)  OR",
+        "  • family-match to corpus source distribution",
+        "",
+        "Cross-family base without ceiling reasoning → regress",
+        "",
+        "Coverage (3 of 4 corners measured):",
+        "  ✓ ✓-Qwen × ceiling     → lift  (Qwen 7B)",
+        "  ✓ cross   × ceiling     → lift  (Gemma 9B)",
+        "  ✓ cross   × floor/mid   → regress (Mistral, Llama, Yi, Phi-4)",
+        "  ⏸  ✓-Qwen × floor      → predicted lift, untested",
+    ], size=11)
+
+    # Right column — 4-regime substring matrix
+    add_box(s, Inches(6.8), Inches(1.4), Inches(6.0), Inches(3.4),
+            "When is substring grading reliable?",
+            fill=SURFACE, border=ACCENT3, size=12, bold=True)
+    sub_rows = [
+        ("Base-vs-base at temp=0",                        "✅ YES"),
+        ("Base-vs-FT at temp=0",                          "⚠ direction only"),
+        ("Base-vs-FT at temp>0",                          "❌ NO"),
+        ("Cross-family intermediate-reasoning FT",        "⚠ direction only, magnitude unreliable"),
+    ]
+    add_table(s, Inches(7.0), Inches(2.0), Inches(5.6), Inches(2.6),
+              ["Regime", "Reliable?"],
+              sub_rows, font_size=10, highlight_rows=set())
+
+    # Bottom — Yi/Phi-4 same judge, different substring
+    add_box(s, Inches(0.5), Inches(5.0), Inches(12.3), Inches(2.0),
+            "Substring magnitude can hide capability damage — Yi/Phi-4 demonstrates",
+            fill=INK, border=ACCENT, size=12, bold=True)
+    add_text(s, Inches(0.7), Inches(5.55), Inches(11.9), Inches(1.45), [
+        "Yi-1.5-9B v4:   substring −28.6pp  (catastrophic),    Sonnet −0.848,  GPT-4o −0.714",
+        "Phi-4 v4:         substring −1.6pp   (within noise floor σ≈1.4–2.3pp),  Sonnet −0.627,  GPT-4o −0.834",
+        "",
+        "Same judge regression magnitude (~−0.7 to −0.9 across both judges), ~18× different substring magnitudes.",
+        "Phi-4's substring number is statistically indistinguishable from base; both judges see clear capability damage.",
+        "A team running substring-only would have shipped Phi-4 v4 thinking 'essentially equivalent to stock.' It isn't.",
+        "→  Standing methodology: two judges by default on every cross-family fine-tune evaluation.",
+    ], size=11, color=ACCENT2)
+
+    add_text(s, Inches(0.5), Inches(7.1), Inches(12.3), Inches(0.3), [
+        "Full methodology: docs/skippy-white-paper.md § Grader-methodology findings (Findings 1+2+3 paired interpretation).",
+    ], size=10, color=MUTED)
+SLIDES.append(slide_two_factor_methodology)
+
+
+def slide_arc_credibility():
+    s = add_blank()
+    add_title(s, "Process arc — six framings in 60 hours, each correctly superseding the prior",
+              "Reviewer 2026-05-10: 'NXP-internal reviewers care about whether the team will catch its own over-claims. This arc demonstrates yes.'")
+
+    arc_rows = [
+        ("2026-05-08 evening",  "preliminary base-family-coupled (N=2 directional)",                                       "initial framing of gotcha #7 from Mistral + Llama regression"),
+        ("2026-05-09 00:13",   "reasoning-floor discriminator (N=5 substring)",                                            "Gemma 9B added → architecture-coupling falsified, reasoning floor proposed"),
+        ("2026-05-09 15:49",   "no judge-corroborated lift in N=5 cells (Sonnet)",                                         "first LLM-judge run reveals substring lifts erase on semantic rubric"),
+        ("2026-05-10 00:21",   "9 of 10 cross-judge corroborated (Gemma judge-sensitive)",                                 "GPT-4o cross-judge added; Gemma divergence surfaced honestly, not papered over"),
+        ("2026-05-10 14:20",   "TWO-FACTOR MODEL (ceiling-reasoning OR family-match)",                                     "Yi catastrophic regression falsifies single-factor reasoning predictor; two-factor proposed"),
+        ("2026-05-10 18:30",   "★ N=7 corroborated — Phi-4 confirms two-factor model (13/14 judge passes)",                "pre-registered falsifier (Phi-4) corroborated; 3/4 corners measured; reviewer closure"),
+    ]
+    add_table(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(3.6),
+              ["When", "Framing", "What changed"],
+              arc_rows, font_size=10, highlight_rows={5})
+
+    add_box(s, Inches(0.5), Inches(5.2), Inches(12.3), Inches(1.8),
+            "What the arc itself demonstrates",
+            fill=SURFACE, border=ACCENT2, size=12, bold=True)
+    add_text(s, Inches(0.7), Inches(5.75), Inches(11.9), Inches(1.2), [
+        "• Pre-registered falsifiers (Gemma at N=3 architecture-coupling; Phi-4 at N=7 two-factor) — the team specified what would break each framing BEFORE measuring",
+        "• Each framing correctly captured what the data supported at the time AND surfaced what would falsify it next",
+        "• Yi's −28.6pp catastrophic regression — easy to bury or explain away — instead promoted to a load-bearing data point",
+        "• Substring-reliability findings emerged from the rigor; reviewer flagged them as 'bigger than gotcha #7 itself'",
+        "• Process trail intentionally preserved in docs/GOTCHA_7_RESOLUTION.md so any reviewer can trace each supersession",
+    ], size=11)
+
+    add_text(s, Inches(0.5), Inches(7.1), Inches(12.3), Inches(0.3), [
+        "Original gotcha #7 was a flawed N=1 over-claim that would have shipped. Final framing is reviewer-final at N=7 with cross-judge corroboration.",
+    ], size=10, color=MUTED)
+SLIDES.append(slide_arc_credibility)
 
 
 def slide_fabrication_problem():
@@ -1326,7 +1416,7 @@ def slide_recipe_taxonomy():
     ], size=12)
 
     add_box(s, Inches(6.8), Inches(1.4), Inches(6.0), Inches(4.0),
-            "Skippy matrix — complete as of 2026-05-08",
+            "Skippy matrix — N=7 reviewer-final (2026-05-10)",
             fill=SURFACE, border=ACCENT2, size=13, bold=True)
     add_text(s, Inches(7.0), Inches(1.95), Inches(5.6), Inches(3.4), [
         "Validated cells (3):",
@@ -1334,26 +1424,27 @@ def slide_recipe_taxonomy():
         "• Dense 14B + attention+FFN — voice ✓ safety ⚠️",
         "• MoE 30B-A3B + attention+router — partial recovery",
         "",
-        "Failure-data cells (4): MoE attn-only, MoE +experts,",
-        "Dense 32B (corpus-too-small), 14B-fabricates",
+        "Cross-family v4 (N=5 + 2 = N=7):",
+        "  ✓ Qwen 7B/14B + Gemma 9B → substring lift (erases on judge)",
+        "  ✗ Mistral / Llama / Yi / Phi-4 → regress (judge corroborates)",
         "",
-        "Cross-family Tier 3 — DONE:",
-        "• Mistral 7B v0.3 v4: −4.0pp (damages retrieval)",
-        "• Llama 3.1 8B v4: −3.2pp (cleaner; no template confound)",
-        "→ Preliminary N=2 non-Qwen regression pattern",
+        "Two-factor predictor:",
+        "  lift = ceiling reasoning (6/6) OR family-match",
+        "  Customer rule: cross-family + not-ceiling → expect regression",
     ], size=12)
 
     add_box(s, Inches(0.5), Inches(5.55), Inches(12.3), Inches(1.45),
-            "Customer template — locate yourself in the matrix",
+            "Customer template — predict your outcome via the two-factor model",
             fill=INK, border=ACCENT, size=12, bold=True)
     add_text(s, Inches(0.7), Inches(6.05), Inches(11.9), Inches(1.0), [
-        "Pick (arch, size, corpus, hardware budget). Find closest filled cell. Match on dims 1, 2, 3 → that recipe should work.",
-        "Example: 'we have a defect-tracking corpus, want to fine-tune a 7B dense base on a 4090' → Skippy 7B v4 cell, recipe transfers, expect 3-5pp lift.",
-        "Example: 'we have a 30B MoE base' → use the +router variant, NOT attention-only; expect partial recovery, not full lift.",
+        "Step 1: Measure your base's stock reasoning (6 prompts × 3 samples). Step 2: Check if your base is in the same family as the corpus source.",
+        "Either 6/6 reasoning OR family-match → expect substring lift on this recipe (lift will partially erase on a semantic judge; this is normal).",
+        "Cross-family + not-ceiling-reasoning → expect substring regression (Yi range: catastrophic; Phi-4 range: within noise floor but judges confirm).",
+        "Standing methodology: run two judges by default — substring magnitude is unreliable on cross-family intermediate-reasoning bases.",
     ], size=12, color=ACCENT2)
 
     add_text(s, Inches(0.5), Inches(7.05), Inches(12.3), Inches(0.35), [
-        "Full taxonomy + filled-cell matrix: docs/recipe-taxonomy.md",
+        "Full taxonomy + filled-cell matrix: docs/recipe-taxonomy.md  |  Methodology: docs/skippy-white-paper.md § Grader-methodology findings",
     ], size=10, color=MUTED)
 SLIDES.append(slide_recipe_taxonomy)
 
@@ -1419,9 +1510,9 @@ def slide14_takeaways():
         "Confident fabrication is industry-wide — Qwen 32B / Llama 8B / Mistral 7B all fabricate fictional peripherals 3/9 of the time. Customer playbook is LAYERED defense (RAG-grounded refusal data + system grounding enforcement); ship-smaller is the deployment shortcut.",
         "Bandwidth physics still holds — Skippy is BW-bound, not compute-bound; 200 TOPS over-provisioned, 100.8 GB/s usable (75% util) is the real constraint. MoE wins decode-per-active-byte.",
         "Cross-family on 5090: 7B-class dense Q4_K_M decode is family-invariant within ~7% (170-185 tok/s across Qwen / Mistral / Llama). Performance follows GGUF size, not vendor.",
-        "Cross-family stock quality is NOT invariant: Qwen 7B = 70.6% / Mistral 7B = 63.5% / Llama 3.1 8B = 59.5%. Pick base for quality, not tok/s.",
-        "Cross-family recipe transfer is preliminary (N=2): v4 on Mistral 7B (−4.0pp) and Llama 3.1 8B (−3.2pp) both regress. Gain pattern transfers cleanly; damage is family-specific. Llama is the cleaner point (no template-patch confound). Budget a corrective iteration before declaring the recipe valid on a non-Qwen base.",
-        "Substring eval is gameable — and specifically fragile for fine-tune-vs-base comparisons: fine-tunes drop ~26pp at temp=0.3; base models are flat. The grader measures format-fidelity-or-correctness; for fine-tunes these can decouple. An LLM judge gives the opposite direction on v4-vs-base. Treat FT headline gains as temp=0-scoped; track all three gates independently.",
+        "Cross-family stock quality is NOT invariant: Qwen 7B = 70.6% / Mistral 7B = 63.5% / Llama 3.1 8B = 59.5% / Yi 1.5 9B = 68.3% / Phi-4 = 71.4% / Gemma 9B = 61.9%. Pick base for quality, not tok/s.",
+        "Cross-family recipe transfer is two-factor (reviewer-final at N=7): lift requires ceiling reasoning (6/6) OR family-match to the corpus source distribution. Both Qwen 7B/14B (Qwen-family) and Gemma 9B (6/6 ceiling) lift; Mistral / Llama / Yi / Phi-4 (cross-family, <6/6 reasoning) regress. Pre-registered falsifiers (Gemma at N=3, Phi-4 at N=7) both behaved as predicted.",
+        "Substring eval is gameable — and SPECIFICALLY UNRELIABLE on cross-family intermediate-reasoning bases. Yi v4 substring −28.6pp; Phi-4 v4 substring −1.6pp (within noise floor σ≈1.4–2.3pp). BOTH judges give the same regression magnitude (−0.7 to −0.9). Standing methodology = two judges by default. The substring-reliability matrix (4 regimes) is in the white paper Grader-methodology section; reviewer flagged this as 'the most valuable methodology contribution this campaign produced — bigger than gotcha #7 itself.'",
         "Sizer/perf-model methodology: cross-class analytic fallback over-projected Llama-3.1 8B by 1.95× on 5090. Use measured per-(base, hardware) anchors, not extrapolation.",
     ], size=12)
 SLIDES.append(slide14_takeaways)
