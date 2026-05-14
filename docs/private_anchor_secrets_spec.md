@@ -75,8 +75,11 @@ bw_share_frac         = 0.75
 bw_efficiency_frac    = 0.70
 notes                 = ""
 
-# NPU High INT8 — likely different peak_bw_gbps; fill in actual silicon spec.
-# Typical guess: LPDDR5X at 8.5+ GT/s × 256b ≈ 270+ GB/s. Confirm with silicon datasheet.
+# NPU High INT8 — same LPDDR5X 8.4 GT/s × 128-bit bus as NPU Mid.
+# peak_bw_gbps = 134.4 GB/s on both tiers; the tier difference is COMPUTE
+# (NPU High: 400 eTOPS INT8 / 200 eTOPS FP vs NPU Mid: INT8-only).
+# BW-bound decode rates may therefore look similar to Mid; compute-bound
+# prefill or larger-context behavior is where the tier difference shows.
 
 [npu_llm_anchors.high_int8.qwen3_30b_a3b_moe]
 tokps                 = 0.0
@@ -85,21 +88,22 @@ mem_gb                = 0.0
 seqlen                = 2048
 source                = "measured"
 measured_date         = "2026-05-14"
-peak_bw_gbps          = 0.0           # CONFIRM from silicon spec
+peak_bw_gbps          = 134.4         # confirmed: same bus as NPU Mid
 bw_share_frac         = 0.75
 bw_efficiency_frac    = 0.70
 notes                 = ""
 
 [npu_llm_anchors.high_int8.qwen25_32b_dense]
 tokps                 = 0.0
-# ...same fields as above
+# ...same fields as above; peak_bw_gbps = 134.4
 
 [npu_llm_anchors.high_int8.qwen25_7b_dense]
 tokps                 = 0.0
-# ...same fields
+# ...same fields; peak_bw_gbps = 134.4
 
-# NPU High FP — same silicon, FP path (200 eTOPS).
-# peak_bw_gbps is the SAME bus as INT8 (same physical DRAM); efficiency may differ.
+# NPU High FP — same silicon, FP path (200 eTOPS, half of INT8 compute).
+# peak_bw_gbps = 134.4 (same bus); BW-bound regime should match high_int8;
+# compute-bound regime gets the 2× compute hit relative to INT8.
 
 [npu_llm_anchors.high_fp.qwen3_30b_a3b_moe]
 tokps                 = 0.0
@@ -108,34 +112,36 @@ mem_gb                = 0.0
 seqlen                = 2048
 source                = "measured"
 measured_date         = "2026-05-14"
-peak_bw_gbps          = 0.0           # same value as high_int8
+peak_bw_gbps          = 134.4         # same bus as high_int8
 bw_share_frac         = 0.75
 bw_efficiency_frac    = 0.70
 notes                 = ""
 
 [npu_llm_anchors.high_fp.qwen25_32b_dense]
 tokps                 = 0.0
-# ...
+# ...peak_bw_gbps = 134.4
 
 [npu_llm_anchors.high_fp.qwen25_7b_dense]
 tokps                 = 0.0
-# ...
+# ...peak_bw_gbps = 134.4
 
 
 # ─────────────────────────────────────────────────────────────────────
 # CNN anchor measurements — 2-3 tier-precision cells × 3 CNN variants
 # ─────────────────────────────────────────────────────────────────────
 
-#  CNN keys:
-#    resnet50      — ResNet-50 (confirm variant; ResNet-18 if different)
-#    yolov8n_w4    — YOLOv8n with 4-bit weights
-#    yolov8n_w8    — YOLOv8n with 8-bit weights
+#  CNN keys (confirmed 2026-05-14):
+#    resnet50_w4   — ResNet-50, 4-bit weights, 224×224 input
+#    yolov8n_w4    — YOLOv8n, 4-bit weights, 640×640 input
+#    yolov8n_w8    — YOLOv8n, 8-bit weights, 640×640 input
+#
+#  CNN was measured under INT path only — no high_fp.* sections needed.
 
-[cnn_anchors.mid_int8.resnet50]
+[cnn_anchors.mid_int8.resnet50_w4]
 ms_per_inference      = 0.0           # measured latency, milliseconds
 fps                   = 0.0           # 1000 / ms; precompute or compute live
 mem_mb                = 0.0           # runtime memory footprint
-input_res             = "224x224"     # standard ImageNet ResNet-50 input
+input_res             = "224x224"     # ResNet-50 ImageNet standard, confirmed
 source                = "measured"
 measured_date         = "2026-05-14"
 peak_bw_gbps          = 134.4
@@ -147,7 +153,7 @@ notes                 = ""
 ms_per_inference      = 0.0
 fps                   = 0.0
 mem_mb                = 0.0
-input_res             = "640x640"     # confirm; typical YOLOv8 default
+input_res             = "640x640"     # YOLOv8 default, confirmed
 source                = "measured"
 measured_date         = "2026-05-14"
 peak_bw_gbps          = 134.4
@@ -167,19 +173,19 @@ bw_share_frac         = 0.75
 bw_efficiency_frac    = 0.70
 notes                 = ""
 
-[cnn_anchors.high_int8.resnet50]
+[cnn_anchors.high_int8.resnet50_w4]
 ms_per_inference      = 0.0
-# ...same fields as cnn_anchors.mid_int8.resnet50 with peak_bw_gbps reflecting High silicon
+# ...same fields as cnn_anchors.mid_int8.resnet50_w4; peak_bw_gbps = 134.4
 
 [cnn_anchors.high_int8.yolov8n_w4]
-# ...
+ms_per_inference      = 0.0
+# ...peak_bw_gbps = 134.4
 
 [cnn_anchors.high_int8.yolov8n_w8]
-# ...
+ms_per_inference      = 0.0
+# ...peak_bw_gbps = 134.4
 
-# Optional: high_fp variants if CNN was measured under FP path on NPU High.
-# Skip these sections if you only have INT8 numbers for CNN.
-# [cnn_anchors.high_fp.resnet50] ...
+# No high_fp.* CNN sections — CNN was measured INT-only on NPU High.
 ```
 
 ## Loader module — `sizer/npu_anchors.py`
@@ -396,9 +402,13 @@ When [sizer] (keyhole-sizer) mirrors:
 - BW-share-selector UI overrides the `bw_share_frac` field at call time. Default in secrets is 0.75; UI default matches.
 - Bus messaging across sessions: discuss SHAPES (`schema`, `axes`, `field names`) not VALUES.
 
-## Outstanding questions for Kyle (to fill in once schema lands)
+## Resolved (2026-05-14)
 
-- **NPU High peak_bw_gbps**: which LPDDR rate + bus width? (LPDDR5X 8.5+ GT/s × 256b ≈ 270 GB/s is the guess; confirm from datasheet.)
-- **ResNet variant**: ResNet-50 (224×224) assumed; correct?
-- **YOLOv8n input resolution**: 640×640 assumed; correct?
-- **CNN High FP variant**: did you measure CNN under FP path on NPU High, or INT8-only? (Affects whether `cnn_anchors.high_fp.*` sections are needed.)
+All schema-blocking questions answered:
+
+- **NPU High peak_bw_gbps**: 134.4 GB/s — **same bus as NPU Mid** (LPDDR5X 8.4 GT/s × 128-bit ÷ 8 = 134.4). The tier difference is compute-only (NPU High = 400 eTOPS INT8 / 200 eTOPS FP; NPU Mid = INT8 only). BW-bound regime should look similar across tiers; compute-bound regime differentiates.
+- **ResNet variant**: ResNet-50, 4-bit weights, 224×224 input. Schema key: `resnet50_w4`.
+- **YOLOv8n input resolution**: 640×640 (confirmed).
+- **CNN High FP variant**: not measured — CNN INT-only on NPU High. No `cnn_anchors.high_fp.*` sections needed; the spec drops them.
+
+Final shape: 9 LLM cells (3 tier-precision × 3 models) + 6 CNN cells (2 tier-precision × 3 CNN variants).
