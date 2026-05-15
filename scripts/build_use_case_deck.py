@@ -846,6 +846,53 @@ def slide10_target_npu():
 SLIDES.append(slide10_target_npu)
 
 
+def slide_compute_tiers():
+    s = add_blank()
+    add_title(s, "Compute tiers on the same bus — when compute pays off",
+              "Mid and High share 128-bit LPDDR5X @ 8.4 GT/s. Compute headroom helps prefill (TTFT) and CNN — not LLM decode.")
+
+    rows_tiers = [
+        ("NPU Low",   "64-bit LPDDR4 @ 4 GT/s",      "32 GB/s",      "~42 TOPS",   "INT8 only",     "Speculative decode required to hit advertised TPS"),
+        ("NPU Mid",   "128-bit LPDDR5X @ 8.4 GT/s",  "134.4 GB/s",   "200 TOPS",   "INT8 only",     "Baseline tier — LLM-decode-optimal at this bus"),
+        ("NPU High",  "128-bit LPDDR5X @ 8.4 GT/s",  "134.4 GB/s",   "400 eTOPS",  "200 eTOPS FP",  "Same bus as Mid; compute jump unlocks CNN + FP"),
+    ]
+    add_table(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(1.8),
+              ["Tier", "Memory bus", "Peak BW", "INT8 compute", "FP compute", "Note"],
+              rows_tiers, font_size=11, highlight_rows={1, 2})
+
+    rows_measured = [
+        ("NPU Low",   "29.27",  "1.67 s",   "spec-decode (BW-starved)"),
+        ("NPU Mid",   "37.85",  "0.351 s",  "naive BW math fits"),
+        ("NPU High",  "50.46",  "0.176 s",  "naive BW math fits"),
+    ]
+    add_table(s, Inches(0.5), Inches(3.5), Inches(6.0), Inches(1.6),
+              ["Tier", "TPS decode", "TTFT 1K", "Regime"],
+              rows_measured, font_size=11)
+    add_text(s, Inches(0.5), Inches(5.2), Inches(6.0), Inches(0.45),
+             "Vendor-measured Qwen 3 30B-A3B (MoE, 3B active). TPS Mid→High = 1.33× ; TTFT Mid→High = 2.0×.",
+             size=10, color=MUTED)
+
+    add_box(s, Inches(6.8), Inches(3.5), Inches(6.0), Inches(2.1),
+            "Customer decision",
+            fill=SURFACE, border=ACCENT3, size=12, bold=True)
+    add_text(s, Inches(7.0), Inches(4.0), Inches(5.6), Inches(1.5), [
+        "• LLM-only → pick Mid (same bus = same decode ceiling as High)",
+        "• Mixed LLM + CNN → pick High (CNN is compute-bound, not BW-bound)",
+        "• FP precision required → must pick High (Mid is INT8-only)",
+        "• NPU Low is BW-starved; needs spec-decode to advertise TPS",
+    ], size=11)
+
+    add_box(s, Inches(0.5), Inches(5.8), Inches(12.3), Inches(1.3),
+            "Why TPS scales sublinearly with compute (1.33×, not 2×)",
+            fill=INK, border=ACCENT, size=11, bold=True)
+    add_text(s, Inches(0.7), Inches(6.3), Inches(11.9), Inches(0.85), [
+        "LLM decode is bandwidth-bound: every token reads the active expert weights once.",
+        "Doubling compute on the same memory bus barely moves decode TPS — the bus is the constraint.",
+        "Prefill (TTFT) IS compute-bound — that's why TTFT halves Mid→High (matches the 2× compute jump).",
+    ], size=11)
+SLIDES.append(slide_compute_tiers)
+
+
 def slide_moe_memory_model():
     s = add_blank()
     add_title(s, "MoE vs dense — the edge trade-off",
