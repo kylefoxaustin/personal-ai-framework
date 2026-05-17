@@ -1119,7 +1119,7 @@ SLIDES.append(slide_skippy_moe_upgrade)
 def slide_v4_campaign_final():
     s = add_blank()
     add_title(s, "v4 campaign final — recipe transfer is architecture- and family-coupled",
-              "Qwen gains scale 7B–14B. MoE needs router. Non-Qwen families regress (preliminary N=2 signal — see grader-methodology note).")
+              "Qwen gains scale 7B–14B. MoE needs router. Cross-family v4 N=4 corroborates two-factor predictor (see slide 19/20).")
 
     headline_rows = [
         ("Qwen2.5-7B Instruct (stock)",          "Dense / 7B",      "70.6%",  "—",        "base reference"),
@@ -1140,32 +1140,31 @@ def slide_v4_campaign_final():
               ["Model / configuration", "Arch / size", "Pass rate", "vs base", "Story"],
               headline_rows, font_size=10, highlight_rows={1, 7})
 
-    add_box(s, Inches(0.5), Inches(5.75), Inches(3.9), Inches(1.1),
+    add_box(s, Inches(0.5), Inches(6.05), Inches(3.9), Inches(0.9),
             "Dense rule (validated 7B–14B)",
-            fill=SURFACE, border=ACCENT2, size=11, bold=True)
-    add_text(s, Inches(0.65), Inches(6.15), Inches(3.65), Inches(0.75), [
+            fill=SURFACE, border=ACCENT2, size=10, bold=True)
+    add_text(s, Inches(0.65), Inches(6.40), Inches(3.65), Inches(0.55), [
         "• r=64, 100 refusal exemplars, 2 epochs",
         "• Lifts 7B + 14B; trades at 32B (param:data ratio)",
-    ], size=10)
+    ], size=9)
 
-    add_box(s, Inches(4.55), Inches(5.75), Inches(3.9), Inches(1.1),
+    add_box(s, Inches(4.55), Inches(6.05), Inches(3.9), Inches(0.9),
             "MoE rule (validated)",
-            fill=SURFACE, border=ACCENT3, size=11, bold=True)
-    add_text(s, Inches(4.7), Inches(6.15), Inches(3.65), Inches(0.75), [
+            fill=SURFACE, border=ACCENT3, size=10, bold=True)
+    add_text(s, Inches(4.7), Inches(6.40), Inches(3.65), Inches(0.55), [
         "• Attn-only breaks reasoning — must add router",
         "• Expert FFN LoRA over-fits — exclude",
-    ], size=10)
+    ], size=9)
 
-    add_box(s, Inches(8.6), Inches(5.75), Inches(4.2), Inches(1.1),
-            "Cross-family rule (preliminary N=2)",
-            fill=SURFACE, border=ACCENT3, size=11, bold=True)
-    add_text(s, Inches(8.75), Inches(6.15), Inches(3.95), Inches(0.75), [
-        "• Qwen gains; Mistral + Llama both regress",
-        "• Gain pattern transfers; damage is family-specific",
-        "• Treat as unvalidated; N≥3 needed to establish",
-    ], size=10)
+    add_box(s, Inches(8.6), Inches(6.05), Inches(4.2), Inches(0.9),
+            "Cross-family rule (N=4 v4 + two-factor predictor)",
+            fill=SURFACE, border=ACCENT3, size=10, bold=True)
+    add_text(s, Inches(8.75), Inches(6.40), Inches(3.95), Inches(0.55), [
+        "• Lift = ceiling reasoning (6/6) OR family-match",
+        "• Corroborated at N=7 cross-judge (see slide 19/20)",
+    ], size=9)
 
-    add_text(s, Inches(0.5), Inches(7.0), Inches(12.3), Inches(0.35), [
+    add_text(s, Inches(0.5), Inches(7.05), Inches(12.3), Inches(0.35), [
         "126-sample post-regrade eval, v2-rag, Q4_K_M, hybrid retrieval. 5090 for dense 7B/14B; H100 for 32B + MoE. Cross-family deltas: temp=0 substring — fragile under perturbation for fine-tunes (see grader-methodology section in white paper).",
     ], size=9, color=MUTED)
 SLIDES.append(slide_v4_campaign_final)
