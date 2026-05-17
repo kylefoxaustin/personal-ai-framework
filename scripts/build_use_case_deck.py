@@ -848,8 +848,8 @@ SLIDES.append(slide10_target_npu)
 
 def slide_compute_tiers():
     s = add_blank()
-    add_title(s, "Compute tiers on the same bus — when compute pays off",
-              "Mid and High share 128-bit LPDDR5X @ 8.4 GT/s. Compute headroom helps prefill (TTFT) and CNN — not LLM decode.")
+    add_title(s, "Compute tiers on the same bus — decode is BW-bound, TTFT is compute-bound",
+              "Mid and High share 128-bit LPDDR5X @ 8.4 GT/s. Compute headroom halves TTFT — but doesn't move decode.")
 
     rows_tiers = [
         ("NPU Low",   "64-bit LPDDR4 @ 4 GT/s",      "32 GB/s",      "~42 TOPS",   "INT8 only",     "Speculative decode required to hit advertised TPS"),
@@ -863,13 +863,13 @@ def slide_compute_tiers():
     rows_measured = [
         ("NPU Low",   "29.27",  "1.67 s",   "spec-decode (BW-starved)"),
         ("NPU Mid",   "37.85",  "0.351 s",  "naive BW math fits"),
-        ("NPU High",  "50.46",  "0.176 s",  "naive BW math fits"),
+        ("NPU High",  "37.85",  "0.176 s",  "same bus → same decode"),
     ]
     add_table(s, Inches(0.5), Inches(3.5), Inches(6.0), Inches(1.6),
               ["Tier", "TPS decode", "TTFT 1K", "Regime"],
               rows_measured, font_size=11)
     add_text(s, Inches(0.5), Inches(5.2), Inches(6.0), Inches(0.45),
-             "Vendor-measured Qwen 3 30B-A3B (MoE, 3B active). TPS Mid→High = 1.33× ; TTFT Mid→High = 2.0×.",
+             "Vendor-measured Qwen 3 30B-A3B (MoE, 3B active). TPS Mid→High = 1.0× (BW-bound); TTFT Mid→High = 2.0× (compute-bound).",
              size=10, color=MUTED)
 
     add_box(s, Inches(6.8), Inches(3.5), Inches(6.0), Inches(2.1),
@@ -883,12 +883,12 @@ def slide_compute_tiers():
     ], size=11)
 
     add_box(s, Inches(0.5), Inches(5.8), Inches(12.3), Inches(1.3),
-            "Why TPS scales sublinearly with compute (1.33×, not 2×)",
+            "Why decode doesn't budge but TTFT halves (the BW-bound thesis, in one slide)",
             fill=INK, border=ACCENT, size=11, bold=True)
     add_text(s, Inches(0.7), Inches(6.3), Inches(11.9), Inches(0.85), [
-        "LLM decode is bandwidth-bound: every token reads the active expert weights once.",
-        "Doubling compute on the same memory bus barely moves decode TPS — the bus is the constraint.",
-        "Prefill (TTFT) IS compute-bound — that's why TTFT halves Mid→High (matches the 2× compute jump).",
+        "LLM decode is bandwidth-bound: every token reads the active expert weights once → same bus, same decode rate (Mid = High = 37.85 TPS).",
+        "Prefill (TTFT) is compute-bound: ingesting a 1K-token prompt is a matmul-heavy workload → compute scales it (200 → 400 eTOPS → 2× faster TTFT).",
+        "To raise decode you upgrade memory (LPDDR5T-11.2 / LPDDR6) — not compute. See 'MoE vs dense on three NPU tiers' for the memory-upgrade ladder.",
     ], size=11)
 SLIDES.append(slide_compute_tiers)
 
@@ -1028,7 +1028,7 @@ SLIDES.append(slide11_vendor_claim)
 def slide12_workload_fit():
     s = add_blank()
     add_title(s, "Which workload fits on the target",
-              "Mapping Skippy's current use cases to the 200-TOPS / 80 GB/s NPU")
+              "Mapping Skippy's current use cases to the 200-TOPS / 100.8 GB/s NPU Mid (75% util)")
 
     rows = [
         ("Single-user chat, 3B dense, 4K ctx",      "Fits · 53 tok/s",    "Ideal edge case"),
@@ -1607,6 +1607,7 @@ def slide14_takeaways():
         "Voice transfer is recipe-robust. All four v4 fine-tunes (7B, 14B, MoE, MoE-router) preserved Skippy's voice — voice is not architecture-coupled.",
         "Confident fabrication is industry-wide — Qwen 32B / Llama 8B / Mistral 7B all fabricate fictional peripherals 3/9 of the time. Customer playbook is LAYERED defense (RAG-grounded refusal data + system grounding enforcement); ship-smaller is the deployment shortcut.",
         "Bandwidth physics still holds — Skippy is BW-bound, not compute-bound; 200 TOPS over-provisioned, 100.8 GB/s usable (75% util) is the real constraint. MoE wins decode-per-active-byte.",
+        "Compute-tier reality check — NPU Mid and High share the same 128-bit LPDDR5X @ 8.4 GT/s bus, so they post identical decode TPS (37.85 on Qwen 3 30B-A3B). The compute jump (200 → 400 eTOPS INT8) halves TTFT (compute-bound prefill) but doesn't move decode (BW-bound). Customer rule: pick Mid for LLM-only, High for mixed LLM+CNN or FP-required workloads. To raise decode, upgrade memory, not compute.",
         "Cross-family on 5090: 7B-class dense Q4_K_M decode is family-invariant within ~7% (170-185 tok/s across Qwen / Mistral / Llama). Performance follows GGUF size, not vendor.",
         "Cross-family stock quality is NOT invariant: Qwen 7B = 70.6% / Mistral 7B = 63.5% / Llama 3.1 8B = 59.5% / Yi 1.5 9B = 68.3% / Phi-4 = 71.4% / Gemma 9B = 61.9%. Pick base for quality, not tok/s.",
         "Cross-family recipe transfer is two-factor on substring (reviewer-final at N=7): substring lift requires ceiling reasoning (6/6) OR family-match. Under semantic regrade the family-match gate is substantially overstated — Gemma 9B (6/6) still lifts under semantic; Qwen 14B (3/6) still lifts smaller; Qwen 7B (6/6) REVERSES to −4.8pp regression. The 'v4 lifts capability' framing is retired — the recipe's value is voice transfer and safety calibration, not capability lift; the substring-headline-capability gain was a format-fidelity artifact specific to Qwen-shaped phrasings in the training data.",
