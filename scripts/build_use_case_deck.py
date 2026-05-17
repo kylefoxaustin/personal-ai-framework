@@ -716,20 +716,20 @@ SLIDES.append(slide6_memory_rlhf)
 def slide7_kpis():
     s = add_blank()
     add_title(s, "Measured KPIs — what the RTX 5090 actually does",
-              "Per-turn observability from Prometheus /metrics (v5.8+)")
+              "Per-turn observability from Prometheus /metrics (v5.8+) · Qwen 2.5 7B v4 (production)")
 
     rows = [
-        ("Time to first token (TTFT)",        "40–170 ms",       "p50 / p95",    "dominated by prompt prefill + KV warmup"),
-        ("Throughput (streaming)",             "85–140 tok/s",     "sustained",    "bandwidth-bound at Q4_K_M · 9 GB model"),
-        ("End-to-end, 200-token answer",       "1.5–3.0 s",         "wall",         "includes RAG + tool pass + generation"),
+        ("Time to first token (TTFT)",        "30–120 ms",       "p50 / p95",    "7B prefill is faster than 14B (smaller weight read)"),
+        ("Throughput (streaming)",             "180–215 tok/s",   "sustained",    "bandwidth-bound at Q4_K_M · 4.7 GB model · 183.9 median"),
+        ("End-to-end, 200-token answer",       "1.0–2.0 s",         "wall",         "includes RAG + tool pass + generation"),
         ("RAG retrieval",                      "60–120 ms",         "k=5",          "hybrid (BM25 + HNSW + rerank top-20)"),
         ("Tool detection pass",                 "80–150 ms",         "64–2048 tok",  "separate short LLM call"),
         ("Tool execution (safe tools)",        "5–50 ms",           "local only",    "web_search: 300–800 ms (network)"),
         ("Per-user memory retrieval",          "40–80 ms",          "top-2",        "ChromaDB collection per user"),
-        ("Peak VRAM (14B Q4_K_M, 16K ctx)",     "≈ 9.2 GB",           "steady",       "KV cache grows ~0.5 GB per 1K tokens"),
+        ("Peak VRAM (7B Q4_K_M, 16K ctx)",     "≈ 5.5 GB",           "steady",       "KV cache grows ~0.3 GB per 1K tokens"),
         ("Host CPU during inference",          "< 10%",              "single core",  "llama.cpp offloads all layers to GPU"),
         ("Docs in knowledge base",              "61,500+",            "ChromaDB",     "~600 MB RAM, 250 MB disk"),
-        ("Model load time (cold)",             "20–30 s",            "GGUF mmap",    "one-time; hot restart re-uses page cache"),
+        ("Model load time (cold)",             "8–12 s",             "GGUF mmap",    "7B mmap; hot restart re-uses page cache"),
     ]
     add_table(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(5.0),
               ["Metric", "Measured", "How", "Notes"],
@@ -1033,7 +1033,7 @@ def slide12_workload_fit():
     rows = [
         ("Single-user chat, 3B dense, 4K ctx",      "Fits · 53 tok/s",    "Ideal edge case"),
         ("Single-user chat, 7B dense, 4K ctx",      "Fits · 27 tok/s",    "Comfortably interactive"),
-        ("Single-user chat, 14B dense, 16K ctx",    "Tight · 12 tok/s",   "Our current model; acceptable on this NPU"),
+        ("Single-user chat, 14B dense, 16K ctx",    "Tight · 12 tok/s",   "v4 candidate (not shipped — fabrication)"),
         ("Single-user chat, Qwen3 30B-A3B, 4K",     "Fits · 37.85 TPS ★", "Measured on Edge NPU 2 — strong edge MoE"),
         ("Hybrid RAG (+0.1 s retrieval)",            "Negligible overhead",  "CPU-side; not on NPU"),
         ("Tool detection pass",                       "Adds 2nd small LLM call",  "Same model, 64–2048 tok — cheap"),
@@ -1056,9 +1056,9 @@ def slide13_platform_sizing():
               "Where the target NPU lands on the spectrum")
 
     rows = [
-        ("NVIDIA RTX 5090 (desktop)",        "209 TOPS (INT8)",   "1792 GB/s",   "Qwen 2.5 14B @ 85–140 tok/s",              "450 W"),
+        ("NVIDIA RTX 5090 (desktop)",        "209 TOPS (INT8)",   "1792 GB/s",   "Qwen 2.5 7B v4 @ 180–215 tok/s (prod)",     "450 W"),
         ("NVIDIA Jetson AGX Orin 64GB",       "275 TOPS (INT8)",    "204 GB/s",    "Qwen 2.5 7B @ 25–40 tok/s",                 "15–60 W"),
-        ("Apple M3 Max (128GB)",              "~18 TFLOPS GPU",      "400 GB/s",    "Qwen 2.5 14B @ 30–50 tok/s",                 "~70 W"),
+        ("Apple M3 Max (128GB)",              "~18 TFLOPS GPU",      "400 GB/s",    "Qwen 2.5 7B v4 @ 60–80 tok/s (prod)",        "~70 W"),
         ("Target NPU (this deck, 75% util)",   "200 TOPS (INT8)",     "100.8 GB/s",  "Qwen 3 30B-A3B @ 37.85 TPS ★ (measured)",    "TBD"),
         ("Mobile SoC (reference)",             "~45 TOPS",             "~60 GB/s",     "Qwen 2.5 3B @ ~10 tok/s",                     "3–5 W"),
     ]
