@@ -126,7 +126,7 @@
 >
 > The MoE story: attention-only LoRA breaks reasoning catastrophically (minus 10.3 points), adding the router recovers reasoning to within four points of base, adding expert FFN LoRA over-fits and regresses. The recommended MoE recipe is attention-plus-router, no experts.
 >
-> Cross-family at the bottom: Mistral, Llama, Yi, and Phi-4 all regress. We initially read this as architecture-coupled at N=2. Yi at −28.6pp is catastrophic and was the moment that falsified the single-factor reasoning predictor. Phi-4 is the pre-registered falsifier we added at N=7 — and it corroborates the two-factor model. The next slide shows how that reading evolved.
+> Cross-family at the bottom: Mistral, Llama, and Yi all regress. We initially read this as architecture-coupled at N=2. Yi at −28.6pp is catastrophic and was the moment that falsified the single-factor reasoning predictor. The N=4 cross-family count in the subtitle includes Phi-4 (the pre-registered falsifier at N=7) — it's broken out on the next slide alongside the rest of the cross-judge work. The two-factor model survives the full N=7 corroboration.
 
 ## Slide 19 — Cross-family baselines on Skippy's eval
 

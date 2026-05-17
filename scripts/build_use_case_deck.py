@@ -1133,8 +1133,7 @@ def slide_v4_campaign_final():
         ("Qwen3-30B-A3B v4 + router + experts",  "MoE / 30B-A3B",  "65.9%",  "−8.7pp",   "expert LoRA over-fits 6.5K-example corpus"),
         ("Mistral 7B v0.3 v4  [non-Qwen]",       "Dense / 7B",      "59.5%",  "−3.8pp",   "gains transfer; retrieval regresses; template-confound possible"),
         ("Llama-3.1 8B v4  [non-Qwen, clean]",   "Dense / 8B",      "56.3%",  "−3.2pp",   "same pattern; no template patch — cleaner data point"),
-        ("Yi-1.5-9B v4  [non-Qwen, catastrophic]", "Dense / 9B",    "39.7%",  "−28.6pp",  "catastrophic — falsified single-factor reasoning predictor"),
-        ("Phi-4 (14B) v4  [non-Qwen, mid-reason]", "Dense / 14B",   "69.8%",  "−1.6pp",   "noise-floor substring; both judges confirm capability damage"),
+        ("Yi-1.5-9B v4  [non-Qwen, catastrophic]", "Dense / 9B",    "39.7%",  "−28.6pp",  "catastrophic — falsified the single-factor reasoning predictor"),
     ]
     add_table(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(4.55),
               ["Model / configuration", "Arch / size", "Pass rate", "vs base", "Story"],
