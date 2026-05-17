@@ -1,6 +1,6 @@
 # Personal AI Framework — Presenter Script
 **Audience:** Technical management (engineering directors / VPs / senior managers).
-**Deck:** `personal-ai-use-cases.pptx` (28 slides).
+**Deck:** `personal-ai-use-cases.pptx` (29 slides).
 **Suggested length:** 35–45 minutes presentation + 10–15 minutes Q&A.
 **Register:** Confident, evidence-grounded, willing to name uncertainty. No vendor-pitch energy.
 
@@ -114,9 +114,19 @@
 
 > This slide does two things. First, head-to-head on our 5090 desktop: 14B dense (the previous production candidate) versus Qwen 3 30B-A3B MoE. The dense reads 9.2 gigabytes per token, the MoE reads about 1.5 — so the MoE decodes faster even though it has more total parameters.
 >
-> Second, the cross-reference table — this is the credibility check. We have a synthetic benchmark (Keyhole project) that measures pure decode and prefill in isolation. Their 5090 number for Q4 decode is 250 tokens per second; their bandwidth-math projection to the NPU is about 16.5 TPS. Our production measurement on 7B v4 with full RAG is 183.9 TPS — same hardware, different workload shapes, but the bandwidth physics agree within three percent across two independent measurement stacks. **That's our evidence that the BW-bound projection is a real constraint, not an artifact of either tool.**
+> Second, the cross-reference table — this is the credibility check. We have a synthetic benchmark (Keyhole project) that measures pure decode and prefill in isolation. Their 5090 number for Q4 decode is 250 tokens per second; ours on 7B v4 with full RAG is 184. Different workloads, same hardware — both stacks land within about ten percent of each other on Q4 decode and both reproduce the bandwidth-bound regime. **That's our evidence that the BW-bound projection is a real constraint, not an artifact of either tool.**
 
-## Slide 18 — v4 fine-tune campaign: final results
+## Slide 18 — Skippy + Keyhole — orthogonal product cuts
+
+> Quick orientation before we dive into the fine-tuning campaign. Skippy and the Keyhole edge AI video platform come from the same engineering team but cover orthogonal product cuts. This deck — Skippy — owns the local-LLM artifact: how it was built, recipe taxonomy, methodology rigor, the inference stack. The Keyhole deck owns the vision pipeline, the three-mode deployment story (vision-only / vision+LLM / LLM-only), the CNN bake-offs, and the production deployment context. Same LLM artifact across both decks — Qwen3-30B-A3B Q4_K_M, unmodified. Keyhole uses it; Skippy documents how it was built.
+>
+> Two practical things: the NPU-tier framing we just walked through — Mid INT8-only, Mid and High share the 8.4 GT/s bus, FP recipes pin to High — that matches the Keyhole deck exactly. Both decks pull from the same NPU model. This deck's compute-tier slide is canonical.
+>
+> If you ask a CNN sizing question or a vision-throughput question, that's the wrong deck — I'd point you to the Keyhole materials at `gdrive:skippy_files/keyhole/look_here/`. This deck doesn't answer those because we're at the wrong layer.
+>
+> *Quick orientation slide; intentionally short. Used to set up the rest of the deck as the methodology-side and keep cross-deck reviewers oriented.*
+
+## Slide 19 — v4 fine-tune campaign: final results
 
 > Now we shift from the framework to the fine-tuning work. This is the punchline table.
 >
@@ -128,7 +138,7 @@
 >
 > Cross-family at the bottom: Mistral, Llama, and Yi all regress. We initially read this as architecture-coupled at N=2. Yi at −28.6pp is catastrophic and was the moment that falsified the single-factor reasoning predictor. The N=4 cross-family count in the subtitle includes Phi-4 (the pre-registered falsifier at N=7) — it's broken out on the next slide alongside the rest of the cross-judge work. The two-factor model survives the full N=7 corroboration.
 
-## Slide 19 — Cross-family baselines on Skippy's eval
+## Slide 20 — Cross-family baselines on Skippy's eval
 
 > Seven stock bases, evaluated cold without any fine-tuning. Two patterns visible.
 >
@@ -138,7 +148,7 @@
 >
 > The right-hand box previews the two-factor predictor: cross-family v4 fine-tunes lift when the base has ceiling-stock-reasoning OR family-match to the corpus. Otherwise they regress. Phi-4 is the corroboration — pre-registered falsifier, and it did regress as predicted.
 
-## Slide 20 — Two-factor methodology + substring grading reliability
+## Slide 21 — Two-factor methodology + substring grading reliability
 
 > This is the methodology punchline of the campaign. Two stories on one slide.
 >
@@ -146,7 +156,7 @@
 >
 > Right: when is substring grading reliable? Substring works fine for base-vs-base comparisons. For fine-tunes versus base, substring is only directionally reliable at temperature zero — magnitude is unreliable. The Yi-versus-Phi-4 example at the bottom: Yi's substring drop is 28.6 percentage points, Phi-4's is 1.6 points — eighteen-times spread. But both LLM judges read the same regression magnitude. A team running substring-only would have shipped Phi-4 thinking "essentially equivalent to stock." It isn't. **Standing methodology rule that came out of this campaign: two LLM judges by default on every cross-family fine-tune.**
 
-## Slide 21 — The arc itself: six framings in sixty hours
+## Slide 22 — The arc itself: six framings in sixty hours
 
 > If technical management remembers one slide for credibility reasons, I'd want it to be this one. This is what catching your own mistakes looks like.
 >
@@ -158,7 +168,7 @@
 >
 > *This is the slide that distinguishes "team that ships fast" from "team that ships fast and catches itself." Technical management cares about the latter.*
 
-## Slide 22 — The fabrication problem
+## Slide 23 — The fabrication problem
 
 > A separate story from cross-family results: confident hallucination as a base-model property.
 >
@@ -166,7 +176,7 @@
 >
 > Three families at 7B-and-above scale across different vendors all fabricate: Qwen 32B (3 out of 9 fabricated), Llama 8B (3 out of 9), Mistral 7B (3 out of 9). Same failure mode across the industry. Notice the within-7B split — stock Qwen 7B passes 9 of 9 while stock Mistral 7B fabricates 3 of 9. Same parameter count, different vendor. That tells us the mechanism is not pure parameter scaling — it's base-model training-data and instruct-tuning specific. This is **not a Skippy-recipe problem**. It's a base-model failure mode customers can't escape by switching vendors.
 
-## Slide 23 — Eight options for fabrication defense
+## Slide 24 — Eight options for fabrication defense
 
 > The customer playbook. Eight layers, ranked cheapest to most aggressive. The two highlighted entries: option 1, RAG-grounded refusal exemplars in training data — add about 200 examples where retrieval returns nothing and the model learns to refuse. Option 3, system-level grounding enforcement at inference time — cite every claim or reject. These two stack well: training-side teaches behavior; system-side catches whatever the model still produces.
 >
@@ -174,7 +184,7 @@
 >
 > The customer-rule headline: for teams without RLHF budget, layers 1 + 3 are the sweet spot. **Don't rely on a single layer.** System-prompt disclaimers alone fail at scale.
 
-## Slide 24 — What we shipped: layered defense by deployment choice
+## Slide 25 — What we shipped: layered defense by deployment choice
 
 > Skippy production stacks two layers — option 6 (ship-smaller, 7B v4 instead of 14B v4) plus option 3 (system-level grounding via citation-required RAG).
 >
@@ -182,7 +192,7 @@
 >
 > The bottom block is the customer-template: three tiers depending on RLHF budget and how high-stakes the deployment is.
 
-## Slide 25 — Recipe as a six-dimensional tuple
+## Slide 26 — Recipe as a six-dimensional tuple
 
 > The framework slide for what Skippy is. Every fine-tune is a point in a six-dimensional space: architecture class, size class, LoRA target set, loss masking, corpus shape, hyperparameters. Plus three validation gates (capability, voice, safety) and a hardware tier.
 >
@@ -190,7 +200,7 @@
 >
 > The customer template at the bottom: measure your stock-base reasoning, check family match, predict your outcome. **Standing methodology: run two judges by default on cross-family evaluations.**
 
-## Slide 26 — Voice as a separate gate
+## Slide 27 — Voice as a separate gate
 
 > One more thing substring evaluation can't see: voice. We measure response length, bullet density, bold density, emoji density, opener boilerplate. The stock Qwen Instruct cadence averages 672 characters per response with formatting and boilerplate. Skippy 7B v4 production averages 157 characters — terse, target voice.
 >
@@ -198,7 +208,7 @@
 >
 > All four of our v4 fine-tunes preserved Skippy's voice — voice is recipe-robust and architecture-independent. That's the persona-gate value proposition for customer templates.
 
-## Slide 27 — Headline erosion: six methodology improvements retired the capability claim
+## Slide 28 — Headline erosion: six methodology improvements retired the capability claim
 
 > The most uncomfortable slide. The original headline was 7B v4 at +3.1 percentage points over base. Looked like a clean capability lift. Six methodology improvements moved it.
 >
@@ -208,7 +218,7 @@
 >
 > *This is more credible than a clean +3 headline would be. That's what I'd ask technical management to take from the whole campaign.*
 
-## Slide 28 — Key takeaways
+## Slide 29 — Key takeaways
 
 > The summary. Skippy is a fine-tuning template, not a finished product — the recipe is the deliverable, customers swap our voice for their domain.
 >
@@ -291,8 +301,9 @@
 | Framework intro | 1–7 | 8 min |
 | Bandwidth physics + NPU sizing | 8–14 | 10 min |
 | Workload + platform | 15–17 | 5 min |
-| Fine-tune campaign + methodology | 18–28 | 12 min |
+| Cross-deck orientation | 18 | 1 min |
+| Fine-tune campaign + methodology | 19–29 | 12 min |
 | Q&A | — | 10–15 min |
 | **Total** | | **45–60 min** |
 
-Slides 11 (compute tiers), 17 (BW physics validation), 21 (process arc), and 27 (headline erosion) are the load-bearing slides for technical management credibility. If time runs short, compress the data-flow slides (4, 5, 6) and the fabrication-options slide (23) before compressing the load-bearing ones.
+Slides 11 (compute tiers), 17 (BW physics validation), 22 (process arc), and 28 (headline erosion) are the load-bearing slides for technical management credibility. If time runs short, compress the data-flow slides (4, 5, 6), the cross-deck orientation slide (18 — read out the cross-reference, skip the bullets), and the fabrication-options slide (24) before compressing the load-bearing ones.

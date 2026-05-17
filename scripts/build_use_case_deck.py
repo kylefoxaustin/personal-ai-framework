@@ -1116,10 +1116,50 @@ def slide_skippy_moe_upgrade():
 SLIDES.append(slide_skippy_moe_upgrade)
 
 
+def slide_keyhole_cross_reference():
+    s = add_blank()
+    add_title(s, "Skippy + Keyhole — same engineering team, orthogonal product cuts",
+              "Skippy is the local-LLM artifact + training story. Keyhole is the edge AI video platform that uses it.")
+
+    add_box(s, Inches(0.5), Inches(1.4), Inches(6.1), Inches(3.0),
+            "What Skippy is (this deck)",
+            fill=SURFACE, border=ACCENT2, size=13, bold=True)
+    add_text(s, Inches(0.7), Inches(1.95), Inches(5.7), Inches(2.5), [
+        "• Local-LLM artifact: Qwen3-30B-A3B base, Q4_K_M quant, fine-tuned via the v4 recipe.",
+        "• How the artifact was built — recipe taxonomy, fine-tune campaign coverage, cross-family v4 runs (Mistral / Llama / Yi / Phi-4).",
+        "• Methodology rigor — headline-erosion arc, two-factor recipe predictor, three-gate framework, substring-vs-semantic grading.",
+        "• Inference stack — llama.cpp + FastAPI server, RAG retrieval, per-user memory, agentic tool loop.",
+        "• Production behavior — TTFT, decode, voice + safety eval.",
+    ], size=12)
+
+    add_box(s, Inches(6.7), Inches(1.4), Inches(6.1), Inches(3.0),
+            "What Keyhole is (different deck)",
+            fill=SURFACE, border=ACCENT, size=13, bold=True)
+    add_text(s, Inches(6.9), Inches(1.95), Inches(5.7), Inches(2.5), [
+        "• Edge AI video analytics platform — FFmpeg → YOLO-seg → CLIP open-vocab labels → event store → optional NLQ.",
+        "• Vision pipeline measurements + bake-offs — CNN accuracy + perf, ResNet-50 / YOLOv8 / YOLO-seg.",
+        "• Three operational modes — vision-only, vision + LLM, LLM-only.",
+        "• Vision-side edge-NPU sizing — compute-bound matmul regime complementing this deck's LLM-decode BW-bound treatment.",
+        "• Production deployment context — the platform Skippy-the-artifact runs on.",
+        "• See: `keyhole_results.pptx` / `keyhole_deck_branded.pptx` on gdrive:skippy_files/keyhole/look_here/",
+    ], size=12)
+
+    add_box(s, Inches(0.5), Inches(4.7), Inches(12.3), Inches(2.3),
+            "How the two decks complement",
+            fill=INK, border=ACCENT, size=13, bold=True)
+    add_text(s, Inches(0.7), Inches(5.3), Inches(11.9), Inches(1.6), [
+        "• Same engineering team; orthogonal product cuts. Skippy answers \"how was the local-LLM built?\" — Keyhole answers \"how does an edge AI vision platform deploy with optional LLM coexistence?\"",
+        "• Same LLM artifact across both decks — Qwen3-30B-A3B Q4_K_M unmodified. Keyhole uses it; Skippy documents how it was built.",
+        "• Keyhole's NPU-tier framing (Mid INT8-only / Mid + High share 8.4 GT/s) matches this deck's Slide 11 exactly. Both decks pull from the same NPU model. PAI/Skippy slide 11 is canonical.",
+        "• If asked 'how do CNN workloads size on edge NPU?' or 'what's the actual vision throughput math?' — answer: see Keyhole deck. This deck doesn't answer those questions because it's the wrong layer.",
+    ], size=12, mono=False)
+SLIDES.append(slide_keyhole_cross_reference)
+
+
 def slide_v4_campaign_final():
     s = add_blank()
     add_title(s, "v4 campaign final — recipe transfer is architecture- and family-coupled",
-              "Qwen gains scale 7B–14B. MoE needs router. Cross-family v4 N=4 corroborates two-factor predictor (see slide 19/20).")
+              "Qwen gains scale 7B–14B. MoE needs router. Cross-family v4 N=4 corroborates two-factor predictor (see slide 20/21).")
 
     headline_rows = [
         ("Qwen2.5-7B Instruct (stock)",          "Dense / 7B",      "70.6%",  "—",        "base reference"),
@@ -1160,7 +1200,7 @@ def slide_v4_campaign_final():
             fill=SURFACE, border=ACCENT3, size=10, bold=True)
     add_text(s, Inches(8.75), Inches(6.40), Inches(3.95), Inches(0.55), [
         "• Lift = ceiling reasoning (6/6) OR family-match",
-        "• Corroborated at N=7 cross-judge (see slide 19/20)",
+        "• Corroborated at N=7 cross-judge (see slide 20/21)",
     ], size=9)
 
     add_text(s, Inches(0.5), Inches(7.05), Inches(12.3), Inches(0.35), [
