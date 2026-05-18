@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-5.9.2-blue)
+![Version](https://img.shields.io/badge/version-5.10.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
@@ -245,17 +245,21 @@ Key settings:
 
 ## 📈 Performance
 
-Tested on RTX 5090 (32GB VRAM):
-- **TTFT**: ~0.04-0.17s (time to first token)
-- **Throughput**: 85-140 tokens/sec
+Tested on RTX 5090 (32GB VRAM) running **Qwen 2.5 7B v4** (production fine-tune):
+- **TTFT**: ~0.03-0.12s (time to first token)
+- **Throughput**: 180-215 tokens/sec sustained (183.9 median)
+- **Peak VRAM**: ~5.5 GB at 16K context
 - **Context**: 16K tokens default (32K max)
 - **Knowledge Base**: 61,500+ documents
 - **Datasheet Ingestion**: 37 PDFs (6,129 chunks) in ~5 min
+
+Production model upgraded from Qwen 2.5 14B to Qwen 2.5 7B v4 in the v5.10.0 methodology campaign — full reasoning at [docs/skippy-white-paper.md](docs/skippy-white-paper.md) and [docs/recipe-taxonomy.md](docs/recipe-taxonomy.md). 14B candidate scored higher on headline (76.2% vs 73.8%) but fabricated fictional peripherals; production trades headline for safety calibration.
 
 ## 🏷️ Versions
 
 | Version | Highlights |
 |---------|------------|
+| **v5.10.0** | Methodology + research checkpoint — gotcha-#7 closure with N=7 two-factor recipe predictor (ceiling reasoning OR family-match); cross-family v4 campaign (Gemma 9B, Mistral 7B, Llama 3.1 8B, Yi-1.5-9B, Phi-4 14B); Qwen-family substring-grader bias finding + `eval/regrade_semantic.py` semantic-regrade tooling; voice-metrics tooling (`eval/voice_metrics.py`); recipe-taxonomy framework (`docs/recipe-taxonomy.md`); Skippy white paper (`docs/skippy-white-paper.md`); private-anchor secrets spec for cross-app NPU measurement architecture (`docs/private_anchor_secrets_spec.md`); 29-slide use-case deck + presenter script for tech-mgmt audiences; cross-deck reference pattern with Keyhole. Production = Qwen 2.5 7B v4 (73.8% pass / voice ✓ / safety ✓); 14B v4 candidate documented but not shipped (fabrication). No application-feature changes — engine is unchanged. |
 | **v5.9.2** | Auth middleware bypasses CORS preflight (`OPTIONS`) — browser was getting 401 on every cross-origin preflight, silently hiding per-user data |
 | **v5.9.1** | Multi-user polish — `/health` is public (no more spurious session wipes), header wraps cleanly when buttons don't fit, 401 handler only logs out when a token was actually sent |
 | **v5.9.0** | Multi-user support — bcrypt login, per-user data isolation under `users/<name>/`, admin can add/remove users and reset passwords, auto-migrate single-user installs into `users/kyle/` |
