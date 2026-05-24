@@ -75,3 +75,56 @@ docs/              # Guides (architecture, FAQ, quickstart, fresh install)
 - **Adding a UI feature**: Edit `web/index.html`. Add HTML, CSS (in `<style>`), and JS (in `<script>`) in the same file.
 - **Adding a backend endpoint**: Edit `pipeline/llm_server.py`. Add FastAPI route.
 - **New version release**: Update README badge + version table, commit, tag, push with `--tags`.
+
+## ratchet ecosystem — Skippy is the upstream author (phase 5, v5.10.1)
+
+`ratchet` is a shared SoC sizing engine consolidated from four ecosystem
+surfaces. Skippy's relationship to that ecosystem is **structurally upstream**:
+this repo *authors* canonical artifacts that the rest of the ecosystem consumes.
+It is **not** a downstream consumer of ratchet and has **no `import ratchet`**
+anywhere.
+
+The full empirical recon lives in
+[`docs/decisions/phase5-scope-recon.md`](docs/decisions/phase5-scope-recon.md).
+Short version for future contributors:
+
+**Skippy authors / produces:**
+- [`docs/private_anchor_secrets_spec.md`](docs/private_anchor_secrets_spec.md)
+  — the canonical anchor-secrets schema. ratchet's anchor loader, PAI sizer's
+  loader, and keyhole-sizer's loader all conform to this spec; this file is
+  the source of truth.
+- [`eval/build_sizer_bundle.py`](eval/build_sizer_bundle.py) — produces
+  `eval/results/sizer_bundle.json`, the bundle PAI sizer's `measured.py`
+  consumes to populate `RTX_5090_REFERENCE.measured_llm`.
+
+**Data flow:**
+```
+  Skippy (this repo)
+    ├─ anchor-secrets schema   ──► ratchet (implements) ──► PAI sizer, keyhole-sizer
+    └─ sizer_bundle.json       ─────────────────────────► PAI sizer (measured.py)
+```
+
+**Why no `requirements.txt` pin on ratchet.** Pinning a dependency Skippy
+doesn't import would misrepresent the upstream-producer relationship as a
+downstream-consumer one. A contributor auditing `requirements.txt` would see
+`ratchet>=…` and grep for `import ratchet`, find nothing, and either think the
+dependency is dead code or assume non-obvious dynamic loading — both wrong.
+This CLAUDE.md section is the truthful hook for the relationship. (Contrast:
+keyhole backend v1.0.1 *does* pin ratchet because it's a sibling that *could*
+consume — a future-use hook for a real candidate consumer. Different
+relationship, different shape.)
+
+**If you're adding cross-surface schemas or sizer-bundle fields:** update the
+spec in `docs/private_anchor_secrets_spec.md` (Skippy is the authority), then
+the downstream consumers (ratchet, PAI sizer, keyhole-sizer) update their
+loaders/measured.py to match. The discipline is one-way: Skippy → ratchet → sizers.
+
+**Ecosystem checkpoint after phase 5:**
+
+| Surface | Relationship | Tag |
+|---|---|---|
+| PAI sizer | consumer (Hardware/TIERS/loader/capability) | v1.1.0 |
+| keyhole-sizer | consumer (+ vision adapters) | v1.1.0 |
+| keyhole backend | sibling, future-use pin | v1.0.1 |
+| Skippy (this repo) | upstream author | **v5.10.1** |
+
