@@ -533,18 +533,72 @@ SLIDES.append(slide1_title)
 
 def slide2_exec_summary():
     s = add_blank()
-    add_title(s, "Executive summary",
-              "What the framework does and why it matters for edge")
-    add_bullets(s, Inches(0.5), Inches(1.4), Inches(12.3), Inches(5.4), [
-        "Private AI assistant — runs 100% locally, no cloud API calls.",
-        "Answers questions using your own corpus (61K+ documents: emails, transcripts, PDFs, source code).",
-        "Retrieves context via hybrid search (semantic + BM25 + reranking), injects into Qwen 2.5 7B v4 (fine-tuned, production).",
-        "Agentic: can call tools (read files, web search, send Gmail, create calendar events, schedule reminders, run scripts).",
-        "Learns from use — 👍/👎 feedback excludes bad turns; LoRA retrains on your writing style.",
-        "Multi-user with per-user data isolation (bcrypt auth, per-user SQLite + ChromaDB collections).",
-        "Observable — Prometheus /metrics + Grafana dashboard for TTFT, throughput, RAG hits, tool calls.",
-        "Why this deck matters: data flow + KPIs let us size a 200-TOPS edge NPU replacement for the RTX 5090 today.",
-    ], size=14)
+    add_title(s, "Executive summary — sizing Skippy on NPU Mid vs NPU High",
+              "Memory bandwidth dominates decode. Compute headroom moves TTFT and unlocks FP recipes. Pick the tier by what you need from Skippy, not by raw TOPS.")
+
+    # ── LEFT COLUMN: Tier picker (sizing decisions) ────────────────────────
+    add_box(s, Inches(0.5), Inches(1.35), Inches(6.15), Inches(0.45),
+            "Pick the tier by workload — decode ceiling is the same on Mid + High",
+            fill=ACCENT2, border=ACCENT2, color=RGBColor(0x0F,0x19,0x2E),
+            size=11, bold=True)
+    tier_rows = [
+        ("Q&A · agentic · RAG (INT8-runnable)",   "NPU Mid",   "134.4 GB/s · 24 GB · INT8 @ 200 TOPS"),
+        ("FP-precision recipes (Q5 / Q8 / FP8 / BF16)", "NPU High",  "Same bus · 32 GB · 200 BF16 / 400 INT8"),
+        ("LLM + CNN coexistence on one chip",     "NPU High",  "CNN is compute-bound — Mid's TOPS caps FPS"),
+        ("Lowest TTFT @ 1K-token prompt",          "NPU High",  "2× compute → halves prefill (decode unchanged)"),
+        ("Decode tok/s headroom beyond stock",     "Either + memory upgrade",  "LPDDR5T-11.2 / LPDDR6-12/14 lifts BW linearly"),
+    ]
+    add_table(s, Inches(0.5), Inches(1.9), Inches(6.15), Inches(2.3),
+              ["If you need…", "Pick", "Why"],
+              tier_rows, font_size=10)
+
+    # Sizing assumption box (left, below tier table)
+    add_box(s, Inches(0.5), Inches(4.35), Inches(6.15), Inches(2.65),
+            "Sizing assumptions baked into this deck",
+            fill=SURFACE, border=ACCENT3, size=11, bold=True)
+    add_text(s, Inches(0.65), Inches(4.85), Inches(5.85), Inches(2.1), [
+        "• Decode is BW-bound: tok/s ≈ effective_BW ÷ active_weight_bytes_per_tok",
+        "• Mid + High share 128-bit LPDDR5X @ 8.4 GT/s = 134.4 GB/s peak",
+        "• Default NPU_share = 75% (shared SoC bus) → 70.6 GB/s usable post-BW-efficiency",
+        "• Active param weights stream through DRAM per decoded token",
+        "• Prefill is compute-bound: TTFT scales with peak TOPS (Mid 200 → High 400 INT8)",
+        "• Q4_K_M weight-only quant runs via dequant path (Mid INT8, High fp16)",
+        "• Memory upgrades scale decode linearly; TTFT held at stock (compute fixed)",
+    ], size=10)
+
+    # ── RIGHT COLUMN: Quality gates → model selection ─────────────────────
+    add_box(s, Inches(6.85), Inches(1.35), Inches(6.0), Inches(0.45),
+            "Three-gate framework — all three must pass to ship",
+            fill=ACCENT, border=ACCENT, color=RGBColor(0xFF,0xFF,0xFF),
+            size=11, bold=True)
+    add_text(s, Inches(6.95), Inches(1.85), Inches(5.8), Inches(0.95), [
+        "🟢  Capability — answers correctly at temp=0 on v2-RAG eval (132 prompts × 3 samples; semantic-graded)",
+        "🎙️  Voice — sounds like Skippy after fine-tune (Qwen family transfers; non-Qwen v4 regresses)",
+        "🛡️  Safety — refuses correctly when warranted (refusal=1.000 across the FT ladder)",
+    ], size=10)
+
+    add_box(s, Inches(6.85), Inches(2.95), Inches(6.0), Inches(0.45),
+            "Which model emphasizes which Skippy aspect",
+            fill=ACCENT2, border=ACCENT2, color=RGBColor(0x0F,0x19,0x2E),
+            size=11, bold=True)
+    model_rows = [
+        ("Capability (raw correctness)",      "Qwen 2.5 14B v4",          "76.2% (+5.6pp)",  "Highest pass — fabricates peripherals → blocked"),
+        ("★ Ships (3-gate clear)",            "Qwen 2.5 7B v4 (prod)",     "73.8% (+3.1pp)",  "Only model clearing all three gates"),
+        ("Per-token efficiency",              "Qwen3-30B-A3B router-v4",  "~37 tok/s on Mid", "3B active params · best decode-density"),
+        ("Voice fidelity",                    "Qwen 2.5 7B v4",           "Qwen-family only", "Cross-family v4 (Mistral/Llama/Yi) breaks voice"),
+        ("Smallest viable footprint",         "Qwen 2.5 3B Instruct",     "1.9 GB · 53 tok/s","Fits Low-LP5X; weak reasoning"),
+    ]
+    add_table(s, Inches(6.85), Inches(3.5), Inches(6.0), Inches(2.55),
+              ["Skippy aspect", "Model", "Headline", "Why"],
+              model_rows, font_size=10, highlight_rows={1})
+
+    # Bottom-line row spanning both columns
+    add_box(s, Inches(0.5), Inches(6.2), Inches(12.35), Inches(0.85),
+            "Bottom line",
+            fill=INK, border=ACCENT, size=11, bold=True)
+    add_text(s, Inches(0.7), Inches(6.55), Inches(11.95), Inches(0.5), [
+        "Skippy ships today on NPU Mid running Qwen 2.5 7B v4 — the only model clearing capability + voice + safety. NPU High is the upsell for FP recipes, CNN coexistence, and prefill-latency-sensitive workloads. Decode ceiling is identical on both at stock memory.",
+    ], size=11)
 SLIDES.append(slide2_exec_summary)
 
 
@@ -1154,6 +1208,186 @@ def slide_keyhole_cross_reference():
         "• If asked 'how do CNN workloads size on edge NPU?' or 'what's the actual vision throughput math?' — answer: see Keyhole deck. This deck doesn't answer those questions because it's the wrong layer.",
     ], size=12, mono=False)
 SLIDES.append(slide_keyhole_cross_reference)
+
+
+# ─── Engine extraction arc (added 2026-05-25) ────────────────────────────
+# Three slides covering the cross-surface engine consolidation that landed
+# between v5.10.1 (deck snapshot) and today. Sources: PAI sizer's
+# ANCHOR_SECRETS_LOADER_EXTRACT.md / HARDWARE_TIER_EXTRACT.md / TIER_PRECISION_
+# CAPABILITY_EXTRACT.md / ENGINE_RATCHET_PLAN.md (commits c1d56f9 + a9b270a on
+# personal-ai-assistant-sizer), plus ratchet v0.2.3 ADR 011 Amendment 5, plus
+# the 2026-05-21 16:56 [ratchet] bus message reporting the memory-upgrade
+# anchor bug fix.
+
+def slide_engine_extraction_why():
+    s = add_blank()
+    add_title(s, "Engine extraction — one canonical engine for four surfaces",
+              "Skippy, Keyhole, Keyhole-sizer, PAI sizer all needed the same Hardware + anchor + projection code. Stop duplicating it.")
+
+    # ── Pre-extraction state (LEFT) ──
+    add_box(s, Inches(0.5), Inches(1.4), Inches(6.1), Inches(2.6),
+            "Pre-extraction — what was duplicated across four repos",
+            fill=SURFACE, border=ACCENT3, size=12, bold=True)
+    add_text(s, Inches(0.7), Inches(1.95), Inches(5.7), Inches(2.0), [
+        "• Hardware dataclass — 24 fields (peak TOPS, mem BW, calibration constants, tier_family, capability levels) duplicated in PAI sizer + keyhole-sizer",
+        "• Anchor loader — `npu_anchors.py` was byte-identical across PAI sizer + keyhole-sizer; each maintained its own copy",
+        "• Projection math — BW-bound decode + compute-bound prefill duplicated",
+        "• Capability taxonomy — 4-level (tensor_native / tensor_compat / cuda_core / unsupported) implemented twice with naming deltas",
+        "• Drift risk — fixing a bug in one surface didn't reach the others without manual mirror commits",
+    ], size=10)
+
+    # ── Canonical truth + ratchet (RIGHT) ──
+    add_box(s, Inches(6.7), Inches(1.4), Inches(6.15), Inches(2.6),
+            "Post-extraction — ratchet is the engine; Skippy is the data source",
+            fill=SURFACE, border=ACCENT2, size=12, bold=True)
+    add_text(s, Inches(6.9), Inches(1.95), Inches(5.75), Inches(2.0), [
+        "• `ratchet` Python package owns: Hardware + canonical tiers + anchor loader + projection + capability taxonomy",
+        "• Skippy (personal-ai-framework) remains canonical author of: LLM artifact, methodology, anchor-secrets spec, sizer-bundle generator (`eval/build_sizer_bundle.py`)",
+        "• Data flow: Skippy → consumers (ratchet, PAI sizer, keyhole-sizer)",
+        "• PAI sizer + keyhole-sizer (and future drone sizer) become thin Streamlit shells importing from `ratchet`",
+        "• Bug fixes in `ratchet` propagate to all consumers on bump",
+    ], size=10)
+
+    # ── Discipline rules surfaced by the extraction (bottom) ──
+    add_box(s, Inches(0.5), Inches(4.2), Inches(12.35), Inches(2.85),
+            "Discipline rules surfaced + locked by the engine consolidation",
+            fill=INK, border=ACCENT, size=12, bold=True)
+    discipline_rows = [
+        ("KEY-not-VALUE for anchor data",     "Schema is public, measured values are credentials — refer by `npu_llm_anchors.mid_int8.qwen25_7b_dense.tokps` not by the number"),
+        ("Sizer bundles vendored, not pulled","`sizer_bundle.json` is regenerated by Skippy's `build_sizer_bundle.py` and committed; downstreams never call the GitHub API"),
+        ("Stock-identity tracking",            "Memory-upgrade clones snapshot `stock_name` + `stock_mem_bandwidth_gbs` so silicon-intrinsic lookups still resolve to stock caps"),
+        ("Capability is 4-level, not binary", "`tensor_compat` (binary-compat via sm80 IMMA on SM120) is distinct from `tensor_native` — matters for emerging silicon"),
+        ("Verify-shipped before relaying",     "`git log origin/main..HEAD` empty + `git tag` shows the new tag before announcing on the cross-session bus"),
+    ]
+    add_table(s, Inches(0.7), Inches(4.75), Inches(11.95), Inches(2.15),
+              ["Rule", "What it means in practice"],
+              discipline_rows, font_size=10)
+SLIDES.append(slide_engine_extraction_why)
+
+
+def slide_engine_extraction_milestones():
+    s = add_blank()
+    add_title(s, "Engine extraction — Phase 1 → 2 → 3 milestones",
+              "ratchet went from v0.2.0 design draft to v0.2.3 with the PAI retrofit shipped. Keyhole-sizer Phase 3 queued; Skippy stays canonical (no-op consumer).")
+
+    rows = [
+        ("Phase 1",
+         "ratchet v0.2.0",
+         "Engine package shipped",
+         "✓ 2026-05-20",
+         "213 tests green · 15 ADRs · clean editable install · `pip install ratchet`"),
+        ("Phase 1.1",
+         "ratchet v0.2.1 (ADR 011 Amend 3)",
+         "Adopt real byte-identical loader",
+         "✓ Approved by [docs]",
+         "Slim 2-arg loader replaced by rich 3-arg `load_llm_anchor(tier, precision, model_key)` matching PAI/keyhole-sizer reality"),
+        ("Phase 1.2",
+         "ratchet v0.2.2",
+         "Expose raw loader as canonical surface",
+         "✓ Shipped",
+         "`bytes_per_token(share_override)` + `badge` property surfaced; overlay relegated to optional thin wrapper"),
+        ("Phase 1.3",
+         "ratchet v0.2.3 (ADR 011 Amend 5)",
+         "Memory-upgrade anchor BW-scale fix",
+         "✓ Shipped",
+         "Memory-variant overlay now scales decode by `mem_bw / stock_mem_bw` instead of dropping the anchor — see next slide"),
+        ("Phase 2",
+         "PAI sizer v1.1.0",
+         "Retrofit onto ratchet (Option C)",
+         "✓ 2026-05-21",
+         "Local `sizer/npu_anchors.py` deleted; PAI imports loader from `ratchet>=0.2.2,<0.3.0` — clean import swap, zero behavior change"),
+        ("Phase 3",
+         "Keyhole-sizer retrofit",
+         "Mirror PAI's retrofit",
+         "▸ Queued",
+         "Same pattern — adopt `ratchet`'s loader + projection; absorb the memory-upgrade-anchor fix in the process"),
+        ("Phase 5",
+         "Skippy (framework)",
+         "No-op upstream-authority retrofit",
+         "✓ Documented",
+         "Skippy doesn't import ratchet (it's the data source, not a consumer) — see `docs/decisions/phase5-scope-recon.md`"),
+    ]
+    add_table(s, Inches(0.5), Inches(1.4), Inches(12.35), Inches(3.85),
+              ["Phase", "Tag", "What", "Status", "Detail"],
+              rows, font_size=10, highlight_rows={3, 4})
+
+    # ── Surface-state matrix (bottom) ──
+    add_box(s, Inches(0.5), Inches(5.4), Inches(6.1), Inches(1.6),
+            "Surface state after Phase 2",
+            fill=SURFACE, border=ACCENT2, size=11, bold=True)
+    add_text(s, Inches(0.7), Inches(5.85), Inches(5.75), Inches(1.05), [
+        "• Skippy framework      v5.10.1   ✓  canonical (no ratchet pin)",
+        "• ratchet engine         v0.2.3    ✓  consumed",
+        "• PAI sizer              v1.1.0    ✓  imports ratchet",
+        "• keyhole-sizer          v1.0.0    ▸  Phase 3 pending",
+    ], size=10, mono=True)
+
+    add_box(s, Inches(6.7), Inches(5.4), Inches(6.15), Inches(1.6),
+            "What this unlocks",
+            fill=SURFACE, border=ACCENT, size=11, bold=True)
+    add_text(s, Inches(6.9), Inches(5.85), Inches(5.85), Inches(1.05), [
+        "• One-place bug fixes — anchor / projection / capability bugs fix everywhere on a ratchet bump",
+        "• Drone-repo sizer (next surface) starts clean — imports ratchet, doesn't fork the engine",
+        "• Discipline rules now enforced by the package, not by per-repo memory",
+    ], size=10)
+SLIDES.append(slide_engine_extraction_milestones)
+
+
+def slide_engine_extraction_anchor_bug():
+    s = add_blank()
+    add_title(s, "Memory-upgrade anchor bug — found while retrofitting PAI",
+              "Both sizers' overlay helpers dropped private anchors on memory upgrades. Fix: BW-scale the anchor's decode from stock instead of falling back to first-principles.")
+
+    # ── The bug ──
+    add_box(s, Inches(0.5), Inches(1.35), Inches(6.1), Inches(2.8),
+            "The bug — first memory-upgrade tier could read LOWER than stock",
+            fill=SURFACE, border=ACCENT3, size=11, bold=True)
+    add_text(s, Inches(0.7), Inches(1.85), Inches(5.75), Inches(2.25), [
+        "• A privately-anchored cell (e.g., NPU High × Qwen 2.5 32B-dense via the `high_fp` anchor) showed correct measured decode at STOCK memory.",
+        "• ANY memory upgrade dropped the anchor entirely and fell back to cross-class first-principles — a different, lower baseline.",
+        "• Result: stock 5.2 → LPDDR5T 5.1 tok/s — a measured-to-cross-class DISCONTINUITY, not broken BW scaling.",
+        "• Root cause: overlay helpers guarded out memory variants.",
+        "  – PAI sizer: `if abs(mem_data_rate_gtps - 8.4) > 0.05: return r`",
+        "  – keyhole-sizer: `_maybe_anchor_overlay_llm` 'stock-bus guard'",
+        "• Same bug in both sizers — duplicated because the code was duplicated.",
+    ], size=10)
+
+    # ── The fix ──
+    add_box(s, Inches(6.7), Inches(1.35), Inches(6.15), Inches(2.8),
+            "The fix — BW-scale by mem_bw / stock_mem_bw (ratchet v0.2.3 / ADR 011 Amendment 5)",
+            fill=SURFACE, border=ACCENT2, size=11, bold=True)
+    add_text(s, Inches(6.9), Inches(1.85), Inches(5.85), Inches(2.25), [
+        "• Memory-upgrade clones now BW-scale the anchor's decode by `mem_bandwidth_gbs / stock_mem_bandwidth_gbs`.",
+        "• Decode is BW-bound, so the scaling is first-principles correct: doubling effective BW (at fixed compute) doubles decode tok/s.",
+        "• TTFT held at stock — prefill is compute-bound; a memory-only swap shouldn't move it.",
+        "• `hw_to_anchor_tier_precision` now routes memory-variant clones via STOCK identity instead of returning None.",
+        "• `overlay_llm_anchor` does the scaling — same physics as the public same-class projection path.",
+        "• PAI v1.1.0 carries the mirror fix in its own `_maybe_anchor_overlay`.",
+    ], size=10)
+
+    # ── Before / after numbers ──
+    add_box(s, Inches(0.5), Inches(4.3), Inches(12.35), Inches(0.5),
+            "Eyeball check — NPU High × Qwen 2.5 32B-dense across the memory dropdown",
+            fill=ACCENT, border=ACCENT, color=RGBColor(0xFF,0xFF,0xFF),
+            size=11, bold=True)
+    fix_rows = [
+        ("NPU High (stock LPDDR5X 8.4)", "134.4 GB/s", "5.2",  "5.2",  "anchor at stock — unchanged"),
+        ("+ LPDDR5T 11.2",                "179.2 GB/s", "5.1",  "~6.9", "BUG: dropped anchor → cross-class | FIX: scaled by 179.2 / 134.4 = 1.33×"),
+        ("+ LPDDR6 12.0",                 "192.0 GB/s", "5.5",  "~7.4", "BUG: dropped anchor → cross-class | FIX: scaled by 192.0 / 134.4 = 1.43×"),
+        ("+ LPDDR6 14.0",                 "224.0 GB/s", "6.4",  "~8.7", "BUG: dropped anchor → cross-class | FIX: scaled by 224.0 / 134.4 = 1.67×"),
+    ]
+    add_table(s, Inches(0.5), Inches(4.85), Inches(12.35), Inches(1.55),
+              ["Tier", "Peak BW", "Before (bug) tok/s", "After (fix) tok/s", "Note"],
+              fix_rows, font_size=10, highlight_rows={1, 2, 3})
+
+    # ── Lesson ──
+    add_box(s, Inches(0.5), Inches(6.5), Inches(12.35), Inches(0.55),
+            "Lesson",
+            fill=INK, border=ACCENT, size=11, bold=True)
+    add_text(s, Inches(0.7), Inches(6.85), Inches(11.95), Inches(0.4), [
+        "The engine consolidation surfaced a bug duplicated across two surfaces. Consolidation discipline is itself a forcing function for correctness — one place to fix, one place to test.",
+    ], size=10)
+SLIDES.append(slide_engine_extraction_anchor_bug)
 
 
 def slide_v4_campaign_final():
