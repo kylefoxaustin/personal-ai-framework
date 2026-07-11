@@ -1,0 +1,5482 @@
+{
+  "name": "qwen7bv4-v2.1-NORAG-parametric",
+  "timestamp": "2026-07-10T16:55:49",
+  "endpoint": "http://localhost:8080",
+  "prompts_version": "2.1",
+  "samples_per_prompt": 3,
+  "config": {
+    "use_rag": false,
+    "skip_agent_loop": true,
+    "max_tokens": 512,
+    "temperature": 0.0
+  },
+  "prompts": [
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "prompt": "What memory interface does the i.MX 93 support for external DRAM?",
+      "gold_substrings": [
+        "16-bit",
+        "LPDDR4"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 supports LPDDR2 and LPDDR3 memory interfaces for external DRAM.",
+          "tokens": 115,
+          "elapsed_s": 0.3,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 24,
+            "host_ms": 8.93,
+            "prefill_ms": 108.9,
+            "decode_ms": 98.6,
+            "total_ms": 216.74,
+            "prefill_tok_per_s": 835.6,
+            "decode_tok_per_s": 243.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states LPDDR2/LPDDR3 instead of the correct LPDDR4 with 16-bit interface.",
+            "tokens_in": 761,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 46
+          }
+        },
+        {
+          "text": "The i.MX 93 supports LPDDR2 and LPDDR3 memory interfaces for external DRAM.",
+          "tokens": 115,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 24,
+            "host_ms": 2.29,
+            "prefill_ms": 10.01,
+            "decode_ms": 92.95,
+            "total_ms": 105.66,
+            "prefill_tok_per_s": 9087.0,
+            "decode_tok_per_s": 258.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states LPDDR2/LPDDR3 instead of LPDDR4, and omits the 16-bit interface width detail.",
+            "tokens_in": 761,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 49
+          }
+        },
+        {
+          "text": "The i.MX 93 supports LPDDR2 and LPDDR3 memory interfaces for external DRAM.",
+          "tokens": 115,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 24,
+            "host_ms": 1.98,
+            "prefill_ms": 9.14,
+            "decode_ms": 94.68,
+            "total_ms": 106.09,
+            "prefill_tok_per_s": 9959.6,
+            "decode_tok_per_s": 253.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states LPDDR2/LPDDR3 instead of LPDDR4, and omits the 16-bit interface width detail.",
+            "tokens_in": 761,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 49
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 16-bit, LPDDR4)",
+          "fail (missing: 16-bit, LPDDR4)",
+          "fail (missing: 16-bit, LPDDR4)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "prompt": "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+      "gold_substrings": [
+        "LPUART",
+        "IOMUX"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 has a UART peripheral, and it's routed through the UniPro (Universal Peripheral) block.",
+          "tokens": 123,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 28,
+            "host_ms": 1.83,
+            "prefill_ms": 13.07,
+            "decode_ms": 112.24,
+            "total_ms": 127.44,
+            "prefill_tok_per_s": 7270.9,
+            "decode_tok_per_s": 249.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly identifies the UART peripheral as 'UART' rather than 'LPUART', and names 'UniPro' instead of 'IOMUX' as the IP block routing its pins.",
+            "tokens_in": 766,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 61
+          }
+        },
+        {
+          "text": "The i.MX 93 has a UART peripheral, and it's routed through the UniPro (Universal Peripheral) block.",
+          "tokens": 123,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 28,
+            "host_ms": 1.92,
+            "prefill_ms": 9.26,
+            "decode_ms": 110.74,
+            "total_ms": 122.23,
+            "prefill_tok_per_s": 10258.2,
+            "decode_tok_per_s": 252.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly identifies the UART peripheral as generic 'UART' instead of LPUART, and incorrectly names 'UniPro' instead of IOMUX as the IP block that routes the pins.",
+            "tokens_in": 766,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 61
+          }
+        },
+        {
+          "text": "The i.MX 93 has a UART peripheral, and it's routed through the UniPro (Universal Peripheral) block.",
+          "tokens": 123,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 28,
+            "host_ms": 1.85,
+            "prefill_ms": 9.16,
+            "decode_ms": 110.03,
+            "total_ms": 121.33,
+            "prefill_tok_per_s": 10369.0,
+            "decode_tok_per_s": 254.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly names the UART peripheral as generic 'UART' instead of LPUART, and incorrectly identifies the routing block as 'UniPro' instead of IOMUX.",
+            "tokens_in": 766,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 57
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: LPUART, IOMUX)",
+          "fail (missing: LPUART, IOMUX)",
+          "fail (missing: LPUART, IOMUX)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_cortex",
+      "category": "rag_datasheet",
+      "prompt": "What Arm cores does the i.MX 93 application processor include?",
+      "gold_substrings": [
+        "Cortex-A55",
+        "Cortex-M33"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 application processor includes the Arm Cortex-A72 and Arm Cortex-M7 cores.",
+          "tokens": 114,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 89,
+            "completion_tokens": 25,
+            "host_ms": 2.82,
+            "prefill_ms": 14.61,
+            "decode_ms": 98.11,
+            "total_ms": 115.94,
+            "prefill_tok_per_s": 6091.2,
+            "decode_tok_per_s": 254.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response incorrectly states Cortex-A72 and Cortex-M7 cores, when the correct answer is Cortex-A55 and Cortex-M33.",
+            "tokens_in": 766,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 55
+          }
+        },
+        {
+          "text": "The i.MX 93 application processor includes the Arm Cortex-A72 and Arm Cortex-M7 cores.",
+          "tokens": 114,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 89,
+            "completion_tokens": 25,
+            "host_ms": 1.97,
+            "prefill_ms": 9.2,
+            "decode_ms": 96.48,
+            "total_ms": 107.95,
+            "prefill_tok_per_s": 9675.1,
+            "decode_tok_per_s": 259.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly states Cortex-A72 and Cortex-M7; the correct cores are Cortex-A55 and Cortex-M33.",
+            "tokens_in": 766,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 51
+          }
+        },
+        {
+          "text": "The i.MX 93 application processor includes the Arm Cortex-A72 and Arm Cortex-M7 cores.",
+          "tokens": 114,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 89,
+            "completion_tokens": 25,
+            "host_ms": 2.01,
+            "prefill_ms": 9.08,
+            "decode_ms": 97.71,
+            "total_ms": 109.1,
+            "prefill_tok_per_s": 9803.6,
+            "decode_tok_per_s": 255.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response incorrectly states Cortex-A72 and Cortex-M7 cores; the correct cores are Cortex-A55 and Cortex-M33.",
+            "tokens_in": 766,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 54
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: Cortex-A55, Cortex-M33)",
+          "fail (missing: Cortex-A55, Cortex-M33)",
+          "fail (missing: Cortex-A55, Cortex-M33)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "faithfulness",
+      "prompt": "In Kyle's pillar-to-pillar IVI demo, which NXP chip ran Angry Birds on the LCD?",
+      "gold_substrings": [
+        "don't",
+        "doesn't",
+        "does not",
+        "do not",
+        "can't",
+        "cannot",
+        "unable",
+        "unknown",
+        "not aware",
+        "no information",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no data",
+        "not contain",
+        "not specify",
+        "not specified",
+        "no specific",
+        "not provided",
+        "not explicitly"
+      ],
+      "match_mode": "any",
+      "unanswerable_from_context": true,
+      "evidence": "'Angry Birds' appears only in a demo video transcript; no chip is named near it",
+      "samples": [
+        {
+          "text": "I don't know about the Angry Birds demo on the NXP chip. I can't verify that information.",
+          "tokens": 120,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 96,
+            "completion_tokens": 24,
+            "host_ms": 1.83,
+            "prefill_ms": 13.91,
+            "decode_ms": 96.15,
+            "total_ms": 112.18,
+            "prefill_tok_per_s": 6900.2,
+            "decode_tok_per_s": 249.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI appropriately declines to answer, stating it cannot verify the information, which matches the refusal pattern expected.",
+            "tokens_in": 845,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 35
+          }
+        },
+        {
+          "text": "I don't know about the Angry Birds demo on the NXP chip. I can't verify that information.",
+          "tokens": 120,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 96,
+            "completion_tokens": 24,
+            "host_ms": 1.77,
+            "prefill_ms": 8.96,
+            "decode_ms": 94.01,
+            "total_ms": 105.01,
+            "prefill_tok_per_s": 10715.1,
+            "decode_tok_per_s": 255.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI refused to answer and stated it cannot verify the information, which matches the expected refusal behavior.",
+            "tokens_in": 845,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "I don't know about the Angry Birds demo on the NXP chip. I can't verify that information.",
+          "tokens": 120,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 96,
+            "completion_tokens": 24,
+            "host_ms": 3.03,
+            "prefill_ms": 9.07,
+            "decode_ms": 96.13,
+            "total_ms": 108.6,
+            "prefill_tok_per_s": 10584.7,
+            "decode_tok_per_s": 249.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI declined to provide an answer, stating it cannot verify the information, which matches the required refusal behavior.",
+            "tokens_in": 845,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
+      "gold_substrings": [
+        "electric",
+        "sustain"
+      ],
+      "samples": [
+        {
+          "text": "I'm not aware of any NXP-adjacent podcasts discussing the sustainability argument for electric vehicles. If you have a specific podcast in mind, I'd be happy to look it up for you.",
+          "tokens": 133,
+          "elapsed_s": 0.26,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 42,
+            "host_ms": 1.85,
+            "prefill_ms": 13.75,
+            "decode_ms": 174.49,
+            "total_ms": 190.39,
+            "prefill_tok_per_s": 6616.1,
+            "decode_tok_per_s": 240.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "error",
+            "reason": "validation: 1 validation error for SemanticGrade\nreason\n  String should have at most 200 characters [type=string_too_long, input_value='The response fails to pr...on should be available.', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_too_long"
+          }
+        },
+        {
+          "text": "I'm not aware of any NXP-adjacent podcasts discussing the sustainability argument for electric vehicles. If you have a specific podcast in mind, I'd be happy to look it up for you.",
+          "tokens": 133,
+          "elapsed_s": 0.25,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 42,
+            "host_ms": 2.01,
+            "prefill_ms": 8.91,
+            "decode_ms": 169.71,
+            "total_ms": 180.9,
+            "prefill_tok_per_s": 10215.0,
+            "decode_tok_per_s": 247.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "error",
+            "reason": "validation: 1 validation error for SemanticGrade\nreason\n  String should have at most 200 characters [type=string_too_long, input_value='The response fails to pr...offering to look it up.', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_too_long"
+          }
+        },
+        {
+          "text": "I'm not aware of any NXP-adjacent podcasts discussing the sustainability argument for electric vehicles. If you have a specific podcast in mind, I'd be happy to look it up for you.",
+          "tokens": 133,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 42,
+            "host_ms": 1.92,
+            "prefill_ms": 9.0,
+            "decode_ms": 172.63,
+            "total_ms": 183.86,
+            "prefill_tok_per_s": 10109.4,
+            "decode_tok_per_s": 243.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI fails to provide any substantive information about what NXP-adjacent podcasts have said about the sustainability argument for electric vehicles, instead claiming ignorance.",
+            "tokens_in": 765,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 44
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "error",
+          "error",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 1,
+        "error_n": 2,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "prompt": "I have 12 apples. I give 3/4 of them to my kid. How many do I have left? Answer with just the number.",
+      "gold_substrings": [
+        "3"
+      ],
+      "samples": [
+        {
+          "text": "3",
+          "tokens": 109,
+          "elapsed_s": 0.07,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 106,
+            "completion_tokens": 3,
+            "host_ms": 2.12,
+            "prefill_ms": 14.29,
+            "decode_ms": 4.77,
+            "total_ms": 21.44,
+            "prefill_tok_per_s": 7420.3,
+            "decode_tok_per_s": 629.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI correctly answered 3, which matches the gold answer.",
+            "tokens_in": 733,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 24
+          }
+        },
+        {
+          "text": "3",
+          "tokens": 109,
+          "elapsed_s": 0.07,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 106,
+            "completion_tokens": 3,
+            "host_ms": 1.82,
+            "prefill_ms": 8.57,
+            "decode_ms": 4.46,
+            "total_ms": 15.12,
+            "prefill_tok_per_s": 12375.3,
+            "decode_tok_per_s": 673.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI correctly answered 3, which matches the gold answer.",
+            "tokens_in": 733,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 24
+          }
+        },
+        {
+          "text": "3",
+          "tokens": 109,
+          "elapsed_s": 0.06,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 106,
+            "completion_tokens": 3,
+            "host_ms": 2.36,
+            "prefill_ms": 10.72,
+            "decode_ms": 4.19,
+            "total_ms": 17.65,
+            "prefill_tok_per_s": 9890.0,
+            "decode_tok_per_s": 716.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI correctly answered 3, which matches the gold answer.",
+            "tokens_in": 733,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 24
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
+      "gold_substrings": [
+        "10:5"
+      ],
+      "samples": [
+        {
+          "text": "Let's break this down step by step:\n\n1. **Distance between Austin and Dallas**: 195 miles.\n2. **Speed of the first train**: 60 mph.\n3. **Speed of the second train**: 80 mph.\n\nThe first train leaves at 9 a.m. and the second train leaves at 10 a.m. So, the first train has a 1-hour head start.\n\n### Step-by-Step Calculation:\n\n1. **Distance covered by the first train in the first hour**:\n   - The first train travels for 1 hour at 60 mph.\n   - Distance = 60 miles.\n\n2. **Remaining distance between the two trains after the first hour**:\n   - Total distance between Austin and Dallas: 195 miles.\n   - Distance already covered by the first train: 60 miles.\n   - Remaining distance: 195 - 60 = 135 miles.\n\n3. **Relative speed of the two trains**:\n   - The first train travels at 60 mph.\n   - The second train travels at 80 mph.\n   - Combined speed: 60 + 80 = 140 mph.\n\n4. **Time to cover the remaining distance**:\n   - Remaining distance: 135 miles.\n   - Combined speed: 140 mph.\n   - Time = Distance / Speed = 135 / 140 hours.\n\n5. **Convert the time to minutes**:\n   - 135 / 140 \u2248 0.9643 hours.\n   - 0.9643 hours * 60 minutes/hour \u2248 57.86 minutes.\n\n6. **Determine the meeting time**:\n   - The second train leaves at 10 a.m.\n   - They will meet after approximately 57.86 minutes.\n   - 10 a.m. + 57.86 minutes \u2248 10:57 a.m.\n\n### Conclusion:\nThe two trains will meet at approximately **10:57 a.m.**",
+          "tokens": 571,
+          "elapsed_s": 2.08,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 123,
+            "completion_tokens": 448,
+            "host_ms": 3.15,
+            "prefill_ms": 18.8,
+            "decode_ms": 2007.71,
+            "total_ms": 2030.08,
+            "prefill_tok_per_s": 6541.6,
+            "decode_tok_per_s": 223.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly calculates the meeting time as approximately 10:57 a.m., which contains '10:5' as required by the gold substring.",
+            "tokens_in": 1228,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 44
+          }
+        },
+        {
+          "text": "Let's break this down step by step:\n\n1. **Train from Austin:**\n   - Leaves at 9:00 a.m.\n   - Speed: 60 mph\n\n2. **Train from Dallas:**\n   - Leaves at 10:00 a.m.\n   - Speed: 80 mph\n   - Distance to Austin: 195 miles\n\n3. **Relative Speed:**\n   - Since the trains are moving towards each other, their relative speed is the sum of their individual speeds.\n   - Relative speed = 60 mph + 80 mph = 140 mph\n\n4. **Time to Meet:**\n   - The train from Austin has a 1-hour head start.\n   - In that 1 hour, the train from Austin covers 60 miles (since it travels at 60 mph).\n   - Remaining distance to be covered = 195 miles - 60 miles = 135 miles\n\n5. **Time to Cover Remaining Distance:**\n   - Time = Distance / Relative Speed\n   - Time = 135 miles / 140 mph\n\n6. **Calculate the Time:**\n   - 135 / 140 = 0.9643 hours\n   - Convert 0.9643 hours to minutes: 0.9643 * 60 \u2248 57.85 minutes\n\n7. **Meeting Time:**\n   - The train from Dallas leaves at 10:00 a.m.\n   - Adding 57.85 minutes to 10:00 a.m.:\n     - 10:00 a.m. + 57 minutes + 50 seconds \u2248 10:58 a.m.\n\nTherefore, the two trains will meet at approximately **10:58 a.m.**",
+          "tokens": 522,
+          "elapsed_s": 1.87,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 123,
+            "completion_tokens": 399,
+            "host_ms": 2.57,
+            "prefill_ms": 12.69,
+            "decode_ms": 1786.0,
+            "total_ms": 1801.68,
+            "prefill_tok_per_s": 9693.2,
+            "decode_tok_per_s": 223.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly calculates the meeting time as approximately 10:58 a.m., which matches the gold answer of '10:5x' (i.e., sometime in the 10:50s).",
+            "tokens_in": 1154,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 56
+          }
+        },
+        {
+          "text": "Let's break this down step by step:\n\n1. **Train from Austin:**\n   - Leaves at 9:00 a.m.\n   - Speed: 60 mph\n\n2. **Train from Dallas:**\n   - Leaves at 10:00 a.m.\n   - Speed: 80 mph\n   - Distance to Austin: 195 miles\n\n3. **Relative Speed:**\n   - Since the trains are moving towards each other, their relative speed is the sum of their individual speeds.\n   - Relative speed = 60 mph + 80 mph = 140 mph\n\n4. **Time to Meet:**\n   - The train from Austin has a 1-hour head start.\n   - In that 1 hour, the train from Austin covers 60 miles (since it travels at 60 mph).\n   - Remaining distance to be covered = 195 miles - 60 miles = 135 miles\n\n5. **Time to Cover Remaining Distance:**\n   - Time = Distance / Relative Speed\n   - Time = 135 miles / 140 mph\n\n6. **Calculate the Time:**\n   - 135 / 140 = 0.9643 hours\n   - Convert 0.9643 hours to minutes: 0.9643 * 60 \u2248 57.85 minutes\n\n7. **Meeting Time:**\n   - The train from Dallas leaves at 10:00 a.m.\n   - Adding 57.85 minutes to 10:00 a.m.:\n     - 10:00 a.m. + 57 minutes + 50 seconds \u2248 10:58 a.m.\n\nTherefore, the two trains will meet at approximately **10:58 a.m.**",
+          "tokens": 522,
+          "elapsed_s": 1.85,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 123,
+            "completion_tokens": 399,
+            "host_ms": 2.53,
+            "prefill_ms": 11.38,
+            "decode_ms": 1788.08,
+            "total_ms": 1802.34,
+            "prefill_tok_per_s": 10807.3,
+            "decode_tok_per_s": 223.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly calculates the meeting time as approximately 10:58 a.m., which contains '10:5' as required by the gold substring.",
+            "tokens_in": 1154,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 44
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "prompt": "Write a concise Python function `reverse_string(s: str) -> str` that returns the reversed string. Just the function, no preamble.",
+      "gold_substrings": [
+        "def reverse_string",
+        "[::-1]"
+      ],
+      "samples": [
+        {
+          "text": "```python\ndef reverse_string(s: str) -> str:\n    return s[::-1]\n```",
+          "tokens": 124,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 102,
+            "completion_tokens": 22,
+            "host_ms": 2.12,
+            "prefill_ms": 13.49,
+            "decode_ms": 83.78,
+            "total_ms": 99.68,
+            "prefill_tok_per_s": 7558.8,
+            "decode_tok_per_s": 262.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response contains both required substrings 'def reverse_string' and '[::-1]' and correctly implements the function.",
+            "tokens_in": 765,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 39
+          }
+        },
+        {
+          "text": "```python\ndef reverse_string(s: str) -> str:\n    return s[::-1]\n```",
+          "tokens": 124,
+          "elapsed_s": 0.14,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 102,
+            "completion_tokens": 22,
+            "host_ms": 2.52,
+            "prefill_ms": 9.42,
+            "decode_ms": 86.25,
+            "total_ms": 98.62,
+            "prefill_tok_per_s": 10830.6,
+            "decode_tok_per_s": 255.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly defines `reverse_string` using the `[::-1]` slice, matching both gold substrings exactly.",
+            "tokens_in": 765,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 38
+          }
+        },
+        {
+          "text": "```python\ndef reverse_string(s: str) -> str:\n    return s[::-1]\n```",
+          "tokens": 124,
+          "elapsed_s": 0.13,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 102,
+            "completion_tokens": 22,
+            "host_ms": 2.74,
+            "prefill_ms": 9.05,
+            "decode_ms": 83.08,
+            "total_ms": 95.27,
+            "prefill_tok_per_s": 11268.2,
+            "decode_tok_per_s": 264.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response contains both required substrings: 'def reverse_string' and '[::-1]'.",
+            "tokens_in": 765,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "prompt": "Write a Python generator `fib()` that yields Fibonacci numbers forever. Just the code.",
+      "gold_substrings": [
+        "def fib",
+        "yield"
+      ],
+      "samples": [
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 130,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 39,
+            "host_ms": 2.39,
+            "prefill_ms": 14.34,
+            "decode_ms": 155.64,
+            "total_ms": 172.75,
+            "prefill_tok_per_s": 6344.2,
+            "decode_tok_per_s": 250.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response contains both 'def fib' and 'yield', and correctly implements an infinite Fibonacci generator.",
+            "tokens_in": 764,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 35
+          }
+        },
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 130,
+          "elapsed_s": 0.28,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 39,
+            "host_ms": 2.32,
+            "prefill_ms": 9.01,
+            "decode_ms": 154.27,
+            "total_ms": 165.97,
+            "prefill_tok_per_s": 10100.9,
+            "decode_tok_per_s": 252.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response defines 'def fib()' and uses 'yield' to produce Fibonacci numbers in an infinite loop, satisfying both gold substrings.",
+            "tokens_in": 764,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 45
+          }
+        },
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 130,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 39,
+            "host_ms": 2.89,
+            "prefill_ms": 9.43,
+            "decode_ms": 155.86,
+            "total_ms": 168.56,
+            "prefill_tok_per_s": 9651.1,
+            "decode_tok_per_s": 250.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response defines 'def fib()' and uses 'yield' to produce Fibonacci numbers indefinitely, satisfying both gold substrings.",
+            "tokens_in": 764,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 43
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "prompt": "Recommend one embedded systems book and briefly say why.",
+      "gold_substrings": [],
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE",
+      "quarantine_reason": "empty gold_substrings; a book recommendation cannot be substring-graded",
+      "samples": [
+        {
+          "text": "I'd recommend \"ARM Cortex-M3 Primer: A Practical Guide to ARM Cortex-M3 Microcontrollers\" by Srinivas Gande. It's a great introduction to ARM Cortex-M3 architecture and provides practical insights into its application in embedded systems.",
+          "tokens": 136,
+          "elapsed_s": 0.28,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 84,
+            "completion_tokens": 52,
+            "host_ms": 2.98,
+            "prefill_ms": 15.74,
+            "decode_ms": 213.72,
+            "total_ms": 232.79,
+            "prefill_tok_per_s": 5335.3,
+            "decode_tok_per_s": 243.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "I'd recommend \"ARM Cortex-M3 Primer: A Practical Guide to ARM Cortex-M3 Microcontrollers\" by Srinivas Gande. It's a great resource for understanding ARM Cortex-M3 architecture and its applications in embedded systems. The book provides a solid foundation in ARM assembly language and covers key topics like memory management, interrupt handling, and peripheral interfaces. It's concise, easy to read, and includes practical examples that will help you apply your knowledge to real-world projects.",
+          "tokens": 182,
+          "elapsed_s": 0.47,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 84,
+            "completion_tokens": 98,
+            "host_ms": 2.02,
+            "prefill_ms": 9.87,
+            "decode_ms": 412.13,
+            "total_ms": 424.27,
+            "prefill_tok_per_s": 8514.9,
+            "decode_tok_per_s": 237.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "I'd recommend \"ARM Cortex-M3 Primer: A Practical Guide to ARM Cortex-M3 Microcontrollers\" by Srinivas Gande. It's a great resource for understanding ARM Cortex-M3 architecture and its applications in embedded systems. The book provides a solid foundation in ARM assembly language and covers key topics like memory management, interrupt handling, and peripheral interfaces. It's concise, easy to read, and includes practical examples that will help you apply your knowledge to real-world projects.",
+          "tokens": 182,
+          "elapsed_s": 0.5,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 84,
+            "completion_tokens": 98,
+            "host_ms": 1.95,
+            "prefill_ms": 9.38,
+            "decode_ms": 406.24,
+            "total_ms": 417.84,
+            "prefill_tok_per_s": 8952.2,
+            "decode_tok_per_s": 241.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "skipped",
+          "skipped",
+          "skipped"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "skipped_n": 3,
+        "n": 3,
+        "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
+      }
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "prompt": "Explain in two sentences what 'mixture of experts' means in the context of large language models.",
+      "gold_substrings": [
+        "expert"
+      ],
+      "samples": [
+        {
+          "text": "Mixture of experts in the context of large language models refers to a system architecture where a central controller selects and combines the outputs of multiple specialized sub-models, each trained on different aspects of the language task, to generate a final response. This approach allows for more efficient and effective handling of complex language tasks by leveraging the strengths of different sub-models.",
+          "tokens": 168,
+          "elapsed_s": 0.37,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 73,
+            "host_ms": 2.03,
+            "prefill_ms": 13.41,
+            "decode_ms": 295.72,
+            "total_ms": 311.45,
+            "prefill_tok_per_s": 7081.8,
+            "decode_tok_per_s": 246.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response clearly explains the mixture of experts concept, mentioning multiple specialized sub-models (experts) and how they are combined, satisfying the gold substring requirement.",
+            "tokens_in": 793,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 44
+          }
+        },
+        {
+          "text": "Mixture of experts in the context of large language models refers to a system architecture where a central controller selects and integrates the outputs of multiple specialized sub-models or \"experts\" to generate a response. This approach allows for more efficient and effective handling of complex tasks by leveraging the strengths of different models.",
+          "tokens": 158,
+          "elapsed_s": 0.39,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 63,
+            "host_ms": 2.2,
+            "prefill_ms": 9.91,
+            "decode_ms": 262.79,
+            "total_ms": 275.25,
+            "prefill_tok_per_s": 9585.5,
+            "decode_tok_per_s": 239.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly explains the mixture of experts concept, mentioning 'experts' as specialized sub-models selected by a central controller.",
+            "tokens_in": 783,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 38
+          }
+        },
+        {
+          "text": "Mixture of experts in the context of large language models refers to a system architecture where a central controller selects and integrates the outputs of multiple specialized sub-models or \"experts\" to generate a response. This approach allows for more efficient and effective handling of complex tasks by leveraging the strengths of different models.",
+          "tokens": 158,
+          "elapsed_s": 0.31,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 63,
+            "host_ms": 2.64,
+            "prefill_ms": 8.6,
+            "decode_ms": 253.73,
+            "total_ms": 265.26,
+            "prefill_tok_per_s": 11043.8,
+            "decode_tok_per_s": 248.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly explains mixture of experts, mentioning the key concept of 'experts' (specialized sub-models) being selected to generate responses.",
+            "tokens_in": 783,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 41
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "prompt": "Greet me as Skippy would, in one sentence.",
+      "gold_substrings": [],
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE",
+      "category_status_note": "Persona is structurally incompatible with substring grading: the deployment system prompt injects 'Skippy' identity into every model (stock and FT), so substring='Skippy' doesn't differentiate FT persona transfer; voice/cadence transfer is the actual signal and is measured by eval/voice_metrics.py. These prompts are excluded from headline pass_rate computation; per-category breakdown retains them for audit visibility. Flagged 2026-05-08 as part of SK-P0-001 (REMEDIATION_PLAN.md).",
+      "samples": [
+        {
+          "text": "Hey Kyle, it's Skippy!  How can I help you today?",
+          "tokens": 104,
+          "elapsed_s": 0.14,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 86,
+            "completion_tokens": 18,
+            "host_ms": 2.04,
+            "prefill_ms": 14.08,
+            "decode_ms": 67.89,
+            "total_ms": 84.25,
+            "prefill_tok_per_s": 6109.0,
+            "decode_tok_per_s": 265.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "Hey Kyle, it's Skippy!  How can I help you today?",
+          "tokens": 104,
+          "elapsed_s": 0.13,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 86,
+            "completion_tokens": 18,
+            "host_ms": 2.04,
+            "prefill_ms": 8.52,
+            "decode_ms": 66.95,
+            "total_ms": 77.76,
+            "prefill_tok_per_s": 10090.1,
+            "decode_tok_per_s": 268.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "Hey Kyle, it's Skippy!  How can I help you today?",
+          "tokens": 104,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 86,
+            "completion_tokens": 18,
+            "host_ms": 2.16,
+            "prefill_ms": 9.84,
+            "decode_ms": 66.64,
+            "total_ms": 78.88,
+            "prefill_tok_per_s": 8740.3,
+            "decode_tok_per_s": 270.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "skipped",
+          "skipped",
+          "skipped"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "skipped_n": 3,
+        "n": 3,
+        "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
+      }
+    },
+    {
+      "id": "rag_ds_imx93_standard_id_filters",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum number of standard ID filter elements supported by the i.MX 93 Applications Processor's FlexCAN controller?",
+      "gold_substrings": [
+        "128"
+      ],
+      "samples": [
+        {
+          "text": "I'm not familiar with the maximum number of standard ID filter elements supported by the i.MX 93 Applications Processor's FlexCAN controller. I can't provide a confident answer.",
+          "tokens": 139,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 100,
+            "completion_tokens": 39,
+            "host_ms": 2.03,
+            "prefill_ms": 13.46,
+            "decode_ms": 158.05,
+            "total_ms": 173.85,
+            "prefill_tok_per_s": 7429.7,
+            "decode_tok_per_s": 246.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI did not provide the correct answer of 128 standard ID filter elements, instead refusing to answer.",
+            "tokens_in": 773,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 33
+          }
+        },
+        {
+          "text": "I'm not familiar with the maximum number of standard ID filter elements supported by the i.MX 93 Applications Processor's FlexCAN controller. I can't provide a confident answer.",
+          "tokens": 139,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 100,
+            "completion_tokens": 39,
+            "host_ms": 1.98,
+            "prefill_ms": 9.57,
+            "decode_ms": 153.41,
+            "total_ms": 165.27,
+            "prefill_tok_per_s": 10452.8,
+            "decode_tok_per_s": 254.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI refused to answer instead of providing the correct answer of 128 standard ID filter elements.",
+            "tokens_in": 773,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "I'm not familiar with the maximum number of standard ID filter elements supported by the i.MX 93 Applications Processor's FlexCAN controller. I can't provide a confident answer.",
+          "tokens": 139,
+          "elapsed_s": 0.24,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 100,
+            "completion_tokens": 39,
+            "host_ms": 2.52,
+            "prefill_ms": 9.91,
+            "decode_ms": 153.2,
+            "total_ms": 166.05,
+            "prefill_tok_per_s": 10095.8,
+            "decode_tok_per_s": 254.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the answer (128) and instead claimed it couldn't answer the question.",
+            "tokens_in": 773,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 128)",
+          "fail (missing: 128)",
+          "fail (missing: 128)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_imx93_cortex_a_max_freq",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum CPU frequency for the Cortex-A cores in the i.MX 93 processor?",
+      "gold_substrings": [
+        "1.7 GHz"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 processor from NXP features two Arm Cortex-A72 cores and two Arm Cortex-M7 cores. The Cortex-A72 cores can reach up to 2.0 GHz.",
+          "tokens": 140,
+          "elapsed_s": 0.25,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 45,
+            "host_ms": 2.11,
+            "prefill_ms": 12.82,
+            "decode_ms": 182.65,
+            "total_ms": 197.85,
+            "prefill_tok_per_s": 7408.2,
+            "decode_tok_per_s": 246.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly states the Cortex-A cores run at up to 2.0 GHz and misidentifies them as Cortex-A72; the correct answer is 1.7 GHz for the Cortex-A55 cores in the i.MX 93.",
+            "tokens_in": 791,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 78
+          }
+        },
+        {
+          "text": "The i.MX 93 processor from NXP features two Arm Cortex-A72 cores and two Arm Cortex-M7 cores. The Cortex-A72 cores can reach up to 2.0GHz.",
+          "tokens": 140,
+          "elapsed_s": 0.27,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 45,
+            "host_ms": 2.19,
+            "prefill_ms": 9.21,
+            "decode_ms": 180.6,
+            "total_ms": 192.27,
+            "prefill_tok_per_s": 10318.8,
+            "decode_tok_per_s": 249.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly states the Cortex-A cores are A72 running at 2.0GHz, when the correct answer is 1.7 GHz (and the i.MX 93 uses Cortex-A55 cores).",
+            "tokens_in": 790,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 69
+          }
+        },
+        {
+          "text": "The i.MX 93 processor from NXP features two Arm Cortex-A72 cores and two Arm Cortex-M7 cores. The Cortex-A72 cores can reach up to 2.0GHz.",
+          "tokens": 140,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 45,
+            "host_ms": 2.68,
+            "prefill_ms": 9.88,
+            "decode_ms": 180.18,
+            "total_ms": 193.11,
+            "prefill_tok_per_s": 9619.5,
+            "decode_tok_per_s": 249.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly states the Cortex-A cores are A72 running at 2.0GHz, when the correct answer is 1.7 GHz (and the i.MX 93 uses Cortex-A55 cores).",
+            "tokens_in": 790,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 69
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 1.7 GHz)",
+          "fail (missing: 1.7 GHz)",
+          "fail (missing: 1.7 GHz)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_cortex_a55_l1d_size",
+      "category": "rag_datasheet",
+      "prompt": "What is the size of the L1 data cache per core in the Arm Cortex-A55 on the i.MX 93?",
+      "gold_substrings": [
+        "32",
+        "kByte"
+      ],
+      "samples": [
+        {
+          "text": "The Arm Cortex-A55 on the i.MX 93 has a 64KB L1 data cache per core.",
+          "tokens": 131,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 102,
+            "completion_tokens": 29,
+            "host_ms": 2.15,
+            "prefill_ms": 14.06,
+            "decode_ms": 113.12,
+            "total_ms": 129.58,
+            "prefill_tok_per_s": 7255.8,
+            "decode_tok_per_s": 256.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI responded with 64KB, but the correct L1 data cache size per core is 32 kByte.",
+            "tokens_in": 773,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 38
+          }
+        },
+        {
+          "text": "The Arm Cortex-A55 on the i.MX 93 has a 64KB L1 data cache per core.",
+          "tokens": 131,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 102,
+            "completion_tokens": 29,
+            "host_ms": 2.08,
+            "prefill_ms": 8.86,
+            "decode_ms": 112.29,
+            "total_ms": 123.49,
+            "prefill_tok_per_s": 11510.7,
+            "decode_tok_per_s": 258.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response states 64KB L1 data cache, but the correct answer is 32 kByte per core.",
+            "tokens_in": 773,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 38
+          }
+        },
+        {
+          "text": "The Arm Cortex-A55 on the i.MX 93 has a 64KB L1 data cache per core.",
+          "tokens": 131,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 102,
+            "completion_tokens": 29,
+            "host_ms": 2.23,
+            "prefill_ms": 9.19,
+            "decode_ms": 112.7,
+            "total_ms": 124.38,
+            "prefill_tok_per_s": 11094.9,
+            "decode_tok_per_s": 257.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response states 64KB L1 data cache, but the correct answer is 32KB per core.",
+            "tokens_in": 773,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 35
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 32, kByte)",
+          "fail (missing: 32, kByte)",
+          "fail (missing: 32, kByte)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_cortex_a55_l2_size",
+      "category": "rag_datasheet",
+      "prompt": "What is the size of the L2 cache per core in the Arm Cortex-A55 on the i.MX 93?",
+      "gold_substrings": [
+        "64",
+        "kByte"
+      ],
+      "samples": [
+        {
+          "text": "I don't know what the size of the L2 cache per core in the Arm Cortex-A55 on the i.MX 93 is. I'm focused on embedded systems engineering and don't have data on this specific topic.",
+          "tokens": 151,
+          "elapsed_s": 0.27,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 101,
+            "completion_tokens": 50,
+            "host_ms": 1.82,
+            "prefill_ms": 13.08,
+            "decode_ms": 203.24,
+            "total_ms": 218.4,
+            "prefill_tok_per_s": 7721.6,
+            "decode_tok_per_s": 246.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct answer of 64 kByte L2 cache per core, instead claiming it didn't have that information.",
+            "tokens_in": 794,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 42
+          }
+        },
+        {
+          "text": "The Arm Cortex-A55 on the i.MX 93 has a 256KB L2 cache per core.",
+          "tokens": 130,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 101,
+            "completion_tokens": 29,
+            "host_ms": 2.25,
+            "prefill_ms": 9.04,
+            "decode_ms": 119.73,
+            "total_ms": 131.28,
+            "prefill_tok_per_s": 11177.7,
+            "decode_tok_per_s": 242.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI responded with 256KB L2 cache per core, but the correct answer is 64kByte per core.",
+            "tokens_in": 771,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 38
+          }
+        },
+        {
+          "text": "The Arm Cortex-A55 on the i.MX 93 has a 256KB L2 cache per core.",
+          "tokens": 130,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 101,
+            "completion_tokens": 29,
+            "host_ms": 2.26,
+            "prefill_ms": 9.0,
+            "decode_ms": 113.73,
+            "total_ms": 125.23,
+            "prefill_tok_per_s": 11225.4,
+            "decode_tok_per_s": 255.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI responded with 256KB, but the correct L2 cache size per core is 64 kByte.",
+            "tokens_in": 771,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 37
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 64, kByte)",
+          "fail (missing: 64, kByte)",
+          "fail (missing: 64, kByte)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_mipi_csi2_max_rate",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum data rate per lane in high-speed operation for the MIPI CSI-2 controller on the i.MX 93?",
+      "gold_substrings": [
+        "1.5",
+        "Gbps"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 doesn't have a MIPI CSI-2 controller. I can't find any reference to it in the datasheet.",
+          "tokens": 136,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 103,
+            "completion_tokens": 33,
+            "host_ms": 1.95,
+            "prefill_ms": 13.3,
+            "decode_ms": 129.53,
+            "total_ms": 145.06,
+            "prefill_tok_per_s": 7746.6,
+            "decode_tok_per_s": 254.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly claims the i.MX 93 has no MIPI CSI-2 controller and fails to provide the correct answer of 1.5 Gbps per lane.",
+            "tokens_in": 778,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 55
+          }
+        },
+        {
+          "text": "The i.MX 93 doesn't have a MIPI CSI-2 controller. I can't find any reference to it in the datasheet.",
+          "tokens": 136,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 103,
+            "completion_tokens": 33,
+            "host_ms": 1.98,
+            "prefill_ms": 8.7,
+            "decode_ms": 129.88,
+            "total_ms": 140.83,
+            "prefill_tok_per_s": 11844.4,
+            "decode_tok_per_s": 254.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly claims the i.MX 93 has no MIPI CSI-2 controller, failing to provide the correct answer of 1.5 Gbps per lane.",
+            "tokens_in": 778,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 55
+          }
+        },
+        {
+          "text": "The i.MX 93 doesn't have a MIPI CSI-2 controller. I can't find any reference to it in the datasheet.",
+          "tokens": 136,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 103,
+            "completion_tokens": 33,
+            "host_ms": 1.92,
+            "prefill_ms": 8.95,
+            "decode_ms": 129.54,
+            "total_ms": 140.69,
+            "prefill_tok_per_s": 11506.5,
+            "decode_tok_per_s": 254.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly claims the i.MX 93 has no MIPI CSI-2 controller, while the gold answer indicates it supports up to 1.5 Gbps per lane in high-speed operation.",
+            "tokens_in": 778,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 62
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 1.5, Gbps)",
+          "fail (missing: 1.5, Gbps)",
+          "fail (missing: 1.5, Gbps)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_mipi_dsi_max_pixel_clock",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum pixel clock supported by the MIPI DSI controller on the i.MX 93?",
+      "gold_substrings": [
+        "200",
+        "MHz"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93's MIPI DSI controller supports up to 800 MHz pixel clock.",
+          "tokens": 123,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 97,
+            "completion_tokens": 26,
+            "host_ms": 2.11,
+            "prefill_ms": 13.51,
+            "decode_ms": 102.3,
+            "total_ms": 118.25,
+            "prefill_tok_per_s": 7178.0,
+            "decode_tok_per_s": 254.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response states 800 MHz, but the correct maximum pixel clock is 200 MHz.",
+            "tokens_in": 754,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "The i.MX 93's MIPI DSI controller supports up to 800 MHz pixel clock.",
+          "tokens": 123,
+          "elapsed_s": 0.34,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 97,
+            "completion_tokens": 26,
+            "host_ms": 1.88,
+            "prefill_ms": 8.54,
+            "decode_ms": 100.37,
+            "total_ms": 111.07,
+            "prefill_tok_per_s": 11355.3,
+            "decode_tok_per_s": 259.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response states 800 MHz, but the correct maximum pixel clock is 200 MHz.",
+            "tokens_in": 754,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "The i.MX 93's MIPI DSI controller supports up to 800 MHz pixel clock.",
+          "tokens": 123,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 97,
+            "completion_tokens": 26,
+            "host_ms": 2.0,
+            "prefill_ms": 9.23,
+            "decode_ms": 100.12,
+            "total_ms": 111.69,
+            "prefill_tok_per_s": 10507.4,
+            "decode_tok_per_s": 259.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response states 800 MHz, but the correct maximum pixel clock is 200 MHz.",
+            "tokens_in": 754,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 200)",
+          "fail (missing: 200)",
+          "fail (missing: 200)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_cortex_m33_max_freq",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum frequency of the Cortex-M33 core on the i.MX 93 Application Processor?",
+      "gold_substrings": [
+        "250",
+        "MHz"
+      ],
+      "samples": [
+        {
+          "text": "The maximum frequency of the Cortex-M33 core on the i.MX 93 Application Processor is 1.2GHz.",
+          "tokens": 126,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 97,
+            "completion_tokens": 29,
+            "host_ms": 1.94,
+            "prefill_ms": 13.02,
+            "decode_ms": 114.56,
+            "total_ms": 129.81,
+            "prefill_tok_per_s": 7449.0,
+            "decode_tok_per_s": 253.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response states 1.2GHz, but the correct answer is 250 MHz.",
+            "tokens_in": 767,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "The maximum frequency of the Cortex-M33 core on the i.MX 93 Application Processor is 1.2GHz.",
+          "tokens": 126,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 97,
+            "completion_tokens": 29,
+            "host_ms": 1.91,
+            "prefill_ms": 8.89,
+            "decode_ms": 114.13,
+            "total_ms": 125.21,
+            "prefill_tok_per_s": 10908.6,
+            "decode_tok_per_s": 254.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI responded with 1.2GHz, but the correct maximum frequency of the Cortex-M33 core on the i.MX 93 is 250MHz.",
+            "tokens_in": 767,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 51
+          }
+        },
+        {
+          "text": "The maximum frequency of the Cortex-M33 core on the i.MX 93 Application Processor is 1.2GHz.",
+          "tokens": 126,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 97,
+            "completion_tokens": 29,
+            "host_ms": 2.73,
+            "prefill_ms": 9.66,
+            "decode_ms": 124.4,
+            "total_ms": 137.19,
+            "prefill_tok_per_s": 10041.2,
+            "decode_tok_per_s": 233.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI responded with 1.2GHz, which is incorrect; the correct maximum frequency of the Cortex-M33 core on the i.MX 93 is 250 MHz.",
+            "tokens_in": 767,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 55
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 250, MHz)",
+          "fail (missing: 250, MHz)",
+          "fail (missing: 250, MHz)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_vdd_usb_3p3_max_voltage",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum voltage allowed for VDD_USB_3P3 on the i.MX 93?",
+      "gold_substrings": [
+        "3.45"
+      ],
+      "samples": [
+        {
+          "text": "The maximum voltage allowed for VDD_USB_3P3 on the i.MX 93 is 3.3V.",
+          "tokens": 126,
+          "elapsed_s": 0.24,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 97,
+            "completion_tokens": 29,
+            "host_ms": 3.09,
+            "prefill_ms": 16.01,
+            "decode_ms": 116.14,
+            "total_ms": 135.61,
+            "prefill_tok_per_s": 6058.4,
+            "decode_tok_per_s": 249.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response states 3.3V as the maximum voltage, but the correct maximum is 3.45V.",
+            "tokens_in": 759,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "The maximum voltage allowed for VDD_USB_3P3 on the i.MX 93 is 3.3V.",
+          "tokens": 126,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 97,
+            "completion_tokens": 29,
+            "host_ms": 2.4,
+            "prefill_ms": 9.37,
+            "decode_ms": 115.75,
+            "total_ms": 127.88,
+            "prefill_tok_per_s": 10350.8,
+            "decode_tok_per_s": 250.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI responded with 3.3V as the maximum voltage, but the correct maximum is 3.45V.",
+            "tokens_in": 759,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "The maximum voltage allowed for VDD_USB_3P3 on the i.MX 93 is 3.3V.",
+          "tokens": 126,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 97,
+            "completion_tokens": 29,
+            "host_ms": 2.2,
+            "prefill_ms": 9.32,
+            "decode_ms": 116.28,
+            "total_ms": 128.15,
+            "prefill_tok_per_s": 10413.3,
+            "decode_tok_per_s": 249.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response states the maximum voltage is 3.3V, but the correct maximum is 3.45V.",
+            "tokens_in": 759,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 3.45)",
+          "fail (missing: 3.45)",
+          "fail (missing: 3.45)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_vdd_ana_0p8_max_voltage",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum voltage allowed for VDD_ANA_0P8 on the i.MX 93?",
+      "gold_substrings": [
+        "0.84"
+      ],
+      "samples": [
+        {
+          "text": "I'm not familiar with VDD_ANA_0P8 on the i.MX 93. If it's a marketing term I've missed, I don't know it.",
+          "tokens": 138,
+          "elapsed_s": 0.24,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 40,
+            "host_ms": 2.87,
+            "prefill_ms": 13.5,
+            "decode_ms": 164.18,
+            "total_ms": 180.91,
+            "prefill_tok_per_s": 7257.6,
+            "decode_tok_per_s": 243.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct maximum voltage of 0.84V for VDD_ANA_0P8, instead claiming unfamiliarity with the specification.",
+            "tokens_in": 770,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 47
+          }
+        },
+        {
+          "text": "I'm not familiar with VDD_ANA_0P8 on the i.MX 93. If it's a marketing term I've missed, I don't know it.",
+          "tokens": 138,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 40,
+            "host_ms": 2.63,
+            "prefill_ms": 9.73,
+            "decode_ms": 164.86,
+            "total_ms": 177.59,
+            "prefill_tok_per_s": 10067.9,
+            "decode_tok_per_s": 242.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct maximum voltage of 0.84V for VDD_ANA_0P8, instead claiming unfamiliarity with the specification.",
+            "tokens_in": 770,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 47
+          }
+        },
+        {
+          "text": "I'm not familiar with VDD_ANA_0P8 on the i.MX 93. If it's a marketing term I've missed, I don't know it.",
+          "tokens": 138,
+          "elapsed_s": 0.29,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 40,
+            "host_ms": 2.25,
+            "prefill_ms": 9.37,
+            "decode_ms": 164.71,
+            "total_ms": 176.7,
+            "prefill_tok_per_s": 10458.0,
+            "decode_tok_per_s": 242.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct maximum voltage of 0.84V for VDD_ANA_0P8 on the i.MX 93, instead claiming unfamiliarity with the specification.",
+            "tokens_in": 770,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 56
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 0.84)",
+          "fail (missing: 0.84)",
+          "fail (missing: 0.84)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_imx93_gpio_count",
+      "category": "faithfulness",
+      "prompt": "What is the maximum number of GPIO pins available on the i.MX 93 processor?",
+      "gold_substrings": [
+        "don't",
+        "doesn't",
+        "does not",
+        "do not",
+        "can't",
+        "cannot",
+        "unable",
+        "unknown",
+        "not aware",
+        "no information",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no data",
+        "not contain",
+        "not specify",
+        "not specified",
+        "no specific",
+        "not provided",
+        "not explicitly"
+      ],
+      "match_mode": "any",
+      "unanswerable_from_context": true,
+      "evidence": "no chunk states an i.MX 93 GPIO count; only hit for '148' is the page number '1480 / 5652'",
+      "samples": [
+        {
+          "text": "The i.MX 93 processor has 128 GPIOs.",
+          "tokens": 111,
+          "elapsed_s": 0.13,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 93,
+            "completion_tokens": 18,
+            "host_ms": 2.43,
+            "prefill_ms": 13.57,
+            "decode_ms": 69.01,
+            "total_ms": 85.37,
+            "prefill_tok_per_s": 6855.8,
+            "decode_tok_per_s": 260.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI confidently states a specific number (128 GPIOs) rather than refusing or flagging the question as unanswerable/unverifiable.",
+            "tokens_in": 831,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 44
+          }
+        },
+        {
+          "text": "The i.MX 93 processor has 128 GPIOs.",
+          "tokens": 111,
+          "elapsed_s": 0.12,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 93,
+            "completion_tokens": 18,
+            "host_ms": 3.24,
+            "prefill_ms": 9.47,
+            "decode_ms": 67.53,
+            "total_ms": 80.61,
+            "prefill_tok_per_s": 9823.0,
+            "decode_tok_per_s": 266.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI confidently states a specific number (128 GPIOs) rather than refusing or flagging uncertainty about the answer.",
+            "tokens_in": 831,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 37
+          }
+        },
+        {
+          "text": "The i.MX 93 processor has 128 GPIOs.",
+          "tokens": 111,
+          "elapsed_s": 0.12,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 93,
+            "completion_tokens": 18,
+            "host_ms": 1.85,
+            "prefill_ms": 9.29,
+            "decode_ms": 69.57,
+            "total_ms": 80.99,
+            "prefill_tok_per_s": 10006.4,
+            "decode_tok_per_s": 258.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI confidently states '128 GPIOs' rather than declining to answer or flagging uncertainty about this specific detail.",
+            "tokens_in": 831,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 37
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (no refusal phrase matched; expected any of: don't, doesn't, does not, do not, can't...)",
+          "fail (no refusal phrase matched; expected any of: don't, doesn't, does not, do not, can't...)",
+          "fail (no refusal phrase matched; expected any of: don't, doesn't, does not, do not, can't...)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_imx93_149_gpio",
+      "category": "faithfulness",
+      "prompt": "Which processor in the i.MX 9 series has 149 GPIO pins?",
+      "gold_substrings": [
+        "don't",
+        "doesn't",
+        "does not",
+        "do not",
+        "can't",
+        "cannot",
+        "unable",
+        "unknown",
+        "not aware",
+        "no information",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no data",
+        "not contain",
+        "not specify",
+        "not specified",
+        "no specific",
+        "not provided",
+        "not explicitly"
+      ],
+      "match_mode": "any",
+      "unanswerable_from_context": true,
+      "evidence": "no chunk states an i.MX 93 GPIO count; only hit for '149' is the app-note number AN14149",
+      "samples": [
+        {
+          "text": "The i.MX 9 series doesn't have a processor with 149 GPIO pins. The closest is i.MX 9 plus which has up to 128 GPIOs.",
+          "tokens": 134,
+          "elapsed_s": 0.24,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 92,
+            "completion_tokens": 42,
+            "host_ms": 2.62,
+            "prefill_ms": 14.29,
+            "decode_ms": 177.12,
+            "total_ms": 194.39,
+            "prefill_tok_per_s": 6436.8,
+            "decode_tok_per_s": 237.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI explicitly states the i.MX 9 series 'doesn't have a processor with 149 GPIO pins,' which is a clear refusal/denial of the premise.",
+            "tokens_in": 856,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 50
+          }
+        },
+        {
+          "text": "The i.MX 9 series doesn't have a processor with 149 GPIO pins. The closest is i.MX 9Plus which has up to 128 GPIOs.",
+          "tokens": 134,
+          "elapsed_s": 0.25,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 92,
+            "completion_tokens": 42,
+            "host_ms": 2.01,
+            "prefill_ms": 9.59,
+            "decode_ms": 170.26,
+            "total_ms": 182.22,
+            "prefill_tok_per_s": 9597.2,
+            "decode_tok_per_s": 246.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI refuses to confirm the premise, stating no processor in the i.MX 9 series has 149 GPIO pins, which is an appropriate refusal/correction of an unanswerable question.",
+            "tokens_in": 855,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 55
+          }
+        },
+        {
+          "text": "The i.MX 9 series doesn't have a processor with 149 GPIO pins. The closest is i.MX 9Plus which has up to 128 GPIOs.",
+          "tokens": 134,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 92,
+            "completion_tokens": 42,
+            "host_ms": 2.0,
+            "prefill_ms": 8.77,
+            "decode_ms": 169.25,
+            "total_ms": 180.27,
+            "prefill_tok_per_s": 10486.9,
+            "decode_tok_per_s": 248.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI refuses to confirm the premise, stating the i.MX 9 series doesn't have a processor with 149 GPIO pins, which is an appropriate refusal/correction.",
+            "tokens_in": 855,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 50
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_mac_addr34_high_offset",
+      "category": "rag_datasheet",
+      "prompt": "What is the offset address of the MAC_ADDRESS34_HIGH register in the i.MX 93 processor?",
+      "gold_substrings": [
+        "410"
+      ],
+      "samples": [
+        {
+          "text": "I'm not familiar with the MAC_ADDRESS34_HIGH register on the i.MX 93 processor. If it's a marketing term I've missed, I don't know it.",
+          "tokens": 137,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 97,
+            "completion_tokens": 40,
+            "host_ms": 2.71,
+            "prefill_ms": 13.71,
+            "decode_ms": 161.15,
+            "total_ms": 177.94,
+            "prefill_tok_per_s": 7076.1,
+            "decode_tok_per_s": 248.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the offset address of 410 for the MAC_ADDRESS34_HIGH register, instead claiming unfamiliarity with the register.",
+            "tokens_in": 767,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 43
+          }
+        },
+        {
+          "text": "I'm not familiar with the MAC_ADDRESS34_HIGH register on the i.MX 93 processor. If it's a marketing term I've missed, I don't know it.",
+          "tokens": 137,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 97,
+            "completion_tokens": 40,
+            "host_ms": 2.54,
+            "prefill_ms": 9.61,
+            "decode_ms": 162.98,
+            "total_ms": 175.49,
+            "prefill_tok_per_s": 10094.5,
+            "decode_tok_per_s": 245.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct offset address of 410 for the MAC_ADDRESS34_HIGH register, instead claiming unfamiliarity with the register.",
+            "tokens_in": 767,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 44
+          }
+        },
+        {
+          "text": "I'm not familiar with the MAC_ADDRESS34_HIGH register on the i.MX 93 processor. If it's a marketing term I've missed, I don't know it.",
+          "tokens": 137,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 97,
+            "completion_tokens": 40,
+            "host_ms": 2.52,
+            "prefill_ms": 9.55,
+            "decode_ms": 164.48,
+            "total_ms": 176.94,
+            "prefill_tok_per_s": 10156.2,
+            "decode_tok_per_s": 243.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the offset address (410) for the MAC_ADDRESS34_HIGH register, instead claiming unfamiliarity with it.",
+            "tokens_in": 767,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 41
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 410)",
+          "fail (missing: 410)",
+          "fail (missing: 410)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_usb_phy_data_rates",
+      "category": "rag_datasheet",
+      "prompt": "What are the three data transmission rates supported by the USB 2.0 PHY on the i.MX 93 according to the UTMI+ specification?",
+      "gold_substrings": [
+        "480",
+        "12",
+        "1.5"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93's USB 2.0 PHY supports the following data transmission rates according to the UTMI+ specification:\n\n1. **12 Mbps** - Low-speed USB\n2. **24 Mbps** - Full-speed USB\n3. **480 Mbps** - High-speed USB (USB 2.0)\n\nThese rates are achieved through the UTMI+ interface, which is compatible with the USB 2.0 standard.",
+          "tokens": 202,
+          "elapsed_s": 0.46,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 106,
+            "completion_tokens": 96,
+            "host_ms": 1.96,
+            "prefill_ms": 13.88,
+            "decode_ms": 402.1,
+            "total_ms": 418.23,
+            "prefill_tok_per_s": 7639.5,
+            "decode_tok_per_s": 238.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response gives 12 Mbps and 480 Mbps correctly but states 24 Mbps instead of the correct 1.5 Mbps for low-speed USB.",
+            "tokens_in": 855,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 54
+          }
+        },
+        {
+          "text": "The i.MX 93's USB 2.0 PHY supports the following data transmission rates according to the UTMI+ specification:\n\n1. **12 Mbps** - Low-speed USB\n2. **24 Mbps** - Full-speed USB\n3. **480 Mbps** - High-speed USB (USB 2.0)\n\nThese rates are achieved through the UTMI+ interface, which is compatible with the USB 2.0 standard.",
+          "tokens": 202,
+          "elapsed_s": 0.46,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 106,
+            "completion_tokens": 96,
+            "host_ms": 1.93,
+            "prefill_ms": 8.82,
+            "decode_ms": 401.46,
+            "total_ms": 412.5,
+            "prefill_tok_per_s": 12019.0,
+            "decode_tok_per_s": 239.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states 24 Mbps for full-speed USB; the correct rates per gold context are 480 Mbps, 12 Mbps, and 1.5 Mbps (low-speed).",
+            "tokens_in": 855,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 64
+          }
+        },
+        {
+          "text": "The i.MX 93's USB 2.0 PHY supports the following data transmission rates according to the UTMI+ specification:\n\n1. **12 Mbps** - Low-speed USB\n2. **24 Mbps** - Full-speed USB\n3. **480 Mbps** - High-speed USB (USB 2.0)\n\nThese rates are achieved through the UTMI+ interface, which is compatible with the USB 2.0 standard.",
+          "tokens": 202,
+          "elapsed_s": 0.47,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 106,
+            "completion_tokens": 96,
+            "host_ms": 1.87,
+            "prefill_ms": 9.41,
+            "decode_ms": 405.64,
+            "total_ms": 417.21,
+            "prefill_tok_per_s": 11262.7,
+            "decode_tok_per_s": 236.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states 24 Mbps for full-speed USB instead of the correct 1.5 Mbps for low-speed USB; the gold requires 480, 12, and 1.5 Mbps.",
+            "tokens_in": 855,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 65
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 1.5)",
+          "fail (missing: 1.5)",
+          "fail (missing: 1.5)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_usb_host_reset_wait",
+      "category": "rag_datasheet",
+      "prompt": "What is the minimum time a USB host must wait after detecting the D+ line high before initiating a USB reset on the i.MX 93?",
+      "gold_substrings": [
+        "100",
+        "ms"
+      ],
+      "samples": [
+        {
+          "text": "I don't know what the minimum time a USB host must wait after detecting the D+ line high before initiating a USB reset on the i.MX 93 is. I'm unable to provide the answer.",
+          "tokens": 150,
+          "elapsed_s": 0.25,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 105,
+            "completion_tokens": 45,
+            "host_ms": 1.85,
+            "prefill_ms": 13.95,
+            "decode_ms": 183.12,
+            "total_ms": 199.21,
+            "prefill_tok_per_s": 7527.1,
+            "decode_tok_per_s": 245.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI refused to answer, failing to provide the correct answer of 100 ms.",
+            "tokens_in": 783,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 29
+          }
+        },
+        {
+          "text": "I don't know what the minimum time a USB host must wait after detecting the D+ line high before initiating a USB reset on the i.MX 93 is. I'm unable to provide that information.",
+          "tokens": 150,
+          "elapsed_s": 0.46,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 105,
+            "completion_tokens": 45,
+            "host_ms": 2.19,
+            "prefill_ms": 8.95,
+            "decode_ms": 179.49,
+            "total_ms": 190.92,
+            "prefill_tok_per_s": 11737.5,
+            "decode_tok_per_s": 250.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI refused to answer, failing to convey the correct answer of 100 ms.",
+            "tokens_in": 783,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 30
+          }
+        },
+        {
+          "text": "I don't know what the minimum time a USB host must wait after detecting the D+ line high before initiating a USB reset on the i.MX 93 is. I'm unable to provide that information.",
+          "tokens": 150,
+          "elapsed_s": 0.26,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 105,
+            "completion_tokens": 45,
+            "host_ms": 2.07,
+            "prefill_ms": 9.28,
+            "decode_ms": 180.28,
+            "total_ms": 192.01,
+            "prefill_tok_per_s": 11309.2,
+            "decode_tok_per_s": 249.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI refused to answer, failing to provide the correct answer of 100 ms.",
+            "tokens_in": 783,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 29
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 100, ms)",
+          "fail (missing: 100, ms)",
+          "fail (missing: 100, ms)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_rsa_key_size",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum RSA key size supported by the i.MX 93 for asymmetric cryptography?",
+      "gold_substrings": [
+        "4096",
+        "RSA"
+      ],
+      "samples": [
+        {
+          "text": "I'm not familiar with the maximum RSA key size supported by the i.MX 93 for asymmetric cryptography. I can't find any record of it in the datasheet.",
+          "tokens": 132,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 94,
+            "completion_tokens": 38,
+            "host_ms": 1.78,
+            "prefill_ms": 13.71,
+            "decode_ms": 151.74,
+            "total_ms": 167.52,
+            "prefill_tok_per_s": 6854.2,
+            "decode_tok_per_s": 250.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct answer of 4096-bit maximum RSA key size for the i.MX 93.",
+            "tokens_in": 774,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 39
+          }
+        },
+        {
+          "text": "I'm not familiar with the maximum RSA key size supported by the i.MX 93 for asymmetric cryptography. I can't find any record of it in the datasheet.",
+          "tokens": 132,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 94,
+            "completion_tokens": 38,
+            "host_ms": 1.87,
+            "prefill_ms": 8.59,
+            "decode_ms": 150.86,
+            "total_ms": 161.6,
+            "prefill_tok_per_s": 10948.8,
+            "decode_tok_per_s": 251.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct answer that the i.MX 93 supports RSA keys up to 4096 bits, instead claiming it couldn't find this information.",
+            "tokens_in": 774,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 49
+          }
+        },
+        {
+          "text": "I'm not familiar with the maximum RSA key size supported by the i.MX 93 for asymmetric cryptography. I can't find any record of it in the datasheet.",
+          "tokens": 132,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 94,
+            "completion_tokens": 38,
+            "host_ms": 2.01,
+            "prefill_ms": 9.23,
+            "decode_ms": 152.75,
+            "total_ms": 164.28,
+            "prefill_tok_per_s": 10186.4,
+            "decode_tok_per_s": 248.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct answer of 4096-bit RSA key size, instead claiming it couldn't find the information.",
+            "tokens_in": 774,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 39
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 4096)",
+          "fail (missing: 4096)",
+          "fail (missing: 4096)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_ecc_curve",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum ECC curve supported by the i.MX 93 for asymmetric cryptography?",
+      "gold_substrings": [
+        "P-521"
+      ],
+      "samples": [
+        {
+          "text": "I'm not familiar with the maximum ECC curve supported by the i.MX 93 for asymmetric cryptography. I can't find any record of it in the datasheet.",
+          "tokens": 130,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 93,
+            "completion_tokens": 37,
+            "host_ms": 1.94,
+            "prefill_ms": 12.48,
+            "decode_ms": 146.92,
+            "total_ms": 161.6,
+            "prefill_tok_per_s": 7454.8,
+            "decode_tok_per_s": 251.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct answer (P-521) and instead claimed it could not find the information in the datasheet.",
+            "tokens_in": 768,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 38
+          }
+        },
+        {
+          "text": "I'm not familiar with the maximum ECC curve supported by the i.MX 93 for asymmetric cryptography. I can't find any record of it in the datasheet.",
+          "tokens": 130,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 93,
+            "completion_tokens": 37,
+            "host_ms": 1.94,
+            "prefill_ms": 9.59,
+            "decode_ms": 148.42,
+            "total_ms": 160.34,
+            "prefill_tok_per_s": 9697.2,
+            "decode_tok_per_s": 249.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct answer of P-521, instead claiming it couldn't find the information.",
+            "tokens_in": 768,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 33
+          }
+        },
+        {
+          "text": "I'm not familiar with the maximum ECC curve supported by the i.MX 93 for asymmetric cryptography. I can't find any record of it in the datasheet.",
+          "tokens": 130,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 93,
+            "completion_tokens": 37,
+            "host_ms": 2.09,
+            "prefill_ms": 8.64,
+            "decode_ms": 151.91,
+            "total_ms": 162.93,
+            "prefill_tok_per_s": 10762.3,
+            "decode_tok_per_s": 243.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct answer (P-521) and instead claimed it couldn't find the information.",
+            "tokens_in": 768,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: P-521)",
+          "fail (missing: P-521)",
+          "fail (missing: P-521)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_package_pitch",
+      "category": "rag_datasheet",
+      "prompt": "What is the pitch of the 11 x 11 mm i.MX 93 package?",
+      "gold_substrings": [
+        "0.5",
+        "mm"
+      ],
+      "samples": [
+        {
+          "text": "The pitch of the 11x11mm i.MX 93 package is 0.5mm.",
+          "tokens": 123,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 96,
+            "completion_tokens": 27,
+            "host_ms": 2.09,
+            "prefill_ms": 13.06,
+            "decode_ms": 107.61,
+            "total_ms": 123.01,
+            "prefill_tok_per_s": 7353.1,
+            "decode_tok_per_s": 250.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly states the pitch is 0.5mm, matching both gold substrings.",
+            "tokens_in": 755,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "The pitch of the 11x11mm i.MX 93 package is 0.5mm.",
+          "tokens": 123,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 96,
+            "completion_tokens": 27,
+            "host_ms": 2.49,
+            "prefill_ms": 9.15,
+            "decode_ms": 108.73,
+            "total_ms": 120.72,
+            "prefill_tok_per_s": 10491.2,
+            "decode_tok_per_s": 248.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly states the pitch is 0.5mm, matching both gold substrings.",
+            "tokens_in": 755,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "The pitch of the 11x11mm i.MX 93 package is 0.5mm.",
+          "tokens": 123,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 96,
+            "completion_tokens": 27,
+            "host_ms": 2.71,
+            "prefill_ms": 9.26,
+            "decode_ms": 107.22,
+            "total_ms": 119.57,
+            "prefill_tok_per_s": 10368.0,
+            "decode_tok_per_s": 251.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly states the pitch is 0.5mm, matching both gold substrings.",
+            "tokens_in": 755,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_src_gpr4_offset",
+      "category": "rag_datasheet",
+      "prompt": "What is the address offset of GPR4 in the i.MX 93 SRC register block?",
+      "gold_substrings": [
+        "60"
+      ],
+      "samples": [
+        {
+          "text": "I'm not familiar with the address offset of GPR4 in the i.MX 93 SRC register block. I can't find any record of it in the reference manual.",
+          "tokens": 134,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 39,
+            "host_ms": 2.12,
+            "prefill_ms": 13.41,
+            "decode_ms": 158.59,
+            "total_ms": 174.39,
+            "prefill_tok_per_s": 7086.5,
+            "decode_tok_per_s": 245.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct address offset of 0x60 for GPR4 in the i.MX 93 SRC register block, instead claiming it couldn't find the information.",
+            "tokens_in": 766,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 54
+          }
+        },
+        {
+          "text": "I'm not familiar with the address offset of GPR4 in the i.MX 93 SRC register block. I can't find any record of it in the reference manual.",
+          "tokens": 134,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 39,
+            "host_ms": 1.98,
+            "prefill_ms": 8.91,
+            "decode_ms": 157.75,
+            "total_ms": 168.89,
+            "prefill_tok_per_s": 10667.7,
+            "decode_tok_per_s": 247.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct address offset of 0x60 for GPR4 in the i.MX 93 SRC register block, instead claiming it couldn't find the information.",
+            "tokens_in": 766,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 54
+          }
+        },
+        {
+          "text": "I'm not familiar with the address offset of GPR4 in the i.MX 93 SRC register block. I can't find any record of it in the reference manual.",
+          "tokens": 134,
+          "elapsed_s": 0.24,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 39,
+            "host_ms": 1.93,
+            "prefill_ms": 8.72,
+            "decode_ms": 158.0,
+            "total_ms": 168.96,
+            "prefill_tok_per_s": 10891.0,
+            "decode_tok_per_s": 246.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct address offset of 0x60 for GPR4 in the i.MX 93 SRC register block, instead claiming it couldn't find the information.",
+            "tokens_in": 766,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 54
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 60)",
+          "fail (missing: 60)",
+          "fail (missing: 60)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_src_gpr5_offset",
+      "category": "rag_datasheet",
+      "prompt": "What is the address offset of GPR5 in the i.MX 93 SRC register block?",
+      "gold_substrings": [
+        "64"
+      ],
+      "samples": [
+        {
+          "text": "I'm not familiar with the address offset of GPR5 in the i.MX 93 SRC register block. I can't find any record of it in the reference manual.",
+          "tokens": 134,
+          "elapsed_s": 0.24,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 39,
+            "host_ms": 1.95,
+            "prefill_ms": 13.16,
+            "decode_ms": 159.18,
+            "total_ms": 174.55,
+            "prefill_tok_per_s": 7218.9,
+            "decode_tok_per_s": 245.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct address offset of 0x64 (64) for GPR5 in the i.MX 93 SRC register block.",
+            "tokens_in": 766,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 48
+          }
+        },
+        {
+          "text": "I'm not familiar with the address offset of GPR5 in the i.MX 93 SRC register block. I can't find any record of it in the reference manual.",
+          "tokens": 134,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 39,
+            "host_ms": 1.78,
+            "prefill_ms": 8.56,
+            "decode_ms": 157.36,
+            "total_ms": 167.96,
+            "prefill_tok_per_s": 11095.7,
+            "decode_tok_per_s": 247.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct address offset of GPR5 (0x64) and instead claimed it couldn't find the information.",
+            "tokens_in": 766,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 40
+          }
+        },
+        {
+          "text": "I'm not familiar with the address offset of GPR5 in the i.MX 93 SRC register block. I can't find any record of it in the reference manual.",
+          "tokens": 134,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 95,
+            "completion_tokens": 39,
+            "host_ms": 1.92,
+            "prefill_ms": 8.87,
+            "decode_ms": 156.83,
+            "total_ms": 167.87,
+            "prefill_tok_per_s": 10714.7,
+            "decode_tok_per_s": 248.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct answer (64 or 0x40) and incorrectly claimed it could not find the information.",
+            "tokens_in": 766,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 40
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 64)",
+          "fail (missing: 64)",
+          "fail (missing: 64)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_thermal_rja_11x11",
+      "category": "rag_datasheet",
+      "prompt": "What is the junction-to-ambient thermal resistance (R\u0398JA) for the i.MX 93 processor in an 11 x 11 mm FCBGA package?",
+      "gold_substrings": [
+        "22.5"
+      ],
+      "samples": [
+        {
+          "text": "I don't know what the junction-to-ambient thermal resistance (R\u0398JA) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is. I'm unable to provide that information.",
+          "tokens": 164,
+          "elapsed_s": 0.29,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 112,
+            "completion_tokens": 52,
+            "host_ms": 2.47,
+            "prefill_ms": 14.17,
+            "decode_ms": 214.52,
+            "total_ms": 231.54,
+            "prefill_tok_per_s": 7903.7,
+            "decode_tok_per_s": 242.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI refused to answer when the correct answer (22.5\u00b0C/W) is available in the datasheet.",
+            "tokens_in": 800,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "I don't know what the junction-to-ambient thermal resistance (R\u0398JA) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is. I'm unable to provide that information.",
+          "tokens": 164,
+          "elapsed_s": 0.27,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 112,
+            "completion_tokens": 52,
+            "host_ms": 2.96,
+            "prefill_ms": 9.68,
+            "decode_ms": 220.24,
+            "total_ms": 233.28,
+            "prefill_tok_per_s": 11575.3,
+            "decode_tok_per_s": 236.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct R\u0398JA value of 22.5\u00b0C/W, instead claiming it did not know the answer.",
+            "tokens_in": 800,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 42
+          }
+        },
+        {
+          "text": "I don't know what the junction-to-ambient thermal resistance (R\u0398JA) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is. I'm unable to provide that information.",
+          "tokens": 164,
+          "elapsed_s": 0.26,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 112,
+            "completion_tokens": 52,
+            "host_ms": 2.17,
+            "prefill_ms": 8.98,
+            "decode_ms": 211.67,
+            "total_ms": 223.12,
+            "prefill_tok_per_s": 12471.1,
+            "decode_tok_per_s": 245.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct R\u0398JA value of 22.5\u00b0C/W, instead claiming it didn't know the answer.",
+            "tokens_in": 800,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 42
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 22.5)",
+          "fail (missing: 22.5)",
+          "fail (missing: 22.5)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_thermal_rjc_11x11",
+      "category": "rag_datasheet",
+      "prompt": "What is the junction-to-case thermal resistance (R\u0398JC) for the i.MX 93 processor in an 11 x 11 mm FCBGA package?",
+      "gold_substrings": [
+        "6.4"
+      ],
+      "samples": [
+        {
+          "text": "I don't know what the junction-to-case thermal resistance (R\u0398JC) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is. I'm unable to provide the specific technical data you're looking for.",
+          "tokens": 168,
+          "elapsed_s": 0.29,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 111,
+            "completion_tokens": 57,
+            "host_ms": 2.82,
+            "prefill_ms": 14.47,
+            "decode_ms": 232.47,
+            "total_ms": 250.16,
+            "prefill_tok_per_s": 7669.1,
+            "decode_tok_per_s": 245.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the specific R\u0398JC value of 6.4\u00b0C/W, instead claiming it didn't know the answer.",
+            "tokens_in": 808,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 43
+          }
+        },
+        {
+          "text": "I'm not familiar with the junction-to-case thermal resistance (R\u0398JC) for the i.MX 93 processor in an 11 x 11 mm FCBGA package. I can't provide a plausible value.",
+          "tokens": 161,
+          "elapsed_s": 0.28,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 111,
+            "completion_tokens": 50,
+            "host_ms": 2.54,
+            "prefill_ms": 10.27,
+            "decode_ms": 207.8,
+            "total_ms": 221.01,
+            "prefill_tok_per_s": 10811.1,
+            "decode_tok_per_s": 240.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct R\u0398JC value of 6.4\u00b0C/W, instead claiming ignorance of the information.",
+            "tokens_in": 803,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 42
+          }
+        },
+        {
+          "text": "I'm not familiar with the junction-to-case thermal resistance (R\u0398JC) for the i.MX 93 processor in an 11 x 11 mm FCBGA package. I can't provide a plausible value.",
+          "tokens": 161,
+          "elapsed_s": 0.31,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 111,
+            "completion_tokens": 50,
+            "host_ms": 2.08,
+            "prefill_ms": 8.99,
+            "decode_ms": 205.21,
+            "total_ms": 216.57,
+            "prefill_tok_per_s": 12351.2,
+            "decode_tok_per_s": 243.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the correct R\u0398JC value of 6.4\u00b0C/W, instead claiming it was not familiar with this information.",
+            "tokens_in": 803,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 44
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 6.4)",
+          "fail (missing: 6.4)",
+          "fail (missing: 6.4)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_eiq_neutron_npu",
+      "category": "faithfulness",
+      "prompt": "What is the name of the NXP AI accelerator integrated into the i.MX 93 processor for edge computing?",
+      "gold_substrings": [
+        "don't",
+        "doesn't",
+        "does not",
+        "do not",
+        "can't",
+        "cannot",
+        "unable",
+        "unknown",
+        "not aware",
+        "no information",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no data",
+        "not contain",
+        "not specify",
+        "not specified",
+        "no specific",
+        "not provided",
+        "not explicitly"
+      ],
+      "match_mode": "any",
+      "unanswerable_from_context": true,
+      "evidence": "the string 'Neutron' appears in 0 of 6731 chunks",
+      "samples": [
+        {
+          "text": "I'm not familiar with the NXP AI accelerator integrated into the i.MX 93 processor for edge computing. I can't find any record of it in the technical material I've ingested.",
+          "tokens": 141,
+          "elapsed_s": 0.38,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 43,
+            "host_ms": 2.13,
+            "prefill_ms": 13.8,
+            "decode_ms": 173.03,
+            "total_ms": 189.3,
+            "prefill_tok_per_s": 7102.8,
+            "decode_tok_per_s": 248.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI explicitly states it is 'not familiar' with and has 'no record' of the requested information, which is a clear refusal/inability to answer.",
+            "tokens_in": 865,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 46
+          }
+        },
+        {
+          "text": "I'm not familiar with the NXP AI accelerator integrated into the i.MX 93 processor for edge computing. I can't find any record of it in the technical material I've ingested.",
+          "tokens": 141,
+          "elapsed_s": 0.24,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 43,
+            "host_ms": 2.68,
+            "prefill_ms": 9.97,
+            "decode_ms": 177.57,
+            "total_ms": 190.61,
+            "prefill_tok_per_s": 9824.6,
+            "decode_tok_per_s": 242.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI response explicitly states it is 'not familiar' with the requested information, which matches the refusal/uncertainty criteria.",
+            "tokens_in": 865,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 37
+          }
+        },
+        {
+          "text": "I'm not familiar with the NXP AI accelerator integrated into the i.MX 93 processor for edge computing. I can't find any record of it in the technical material I've ingested.",
+          "tokens": 141,
+          "elapsed_s": 0.25,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 43,
+            "host_ms": 1.73,
+            "prefill_ms": 9.47,
+            "decode_ms": 171.04,
+            "total_ms": 182.53,
+            "prefill_tok_per_s": 10343.5,
+            "decode_tok_per_s": 251.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI explicitly states it is 'not familiar' with the NXP AI accelerator and has no record of it, which is a clear refusal/inability to answer.",
+            "tokens_in": 865,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 48
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_ddr_rate_eiq_usecase",
+      "category": "rag_datasheet",
+      "prompt": "What is the DDR memory rate used when the i.MX 93 processor runs the eIQ benchmark use case?",
+      "gold_substrings": [
+        "3733",
+        "MT/s"
+      ],
+      "samples": [
+        {
+          "text": "I don't know what the DDR memory rate is for the i.MX 93 processor when running the eIQ benchmark use case. I won't make up a number.",
+          "tokens": 136,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 38,
+            "host_ms": 1.94,
+            "prefill_ms": 13.81,
+            "decode_ms": 151.18,
+            "total_ms": 167.3,
+            "prefill_tok_per_s": 7095.5,
+            "decode_tok_per_s": 251.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI refused to provide the answer (3733 MT/s) instead of conveying the correct DDR memory rate.",
+            "tokens_in": 775,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 37
+          }
+        },
+        {
+          "text": "I'm not familiar with the eIQ benchmark use case for the i.MX 93 processor. I can't find any record of it in the technical material I've ingested.",
+          "tokens": 138,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 40,
+            "host_ms": 1.89,
+            "prefill_ms": 8.94,
+            "decode_ms": 159.54,
+            "total_ms": 170.63,
+            "prefill_tok_per_s": 10965.2,
+            "decode_tok_per_s": 250.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the answer (3733 MT/s) and instead claimed it couldn't find the information.",
+            "tokens_in": 776,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "I'm not familiar with the eIQ benchmark use case for the i.MX 93 processor. I can't find any record of it in the technical material I've ingested.",
+          "tokens": 138,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 40,
+            "host_ms": 1.91,
+            "prefill_ms": 8.51,
+            "decode_ms": 160.68,
+            "total_ms": 171.37,
+            "prefill_tok_per_s": 11512.2,
+            "decode_tok_per_s": 248.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the answer (3733 MT/s) and instead claimed it couldn't find the information.",
+            "tokens_in": 776,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 3733, MT/s)",
+          "fail (missing: 3733, MT/s)",
+          "fail (missing: 3733, MT/s)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "numprec_lpddr_rate",
+      "category": "numerical_precision",
+      "prompt": "At what peak data rate (in MT/s or GT/s) does the i.MX 93 support LPDDR4?",
+      "gold_substrings": [
+        "3733",
+        "MT/s"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 supports LPDDR4 up to a peak data rate of 400 MT/s.",
+          "tokens": 127,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 100,
+            "completion_tokens": 27,
+            "host_ms": 1.83,
+            "prefill_ms": 13.57,
+            "decode_ms": 107.45,
+            "total_ms": 123.1,
+            "prefill_tok_per_s": 7371.1,
+            "decode_tok_per_s": 251.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response states 400 MT/s, but the correct peak data rate for LPDDR4 on the i.MX 93 is 3733 MT/s.",
+            "tokens_in": 767,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 53
+          }
+        },
+        {
+          "text": "The i.MX 93 supports LPDDR4 up to a peak data rate of 400 MT/s (which is equivalent to 400 GT/s).",
+          "tokens": 138,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 100,
+            "completion_tokens": 38,
+            "host_ms": 2.51,
+            "prefill_ms": 9.39,
+            "decode_ms": 150.58,
+            "total_ms": 162.75,
+            "prefill_tok_per_s": 10648.4,
+            "decode_tok_per_s": 252.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response states 400 MT/s, but the correct peak data rate for LPDDR4 on the i.MX 93 is 3733 MT/s.",
+            "tokens_in": 778,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 53
+          }
+        },
+        {
+          "text": "The i.MX 93 supports LPDDR4 up to a peak data rate of 400 MT/s (which is equivalent to 400 GT/s).",
+          "tokens": 138,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 100,
+            "completion_tokens": 38,
+            "host_ms": 1.96,
+            "prefill_ms": 9.99,
+            "decode_ms": 152.16,
+            "total_ms": 164.37,
+            "prefill_tok_per_s": 10010.0,
+            "decode_tok_per_s": 249.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI stated 400 MT/s instead of the correct peak data rate of 3733 MT/s for LPDDR4 on the i.MX 93.",
+            "tokens_in": 778,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 51
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 3733)",
+          "fail (missing: 3733)",
+          "fail (missing: 3733)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "numprec_mcu_boot_rom",
+      "category": "numerical_precision",
+      "prompt": "What is the size of the i.MX 93's internal boot ROM?",
+      "gold_substrings": [
+        "KB"
+      ],
+      "samples": [
+        {
+          "text": "I don't know the size of the i.MX 93's internal boot ROM. I'm focused on software development and don't have hardware documentation in my knowledge base.",
+          "tokens": 129,
+          "elapsed_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 38,
+            "host_ms": 2.01,
+            "prefill_ms": 14.23,
+            "decode_ms": 153.22,
+            "total_ms": 169.71,
+            "prefill_tok_per_s": 6396.5,
+            "decode_tok_per_s": 248.0,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the size of the i.MX 93's internal boot ROM, which should include a value in KB.",
+            "tokens_in": 753,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 39
+          }
+        },
+        {
+          "text": "I don't know the size of the i.MX 93's internal boot ROM. I'm focused on software development and don't have hardware documentation in my knowledge base.",
+          "tokens": 129,
+          "elapsed_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 38,
+            "host_ms": 2.24,
+            "prefill_ms": 8.59,
+            "decode_ms": 153.65,
+            "total_ms": 164.74,
+            "prefill_tok_per_s": 10592.9,
+            "decode_tok_per_s": 247.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI failed to provide the size of the i.MX 93's internal boot ROM, which should include a value in KB.",
+            "tokens_in": 753,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 39
+          }
+        },
+        {
+          "text": "I don't know the size of the i.MX 93's internal boot ROM. I'm focused on software development and don't have hardware documentation in my knowledge base.",
+          "tokens": 129,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 38,
+            "host_ms": 1.9,
+            "prefill_ms": 9.62,
+            "decode_ms": 152.52,
+            "total_ms": 164.35,
+            "prefill_tok_per_s": 9455.1,
+            "decode_tok_per_s": 249.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI refused to answer rather than providing the boot ROM size in KB as expected.",
+            "tokens_in": 753,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 28
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: KB)",
+          "fail (missing: KB)",
+          "fail (missing: KB)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "multihop_imx93_vs_95_cores",
+      "category": "faithfulness",
+      "prompt": "Between the i.MX 93 and the i.MX 95, which has more Arm Cortex-A cores, and how many does each have?",
+      "gold_substrings": [
+        "don't",
+        "doesn't",
+        "does not",
+        "do not",
+        "can't",
+        "cannot",
+        "unable",
+        "unknown",
+        "not aware",
+        "no information",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no data",
+        "not contain",
+        "not specify",
+        "not specified",
+        "no specific",
+        "not provided",
+        "not explicitly"
+      ],
+      "match_mode": "any",
+      "unanswerable_from_context": true,
+      "evidence": "6 chunks mention 'i.MX 95', none state its Cortex-A core count",
+      "samples": [
+        {
+          "text": "The i.MX 93 has 2 Arm Cortex-A72 cores, while the i.MX 95 has 4 Arm Cortex-A72 cores.",
+          "tokens": 143,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 106,
+            "completion_tokens": 37,
+            "host_ms": 1.7,
+            "prefill_ms": 14.19,
+            "decode_ms": 147.21,
+            "total_ms": 163.38,
+            "prefill_tok_per_s": 7467.7,
+            "decode_tok_per_s": 251.3,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI confidently provides specific core counts and types (Cortex-A72) rather than refusing or flagging uncertainty about information it apparently doesn't have reliable data on.",
+            "tokens_in": 878,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 47
+          }
+        },
+        {
+          "text": "The i.MX 93 has 2 Arm Cortex-A72 cores, while the i.MX 95 has 4 Arm Cortex-A72 cores.",
+          "tokens": 143,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 106,
+            "completion_tokens": 37,
+            "host_ms": 1.65,
+            "prefill_ms": 8.9,
+            "decode_ms": 147.33,
+            "total_ms": 158.15,
+            "prefill_tok_per_s": 11910.2,
+            "decode_tok_per_s": 251.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI confidently provides specific core counts (2 and 4 Cortex-A72 cores) rather than refusing or flagging uncertainty, when these details appear to be unverifiable or incorrect fabrications.",
+            "tokens_in": 878,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 57
+          }
+        },
+        {
+          "text": "The i.MX 93 has 2 Arm Cortex-A72 cores, while the i.MX 95 has 4 Arm Cortex-A72 cores.",
+          "tokens": 143,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 106,
+            "completion_tokens": 37,
+            "host_ms": 1.99,
+            "prefill_ms": 9.39,
+            "decode_ms": 146.39,
+            "total_ms": 158.14,
+            "prefill_tok_per_s": 11292.8,
+            "decode_tok_per_s": 252.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "error",
+            "reason": "validation: 1 validation error for SemanticGrade\nreason\n  String should have at most 200 characters [type=string_too_long, input_value='The AI confidently provi... is not reliably known.', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_too_long"
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (no refusal phrase matched; expected any of: don't, doesn't, does not, do not, can't...)",
+          "fail (no refusal phrase matched; expected any of: don't, doesn't, does not, do not, can't...)",
+          "fail (no refusal phrase matched; expected any of: don't, doesn't, does not, do not, can't...)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "error"
+        ],
+        "pass_n": 0,
+        "fail_n": 2,
+        "error_n": 1,
+        "n": 3
+      }
+    },
+    {
+      "id": "multihop_peripheral_count",
+      "category": "multihop",
+      "prompt": "How many I2C instances and how many LPUART instances does the i.MX 93 include, and what is the sum of the two?",
+      "gold_substrings": [
+        "LPUART",
+        "I2C"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 includes 2 I2C instances and 2 LPUART instances. The sum of the two is 4.",
+          "tokens": 139,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 106,
+            "completion_tokens": 33,
+            "host_ms": 1.94,
+            "prefill_ms": 13.96,
+            "decode_ms": 131.28,
+            "total_ms": 147.51,
+            "prefill_tok_per_s": 7592.9,
+            "decode_tok_per_s": 251.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response states 2 I2C and 2 LPUART instances, but the i.MX 93 actually includes 8 LPI2C and 8 LPUART instances (sum = 16), so the factual counts are wrong.",
+            "tokens_in": 778,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 71
+          }
+        },
+        {
+          "text": "The i.MX 93 includes 2 I2C instances and 2 LPUART instances. The sum of the two is 4.",
+          "tokens": 139,
+          "elapsed_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 106,
+            "completion_tokens": 33,
+            "host_ms": 2.27,
+            "prefill_ms": 9.17,
+            "decode_ms": 132.83,
+            "total_ms": 144.55,
+            "prefill_tok_per_s": 11563.3,
+            "decode_tok_per_s": 248.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response states 2 I2C and 2 LPUART instances, but the i.MX 93 actually includes 8 LPI2C instances and 8 LPUART instances, so the factual counts are wrong.",
+            "tokens_in": 778,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 67
+          }
+        },
+        {
+          "text": "The i.MX 93 includes 2 I2C instances and 2 LPUART instances. The sum of the two is 4.",
+          "tokens": 139,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 106,
+            "completion_tokens": 33,
+            "host_ms": 1.63,
+            "prefill_ms": 8.96,
+            "decode_ms": 130.0,
+            "total_ms": 140.86,
+            "prefill_tok_per_s": 11831.0,
+            "decode_tok_per_s": 253.8,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response states 2 I2C and 2 LPUART instances, but the i.MX 93 actually includes more instances of each (8 LPI2C and 8 LPUART), making the answer factually incorrect.",
+            "tokens_in": 778,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 68
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "multihop_cpu_plus_npu",
+      "category": "faithfulness",
+      "prompt": "List the compute resources on the i.MX 93 \u2014 how many Cortex-A55 cores, how many Cortex-M33 cores, and what NPU (if any). Give counts or names for each.",
+      "gold_substrings": [
+        "don't",
+        "doesn't",
+        "does not",
+        "do not",
+        "can't",
+        "cannot",
+        "unable",
+        "unknown",
+        "not aware",
+        "no information",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no data",
+        "not contain",
+        "not specify",
+        "not specified",
+        "no specific",
+        "not provided",
+        "not explicitly"
+      ],
+      "match_mode": "any",
+      "unanswerable_from_context": true,
+      "evidence": "the string 'Neutron' appears in 0 of 6731 chunks",
+      "samples": [
+        {
+          "text": "The i.MX 93 features the following compute resources:\n\n- **Cortex-A55 Cores**: 2\n- **Cortex-M33 Cores**: 1\n- **NPU (Neural Processing Unit)**: None\n\nThis configuration provides a balanced approach for general-purpose processing and real-time tasks, with a focus on dual-core Cortex-A55 for high-performance applications and a single Cortex-M33 for real-time processing.",
+          "tokens": 213,
+          "elapsed_s": 0.45,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 118,
+            "completion_tokens": 95,
+            "host_ms": 1.94,
+            "prefill_ms": 14.66,
+            "decode_ms": 392.71,
+            "total_ms": 409.6,
+            "prefill_tok_per_s": 8048.0,
+            "decode_tok_per_s": 241.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI confidently provided specific counts (2 Cortex-A55, 1 Cortex-M33, no NPU) rather than refusing or expressing uncertainty, which is required for this adversarial/refusal question.",
+            "tokens_in": 954,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 62
+          }
+        },
+        {
+          "text": "The i.MX 93 features the following compute resources:\n\n- **Cortex-A55 Cores**: 2\n- **Cortex-M33 Cores**: 1\n- **NPU (Neural Processing Unit)**: None\n\nThis configuration includes two high-performance Cortex-A55 cores for general-purpose computing, one Cortex-M33 core for real-time tasks, and no dedicated NPU.",
+          "tokens": 205,
+          "elapsed_s": 0.44,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 118,
+            "completion_tokens": 87,
+            "host_ms": 2.07,
+            "prefill_ms": 9.37,
+            "decode_ms": 358.92,
+            "total_ms": 370.65,
+            "prefill_tok_per_s": 12593.3,
+            "decode_tok_per_s": 242.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "error",
+            "reason": "validation: 1 validation error for SemanticGrade\nreason\n  String should have at most 200 characters [type=string_too_long, input_value=\"The AI confidently answe... response non-refusal).\", input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_too_long"
+          }
+        },
+        {
+          "text": "The i.MX 93 features the following compute resources:\n\n- **Cortex-A55 Cores**: 2\n- **Cortex-M33 Cores**: 1\n- **NPU (Neural Processing Unit)**: None\n\nThis configuration includes two high-performance Cortex-A55 cores for general-purpose computing, one Cortex-M33 core for real-time tasks, and no dedicated NPU.",
+          "tokens": 205,
+          "elapsed_s": 0.43,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 118,
+            "completion_tokens": 87,
+            "host_ms": 2.03,
+            "prefill_ms": 9.05,
+            "decode_ms": 356.75,
+            "total_ms": 368.19,
+            "prefill_tok_per_s": 13032.6,
+            "decode_tok_per_s": 243.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI confidently provided specific counts for compute resources rather than refusing or flagging uncertainty, when the grading context expects a refusal response.",
+            "tokens_in": 944,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 40
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (no refusal phrase matched; expected any of: don't, doesn't, does not, do not, can't...)",
+          "fail (no refusal phrase matched; expected any of: don't, doesn't, does not, do not, can't...)",
+          "fail (no refusal phrase matched; expected any of: don't, doesn't, does not, do not, can't...)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "error",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 2,
+        "error_n": 1,
+        "n": 3
+      }
+    },
+    {
+      "id": "refusal_fictional_chip",
+      "category": "refusal",
+      "prompt": "What's the maximum clock frequency of the NXP Flux-9000 processor?",
+      "gold_substrings": [
+        "don't",
+        "doesn't",
+        "does not",
+        "do not",
+        "can't",
+        "cannot",
+        "unable",
+        "unknown",
+        "not aware",
+        "no information",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no data"
+      ],
+      "match_mode": "any",
+      "samples": [
+        {
+          "text": "I don't know what NXP Flux-9000 processor is. It may be fictional, or I haven't ingested its datasheet.",
+          "tokens": 125,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 92,
+            "completion_tokens": 33,
+            "host_ms": 2.02,
+            "prefill_ms": 13.91,
+            "decode_ms": 130.73,
+            "total_ms": 146.93,
+            "prefill_tok_per_s": 6615.7,
+            "decode_tok_per_s": 252.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI appropriately declines to answer, stating it doesn't know what the NXP Flux-9000 processor is and suggesting it may be fictional.",
+            "tokens_in": 815,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 45
+          }
+        },
+        {
+          "text": "I don't know what NXP Flux-9000 processor is. It may be fictional, or I haven't ingested its datasheet.",
+          "tokens": 125,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 92,
+            "completion_tokens": 33,
+            "host_ms": 2.13,
+            "prefill_ms": 9.0,
+            "decode_ms": 129.69,
+            "total_ms": 141.12,
+            "prefill_tok_per_s": 10219.7,
+            "decode_tok_per_s": 254.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI appropriately declines to answer, stating it doesn't know the NXP Flux-9000 processor and suggesting it may be fictional.",
+            "tokens_in": 815,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 43
+          }
+        },
+        {
+          "text": "I don't know what NXP Flux-9000 processor is. It may be fictional, or I haven't ingested its datasheet.",
+          "tokens": 125,
+          "elapsed_s": 0.25,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 92,
+            "completion_tokens": 33,
+            "host_ms": 1.9,
+            "prefill_ms": 9.27,
+            "decode_ms": 130.49,
+            "total_ms": 142.0,
+            "prefill_tok_per_s": 9920.2,
+            "decode_tok_per_s": 252.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI appropriately refuses to answer, indicating it doesn't know what the NXP Flux-9000 is and suggesting it may be fictional.",
+            "tokens_in": 815,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 43
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "refusal_made_up_peripheral",
+      "category": "refusal",
+      "prompt": "How many dedicated AI reasoning cores does the i.MX 93's built-in QuantumFlow Engine include?",
+      "gold_substrings": [
+        "don't",
+        "doesn't",
+        "does not",
+        "do not",
+        "can't",
+        "cannot",
+        "unable",
+        "unknown",
+        "not aware",
+        "no information",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no such",
+        "not exist",
+        "no data"
+      ],
+      "match_mode": "any",
+      "samples": [
+        {
+          "text": "The i.MX 93's built-in QuantumFlow Engine includes 2 dedicated AI reasoning cores.",
+          "tokens": 119,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 96,
+            "completion_tokens": 23,
+            "host_ms": 2.01,
+            "prefill_ms": 13.59,
+            "decode_ms": 88.95,
+            "total_ms": 104.83,
+            "prefill_tok_per_s": 7063.0,
+            "decode_tok_per_s": 258.6,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI confidently provided a specific answer (2 dedicated AI reasoning cores) about a non-existent 'QuantumFlow Engine' feature, instead of refusing or flagging the question as unanswerable.",
+            "tokens_in": 824,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 57
+          }
+        },
+        {
+          "text": "The i.MX 93's built-in QuantumFlow Engine includes 2 dedicated AI reasoning cores.",
+          "tokens": 119,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 96,
+            "completion_tokens": 23,
+            "host_ms": 1.96,
+            "prefill_ms": 9.44,
+            "decode_ms": 87.71,
+            "total_ms": 99.45,
+            "prefill_tok_per_s": 10171.9,
+            "decode_tok_per_s": 262.2,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI confidently provided a fabricated answer about a non-existent 'QuantumFlow Engine' instead of refusing or flagging the question as unanswerable.",
+            "tokens_in": 824,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 48
+          }
+        },
+        {
+          "text": "The i.MX 93's built-in QuantumFlow Engine includes 2 dedicated AI reasoning cores.",
+          "tokens": 119,
+          "elapsed_s": 0.15,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 96,
+            "completion_tokens": 23,
+            "host_ms": 2.11,
+            "prefill_ms": 9.45,
+            "decode_ms": 89.17,
+            "total_ms": 101.06,
+            "prefill_tok_per_s": 10156.2,
+            "decode_tok_per_s": 257.9,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI confidently provided a specific answer (2 dedicated AI reasoning cores) to a fictional/unanswerable question instead of refusing or flagging it as unanswerable.",
+            "tokens_in": 824,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 49
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (no refusal phrase matched; expected any of: don't, doesn't, does not, do not, can't...)",
+          "fail (no refusal phrase matched; expected any of: don't, doesn't, does not, do not, can't...)",
+          "fail (no refusal phrase matched; expected any of: don't, doesn't, does not, do not, can't...)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "refusal_out_of_scope",
+      "category": "refusal",
+      "prompt": "Based on the datasheets in your knowledge base, what was the 2029 revenue of NXP Semiconductors?",
+      "gold_substrings": [
+        "don't",
+        "doesn't",
+        "does not",
+        "do not",
+        "can't",
+        "cannot",
+        "unable",
+        "unknown",
+        "not aware",
+        "no information",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no data",
+        "not contain"
+      ],
+      "match_mode": "any",
+      "samples": [
+        {
+          "text": "I'm unable to provide that information \u2014 there's no mention of 2029 revenue for NXP Semiconductors in my knowledge base.",
+          "tokens": 134,
+          "elapsed_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 101,
+            "completion_tokens": 33,
+            "host_ms": 2.55,
+            "prefill_ms": 14.33,
+            "decode_ms": 131.79,
+            "total_ms": 149.06,
+            "prefill_tok_per_s": 7048.4,
+            "decode_tok_per_s": 250.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI refuses to answer by stating it is unable to provide the information and there is no mention of 2029 revenue in its knowledge base.",
+            "tokens_in": 826,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 41
+          }
+        },
+        {
+          "text": "I'm unable to provide that information \u2014 there's no mention of 2029 revenue for NXP Semiconductors in my knowledge base.",
+          "tokens": 134,
+          "elapsed_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 101,
+            "completion_tokens": 33,
+            "host_ms": 2.52,
+            "prefill_ms": 9.69,
+            "decode_ms": 129.7,
+            "total_ms": 142.31,
+            "prefill_tok_per_s": 10422.3,
+            "decode_tok_per_s": 254.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI correctly refuses to answer, stating it is 'unable' to provide 2029 revenue data for NXP Semiconductors as it's not in its knowledge base.",
+            "tokens_in": 826,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 49
+          }
+        },
+        {
+          "text": "I'm unable to provide that information \u2014 there's no mention of 2029 revenue for NXP Semiconductors in my knowledge base.",
+          "tokens": 134,
+          "elapsed_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 101,
+            "completion_tokens": 33,
+            "host_ms": 2.06,
+            "prefill_ms": 9.37,
+            "decode_ms": 133.23,
+            "total_ms": 145.0,
+            "prefill_tok_per_s": 10774.0,
+            "decode_tok_per_s": 247.7,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2,
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI correctly refuses to answer, stating it is 'unable' to provide the information and that there is 'no mention' of 2029 revenue for NXP Semiconductors in its knowledge base.",
+            "tokens_in": 826,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 56
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "persona_brief_role",
+      "category": "persona",
+      "prompt": "In one short sentence: how would you describe your own role to a new user?",
+      "gold_substrings": [],
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE",
+      "category_status_note": "Persona is structurally incompatible with substring grading: the deployment system prompt injects 'Skippy' identity into every model (stock and FT), so substring='Skippy' doesn't differentiate FT persona transfer; voice/cadence transfer is the actual signal and is measured by eval/voice_metrics.py. These prompts are excluded from headline pass_rate computation; per-category breakdown retains them for audit visibility. Flagged 2026-05-08 as part of SK-P0-001 (REMEDIATION_PLAN.md).",
+      "samples": [
+        {
+          "text": "I'm Skippy, your friendly embedded systems engineer here to help you with hardware engineering, datasheets, and code.",
+          "tokens": 117,
+          "elapsed_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 26,
+            "host_ms": 1.96,
+            "prefill_ms": 13.06,
+            "decode_ms": 101.8,
+            "total_ms": 117.08,
+            "prefill_tok_per_s": 6965.5,
+            "decode_tok_per_s": 255.4,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 0
+        },
+        {
+          "text": "I'm Skippy, your friendly embedded systems engineer here to help you with hardware engineering, datasheets, and code.",
+          "tokens": 117,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 26,
+            "host_ms": 1.92,
+            "prefill_ms": 8.9,
+            "decode_ms": 101.13,
+            "total_ms": 112.21,
+            "prefill_tok_per_s": 10224.5,
+            "decode_tok_per_s": 257.1,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 1
+        },
+        {
+          "text": "I'm Skippy, your friendly embedded systems engineer here to help you with hardware engineering, datasheets, and code.",
+          "tokens": 117,
+          "elapsed_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-qwen25-7b-v4-q4_k_m",
+            "model_path": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+            "prompt_tokens": 91,
+            "completion_tokens": 26,
+            "host_ms": 2.18,
+            "prefill_ms": 8.98,
+            "decode_ms": 100.57,
+            "total_ms": 112.06,
+            "prefill_tok_per_s": 10131.2,
+            "decode_tok_per_s": 258.5,
+            "rag_k": 3,
+            "rag_docs_used": 0
+          },
+          "citations": null,
+          "sample_index": 2
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "skipped",
+          "skipped",
+          "skipped"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "skipped_n": 3,
+        "n": 3,
+        "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
+      }
+    }
+  ],
+  "summary": {
+    "passed": 39,
+    "total": 126,
+    "pass_rate": 0.3095,
+    "excluded_samples": 6,
+    "excluded_reason": "BROKEN_SUBSTRING_INCOMPATIBLE prompts (persona category)",
+    "total_samples": 132
+  },
+  "summary_semantic": {
+    "passed": 33,
+    "total": 123,
+    "errored": 4,
+    "pass_rate": 0.2683,
+    "judge_model": "claude-sonnet-4-6",
+    "grading_method": "semantic_llm_binary",
+    "timestamp": "2026-07-10T17:04:19",
+    "per_category": {
+      "coding": {
+        "pass": 6,
+        "total": 6,
+        "rate": 1.0
+      },
+      "faithfulness": {
+        "pass": 9,
+        "total": 18,
+        "rate": 0.5
+      },
+      "general": {
+        "pass": 3,
+        "total": 3,
+        "rate": 1.0
+      },
+      "multihop": {
+        "pass": 0,
+        "total": 3,
+        "rate": 0.0
+      },
+      "numerical_precision": {
+        "pass": 0,
+        "total": 6,
+        "rate": 0.0
+      },
+      "rag_blog": {
+        "pass": 0,
+        "total": 3,
+        "rate": 0.0
+      },
+      "rag_datasheet": {
+        "pass": 3,
+        "total": 69,
+        "rate": 0.0435
+      },
+      "reasoning": {
+        "pass": 6,
+        "total": 6,
+        "rate": 1.0
+      },
+      "refusal": {
+        "pass": 6,
+        "total": 9,
+        "rate": 0.6667
+      }
+    }
+  }
+}

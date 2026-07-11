@@ -63,6 +63,11 @@ from pydantic import BaseModel, Field, ValidationError
 ROOT = Path(__file__).resolve().parent.parent
 RESULTS_DIR = ROOT / "eval" / "results"
 
+# Kept in sync with eval/regrade_for_broken_categories.py. Hardcoded by ID, not
+# read from prompts_v2.json, because historical result JSONs embed their own
+# (older) prompt copies that predate the `category_status` flag.
+BROKEN_PROMPT_IDS = {"persona_skippy_voice", "persona_brief_role"}
+
 
 # ============================================================
 # Schema — binary pass/fail with a short reason
@@ -190,9 +195,18 @@ def regrade_eval_json(in_path: Path, out_path: Path, grader_fn, judge_model: str
     by_cat = {}  # category → [pass_n, total_n]
 
     for pi, p in enumerate(prompts, 1):
-        # Preserve broken-category exclusion semantics
+        # Preserve broken-category exclusion semantics.
+        #
+        # Match on the prompt ID as well as the flag. Result JSONs written
+        # before 2026-05-08 embed their own prompt copies WITHOUT
+        # `category_status`, so a flag-only check silently graded persona and
+        # counted it into `summary_semantic` — 6 passing samples the substring
+        # grader scores 0. That inflated every semantic-vs-substring Δ on those
+        # files by ~4.5pp and made semantic grading look uniformly generous.
+        # It is not: persona-excluded, semantic is *stricter* than substring.
+        # Bit us on the RunPod FP8/INT8 files, 2026-07-09.
         cat_status = p.get("category_status")
-        if cat_status == "BROKEN_SUBSTRING_INCOMPATIBLE":
+        if cat_status == "BROKEN_SUBSTRING_INCOMPATIBLE" or p.get("id") in BROKEN_PROMPT_IDS:
             # Mark but don't grade — substring-broken is by-design-excluded from headlines
             p["aggregate_semantic"] = {
                 "per_sample": ["skipped"] * len(p.get("samples", [])),

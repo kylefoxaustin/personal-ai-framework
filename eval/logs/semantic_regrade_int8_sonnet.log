@@ -1,0 +1,14 @@
+######## FP16 REFERENCE — SONNET JUDGE ########
+
+📄 wrote /home/kyle/Documents/GitHub/personal-ai-framework/eval/results/runpod-int8/acc_reference-fp16-v2-rag-pure-int8pod_20260424-201351_semantic_sonnet.json
+   substring: 86/126 = 0.6825
+   semantic:  77/126 = 0.6111
+   Δ (semantic − substring): -7.14pp
+
+######## INT8 W8A8 CANDIDATE — SONNET JUDGE ########
+
+📄 wrote /home/kyle/Documents/GitHub/personal-ai-framework/eval/results/runpod-int8/acc_candidate-int8-v2-rag-pure_20260424-201826_semantic_sonnet.json
+   substring: 81/126 = 0.6429
+   semantic:  76/126 = 0.6032
+   Δ (semantic − substring): -3.97pp
+######## SONNET_DONE ########

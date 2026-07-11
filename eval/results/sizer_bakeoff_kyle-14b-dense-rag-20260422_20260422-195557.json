@@ -1,0 +1,734 @@
+{
+  "name": "kyle-14b-dense-rag-20260422",
+  "timestamp": "2026-04-22T19:55:57",
+  "endpoint": "http://localhost:8080",
+  "samples_per_prompt": 5,
+  "model_reported": "kyle-14b-v3-q4_k_m",
+  "defaults": {
+    "temperature": 0.1,
+    "top_p": 0.9,
+    "samples_per_prompt": 3
+  },
+  "profiles": [
+    {
+      "profile_id": "rag_qa",
+      "description": "Retrieval-augmented Q&A over Skippy's 61K-doc knowledge base. Dominated by long prefill (retrieved chunks). Measures: prefill throughput + end-to-end with retrieval overhead.",
+      "target_prefill_tokens": 4800,
+      "target_decode_tokens": 400,
+      "critical_metric": "end_to_end_latency_with_retrieval",
+      "request_params": {
+        "max_tokens": 500,
+        "use_rag": true,
+        "rag_k": 8
+      },
+      "summary": {
+        "n_valid": 30,
+        "n_total": 30,
+        "host_ms": {
+          "p50": 527.69,
+          "p90": 544.24,
+          "p95": 552.87,
+          "min": 516.57,
+          "max": 12690.76,
+          "mean": 936.72,
+          "n": 30
+        },
+        "prefill_ms": {
+          "p50": 18.71,
+          "p90": 22.77,
+          "p95": 1268.48,
+          "min": 17.61,
+          "max": 1307.48,
+          "mean": 121.6,
+          "n": 30
+        },
+        "decode_ms": {
+          "p50": 11985.42,
+          "p90": 14657.63,
+          "p95": 14763.42,
+          "min": 173.41,
+          "max": 15046.06,
+          "mean": 11580.92,
+          "n": 30
+        },
+        "total_ms": {
+          "p50": 12690.35,
+          "p90": 15300.12,
+          "p95": 15591.3,
+          "min": 727.45,
+          "max": 24481.93,
+          "mean": 12639.81,
+          "n": 30
+        },
+        "prefill_tok_per_s": {
+          "p50": 2599.8,
+          "p90": 2865.2,
+          "p95": 4474.7,
+          "min": 1888.6,
+          "max": 5226.1,
+          "mean": 2741.47,
+          "n": 30
+        },
+        "decode_tok_per_s": {
+          "p50": 41.4,
+          "p90": 106.4,
+          "p95": 116.0,
+          "min": 33.3,
+          "max": 126.9,
+          "mean": 49.53,
+          "n": 30
+        },
+        "prompt_tokens": {
+          "p50": 49,
+          "p90": 57,
+          "p95": 5676,
+          "min": 42,
+          "max": 5676,
+          "mean": 518.7,
+          "n": 30
+        },
+        "completion_tokens": {
+          "p50": 501,
+          "p90": 502,
+          "p95": 502,
+          "min": 22,
+          "max": 502,
+          "mean": 485.2,
+          "n": 30
+        }
+      },
+      "samples": [
+        {
+          "text_preview": ".MX 93 support for external DRAM? system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system",
+          "tokens_used": 545,
+          "wall_clock_s": 24.54,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 502,
+            "host_ms": 12690.76,
+            "prefill_ms": 17.83,
+            "decode_ms": 11773.15,
+            "total_ms": 24481.93,
+            "prefill_tok_per_s": 2411.4,
+            "decode_tok_per_s": 42.6,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ".MX 93 support for external DRAM? system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system",
+          "tokens_used": 545,
+          "wall_clock_s": 12.61,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 502,
+            "host_ms": 536.99,
+            "prefill_ms": 22.77,
+            "decode_ms": 11976.38,
+            "total_ms": 12536.32,
+            "prefill_tok_per_s": 1888.6,
+            "decode_tok_per_s": 41.9,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ".MX 93 support for external DRAM? system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system",
+          "tokens_used": 545,
+          "wall_clock_s": 12.78,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 502,
+            "host_ms": 537.46,
+            "prefill_ms": 17.92,
+            "decode_ms": 12134.79,
+            "total_ms": 12690.35,
+            "prefill_tok_per_s": 2400.0,
+            "decode_tok_per_s": 41.4,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ".MX 93 support for external DRAM? system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system",
+          "tokens_used": 545,
+          "wall_clock_s": 12.63,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 502,
+            "host_ms": 526.8,
+            "prefill_ms": 18.2,
+            "decode_ms": 11985.42,
+            "total_ms": 12530.62,
+            "prefill_tok_per_s": 2362.1,
+            "decode_tok_per_s": 41.9,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ".MX 93 support for external DRAM? system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system",
+          "tokens_used": 545,
+          "wall_clock_s": 12.44,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 43,
+            "completion_tokens": 502,
+            "host_ms": 526.81,
+            "prefill_ms": 18.16,
+            "decode_ms": 11801.19,
+            "total_ms": 12346.35,
+            "prefill_tok_per_s": 2368.0,
+            "decode_tok_per_s": 42.5,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ".MX 93 handles UART, and what IP block routes its pins? itsulture a tele toget et\u0016\u043d\u043e\u0439\u0016\u000eth\f posto that\u0440\u0443\u043f att\nmarginationsleg\nequation comfd\u000fteen\u001b\u001b virtue\u001bemAad\u001a",
+          "tokens_used": 551,
+          "wall_clock_s": 11.77,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 501,
+            "host_ms": 542.57,
+            "prefill_ms": 20.61,
+            "decode_ms": 11141.06,
+            "total_ms": 11704.42,
+            "prefill_tok_per_s": 2426.6,
+            "decode_tok_per_s": 45.0,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ".MX 93 handles UART, and what IP block routes its pins? itsulture a tele toget et\u0016\u043d\u043e\u0439\u0016\u000eth\f posto that\u0440\u0443\u043f att\nemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemA",
+          "tokens_used": 551,
+          "wall_clock_s": 11.81,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 501,
+            "host_ms": 538.09,
+            "prefill_ms": 20.42,
+            "decode_ms": 11128.9,
+            "total_ms": 11687.6,
+            "prefill_tok_per_s": 2448.7,
+            "decode_tok_per_s": 45.0,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ".\n-knowledge questions (concepts, code, math widely-known topics),atu from your training normally if the excerpts don't cover that\") rather than guessing.\n- For",
+          "tokens_used": 3408,
+          "wall_clock_s": 5.49,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 2907,
+            "completion_tokens": 501,
+            "host_ms": 527.69,
+            "prefill_ms": 556.24,
+            "decode_ms": 4318.58,
+            "total_ms": 5405.16,
+            "prefill_tok_per_s": 5226.1,
+            "decode_tok_per_s": 116.0,
+            "rag_k": 8,
+            "rag_docs_used": 2
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ".MX 93 handles UART, and what IP block routes its pins? itsulture a tele toget et\u0016\u043d\u043e\u0439\u0016\u000eth\f posto that\u0440\u0443\u043f att\nemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemA",
+          "tokens_used": 551,
+          "wall_clock_s": 11.59,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 501,
+            "host_ms": 536.62,
+            "prefill_ms": 21.2,
+            "decode_ms": 10902.91,
+            "total_ms": 11460.93,
+            "prefill_tok_per_s": 2358.9,
+            "decode_tok_per_s": 46.0,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ".MX 93 handles UART, and what IP block routes its pins? itsulture a tele toget et\u0016\u043d\u043e\u0439\u0016\u000eth\f posto that\u0440\u0443\u043f attContext\nemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aemAad\u001aem",
+          "tokens_used": 551,
+          "wall_clock_s": 11.39,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 50,
+            "completion_tokens": 501,
+            "host_ms": 525.66,
+            "prefill_ms": 19.91,
+            "decode_ms": 10703.83,
+            "total_ms": 11249.6,
+            "prefill_tok_per_s": 2510.8,
+            "decode_tok_per_s": 46.8,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ".MX 93 application processor include?\u001dLLNKRA@\t\t\t\t\t+NECEJ=H)AOO=CA\t\t\t\t\t\"NKI\u0016\u001dJ=J@.=I=IKKNPDU0K\u0016'UHA\"KT/AJP\u00160QA&QJ\f\r\r\u0015\u0016\r\u0011\u0016\u0010\u0011\u000e\f\r\f/Q>FA?P\u0016.!\u0016\u001dLLNKRA@\u0016)=NRAHH!TPN=JA",
+          "tokens_used": 543,
+          "wall_clock_s": 14.0,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 501,
+            "host_ms": 542.25,
+            "prefill_ms": 18.45,
+            "decode_ms": 13360.74,
+            "total_ms": 13921.62,
+            "prefill_tok_per_s": 2276.8,
+            "decode_tok_per_s": 37.5,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ".MX 93 application processor include?\u001dJ@PDAH=OPPEIA%O=SDEIS=O=PPDADKPAH\n\t\t\t\t\t+NECEJ=H)AOO=CA\t\t\t\t\t\"NKI\u0016&=JAHHA'QDJ\u0018F=JAHHA\nGQDJ\u001cCI=EH\n?KI\u001a0K\u0016'UHA\"KT/AJP\u0016/=P&QJ\r\u000e",
+          "tokens_used": 543,
+          "wall_clock_s": 14.02,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 501,
+            "host_ms": 537.04,
+            "prefill_ms": 18.27,
+            "decode_ms": 13343.11,
+            "total_ms": 13898.6,
+            "prefill_tok_per_s": 2298.9,
+            "decode_tok_per_s": 37.5,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ".MX 93 application processor include?\u001dJ@PDAH=OPPEIA%O=SDEIS=O=PPDADKPAH\n$AS=OSEPDPDEO>EP?D=J@PDAUSANA@KEJCPDA@=IJAOP@=J?APD=P%\u0003RAARANOAAJ\n%PDKQCDPPDAUSANACKEJCP",
+          "tokens_used": 543,
+          "wall_clock_s": 13.77,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 501,
+            "host_ms": 521.89,
+            "prefill_ms": 17.82,
+            "decode_ms": 13179.24,
+            "total_ms": 13719.13,
+            "prefill_tok_per_s": 2357.1,
+            "decode_tok_per_s": 38.0,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ".MX 93 application processor include?\u001dLLNKRA@;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\"NKI\u0016\u001d(\tATPN=JAP;O=HAO=@IEJ0K\u0016'UHA\"KT/AJP\u00160DQ&QH\u000e\u000f\r\u000f\u0016\u000f\u0011\u0016\f\u000f\u000e\f\f\u0015/Q>FA?P\u0016\"3\u0016\u001dLLNKRA@$E",
+          "tokens_used": 543,
+          "wall_clock_s": 11.49,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 501,
+            "host_ms": 526.67,
+            "prefill_ms": 17.84,
+            "decode_ms": 10897.66,
+            "total_ms": 11442.36,
+            "prefill_tok_per_s": 2353.7,
+            "decode_tok_per_s": 46.0,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ".MX 93 application processor include? system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud sy",
+          "tokens_used": 543,
+          "wall_clock_s": 12.32,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 501,
+            "host_ms": 516.72,
+            "prefill_ms": 17.61,
+            "decode_ms": 11720.33,
+            "total_ms": 12254.84,
+            "prefill_tok_per_s": 2384.6,
+            "decode_tok_per_s": 42.7,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ". system\n makeQways name is Assistant. You are a helpful AI assistant.\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the ",
+          "tokens_used": 558,
+          "wall_clock_s": 15.37,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 57,
+            "completion_tokens": 501,
+            "host_ms": 535.08,
+            "prefill_ms": 20.89,
+            "decode_ms": 14753.12,
+            "total_ms": 15309.28,
+            "prefill_tok_per_s": 2729.1,
+            "decode_tok_per_s": 34.0,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ". system\n makeQways name is Assistant. You are a helpful AI assistant.\u2026]",
+          "tokens_used": 79,
+          "wall_clock_s": 0.79,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 57,
+            "completion_tokens": 22,
+            "host_ms": 533.38,
+            "prefill_ms": 20.47,
+            "decode_ms": 173.41,
+            "total_ms": 727.45,
+            "prefill_tok_per_s": 2784.4,
+            "decode_tok_per_s": 126.9,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ". system\n makeQways name is Assistant. You are a helpful AI assistant.\u2026]\n int user\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the LC",
+          "tokens_used": 558,
+          "wall_clock_s": 15.02,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 57,
+            "completion_tokens": 501,
+            "host_ms": 552.87,
+            "prefill_ms": 20.25,
+            "decode_ms": 14406.49,
+            "total_ms": 14979.8,
+            "prefill_tok_per_s": 2814.6,
+            "decode_tok_per_s": 34.8,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ". system\n makeQways name is Assistant. You are a helpful AI assistant.\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the ",
+          "tokens_used": 558,
+          "wall_clock_s": 15.81,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 57,
+            "completion_tokens": 501,
+            "host_ms": 525.14,
+            "prefill_ms": 19.89,
+            "decode_ms": 15046.06,
+            "total_ms": 15591.3,
+            "prefill_tok_per_s": 2865.2,
+            "decode_tok_per_s": 33.3,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ". system\n makeQways name is Assistant. You are a helpful AI assistant.\u2026]\nin intQuery\nIn Kyle's pillar-to-pillar IVI demo, which NXP chip ran Ang;O Birds on the ",
+          "tokens_used": 558,
+          "wall_clock_s": 15.38,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 57,
+            "completion_tokens": 501,
+            "host_ms": 516.57,
+            "prefill_ms": 19.95,
+            "decode_ms": 14763.42,
+            "total_ms": 15300.12,
+            "prefill_tok_per_s": 2856.5,
+            "decode_tok_per_s": 33.9,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ".rees are a helpful AI assistant.rees are a helpful AI assistant.rees are a helpful AI assistant.rees are a helpful AI assistant.rees are a helpful AI assistant",
+          "tokens_used": 550,
+          "wall_clock_s": 14.57,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 49,
+            "completion_tokens": 501,
+            "host_ms": 544.24,
+            "prefill_ms": 18.54,
+            "decode_ms": 13930.69,
+            "total_ms": 14493.68,
+            "prefill_tok_per_s": 2643.3,
+            "decode_tok_per_s": 36.0,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ".rees system\nenu name is AssistantStelsrees system\nenu name is AssistantStelsrees system\nenu name is AssistantStelsrees system\nenu name is AssistantStelsrees sy",
+          "tokens_used": 550,
+          "wall_clock_s": 13.25,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 49,
+            "completion_tokens": 501,
+            "host_ms": 545.66,
+            "prefill_ms": 18.74,
+            "decode_ms": 12612.38,
+            "total_ms": 13177.01,
+            "prefill_tok_per_s": 2614.6,
+            "decode_tok_per_s": 39.7,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ".rees are a helpful AI assistant.rees are a helpful AI assistant.rees are a helpful AI assistant.rees are a helpful AI assistant.rees are a helpful AI assistant",
+          "tokens_used": 550,
+          "wall_clock_s": 14.71,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 49,
+            "completion_tokens": 501,
+            "host_ms": 526.49,
+            "prefill_ms": 18.85,
+            "decode_ms": 14110.99,
+            "total_ms": 14656.55,
+            "prefill_tok_per_s": 2599.8,
+            "decode_tok_per_s": 35.5,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ".rees are a helpful AI assistant.rees are a helpful AI assistant.rees are a helpful AI assistant.rees are a helpful AI assistant.rees are a helpful AI assistant",
+          "tokens_used": 550,
+          "wall_clock_s": 14.41,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 49,
+            "completion_tokens": 501,
+            "host_ms": 518.15,
+            "prefill_ms": 18.09,
+            "decode_ms": 13828.83,
+            "total_ms": 14365.31,
+            "prefill_tok_per_s": 2708.0,
+            "decode_tok_per_s": 36.2,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ".rees are a helpful AI assistant.rees are a helpful AI assistant.rees are a helpful AI assistant.rees are a helpful AI assistant.rees are a helpful AI assistant",
+          "tokens_used": 550,
+          "wall_clock_s": 14.45,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 49,
+            "completion_tokens": 501,
+            "host_ms": 524.43,
+            "prefill_ms": 18.14,
+            "decode_ms": 13839.46,
+            "total_ms": 14382.25,
+            "prefill_tok_per_s": 2701.3,
+            "decode_tok_per_s": 36.2,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ".MX 95?",
+          "tokens_used": 550,
+          "wall_clock_s": 12.03,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 49,
+            "completion_tokens": 501,
+            "host_ms": 541.87,
+            "prefill_ms": 18.71,
+            "decode_ms": 11415.89,
+            "total_ms": 11976.66,
+            "prefill_tok_per_s": 2619.1,
+            "decode_tok_per_s": 43.9,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ".\nDate: Mon, 14 Apr 2019 12:35:24 -0800 (PST)\nDate: Mon, 14 Apr 2019 12:35:24 -0800 (PST)\nDate: Mon, 14 Apr 2019 12:35:24 -0800 (PST)\nDate: Mon, 14 Apr 2019 12:",
+          "tokens_used": 6177,
+          "wall_clock_s": 6.61,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 5676,
+            "completion_tokens": 501,
+            "host_ms": 532.38,
+            "prefill_ms": 1307.48,
+            "decode_ms": 4709.99,
+            "total_ms": 6554.44,
+            "prefill_tok_per_s": 4341.2,
+            "decode_tok_per_s": 106.4,
+            "rag_k": 8,
+            "rag_docs_used": 3
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ".MX 95?",
+          "tokens_used": 550,
+          "wall_clock_s": 15.29,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 49,
+            "completion_tokens": 501,
+            "host_ms": 526.52,
+            "prefill_ms": 18.11,
+            "decode_ms": 14657.63,
+            "total_ms": 15202.45,
+            "prefill_tok_per_s": 2705.8,
+            "decode_tok_per_s": 34.2,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ".\nDate: Mon, 14 Apr 2019 12:35:24 -0800 (PST)\nDate: Mon, 14 Apr 2019 12:35:24 -0800 (PST)\nDate: Mon, 14 Apr 2019 12:35:24 -0800 (PST)\nDate: Mon, 14 Apr 2019 12:",
+          "tokens_used": 6177,
+          "wall_clock_s": 6.45,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 5676,
+            "completion_tokens": 501,
+            "host_ms": 517.91,
+            "prefill_ms": 1268.48,
+            "decode_ms": 4606.57,
+            "total_ms": 6397.53,
+            "prefill_tok_per_s": 4474.7,
+            "decode_tok_per_s": 108.8,
+            "rag_k": 8,
+            "rag_docs_used": 3
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ".MX 95?",
+          "tokens_used": 550,
+          "wall_clock_s": 14.81,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 49,
+            "completion_tokens": 501,
+            "host_ms": 526.81,
+            "prefill_ms": 18.05,
+            "decode_ms": 14205.44,
+            "total_ms": 14750.49,
+            "prefill_tok_per_s": 2714.1,
+            "decode_tok_per_s": 35.3,
+            "rag_k": 8,
+            "rag_docs_used": 0
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 4
+        }
+      ]
+    }
+  ]
+}

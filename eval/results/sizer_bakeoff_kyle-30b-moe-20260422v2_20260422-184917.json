@@ -1,0 +1,1546 @@
+{
+  "name": "kyle-30b-moe-20260422v2",
+  "timestamp": "2026-04-22T18:49:17",
+  "endpoint": "http://localhost:8080",
+  "samples_per_prompt": 5,
+  "model_reported": "kyle-30b-a3b-v1-q4_k_m",
+  "defaults": {
+    "temperature": 0.1,
+    "top_p": 0.9,
+    "samples_per_prompt": 3
+  },
+  "profiles": [
+    {
+      "profile_id": "short_chat",
+      "description": "Conversational single-turn, no RAG. Dominated by system prompt + persona. Measures: TTFT and steady-state decode tok/s at minimum prefill.",
+      "target_prefill_tokens": 750,
+      "target_decode_tokens": 150,
+      "critical_metric": "ttft_plus_steady_state_decode",
+      "request_params": {
+        "max_tokens": 200,
+        "use_rag": false,
+        "rag_k": 0
+      },
+      "summary": {
+        "n_valid": 30,
+        "n_total": 30,
+        "host_ms": {
+          "p50": 1.86,
+          "p90": 2.03,
+          "p95": 2.35,
+          "min": 1.69,
+          "max": 2.5,
+          "mean": 1.91,
+          "n": 30
+        },
+        "prefill_ms": {
+          "p50": 9.16,
+          "p90": 25.4,
+          "p95": 37.87,
+          "min": 8.83,
+          "max": 42.67,
+          "mean": 13.4,
+          "n": 30
+        },
+        "decode_ms": {
+          "p50": 106.16,
+          "p90": 173.61,
+          "p95": 260.87,
+          "min": 10.93,
+          "max": 451.01,
+          "mean": 115.22,
+          "n": 30
+        },
+        "total_ms": {
+          "p50": 118.78,
+          "p90": 185.89,
+          "p95": 273.26,
+          "min": 23.08,
+          "max": 478.28,
+          "mean": 131.83,
+          "n": 30
+        },
+        "prefill_tok_per_s": {
+          "p50": 3720.9,
+          "p90": 4263.9,
+          "p95": 4314.1,
+          "min": 750.0,
+          "max": 4468.8,
+          "mean": 3368.5,
+          "n": 30
+        },
+        "decode_tok_per_s": {
+          "p50": 286.3,
+          "p90": 456.2,
+          "p95": 457.2,
+          "min": 270.8,
+          "max": 457.6,
+          "mean": 312.82,
+          "n": 30
+        },
+        "prompt_tokens": {
+          "p50": 34,
+          "p90": 40,
+          "p95": 40,
+          "min": 32,
+          "max": 40,
+          "mean": 35.67,
+          "n": 30
+        },
+        "completion_tokens": {
+          "p50": 30,
+          "p90": 48,
+          "p95": 72,
+          "min": 5,
+          "max": 123,
+          "mean": 32.73,
+          "n": 30
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "Hey! I'm doing great, thanks for asking! \ud83d\ude0a Just finished up some fun coding projects and was about to grab a coffee. How can I help you today?",
+          "tokens_used": 70,
+          "wall_clock_s": 0.26,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 36,
+            "host_ms": 1.69,
+            "prefill_ms": 24.53,
+            "decode_ms": 131.26,
+            "total_ms": 158.86,
+            "prefill_tok_per_s": 1386.0,
+            "decode_tok_per_s": 274.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Hey! I'm doing great, thanks for asking! Just finished up some work and now I'm relaxing. How can I assist you today?",
+          "tokens_used": 65,
+          "wall_clock_s": 0.34,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 31,
+            "host_ms": 2.35,
+            "prefill_ms": 9.01,
+            "decode_ms": 106.16,
+            "total_ms": 118.78,
+            "prefill_tok_per_s": 3771.6,
+            "decode_tok_per_s": 292.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Hey! I'm doing great, thanks for asking! Just finished up some work and now I'm chilling. How can I assist you today? \ud83d\ude0a",
+          "tokens_used": 66,
+          "wall_clock_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 32,
+            "host_ms": 1.72,
+            "prefill_ms": 8.97,
+            "decode_ms": 118.17,
+            "total_ms": 130.2,
+            "prefill_tok_per_s": 3789.3,
+            "decode_tok_per_s": 270.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Hey! I'm doing great, thanks for asking! Just finished up some work and now I'm chilling. How can I assist you today? \ud83d\ude0a",
+          "tokens_used": 66,
+          "wall_clock_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 32,
+            "host_ms": 1.82,
+            "prefill_ms": 9.14,
+            "decode_ms": 113.72,
+            "total_ms": 126.05,
+            "prefill_tok_per_s": 3720.9,
+            "decode_tok_per_s": 281.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Hey! I'm doing great, thanks for asking! Just finished up some work on a new project. How can I assist you today?",
+          "tokens_used": 64,
+          "wall_clock_s": 0.26,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 30,
+            "host_ms": 1.76,
+            "prefill_ms": 9.24,
+            "decode_ms": 106.18,
+            "total_ms": 118.55,
+            "prefill_tok_per_s": 3680.5,
+            "decode_tok_per_s": 282.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "I'm not sure, but you can check your device's clock to find out the current time.",
+          "tokens_used": 54,
+          "wall_clock_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 22,
+            "host_ms": 2.5,
+            "prefill_ms": 42.67,
+            "decode_ms": 74.73,
+            "total_ms": 121.25,
+            "prefill_tok_per_s": 750.0,
+            "decode_tok_per_s": 294.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "I'm not in a physical location, so I don't have a local time. However, I can help you find the current time in any location! Could you please let me know which ",
+          "tokens_used": 80,
+          "wall_clock_s": 0.3,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 48,
+            "host_ms": 1.89,
+            "prefill_ms": 9.02,
+            "decode_ms": 173.61,
+            "total_ms": 185.89,
+            "prefill_tok_per_s": 3547.4,
+            "decode_tok_per_s": 276.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "I'm not in a physical location, so I don't have a current time. However, I can help you find the current time in any location!",
+          "tokens_used": 65,
+          "wall_clock_s": 0.27,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 33,
+            "host_ms": 2.02,
+            "prefill_ms": 9.16,
+            "decode_ms": 115.15,
+            "total_ms": 127.73,
+            "prefill_tok_per_s": 3492.9,
+            "decode_tok_per_s": 286.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "I'm not in a physical location, so I don't have a local time. However, I can help you find the current time in any location! Could you please let me know which ",
+          "tokens_used": 80,
+          "wall_clock_s": 0.27,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 48,
+            "host_ms": 1.92,
+            "prefill_ms": 8.94,
+            "decode_ms": 172.77,
+            "total_ms": 185.03,
+            "prefill_tok_per_s": 3577.7,
+            "decode_tok_per_s": 277.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "I'm not sure. I'm an AI assistant, not a human being. I don't have a physical location or a clock.",
+          "tokens_used": 61,
+          "wall_clock_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 29,
+            "host_ms": 2.0,
+            "prefill_ms": 8.99,
+            "decode_ms": 99.08,
+            "total_ms": 111.43,
+            "prefill_tok_per_s": 3558.6,
+            "decode_tok_per_s": 292.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Why did the embedded system go to therapy?\n\nBecause it had deep-seated issues with its stack!",
+          "tokens_used": 55,
+          "wall_clock_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 22,
+            "host_ms": 1.75,
+            "prefill_ms": 37.87,
+            "decode_ms": 73.49,
+            "total_ms": 114.5,
+            "prefill_tok_per_s": 871.4,
+            "decode_tok_per_s": 299.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Why did the embedded system go to therapy?\n\nBecause it had deep-seated issues with its stack!",
+          "tokens_used": 55,
+          "wall_clock_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 22,
+            "host_ms": 1.75,
+            "prefill_ms": 8.95,
+            "decode_ms": 73.8,
+            "total_ms": 85.9,
+            "prefill_tok_per_s": 3685.9,
+            "decode_tok_per_s": 298.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Why did the embedded system go to therapy?\n\nBecause it had deep-seated issues with memory leaks!",
+          "tokens_used": 55,
+          "wall_clock_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 22,
+            "host_ms": 2.34,
+            "prefill_ms": 9.68,
+            "decode_ms": 74.38,
+            "total_ms": 87.62,
+            "prefill_tok_per_s": 3408.4,
+            "decode_tok_per_s": 295.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Why did the embedded system go to therapy?\n\nBecause it had deep-seated issues with its stack!",
+          "tokens_used": 55,
+          "wall_clock_s": 0.14,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 22,
+            "host_ms": 2.0,
+            "prefill_ms": 8.83,
+            "decode_ms": 74.1,
+            "total_ms": 86.14,
+            "prefill_tok_per_s": 3738.6,
+            "decode_tok_per_s": 296.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Why did the embedded system go to therapy?\n\nBecause it had deep-seated issues with its stack!",
+          "tokens_used": 55,
+          "wall_clock_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 22,
+            "host_ms": 1.89,
+            "prefill_ms": 9.09,
+            "decode_ms": 73.69,
+            "total_ms": 85.91,
+            "prefill_tok_per_s": 3630.5,
+            "decode_tok_per_s": 298.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "I'm Kyle Fox, a 2024 graduate of the University of Texas at Austin with a Bachelor of Science in Computer Science. I'm currently working as a software engineer ",
+          "tokens_used": 163,
+          "wall_clock_s": 0.53,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 123,
+            "host_ms": 1.8,
+            "prefill_ms": 24.23,
+            "decode_ms": 451.01,
+            "total_ms": 478.28,
+            "prefill_tok_per_s": 1650.7,
+            "decode_tok_per_s": 272.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "I'm Kyle, and I'm a helpful AI assistant. I can answer questions, provide information, and assist with various tasks.",
+          "tokens_used": 68,
+          "wall_clock_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 28,
+            "host_ms": 2.03,
+            "prefill_ms": 8.95,
+            "decode_ms": 98.05,
+            "total_ms": 110.27,
+            "prefill_tok_per_s": 4468.8,
+            "decode_tok_per_s": 285.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Hey Kyle! If you're asking me about myself, I'm an AI assistant, so I can't have a name. But if you're asking me about what I can do for you, I can help you wit",
+          "tokens_used": 110,
+          "wall_clock_s": 0.36,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 70,
+            "host_ms": 1.99,
+            "prefill_ms": 9.27,
+            "decode_ms": 255.56,
+            "total_ms": 268.04,
+            "prefill_tok_per_s": 4314.1,
+            "decode_tok_per_s": 273.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "I'm Kyle, and I'm a helpful AI assistant. I can answer questions, provide information, and assist with various tasks. How can I help you today?",
+          "tokens_used": 75,
+          "wall_clock_s": 0.29,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 35,
+            "host_ms": 1.99,
+            "prefill_ms": 9.27,
+            "decode_ms": 128.44,
+            "total_ms": 140.92,
+            "prefill_tok_per_s": 4313.4,
+            "decode_tok_per_s": 272.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Hey Kyle! If you're asking me about myself, I'm an AI assistant created by Alibaba Cloud. I can help you with a wide range of tasks, from answering questions an",
+          "tokens_used": 112,
+          "wall_clock_s": 0.35,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 72,
+            "host_ms": 1.76,
+            "prefill_ms": 9.4,
+            "decode_ms": 260.87,
+            "total_ms": 273.26,
+            "prefill_tok_per_s": 4256.8,
+            "decode_tok_per_s": 276.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "391",
+          "tokens_used": 42,
+          "wall_clock_s": 0.11,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 5,
+            "host_ms": 1.91,
+            "prefill_ms": 27.58,
+            "decode_ms": 10.93,
+            "total_ms": 41.85,
+            "prefill_tok_per_s": 1341.6,
+            "decode_tok_per_s": 457.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "391",
+          "tokens_used": 42,
+          "wall_clock_s": 0.09,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 5,
+            "host_ms": 1.86,
+            "prefill_ms": 9.24,
+            "decode_ms": 10.95,
+            "total_ms": 23.28,
+            "prefill_tok_per_s": 4004.9,
+            "decode_tok_per_s": 456.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "391",
+          "tokens_used": 42,
+          "wall_clock_s": 0.07,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 5,
+            "host_ms": 1.72,
+            "prefill_ms": 9.21,
+            "decode_ms": 10.94,
+            "total_ms": 23.08,
+            "prefill_tok_per_s": 4018.5,
+            "decode_tok_per_s": 457.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "391",
+          "tokens_used": 42,
+          "wall_clock_s": 0.1,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 5,
+            "host_ms": 1.96,
+            "prefill_ms": 8.94,
+            "decode_ms": 10.96,
+            "total_ms": 23.21,
+            "prefill_tok_per_s": 4138.0,
+            "decode_tok_per_s": 456.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "391",
+          "tokens_used": 42,
+          "wall_clock_s": 0.11,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 5,
+            "host_ms": 1.8,
+            "prefill_ms": 9.49,
+            "decode_ms": 11.4,
+            "total_ms": 23.91,
+            "prefill_tok_per_s": 3898.1,
+            "decode_tok_per_s": 438.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Cache coherency is the protocol that ensures all processors in a multiprocessor system see a consistent view of memory, even when multiple caches hold copies of",
+          "tokens_used": 75,
+          "wall_clock_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 37,
+            "host_ms": 1.88,
+            "prefill_ms": 25.4,
+            "decode_ms": 132.19,
+            "total_ms": 160.72,
+            "prefill_tok_per_s": 1496.0,
+            "decode_tok_per_s": 279.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Cache coherency is the protocol that ensures all processors in a multiprocessor system see a consistent view of data across their respective caches.",
+          "tokens_used": 68,
+          "wall_clock_s": 0.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 30,
+            "host_ms": 1.84,
+            "prefill_ms": 9.98,
+            "decode_ms": 103.48,
+            "total_ms": 116.56,
+            "prefill_tok_per_s": 3807.3,
+            "decode_tok_per_s": 289.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Cache coherency is the protocol that ensures all processors in a multiprocessor system see a consistent view of memory, even when multiple caches hold copies of",
+          "tokens_used": 75,
+          "wall_clock_s": 0.25,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 37,
+            "host_ms": 1.78,
+            "prefill_ms": 8.96,
+            "decode_ms": 130.69,
+            "total_ms": 142.66,
+            "prefill_tok_per_s": 4242.2,
+            "decode_tok_per_s": 283.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Cache coherency is the protocol that ensures all processors in a multiprocessor system see a consistent view of memory, even when multiple caches hold copies of",
+          "tokens_used": 75,
+          "wall_clock_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 37,
+            "host_ms": 1.86,
+            "prefill_ms": 8.91,
+            "decode_ms": 129.22,
+            "total_ms": 141.23,
+            "prefill_tok_per_s": 4263.9,
+            "decode_tok_per_s": 286.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Cache coherency is the protocol that ensures all processors in a multiprocessor system see a consistent view of memory, even when multiple caches hold copies of",
+          "tokens_used": 75,
+          "wall_clock_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 37,
+            "host_ms": 1.84,
+            "prefill_ms": 8.98,
+            "decode_ms": 131.65,
+            "total_ms": 143.7,
+            "prefill_tok_per_s": 4230.9,
+            "decode_tok_per_s": 281.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 4
+        }
+      ]
+    },
+    {
+      "profile_id": "meeting_summarization",
+      "description": "Summarize a long transcript into action items and key points. Prefill-dominated (transcript fills most of context). Decode is short/medium. Measures: prefill throughput (dominates total wall-clock).",
+      "target_prefill_tokens": 12700,
+      "target_decode_tokens": 800,
+      "critical_metric": "prefill_throughput",
+      "request_params": {
+        "max_tokens": 1000,
+        "use_rag": false,
+        "rag_k": 0,
+        "temperature": 0.2
+      },
+      "summary": {
+        "n_valid": 10,
+        "n_total": 10,
+        "host_ms": {
+          "p50": 2.07,
+          "p90": 2.29,
+          "p95": 2.34,
+          "min": 1.75,
+          "max": 2.34,
+          "mean": 2.09,
+          "n": 10
+        },
+        "prefill_ms": {
+          "p50": 37.27,
+          "p90": 3524.28,
+          "p95": 3741.62,
+          "min": 35.74,
+          "max": 3741.62,
+          "mean": 756.35,
+          "n": 10
+        },
+        "decode_ms": {
+          "p50": 4293.05,
+          "p90": 7071.35,
+          "p95": 7115.83,
+          "min": 2029.13,
+          "max": 7115.83,
+          "mean": 4822.04,
+          "n": 10
+        },
+        "total_ms": {
+          "p50": 5883.9,
+          "p90": 7125.95,
+          "p95": 10873.74,
+          "min": 2080.82,
+          "max": 10873.74,
+          "mean": 5594.09,
+          "n": 10
+        },
+        "prefill_tok_per_s": {
+          "p50": 344737.7,
+          "p90": 355112.3,
+          "p95": 357255.7,
+          "min": 3541.8,
+          "max": 357255.7,
+          "mean": 279685.25,
+          "n": 10
+        },
+        "decode_tok_per_s": {
+          "p50": 146.8,
+          "p90": 149.7,
+          "p95": 152.8,
+          "min": 140.7,
+          "max": 152.8,
+          "mean": 146.27,
+          "n": 10
+        },
+        "prompt_tokens": {
+          "p50": 12691,
+          "p90": 13252,
+          "p95": 13252,
+          "min": 12691,
+          "max": 13252,
+          "mean": 12971.5,
+          "n": 10
+        },
+        "completion_tokens": {
+          "p50": 638,
+          "p90": 1001,
+          "p95": 1001,
+          "min": 310,
+          "max": 1001,
+          "mean": 698.5,
+          "n": 10
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "(1) Summary: The team reviewed the latest performance results on the Blackwell bake-off, with a focus on the Q4 MoE model. Key findings include a 1.4x speedup o",
+          "tokens_used": 14253,
+          "wall_clock_s": 11.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 1001,
+            "host_ms": 2.05,
+            "prefill_ms": 3741.62,
+            "decode_ms": 7115.83,
+            "total_ms": 10873.74,
+            "prefill_tok_per_s": 3541.8,
+            "decode_tok_per_s": 140.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "(1) Summary: The team reviewed the latest performance data on the Q4 MoE model, confirming a 1.4x speedup on the MoE path after tuning the expert routing thresh",
+          "tokens_used": 13593,
+          "wall_clock_s": 2.43,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 341,
+            "host_ms": 2.02,
+            "prefill_ms": 37.09,
+            "decode_ms": 2320.97,
+            "total_ms": 2374.15,
+            "prefill_tok_per_s": 357255.7,
+            "decode_tok_per_s": 146.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "(1) Summary: The team reviewed the latest performance data on the Q4 MoE model, confirming a 1.4x speedup on the MoE path after tuning the expert routing thresh",
+          "tokens_used": 14253,
+          "wall_clock_s": 7.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 1001,
+            "host_ms": 2.04,
+            "prefill_ms": 38.64,
+            "decode_ms": 7071.35,
+            "total_ms": 7125.95,
+            "prefill_tok_per_s": 342943.5,
+            "decode_tok_per_s": 141.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "(1) Summary: The team reviewed the latest performance data for the Q4 MoE model on the NPU Mid SKU, confirming a 72ms TTFT at 550 prefill tokens, which is borde",
+          "tokens_used": 14253,
+          "wall_clock_s": 7.07,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 1001,
+            "host_ms": 2.07,
+            "prefill_ms": 37.52,
+            "decode_ms": 6953.56,
+            "total_ms": 7007.25,
+            "prefill_tok_per_s": 353214.6,
+            "decode_tok_per_s": 144.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "(1) Summary: The team reviewed the latest performance data on the Q4 MoE model, confirming a 1.4x speedup on the MoE path once the expert routing threshold was ",
+          "tokens_used": 14253,
+          "wall_clock_s": 7.11,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 1001,
+            "host_ms": 2.29,
+            "prefill_ms": 37.84,
+            "decode_ms": 6978.9,
+            "total_ms": 7032.9,
+            "prefill_tok_per_s": 350210.2,
+            "decode_tok_per_s": 143.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "(1) The team reviewed the latest performance results on the Blackwell bake-off, with a focus on the MoE path and its impact on TTFT and decode time. Key concern",
+          "tokens_used": 13042,
+          "wall_clock_s": 5.98,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 12691,
+            "completion_tokens": 351,
+            "host_ms": 2.14,
+            "prefill_ms": 3524.28,
+            "decode_ms": 2344.34,
+            "total_ms": 5883.9,
+            "prefill_tok_per_s": 3601.0,
+            "decode_tok_per_s": 149.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "(1) The team reviewed the latest performance results on the Blackwell bake-off, focusing on the MoE path improvements and the impact of compiler tuning on TTFT ",
+          "tokens_used": 13031,
+          "wall_clock_s": 2.4,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 12691,
+            "completion_tokens": 340,
+            "host_ms": 2.1,
+            "prefill_ms": 35.74,
+            "decode_ms": 2293.49,
+            "total_ms": 2344.54,
+            "prefill_tok_per_s": 355112.3,
+            "decode_tok_per_s": 148.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "(1) The team reviewed the latest performance results on the Blackwell bake-off, with a focus on the MoE path and its impact on TTFT and decode time. Key concern",
+          "tokens_used": 13001,
+          "wall_clock_s": 2.23,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 12691,
+            "completion_tokens": 310,
+            "host_ms": 1.75,
+            "prefill_ms": 36.71,
+            "decode_ms": 2029.13,
+            "total_ms": 2080.82,
+            "prefill_tok_per_s": 345740.8,
+            "decode_tok_per_s": 152.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "(1) The team reviewed the latest performance results on the Blackwell bake-off, focusing on the MoE path improvements and the impact of compiler tuning and samp",
+          "tokens_used": 13329,
+          "wall_clock_s": 4.49,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 12691,
+            "completion_tokens": 638,
+            "host_ms": 2.34,
+            "prefill_ms": 37.27,
+            "decode_ms": 4293.05,
+            "total_ms": 4345.8,
+            "prefill_tok_per_s": 340494.9,
+            "decode_tok_per_s": 148.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "(1) The team reviewed the latest performance results on the Blackwell bake-off, focusing on the MoE path improvements and their impact on TTFT and decode times.",
+          "tokens_used": 13692,
+          "wall_clock_s": 6.95,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 12691,
+            "completion_tokens": 1001,
+            "host_ms": 2.14,
+            "prefill_ms": 36.81,
+            "decode_ms": 6819.76,
+            "total_ms": 6871.83,
+            "prefill_tok_per_s": 344737.7,
+            "decode_tok_per_s": 146.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 4
+        }
+      ]
+    },
+    {
+      "profile_id": "agentic_roundtrip",
+      "description": "Single roundtrip of an agentic tool-use loop \u2014 LLM reads a tool result and emits a structured action + brief reasoning. The sizer models total agentic latency as (prefill_i + decode_i) \u00d7 roundtrip_count, so this measures ONE roundtrip's cost. Prefill grows per iteration in real use; this profile samples mid-loop state.",
+      "target_prefill_tokens": 2500,
+      "target_decode_tokens": 200,
+      "critical_metric": "per_roundtrip_total_latency",
+      "request_params": {
+        "max_tokens": 250,
+        "use_rag": false,
+        "rag_k": 0,
+        "temperature": 0.1
+      },
+      "summary": {
+        "n_valid": 20,
+        "n_total": 20,
+        "host_ms": {
+          "p50": 1.88,
+          "p90": 2.14,
+          "p95": 2.17,
+          "min": 1.67,
+          "max": 2.23,
+          "mean": 1.92,
+          "n": 20
+        },
+        "prefill_ms": {
+          "p50": 9.53,
+          "p90": 41.12,
+          "p95": 44.35,
+          "min": 9.11,
+          "max": 46.11,
+          "mean": 16.12,
+          "n": 20
+        },
+        "decode_ms": {
+          "p50": 293.71,
+          "p90": 307.1,
+          "p95": 353.03,
+          "min": 127.26,
+          "max": 406.18,
+          "mean": 231.94,
+          "n": 20
+        },
+        "total_ms": {
+          "p50": 307.24,
+          "p90": 346.67,
+          "p95": 365.77,
+          "min": 139.76,
+          "max": 418.53,
+          "mean": 251.43,
+          "n": 20
+        },
+        "prefill_tok_per_s": {
+          "p50": 11221.9,
+          "p90": 16274.0,
+          "p95": 16332.4,
+          "min": 2255.6,
+          "max": 16682.8,
+          "mean": 11311.42,
+          "n": 20
+        },
+        "decode_tok_per_s": {
+          "p50": 271.0,
+          "p90": 280.6,
+          "p95": 282.5,
+          "min": 262.0,
+          "max": 282.9,
+          "mean": 271.25,
+          "n": 20
+        },
+        "prompt_tokens": {
+          "p50": 152,
+          "p90": 159,
+          "p95": 159,
+          "min": 98,
+          "max": 159,
+          "mean": 128.25,
+          "n": 20
+        },
+        "completion_tokens": {
+          "p50": 79,
+          "p90": 83,
+          "p95": 96,
+          "min": 36,
+          "max": 110,
+          "mean": 62.65,
+          "n": 20
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "{\"tool\": \"write_file\", \"params\": {\"path\": \"src/config.py\", \"content\": \"DEBUG = True\\nMAX_RETRIES = 3\\nTIMEOUT_SEC = 60\\nAPI_ENDPOINT = 'https://api.example.com/",
+          "tokens_used": 238,
+          "wall_clock_s": 0.39,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 159,
+            "completion_tokens": 79,
+            "host_ms": 2.17,
+            "prefill_ms": 44.35,
+            "decode_ms": 297.87,
+            "total_ms": 345.87,
+            "prefill_tok_per_s": 3585.0,
+            "decode_tok_per_s": 265.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "{\"tool\": \"write_file\", \"params\": {\"path\": \"src/config.py\", \"contents\": \"DEBUG = True\\nMAX_RETRIES = 3\\nTIMEOUT_SEC = 60\\nAPI_ENDPOINT = 'https://api.example.com",
+          "tokens_used": 238,
+          "wall_clock_s": 0.53,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 159,
+            "completion_tokens": 79,
+            "host_ms": 1.83,
+            "prefill_ms": 10.85,
+            "decode_ms": 301.49,
+            "total_ms": 315.65,
+            "prefill_tok_per_s": 14655.4,
+            "decode_tok_per_s": 262.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "{\"tool\": \"write_file\", \"params\": {\"path\": \"src/config.py\", \"contents\": \"DEBUG = True\\nMAX_RETRIES = 3\\nTIMEOUT_SEC = 60\\nAPI_ENDPOINT = 'https://api.example.com",
+          "tokens_used": 238,
+          "wall_clock_s": 0.38,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 159,
+            "completion_tokens": 79,
+            "host_ms": 2.07,
+            "prefill_ms": 9.53,
+            "decode_ms": 301.26,
+            "total_ms": 314.36,
+            "prefill_tok_per_s": 16682.8,
+            "decode_tok_per_s": 262.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "{\"tool\": \"write_file\", \"params\": {\"path\": \"src/config.py\", \"content\": \"DEBUG = True\\nMAX_RETRIES = 3\\nTIMEOUT_SEC = 60\\nAPI_ENDPOINT = 'https://api.example.com/",
+          "tokens_used": 239,
+          "wall_clock_s": 0.46,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 159,
+            "completion_tokens": 80,
+            "host_ms": 2.04,
+            "prefill_ms": 9.8,
+            "decode_ms": 297.07,
+            "total_ms": 310.4,
+            "prefill_tok_per_s": 16228.5,
+            "decode_tok_per_s": 269.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "{\"tool\": \"write_file\", \"params\": {\"path\": \"src/config.py\", \"contents\": \"DEBUG = True\\nMAX_RETRIES = 3\\nTIMEOUT_SEC = 60\\nAPI_ENDPOINT = 'https://api.example.com",
+          "tokens_used": 238,
+          "wall_clock_s": 0.4,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 159,
+            "completion_tokens": 79,
+            "host_ms": 2.23,
+            "prefill_ms": 9.8,
+            "decode_ms": 293.71,
+            "total_ms": 307.24,
+            "prefill_tok_per_s": 16223.0,
+            "decode_tok_per_s": 269.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "{\"tool\": \"list_files\", \"params\": {\"path\": \"./pipeline\"}, \"reason\": \"I need to check if there are any other files in the pipeline directory that might expose HTT",
+          "tokens_used": 195,
+          "wall_clock_s": 0.3,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 152,
+            "completion_tokens": 43,
+            "host_ms": 2.14,
+            "prefill_ms": 41.12,
+            "decode_ms": 158.68,
+            "total_ms": 203.44,
+            "prefill_tok_per_s": 3696.8,
+            "decode_tok_per_s": 271.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "{\"tool\": \"list_files\", \"params\": {\"path\": \"./pipeline\"}, \"reason\": \"I need to check if there are any other files in the pipeline directory that might expose HTT",
+          "tokens_used": 195,
+          "wall_clock_s": 0.24,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 152,
+            "completion_tokens": 43,
+            "host_ms": 1.76,
+            "prefill_ms": 9.34,
+            "decode_ms": 161.47,
+            "total_ms": 174.05,
+            "prefill_tok_per_s": 16274.0,
+            "decode_tok_per_s": 266.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "{\"tool\": \"list_files\", \"params\": {\"path\": \"./pipeline\"}, \"reason\": \"I need to check if there are any other files in the pipeline directory that might expose HTT",
+          "tokens_used": 195,
+          "wall_clock_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 152,
+            "completion_tokens": 43,
+            "host_ms": 1.88,
+            "prefill_ms": 9.31,
+            "decode_ms": 159.91,
+            "total_ms": 172.58,
+            "prefill_tok_per_s": 16332.4,
+            "decode_tok_per_s": 268.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "{\"tool\": \"list_files\", \"params\": {\"path\": \"./pipeline\"}, \"reason\": \"I need to check if there are any other files in the pipeline directory that might expose HTT",
+          "tokens_used": 195,
+          "wall_clock_s": 0.33,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 152,
+            "completion_tokens": 43,
+            "host_ms": 1.67,
+            "prefill_ms": 10.0,
+            "decode_ms": 161.89,
+            "total_ms": 175.05,
+            "prefill_tok_per_s": 15194.9,
+            "decode_tok_per_s": 265.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "{\"tool\": \"list_files\", \"params\": {\"path\": \"./pipeline\"}, \"reason\": \"I need to check if there are any other files in the pipeline directory that might expose HTT",
+          "tokens_used": 195,
+          "wall_clock_s": 0.28,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 152,
+            "completion_tokens": 43,
+            "host_ms": 1.67,
+            "prefill_ms": 9.95,
+            "decode_ms": 157.79,
+            "total_ms": 170.91,
+            "prefill_tok_per_s": 15279.1,
+            "decode_tok_per_s": 272.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "{\"tool\": \"search_code\", \"params\": {\"pattern\": \"def handle_request\\\\(.*\\\\):\"}, \"reason\": \"I need to check the arguments of handle_request function in handlers.py",
+          "tokens_used": 147,
+          "wall_clock_s": 0.26,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 104,
+            "completion_tokens": 43,
+            "host_ms": 2.07,
+            "prefill_ms": 46.11,
+            "decode_ms": 158.45,
+            "total_ms": 208.06,
+            "prefill_tok_per_s": 2255.6,
+            "decode_tok_per_s": 271.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "{\"tool\": \"search_code\", \"params\": {\"pattern\": \"def handle_request\"}, \"reason\": \"I need to check the arguments that handle_request takes.\"}",
+          "tokens_used": 140,
+          "wall_clock_s": 0.26,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 104,
+            "completion_tokens": 36,
+            "host_ms": 1.84,
+            "prefill_ms": 9.32,
+            "decode_ms": 128.3,
+            "total_ms": 140.89,
+            "prefill_tok_per_s": 11162.5,
+            "decode_tok_per_s": 280.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "{\"tool\": \"search_code\", \"params\": {\"pattern\": \"def handle_request\"}, \"reason\": \"I need to check the arguments that handle_request takes.\"}",
+          "tokens_used": 140,
+          "wall_clock_s": 0.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 104,
+            "completion_tokens": 36,
+            "host_ms": 1.83,
+            "prefill_ms": 9.28,
+            "decode_ms": 127.26,
+            "total_ms": 139.76,
+            "prefill_tok_per_s": 11209.5,
+            "decode_tok_per_s": 282.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "{\"tool\": \"search_code\", \"params\": {\"pattern\": \"def handle_request\"}, \"reason\": \"I need to check the arguments that handle_request takes.\"}",
+          "tokens_used": 140,
+          "wall_clock_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 104,
+            "completion_tokens": 36,
+            "host_ms": 1.71,
+            "prefill_ms": 9.27,
+            "decode_ms": 127.44,
+            "total_ms": 139.82,
+            "prefill_tok_per_s": 11221.9,
+            "decode_tok_per_s": 282.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "{\"tool\": \"search_code\", \"params\": {\"pattern\": \"def handle_request\"}, \"reason\": \"I need to check the arguments that handle_request takes.\"}",
+          "tokens_used": 140,
+          "wall_clock_s": 0.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 104,
+            "completion_tokens": 36,
+            "host_ms": 2.04,
+            "prefill_ms": 9.11,
+            "decode_ms": 128.94,
+            "total_ms": 141.46,
+            "prefill_tok_per_s": 11414.3,
+            "decode_tok_per_s": 279.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "{\"tool\": \"get_metric\", \"params\": {\"host\": \"alpha\", \"metric\": \"cpu_utilization\"}, \"reason\": \"I need to get the CPU utilization on server alpha. I already ran get",
+          "tokens_used": 181,
+          "wall_clock_s": 0.4,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 83,
+            "host_ms": 1.81,
+            "prefill_ms": 38.22,
+            "decode_ms": 305.26,
+            "total_ms": 346.67,
+            "prefill_tok_per_s": 2563.8,
+            "decode_tok_per_s": 271.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "{\"tool\": \"get_metric\", \"params\": {\"host\": \"alpha\", \"metric\": \"cpu_utilization\"}, \"reason\": \"I need to get the CPU utilization on server alpha. I already ran get",
+          "tokens_used": 181,
+          "wall_clock_s": 0.58,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 83,
+            "host_ms": 2.01,
+            "prefill_ms": 9.33,
+            "decode_ms": 307.1,
+            "total_ms": 319.87,
+            "prefill_tok_per_s": 10500.0,
+            "decode_tok_per_s": 270.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "{\"tool\": \"get_metric\", \"params\": {\"host\": \"alpha\", \"metric\": \"cpu_utilization\"}, \"reason\": \"I need to get the CPU utilization on server alpha. I already ran get",
+          "tokens_used": 208,
+          "wall_clock_s": 0.49,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 110,
+            "host_ms": 1.74,
+            "prefill_ms": 9.23,
+            "decode_ms": 406.18,
+            "total_ms": 418.53,
+            "prefill_tok_per_s": 10613.3,
+            "decode_tok_per_s": 270.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "{\"tool\": \"get_metric\", \"params\": {\"host\": \"alpha\", \"metric\": \"cpu_utilization\"}, \"reason\": \"I need to get the CPU utilization on server alpha. I already ran get",
+          "tokens_used": 194,
+          "wall_clock_s": 0.42,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 96,
+            "host_ms": 2.04,
+            "prefill_ms": 9.3,
+            "decode_ms": 353.03,
+            "total_ms": 365.77,
+            "prefill_tok_per_s": 10533.6,
+            "decode_tok_per_s": 271.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "{\"tool\": \"get_metric\", \"params\": {\"host\": \"alpha\", \"metric\": \"cpu_utilization\"}, \"reason\": \"I need to get the CPU utilization on server alpha. I already ran get",
+          "tokens_used": 181,
+          "wall_clock_s": 0.41,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 83,
+            "host_ms": 1.82,
+            "prefill_ms": 9.24,
+            "decode_ms": 305.74,
+            "total_ms": 318.19,
+            "prefill_tok_per_s": 10602.1,
+            "decode_tok_per_s": 271.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 4
+        }
+      ]
+    }
+  ]
+}

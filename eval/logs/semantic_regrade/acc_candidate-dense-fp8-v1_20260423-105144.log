@@ -1,0 +1,21 @@
+Eval JSON:    acc_candidate-dense-fp8-v1_20260423-105144.json
+Model judged: candidate-dense-fp8-v1
+Judge model:  gpt-4o-2024-08-06
+Prompts:      12
+
+  [ 1/12] rag_datasheet             0/3
+  [ 2/12] rag_datasheet             0/3
+  [ 3/12] rag_datasheet             0/3
+  [ 4/12] rag_email                 0/3
+  [ 5/12] rag_blog                  3/3
+  [ 6/12] reasoning                 3/3
+  [ 7/12] reasoning                 3/3
+  [ 8/12] coding                    3/3
+  [ 9/12] coding                    3/3
+  [10/12] general                   3/3
+  [11/12] general                   3/3
+
+📄 wrote /home/kyle/Documents/GitHub/personal-ai-framework/eval/results/acc_candidate-dense-fp8-v1_20260423-105144_semantic.json
+   substring: 18/33 = 0.5455
+   semantic:  21/33 = 0.6364
+   Δ (semantic − substring): +9.09pp

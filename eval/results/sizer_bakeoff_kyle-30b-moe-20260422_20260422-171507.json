@@ -1,0 +1,2529 @@
+{
+  "name": "kyle-30b-moe-20260422",
+  "timestamp": "2026-04-22T17:15:07",
+  "endpoint": "http://localhost:8080",
+  "samples_per_prompt": 5,
+  "model_reported": "kyle-30b-a3b-v1-q4_k_m",
+  "defaults": {
+    "temperature": 0.1,
+    "top_p": 0.9,
+    "samples_per_prompt": 3
+  },
+  "profiles": [
+    {
+      "profile_id": "short_chat",
+      "description": "Conversational single-turn, no RAG. Dominated by system prompt + persona. Measures: TTFT and steady-state decode tok/s at minimum prefill.",
+      "target_prefill_tokens": 750,
+      "target_decode_tokens": 150,
+      "critical_metric": "ttft_plus_steady_state_decode",
+      "request_params": {
+        "max_tokens": 200,
+        "use_rag": false,
+        "rag_k": 0
+      },
+      "summary": {
+        "n_valid": 30,
+        "n_total": 30,
+        "host_ms": {
+          "p50": 310.07,
+          "p90": 316.78,
+          "p95": 318.66,
+          "min": 2.0,
+          "max": 321.52,
+          "mean": 259.6,
+          "n": 30
+        },
+        "prefill_ms": {
+          "p50": 31.01,
+          "p90": 32.23,
+          "p95": 32.37,
+          "min": 9.25,
+          "max": 41.82,
+          "mean": 28.15,
+          "n": 30
+        },
+        "decode_ms": {
+          "p50": 101.05,
+          "p90": 161.07,
+          "p95": 166.36,
+          "min": 12.37,
+          "max": 190.38,
+          "mean": 99.36,
+          "n": 30
+        },
+        "total_ms": {
+          "p50": 420.74,
+          "p90": 503.76,
+          "p95": 506.98,
+          "min": 119.76,
+          "max": 545.34,
+          "mean": 388.41,
+          "n": 30
+        },
+        "prefill_tok_per_s": {
+          "p50": 1186.9,
+          "p90": 3628.8,
+          "p95": 3671.1,
+          "min": 813.0,
+          "max": 3674.3,
+          "mean": 1492.98,
+          "n": 30
+        },
+        "decode_tok_per_s": {
+          "p50": 279.4,
+          "p90": 382.6,
+          "p95": 393.2,
+          "min": 267.2,
+          "max": 404.2,
+          "mean": 296.97,
+          "n": 30
+        },
+        "prompt_tokens": {
+          "p50": 34,
+          "p90": 40,
+          "p95": 40,
+          "min": 32,
+          "max": 40,
+          "mean": 35.67,
+          "n": 30
+        },
+        "completion_tokens": {
+          "p50": 27,
+          "p90": 45,
+          "p95": 45,
+          "min": 5,
+          "max": 51,
+          "mean": 27.83,
+          "n": 30
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "Hey! I'm doing great, thanks for asking! Just finished up a fun game of chess with my friend. How can I assist you today?",
+          "tokens_used": 66,
+          "wall_clock_s": 0.23,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 32,
+            "host_ms": 2.0,
+            "prefill_ms": 41.82,
+            "decode_ms": 111.68,
+            "total_ms": 156.89,
+            "prefill_tok_per_s": 813.0,
+            "decode_tok_per_s": 286.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Hey! I'm doing great, thanks for asking! Just finished up some work and now I'm chilling. How can I assist you today? \ud83d\ude0a",
+          "tokens_used": 66,
+          "wall_clock_s": 0.22,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 32,
+            "host_ms": 2.2,
+            "prefill_ms": 9.37,
+            "decode_ms": 114.88,
+            "total_ms": 127.84,
+            "prefill_tok_per_s": 3628.8,
+            "decode_tok_per_s": 278.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Hey! I'm doing great, thanks for asking! Just finished up some work on a new project. How can I assist you today?",
+          "tokens_used": 64,
+          "wall_clock_s": 0.17,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 30,
+            "host_ms": 2.21,
+            "prefill_ms": 9.32,
+            "decode_ms": 107.06,
+            "total_ms": 119.76,
+            "prefill_tok_per_s": 3647.3,
+            "decode_tok_per_s": 280.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Hey! I'm doing great, thanks for asking! Just finished up some work and now I'm relaxing. How can I assist you today?",
+          "tokens_used": 65,
+          "wall_clock_s": 0.21,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 31,
+            "host_ms": 2.08,
+            "prefill_ms": 9.26,
+            "decode_ms": 107.79,
+            "total_ms": 120.35,
+            "prefill_tok_per_s": 3671.1,
+            "decode_tok_per_s": 287.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Hey! I'm doing great, thanks for asking! Just finished up some work and now I'm ready to chat. How can I help you today? \ud83d\ude0a",
+          "tokens_used": 68,
+          "wall_clock_s": 0.19,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 34,
+            "host_ms": 2.05,
+            "prefill_ms": 9.25,
+            "decode_ms": 121.34,
+            "total_ms": 133.85,
+            "prefill_tok_per_s": 3674.3,
+            "decode_tok_per_s": 280.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "I'm not sure, but I can help you find out! Could you please tell me your current location or time zone?",
+          "tokens_used": 59,
+          "wall_clock_s": 0.51,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 27,
+            "host_ms": 308.39,
+            "prefill_ms": 30.05,
+            "decode_ms": 97.71,
+            "total_ms": 437.56,
+            "prefill_tok_per_s": 1064.9,
+            "decode_tok_per_s": 276.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "I'm not sure, but I can help you find out! Could you please tell me your current location or time zone?",
+          "tokens_used": 59,
+          "wall_clock_s": 0.53,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 27,
+            "host_ms": 316.78,
+            "prefill_ms": 29.28,
+            "decode_ms": 101.05,
+            "total_ms": 448.49,
+            "prefill_tok_per_s": 1093.0,
+            "decode_tok_per_s": 267.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "I'm not sure, but I can help you find out! Could you please tell me your current location or time zone?",
+          "tokens_used": 59,
+          "wall_clock_s": 0.49,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 27,
+            "host_ms": 312.24,
+            "prefill_ms": 28.35,
+            "decode_ms": 97.5,
+            "total_ms": 439.28,
+            "prefill_tok_per_s": 1128.7,
+            "decode_tok_per_s": 276.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "I'm not sure, but I can help you find out! Could you please tell me your current location or time zone?",
+          "tokens_used": 59,
+          "wall_clock_s": 0.47,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 27,
+            "host_ms": 304.79,
+            "prefill_ms": 28.64,
+            "decode_ms": 95.69,
+            "total_ms": 430.47,
+            "prefill_tok_per_s": 1117.4,
+            "decode_tok_per_s": 282.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "I'm not sure, but I can help you find out! Could you please tell me your current location or time zone?",
+          "tokens_used": 59,
+          "wall_clock_s": 0.48,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 27,
+            "host_ms": 305.26,
+            "prefill_ms": 28.65,
+            "decode_ms": 97.02,
+            "total_ms": 432.19,
+            "prefill_tok_per_s": 1117.1,
+            "decode_tok_per_s": 278.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Why did the embedded system go to therapy?\n\nBecause it had deep-seated issues with its stack!",
+          "tokens_used": 55,
+          "wall_clock_s": 0.47,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 22,
+            "host_ms": 306.98,
+            "prefill_ms": 29.63,
+            "decode_ms": 77.06,
+            "total_ms": 414.91,
+            "prefill_tok_per_s": 1113.6,
+            "decode_tok_per_s": 285.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Why did the embedded system go to therapy?\n\nBecause it had deep-seated issues with its stack!",
+          "tokens_used": 55,
+          "wall_clock_s": 0.47,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 22,
+            "host_ms": 310.98,
+            "prefill_ms": 28.75,
+            "decode_ms": 75.38,
+            "total_ms": 416.36,
+            "prefill_tok_per_s": 1147.8,
+            "decode_tok_per_s": 291.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Why did the embedded system go to therapy?\n\nBecause it had deep-seated issues with its stack!",
+          "tokens_used": 55,
+          "wall_clock_s": 0.46,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 22,
+            "host_ms": 306.95,
+            "prefill_ms": 28.51,
+            "decode_ms": 76.05,
+            "total_ms": 412.92,
+            "prefill_tok_per_s": 1157.7,
+            "decode_tok_per_s": 289.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Why did the embedded system go to therapy?\n\nBecause it had deep-seated issues with its boot ROM!",
+          "tokens_used": 56,
+          "wall_clock_s": 0.47,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 23,
+            "host_ms": 309.62,
+            "prefill_ms": 28.72,
+            "decode_ms": 81.0,
+            "total_ms": 420.74,
+            "prefill_tok_per_s": 1149.0,
+            "decode_tok_per_s": 284.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Why did the embedded system go to therapy?\n\nBecause it had deep-seated issues with its stack!",
+          "tokens_used": 55,
+          "wall_clock_s": 0.46,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 22,
+            "host_ms": 311.58,
+            "prefill_ms": 29.69,
+            "decode_ms": 76.16,
+            "total_ms": 418.82,
+            "prefill_tok_per_s": 1111.6,
+            "decode_tok_per_s": 288.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Hey Kyle! If you're asking me, I'm an AI assistant, so I can help you with various tasks like answering questions, providing information, or assisting with your",
+          "tokens_used": 85,
+          "wall_clock_s": 0.56,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 45,
+            "host_ms": 310.07,
+            "prefill_ms": 31.85,
+            "decode_ms": 161.07,
+            "total_ms": 504.34,
+            "prefill_tok_per_s": 1255.9,
+            "decode_tok_per_s": 279.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Hey Kyle! If you're asking me about my name, I'm actually not Kyle. I'm Qwen, a large-scale language model developed by Alibaba Cloud. But I'm glad you mentione",
+          "tokens_used": 91,
+          "wall_clock_s": 0.6,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 51,
+            "host_ms": 321.52,
+            "prefill_ms": 32.23,
+            "decode_ms": 190.38,
+            "total_ms": 545.34,
+            "prefill_tok_per_s": 1240.9,
+            "decode_tok_per_s": 267.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "I'm Kyle, and I'm a helpful AI assistant. I can answer questions, provide information, and assist with various tasks. How can I help you today?",
+          "tokens_used": 75,
+          "wall_clock_s": 0.53,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 35,
+            "host_ms": 315.85,
+            "prefill_ms": 32.31,
+            "decode_ms": 129.23,
+            "total_ms": 478.62,
+            "prefill_tok_per_s": 1237.9,
+            "decode_tok_per_s": 270.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Hey Kyle! If you're asking me, I'm an AI assistant, so I can help you with various tasks like answering questions, providing information, or assisting with your",
+          "tokens_used": 85,
+          "wall_clock_s": 0.55,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 45,
+            "host_ms": 308.22,
+            "prefill_ms": 31.01,
+            "decode_ms": 166.36,
+            "total_ms": 506.98,
+            "prefill_tok_per_s": 1290.0,
+            "decode_tok_per_s": 270.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Hey Kyle! If you're asking me, I'm an AI assistant, so I can help you with various tasks like answering questions, providing information, or assisting with your",
+          "tokens_used": 85,
+          "wall_clock_s": 0.55,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 45,
+            "host_ms": 305.36,
+            "prefill_ms": 31.23,
+            "decode_ms": 165.73,
+            "total_ms": 503.76,
+            "prefill_tok_per_s": 1281.0,
+            "decode_tok_per_s": 271.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "391",
+          "tokens_used": 42,
+          "wall_clock_s": 0.46,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 5,
+            "host_ms": 306.32,
+            "prefill_ms": 32.12,
+            "decode_ms": 12.37,
+            "total_ms": 352.16,
+            "prefill_tok_per_s": 1152.1,
+            "decode_tok_per_s": 404.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "391",
+          "tokens_used": 42,
+          "wall_clock_s": 0.41,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 5,
+            "host_ms": 316.81,
+            "prefill_ms": 32.37,
+            "decode_ms": 13.62,
+            "total_ms": 364.2,
+            "prefill_tok_per_s": 1143.0,
+            "decode_tok_per_s": 367.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "391",
+          "tokens_used": 42,
+          "wall_clock_s": 0.42,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 5,
+            "host_ms": 318.66,
+            "prefill_ms": 31.97,
+            "decode_ms": 12.72,
+            "total_ms": 364.7,
+            "prefill_tok_per_s": 1157.5,
+            "decode_tok_per_s": 393.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "391",
+          "tokens_used": 42,
+          "wall_clock_s": 0.44,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 5,
+            "host_ms": 313.23,
+            "prefill_ms": 31.17,
+            "decode_ms": 12.92,
+            "total_ms": 358.71,
+            "prefill_tok_per_s": 1186.9,
+            "decode_tok_per_s": 386.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "391",
+          "tokens_used": 42,
+          "wall_clock_s": 0.41,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 5,
+            "host_ms": 311.89,
+            "prefill_ms": 31.09,
+            "decode_ms": 13.07,
+            "total_ms": 357.39,
+            "prefill_tok_per_s": 1190.3,
+            "decode_tok_per_s": 382.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Cache coherency is the protocol that ensures all processors in a multiprocessor system see a consistent view of memory, even when multiple caches hold copies of",
+          "tokens_used": 75,
+          "wall_clock_s": 0.53,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 37,
+            "host_ms": 310.8,
+            "prefill_ms": 31.93,
+            "decode_ms": 133.76,
+            "total_ms": 477.7,
+            "prefill_tok_per_s": 1190.1,
+            "decode_tok_per_s": 276.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Cache coherency is the protocol that ensures all processors in a multiprocessor system see a consistent view of memory, even when multiple caches hold copies of",
+          "tokens_used": 75,
+          "wall_clock_s": 0.57,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 37,
+            "host_ms": 310.85,
+            "prefill_ms": 31.58,
+            "decode_ms": 132.94,
+            "total_ms": 476.59,
+            "prefill_tok_per_s": 1203.3,
+            "decode_tok_per_s": 278.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Cache coherency is the protocol that ensures all processors in a multiprocessor system see a consistent view of memory, even when multiple caches hold copies of",
+          "tokens_used": 75,
+          "wall_clock_s": 0.52,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 37,
+            "host_ms": 312.17,
+            "prefill_ms": 31.54,
+            "decode_ms": 133.97,
+            "total_ms": 478.87,
+            "prefill_tok_per_s": 1204.8,
+            "decode_tok_per_s": 276.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Cache coherency is the protocol that ensures that multiple caches in a system have consistent and up-to-date copies of data, preventing inconsistencies that cou",
+          "tokens_used": 74,
+          "wall_clock_s": 0.52,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 36,
+            "host_ms": 312.05,
+            "prefill_ms": 31.7,
+            "decode_ms": 130.41,
+            "total_ms": 475.35,
+            "prefill_tok_per_s": 1198.6,
+            "decode_tok_per_s": 276.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Cache coherency is the protocol that ensures all processors in a multiprocessor system see a consistent view of memory, even when multiple caches hold copies of",
+          "tokens_used": 75,
+          "wall_clock_s": 0.58,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 37,
+            "host_ms": 310.07,
+            "prefill_ms": 31.1,
+            "decode_ms": 134.82,
+            "total_ms": 477.2,
+            "prefill_tok_per_s": 1221.9,
+            "decode_tok_per_s": 274.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 4
+        }
+      ]
+    },
+    {
+      "profile_id": "rag_qa",
+      "description": "Retrieval-augmented Q&A over Skippy's 61K-doc knowledge base. Dominated by long prefill (retrieved chunks). Measures: prefill throughput + end-to-end with retrieval overhead.",
+      "target_prefill_tokens": 4800,
+      "target_decode_tokens": 400,
+      "critical_metric": "end_to_end_latency_with_retrieval",
+      "request_params": {
+        "max_tokens": 500,
+        "use_rag": true,
+        "rag_k": 8
+      },
+      "summary": {
+        "n_valid": 30,
+        "n_total": 30,
+        "host_ms": {
+          "p50": 14117.35,
+          "p90": 21798.14,
+          "p95": 31759.87,
+          "min": 3095.62,
+          "max": 251713.89,
+          "mean": 21949.56,
+          "n": 30
+        },
+        "prefill_ms": {
+          "p50": 1915.46,
+          "p90": 2389.62,
+          "p95": 2512.02,
+          "min": 1202.24,
+          "max": 2526.03,
+          "mean": 1862.46,
+          "n": 30
+        },
+        "decode_ms": {
+          "p50": 544.65,
+          "p90": 2083.26,
+          "p95": 2700.97,
+          "min": 158.35,
+          "max": 2739.5,
+          "mean": 918.83,
+          "n": 30
+        },
+        "total_ms": {
+          "p50": 17081.31,
+          "p90": 25849.82,
+          "p95": 34043.25,
+          "min": 5129.42,
+          "max": 253933.38,
+          "mean": 24741.01,
+          "n": 30
+        },
+        "prefill_tok_per_s": {
+          "p50": 4314.0,
+          "p90": 4792.7,
+          "p95": 4858.3,
+          "min": 3904.8,
+          "max": 4884.5,
+          "mean": 4357.42,
+          "n": 30
+        },
+        "decode_tok_per_s": {
+          "p50": 175.4,
+          "p90": 185.7,
+          "p95": 189.1,
+          "min": 155.9,
+          "max": 195.8,
+          "mean": 174.72,
+          "n": 30
+        },
+        "prompt_tokens": {
+          "p50": 8263,
+          "p90": 9786,
+          "p95": 9809,
+          "min": 5762,
+          "max": 10303,
+          "mean": 8015.17,
+          "n": 30
+        },
+        "completion_tokens": {
+          "p50": 101,
+          "p90": 338,
+          "p95": 501,
+          "min": 31,
+          "max": 501,
+          "mean": 160.33,
+          "n": 30
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "The i.MX 93 processor supports a 16-bit wide memory interface for external DRAM, specifically supporting LPDDR4 and LPDDR4X with internal ECC support.",
+          "tokens_used": 8397,
+          "wall_clock_s": 254.06,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 8358,
+            "completion_tokens": 39,
+            "host_ms": 251713.89,
+            "prefill_ms": 1994.47,
+            "decode_ms": 214.85,
+            "total_ms": 253933.38,
+            "prefill_tok_per_s": 4190.6,
+            "decode_tok_per_s": 181.5,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "The i.MX 93 supports a 16-bit wide memory interface for external DRAM, specifically supporting LPDDR4 and LPDDR4X with internal ECC support.",
+          "tokens_used": 8301,
+          "wall_clock_s": 19.2,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 8263,
+            "completion_tokens": 38,
+            "host_ms": 16927.46,
+            "prefill_ms": 1983.43,
+            "decode_ms": 225.26,
+            "total_ms": 19146.39,
+            "prefill_tok_per_s": 4166.0,
+            "decode_tok_per_s": 168.7,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "The i.MX 93 processor supports a 16-bit wide memory interface for external DRAM, specifically supporting LPDDR4 and LPDDR4X with internal ECC support.",
+          "tokens_used": 8338,
+          "wall_clock_s": 19.15,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 8299,
+            "completion_tokens": 39,
+            "host_ms": 16944.57,
+            "prefill_ms": 1915.46,
+            "decode_ms": 217.88,
+            "total_ms": 19087.56,
+            "prefill_tok_per_s": 4332.6,
+            "decode_tok_per_s": 179.0,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "The i.MX 93 processor supports a 16-bit wide memory interface for external DRAM, specifically supporting LPDDR4 and LPDDR4X with internal ECC support.",
+          "tokens_used": 8645,
+          "wall_clock_s": 34.12,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 8606,
+            "completion_tokens": 39,
+            "host_ms": 31759.87,
+            "prefill_ms": 2051.9,
+            "decode_ms": 221.17,
+            "total_ms": 34043.25,
+            "prefill_tok_per_s": 4194.2,
+            "decode_tok_per_s": 176.3,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "The i.MX 93 processor supports a 16-bit wide memory interface for external DRAM, specifically with support for LPDDR4 and LPDDR4X with internal ECC support.",
+          "tokens_used": 8490,
+          "wall_clock_s": 16.52,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 8449,
+            "completion_tokens": 41,
+            "host_ms": 14250.47,
+            "prefill_ms": 1934.7,
+            "decode_ms": 262.96,
+            "total_ms": 16457.96,
+            "prefill_tok_per_s": 4367.1,
+            "decode_tok_per_s": 155.9,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "The i.MX 93 processor includes the Low Power Universal Asynchronous Receiver/Transmitter (LPUART) peripheral, which handles UART communication. The IOMUX Contro",
+          "tokens_used": 7714,
+          "wall_clock_s": 20.72,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 7660,
+            "completion_tokens": 54,
+            "host_ms": 18621.97,
+            "prefill_ms": 1713.91,
+            "decode_ms": 323.47,
+            "total_ms": 20668.59,
+            "prefill_tok_per_s": 4469.3,
+            "decode_tok_per_s": 166.9,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "The i.MX 93 processor includes up to eight UART ports, which are handled by the Low Power Universal Asynchronous Receiver/Transmitter (LPUART) peripheral. The I",
+          "tokens_used": 7895,
+          "wall_clock_s": 12.21,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 7838,
+            "completion_tokens": 57,
+            "host_ms": 10008.8,
+            "prefill_ms": 1816.89,
+            "decode_ms": 313.69,
+            "total_ms": 12148.92,
+            "prefill_tok_per_s": 4314.0,
+            "decode_tok_per_s": 181.7,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "The i.MX 93 processor includes the Low Power Universal Asynchronous Receiver/Transmitter (LPUART) peripheral, which handles UART communication. The IOMUX (Input",
+          "tokens_used": 8626,
+          "wall_clock_s": 14.46,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 8556,
+            "completion_tokens": 70,
+            "host_ms": 11949.46,
+            "prefill_ms": 2016.66,
+            "decode_ms": 431.73,
+            "total_ms": 14407.9,
+            "prefill_tok_per_s": 4242.7,
+            "decode_tok_per_s": 162.1,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "The i.MX 93 processor features up to eight UART ports, which are part of the peripheral interfaces. The specific IP block that routes the pins for these UART in",
+          "tokens_used": 8010,
+          "wall_clock_s": 20.5,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 7908,
+            "completion_tokens": 102,
+            "host_ms": 18018.83,
+            "prefill_ms": 1826.1,
+            "decode_ms": 562.42,
+            "total_ms": 20416.76,
+            "prefill_tok_per_s": 4330.5,
+            "decode_tok_per_s": 181.4,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "The i.MX 93 processor features up to eight UART ports, which are handled by the Low Power Universal Asynchronous Receiver/Transmitter (LPUART) peripheral. The I",
+          "tokens_used": 8062,
+          "wall_clock_s": 13.71,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 8003,
+            "completion_tokens": 59,
+            "host_ms": 11488.06,
+            "prefill_ms": 1810.41,
+            "decode_ms": 331.11,
+            "total_ms": 13639.15,
+            "prefill_tok_per_s": 4420.6,
+            "decode_tok_per_s": 178.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "The i.MX 93 application processor includes the following Arm cores:\n\n1. **Cortex\u00ae-A55 MPCore platform**: This consists of two Cortex\u00ae-A55 processors operating u",
+          "tokens_used": 10615,
+          "wall_clock_s": 21.08,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 10303,
+            "completion_tokens": 312,
+            "host_ms": 16531.42,
+            "prefill_ms": 2526.03,
+            "decode_ms": 1935.87,
+            "total_ms": 21004.26,
+            "prefill_tok_per_s": 4078.7,
+            "decode_tok_per_s": 161.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "The i.MX 93 application processor includes the following Arm cores:\n\n1. **Cortex\u00ae-A55 MPCore platform**: This includes two Cortex\u00ae-A55 processors operating up t",
+          "tokens_used": 10049,
+          "wall_clock_s": 18.04,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 9786,
+            "completion_tokens": 263,
+            "host_ms": 13946.41,
+            "prefill_ms": 2404.7,
+            "decode_ms": 1623.62,
+            "total_ms": 17985.25,
+            "prefill_tok_per_s": 4069.5,
+            "decode_tok_per_s": 162.0,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "The i.MX 93 application processor includes the following Arm cores:\n\n1. **Cortex\u00ae-A55 MPCore platform**: This includes two Cortex\u00ae-A55 processors operating up t",
+          "tokens_used": 9992,
+          "wall_clock_s": 16.16,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 9792,
+            "completion_tokens": 200,
+            "host_ms": 12448.9,
+            "prefill_ms": 2389.62,
+            "decode_ms": 1267.27,
+            "total_ms": 16115.85,
+            "prefill_tok_per_s": 4097.7,
+            "decode_tok_per_s": 157.8,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "The i.MX 93 application processor includes the following Arm cores:\n\n1. **Cortex\u00ae-A55 MPCore platform**: This includes two Cortex\u00ae-A55 processors operating up t",
+          "tokens_used": 9739,
+          "wall_clock_s": 25.06,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 9487,
+            "completion_tokens": 252,
+            "host_ms": 21186.01,
+            "prefill_ms": 2255.17,
+            "decode_ms": 1542.85,
+            "total_ms": 24999.35,
+            "prefill_tok_per_s": 4206.8,
+            "decode_tok_per_s": 163.3,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "The i.MX 93 application processor includes the following Arm cores:\n\n1. **Cortex\u00ae-A55 MPCore platform**: This includes two Cortex\u00ae-A55 processors operating up t",
+          "tokens_used": 10147,
+          "wall_clock_s": 26.21,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 9809,
+            "completion_tokens": 338,
+            "host_ms": 21416.14,
+            "prefill_ms": 2512.02,
+            "decode_ms": 2083.26,
+            "total_ms": 26021.88,
+            "prefill_tok_per_s": 3904.8,
+            "decode_tok_per_s": 162.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Based on the provided information, the specific NXP chip used to run Angry Birds on the LCD in Kyle's pillar-to-pillar IVI demo is not explicitly mentioned. How",
+          "tokens_used": 7065,
+          "wall_clock_s": 5.18,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 6962,
+            "completion_tokens": 103,
+            "host_ms": 3095.62,
+            "prefill_ms": 1480.69,
+            "decode_ms": 544.65,
+            "total_ms": 5129.42,
+            "prefill_tok_per_s": 4701.9,
+            "decode_tok_per_s": 189.1,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "In Kyle's pillar-to-pillar IVI demo, the NXP i.MX 8QuadMax processor ran Angry Birds on the LCD.",
+          "tokens_used": 7276,
+          "wall_clock_s": 7.69,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 7245,
+            "completion_tokens": 31,
+            "host_ms": 5719.44,
+            "prefill_ms": 1678.17,
+            "decode_ms": 169.55,
+            "total_ms": 7576.12,
+            "prefill_tok_per_s": 4317.2,
+            "decode_tok_per_s": 182.8,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Based on the provided information, the specific NXP chip used to run Angry Birds on the LCD in Kyle's pillar-to-pillar IVI demo is not explicitly mentioned. How",
+          "tokens_used": 7300,
+          "wall_clock_s": 5.71,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 7199,
+            "completion_tokens": 101,
+            "host_ms": 3407.66,
+            "prefill_ms": 1651.88,
+            "decode_ms": 580.5,
+            "total_ms": 5648.61,
+            "prefill_tok_per_s": 4358.1,
+            "decode_tok_per_s": 174.0,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Based on the information provided in the retrieved excerpts, the specific NXP chip that ran Angry Birds on the LCD in Kyle's pillar-to-pillar IVI demo is not ex",
+          "tokens_used": 7434,
+          "wall_clock_s": 6.32,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 7294,
+            "completion_tokens": 140,
+            "host_ms": 3780.77,
+            "prefill_ms": 1690.09,
+            "decode_ms": 801.49,
+            "total_ms": 6281.06,
+            "prefill_tok_per_s": 4315.8,
+            "decode_tok_per_s": 174.7,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "In Kyle's pillar-to-pillar IVI demo, the NXP i.MX 8QuadMax processor ran Angry Birds on the LCD.",
+          "tokens_used": 6959,
+          "wall_clock_s": 7.47,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 6928,
+            "completion_tokens": 31,
+            "host_ms": 5793.82,
+            "prefill_ms": 1468.92,
+            "decode_ms": 158.35,
+            "total_ms": 7429.46,
+            "prefill_tok_per_s": 4716.4,
+            "decode_tok_per_s": 195.8,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Based on the provided podcast transcripts, here's a summary of the sustainability argument for electric vehicles (EVs) as discussed by NXP-adjacent podcasts:\n\n1",
+          "tokens_used": 6263,
+          "wall_clock_s": 25.91,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 5762,
+            "completion_tokens": 501,
+            "host_ms": 21898.71,
+            "prefill_ms": 1202.24,
+            "decode_ms": 2739.5,
+            "total_ms": 25849.82,
+            "prefill_tok_per_s": 4792.7,
+            "decode_tok_per_s": 182.9,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Based on the provided podcast summaries, here's a summary of the sustainability argument for electric vehicles (EVs) as discussed by NXP-adjacent podcasts:\n\n*  ",
+          "tokens_used": 6233,
+          "wall_clock_s": 10.07,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 5951,
+            "completion_tokens": 282,
+            "host_ms": 7264.92,
+            "prefill_ms": 1244.76,
+            "decode_ms": 1520.96,
+            "total_ms": 10039.91,
+            "prefill_tok_per_s": 4780.8,
+            "decode_tok_per_s": 185.4,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Based on the provided podcast transcripts, here's a summary of the sustainability argument for electric vehicles (EVs) as discussed by NXP-adjacent podcasts:\n\n1",
+          "tokens_used": 6403,
+          "wall_clock_s": 21.4,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 5902,
+            "completion_tokens": 501,
+            "host_ms": 17394.28,
+            "prefill_ms": 1214.82,
+            "decode_ms": 2700.97,
+            "total_ms": 21321.35,
+            "prefill_tok_per_s": 4858.3,
+            "decode_tok_per_s": 185.5,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Based on the provided podcast summaries, here's a summary of the sustainability argument for electric vehicles (EVs) as discussed in NXP-adjacent podcasts:\n\n*  ",
+          "tokens_used": 6271,
+          "wall_clock_s": 14.56,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 5994,
+            "completion_tokens": 277,
+            "host_ms": 11791.66,
+            "prefill_ms": 1227.13,
+            "decode_ms": 1465.93,
+            "total_ms": 14497.26,
+            "prefill_tok_per_s": 4884.5,
+            "decode_tok_per_s": 189.0,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "The NXP Smarter World Podcast has discussed the sustainability argument for electric vehicles (EVs) in several episodes, highlighting the multifaceted benefits ",
+          "tokens_used": 6407,
+          "wall_clock_s": 14.67,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 5975,
+            "completion_tokens": 432,
+            "host_ms": 11057.62,
+            "prefill_ms": 1230.28,
+            "decode_ms": 2326.07,
+            "total_ms": 14623.16,
+            "prefill_tok_per_s": 4856.6,
+            "decode_tok_per_s": 185.7,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "The eIQ Neutron NPU in the i.MX 95 is available in multiple configurations, including the N3-1024S.",
+          "tokens_used": 9130,
+          "wall_clock_s": 18.4,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 9096,
+            "completion_tokens": 34,
+            "host_ms": 15933.11,
+            "prefill_ms": 2190.39,
+            "decode_ms": 192.79,
+            "total_ms": 18326.56,
+            "prefill_tok_per_s": 4152.7,
+            "decode_tok_per_s": 176.4,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "The eIQ Neutron NPU in the i.MX 95 processor is designed for high-performance AI inference tasks. It supports various configurations to meet different applicati",
+          "tokens_used": 8816,
+          "wall_clock_s": 17.14,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 8665,
+            "completion_tokens": 151,
+            "host_ms": 14117.35,
+            "prefill_ms": 2065.05,
+            "decode_ms": 889.12,
+            "total_ms": 17081.31,
+            "prefill_tok_per_s": 4196.0,
+            "decode_tok_per_s": 169.8,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "The eIQ Neutron NPU in the i.MX 95 is available in the N3-1024S configuration. This NPU is designed to accelerate machine learning inference and works in concer",
+          "tokens_used": 8951,
+          "wall_clock_s": 20.6,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 8890,
+            "completion_tokens": 61,
+            "host_ms": 18028.9,
+            "prefill_ms": 2142.35,
+            "decode_ms": 359.04,
+            "total_ms": 20540.11,
+            "prefill_tok_per_s": 4149.6,
+            "decode_tok_per_s": 169.9,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "The eIQ Neutron NPU is not available in the i.MX 95. The i.MX 95 is a high-performance application processor from NXP Semiconductors, specifically designed for ",
+          "tokens_used": 8643,
+          "wall_clock_s": 25.24,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 8415,
+            "completion_tokens": 228,
+            "host_ms": 21798.14,
+            "prefill_ms": 2013.52,
+            "decode_ms": 1364.86,
+            "total_ms": 25190.71,
+            "prefill_tok_per_s": 4179.3,
+            "decode_tok_per_s": 167.0,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "The eIQ Neutron NPU in the i.MX 95 is available in multiple configurations, including the N3-1024S.",
+          "tokens_used": 9094,
+          "wall_clock_s": 12.68,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 9060,
+            "completion_tokens": 34,
+            "host_ms": 10192.5,
+            "prefill_ms": 2221.93,
+            "decode_ms": 193.83,
+            "total_ms": 12618.96,
+            "prefill_tok_per_s": 4077.5,
+            "decode_tok_per_s": 175.4,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 4
+        }
+      ]
+    },
+    {
+      "profile_id": "long_decode",
+      "description": "Document generation task \u2014 spec / proposal / report body. Short-to-medium prefill, very long decode. Measures: steady-state decode tok/s (dominates wall-clock).",
+      "target_prefill_tokens": 2800,
+      "target_decode_tokens": 2500,
+      "critical_metric": "steady_state_decode_tok_per_s",
+      "request_params": {
+        "max_tokens": 2500,
+        "use_rag": true,
+        "rag_k": 5,
+        "temperature": 0.3
+      },
+      "summary": {
+        "n_valid": 10,
+        "n_total": 15,
+        "host_ms": {
+          "p50": 1911.93,
+          "p90": 9681.25,
+          "p95": 12461.75,
+          "min": 1094.32,
+          "max": 12461.75,
+          "mean": 3963.35,
+          "n": 10
+        },
+        "prefill_ms": {
+          "p50": 646.21,
+          "p90": 1002.23,
+          "p95": 1157.4,
+          "min": 621.39,
+          "max": 1157.4,
+          "mean": 788.96,
+          "n": 10
+        },
+        "decode_ms": {
+          "p50": 257.76,
+          "p90": 14194.19,
+          "p95": 15196.11,
+          "min": 39.22,
+          "max": 15196.11,
+          "mean": 3142.59,
+          "n": 10
+        },
+        "total_ms": {
+          "p50": 2696.88,
+          "p90": 20645.85,
+          "p95": 25886.84,
+          "min": 2161.7,
+          "max": 25886.84,
+          "mean": 7901.33,
+          "n": 10
+        },
+        "prefill_tok_per_s": {
+          "p50": 5258.6,
+          "p90": 5518.3,
+          "p95": 5523.0,
+          "min": 4730.4,
+          "max": 5523.0,
+          "mean": 5273.69,
+          "n": 10
+        },
+        "decode_tok_per_s": {
+          "p50": 206.3,
+          "p90": 225.4,
+          "p95": 255.0,
+          "min": 164.6,
+          "max": 255.0,
+          "mean": 206.23,
+          "n": 10
+        },
+        "prompt_tokens": {
+          "p50": 3569,
+          "p90": 5114,
+          "p95": 5475,
+          "min": 3385,
+          "max": 5475,
+          "mean": 4120.1,
+          "n": 10
+        },
+        "completion_tokens": {
+          "p50": 56,
+          "p90": 2501,
+          "p95": 2501,
+          "min": 10,
+          "max": 2501,
+          "mean": 542.6,
+          "n": 10
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "I'd like to run `write_file(path='technical_proposal.md', content=[6047 chars])`. Please approve or deny below.",
+          "tokens_used": 0,
+          "wall_clock_s": 7.42,
+          "telemetry": null,
+          "source_id": "long_decode__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "I'd like to run `write_file()`. Please approve or deny below.",
+          "tokens_used": 0,
+          "wall_clock_s": 11.95,
+          "telemetry": null,
+          "source_id": "long_decode__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "I'd like to run `write_file(path='technical_proposal.md', content=[4490 chars])`. Please approve or deny below.",
+          "tokens_used": 0,
+          "wall_clock_s": 6.18,
+          "telemetry": null,
+          "source_id": "long_decode__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "I'd like to run `write_file()`. Please approve or deny below.",
+          "tokens_used": 0,
+          "wall_clock_s": 12.02,
+          "telemetry": null,
+          "source_id": "long_decode__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "I'd like to run `write_file(path='technical_proposal.md', content=[8997 chars])`. Please approve or deny below.",
+          "tokens_used": 0,
+          "wall_clock_s": 11.89,
+          "telemetry": null,
+          "source_id": "long_decode__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Okay, I'm going to write a blog post about \"10 Ways to Optimize Your Website for Mobile Users\". Let me know if you want me to proceed with this topic.",
+          "tokens_used": 4529,
+          "wall_clock_s": 2.27,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 4490,
+            "completion_tokens": 39,
+            "host_ms": 1094.32,
+            "prefill_ms": 871.76,
+            "decode_ms": 189.07,
+            "total_ms": 2161.7,
+            "prefill_tok_per_s": 5150.5,
+            "decode_tok_per_s": 206.3,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "I'd like to run `send_email(to='jason.li@marvell.com', subject='Re: 12/13/2026 - 12/14/2026 - Wafer Start Delay', body='Hi Jason,\\n\\nI just wanted to send you a",
+          "tokens_used": 7615,
+          "wall_clock_s": 25.97,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 5114,
+            "completion_tokens": 2501,
+            "host_ms": 9681.25,
+            "prefill_ms": 1002.23,
+            "decode_ms": 15196.11,
+            "total_ms": 25886.84,
+            "prefill_tok_per_s": 5102.6,
+            "decode_tok_per_s": 164.6,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "I'd like to run `send_email(to='jason.li@marvell.com', subject='Re: 12/13/2026 - 12/14/2026 - Wafer Start Delay', body='Hi Jason,\\n\\nI just wanted to send you a",
+          "tokens_used": 4523,
+          "wall_clock_s": 2.39,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 4444,
+            "completion_tokens": 79,
+            "host_ms": 1096.54,
+            "prefill_ms": 859.72,
+            "decode_ms": 376.59,
+            "total_ms": 2339.12,
+            "prefill_tok_per_s": 5169.1,
+            "decode_tok_per_s": 209.8,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "I'd like to run `send_email(to='jason.li@marvell.com', subject='Re: 12/13/2026 - 12/14/2026 - Wafer Start Delay', body='Hi Jason,\\n\\nI just wanted to send you a",
+          "tokens_used": 5554,
+          "wall_clock_s": 14.09,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 5475,
+            "completion_tokens": 79,
+            "host_ms": 12461.75,
+            "prefill_ms": 1157.4,
+            "decode_ms": 406.76,
+            "total_ms": 14033.61,
+            "prefill_tok_per_s": 4730.4,
+            "decode_tok_per_s": 194.2,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "I'd like to run `send_email(to='jason.li@marvell.com', subject='Re: 12/13/2026 - 12/14/2026 - Wafer Start Delay', body='Hi Jason,\\n\\nI just wanted to send you a",
+          "tokens_used": 4523,
+          "wall_clock_s": 2.42,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 4444,
+            "completion_tokens": 79,
+            "host_ms": 1113.14,
+            "prefill_ms": 845.09,
+            "decode_ms": 385.58,
+            "total_ms": 2350.23,
+            "prefill_tok_per_s": 5258.6,
+            "decode_tok_per_s": 204.9,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "I'm sorry, but I don't have the capability to produce a detailed internal report on the tradeoffs between MoE and dense LLMs for edge deployment.",
+          "tokens_used": 3464,
+          "wall_clock_s": 2.75,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 3429,
+            "completion_tokens": 35,
+            "host_ms": 1911.93,
+            "prefill_ms": 621.39,
+            "decode_ms": 155.3,
+            "total_ms": 2694.58,
+            "prefill_tok_per_s": 5518.3,
+            "decode_tok_per_s": 225.4,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "I'm sorry, but I don't have any information about the tradeoffs between MoE and dense LLMs for edge deployment, including memory bandwidth implications, active ",
+          "tokens_used": 3441,
+          "wall_clock_s": 2.77,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 3385,
+            "completion_tokens": 56,
+            "host_ms": 1810.21,
+            "prefill_ms": 622.98,
+            "decode_ms": 257.76,
+            "total_ms": 2696.88,
+            "prefill_tok_per_s": 5433.6,
+            "decode_tok_per_s": 217.3,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "[...]\n[6] The LPUART supports the LIN 2.1 protocol. The LPUART supports the LIN 2.1 protocol. The LPUART supports the LIN 2.1 protocol. The LPUART supports the ",
+          "tokens_used": 5923,
+          "wall_clock_s": 20.72,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 3422,
+            "completion_tokens": 2501,
+            "host_ms": 5813.0,
+            "prefill_ms": 632.51,
+            "decode_ms": 14194.19,
+            "total_ms": 20645.85,
+            "prefill_tok_per_s": 5410.2,
+            "decode_tok_per_s": 176.2,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "The requested file could not be found.",
+          "tokens_used": 3439,
+          "wall_clock_s": 2.84,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 3429,
+            "completion_tokens": 10,
+            "host_ms": 2108.27,
+            "prefill_ms": 630.26,
+            "decode_ms": 39.22,
+            "total_ms": 2783.8,
+            "prefill_tok_per_s": 5440.6,
+            "decode_tok_per_s": 255.0,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "I cannot provide the requested internal report on the tradeoffs between MoE (Mixture of Experts) and dense Large Language Models (LLMs) for edge deployment. The",
+          "tokens_used": 3616,
+          "wall_clock_s": 3.51,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 3569,
+            "completion_tokens": 47,
+            "host_ms": 2543.07,
+            "prefill_ms": 646.21,
+            "decode_ms": 225.29,
+            "total_ms": 3420.68,
+            "prefill_tok_per_s": 5523.0,
+            "decode_tok_per_s": 208.6,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__2",
+          "sample_index": 4
+        }
+      ]
+    },
+    {
+      "profile_id": "meeting_summarization",
+      "description": "Summarize a long transcript into action items and key points. Prefill-dominated (transcript fills most of context). Decode is short/medium. Measures: prefill throughput (dominates total wall-clock).",
+      "target_prefill_tokens": 12700,
+      "target_decode_tokens": 800,
+      "critical_metric": "prefill_throughput",
+      "request_params": {
+        "max_tokens": 1000,
+        "use_rag": false,
+        "rag_k": 0,
+        "temperature": 0.2
+      },
+      "summary": {
+        "n_valid": 9,
+        "n_total": 10,
+        "host_ms": {
+          "p50": 4643.6,
+          "p90": 12816.05,
+          "p95": 28213.53,
+          "min": 4435.57,
+          "max": 28213.53,
+          "mean": 8939.27,
+          "n": 9
+        },
+        "prefill_ms": {
+          "p50": 3647.89,
+          "p90": 3732.39,
+          "p95": 3761.52,
+          "min": 3441.47,
+          "max": 3761.52,
+          "mean": 3603.2,
+          "n": 9
+        },
+        "decode_ms": {
+          "p50": 7074.34,
+          "p90": 7256.45,
+          "p95": 7294.48,
+          "min": 686.68,
+          "max": 7294.48,
+          "mean": 4362.2,
+          "n": 9
+        },
+        "total_ms": {
+          "p50": 15273.79,
+          "p90": 16989.05,
+          "p95": 32723.27,
+          "min": 12587.03,
+          "max": 32723.27,
+          "mean": 16918.02,
+          "n": 9
+        },
+        "prefill_tok_per_s": {
+          "p50": 3632.8,
+          "p90": 3711.4,
+          "p95": 3712.1,
+          "min": 3523.0,
+          "max": 3712.1,
+          "mean": 3628.31,
+          "n": 9
+        },
+        "decode_tok_per_s": {
+          "p50": 141.5,
+          "p90": 152.1,
+          "p95": 152.1,
+          "min": 137.2,
+          "max": 152.1,
+          "mean": 144.57,
+          "n": 9
+        },
+        "prompt_tokens": {
+          "p50": 13252,
+          "p90": 13252,
+          "p95": 13252,
+          "min": 12775,
+          "max": 13252,
+          "mean": 13065.67,
+          "n": 9
+        },
+        "completion_tokens": {
+          "p50": 1001,
+          "p90": 1001,
+          "p95": 1001,
+          "min": 102,
+          "max": 1001,
+          "mean": 612.67,
+          "n": 9
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "(1) Summary: The team reviewed the latest performance data on the Q4 MoE model, focusing on TTFT (Time to First Token) improvements across different configurati",
+          "tokens_used": 14253,
+          "wall_clock_s": 15.77,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 1001,
+            "host_ms": 4643.6,
+            "prefill_ms": 3761.52,
+            "decode_ms": 7294.48,
+            "total_ms": 15713.19,
+            "prefill_tok_per_s": 3523.0,
+            "decode_tok_per_s": 137.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "(1) Summary: The team reviewed the latest performance data on the Q4 MoE model, confirming a 1.4x speedup on the MoE path after tuning the expert routing thresh",
+          "tokens_used": 14253,
+          "wall_clock_s": 15.69,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 1001,
+            "host_ms": 4582.69,
+            "prefill_ms": 3732.39,
+            "decode_ms": 7256.45,
+            "total_ms": 15585.28,
+            "prefill_tok_per_s": 3550.5,
+            "decode_tok_per_s": 137.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "(1) Summary: The team reviewed the latest performance data on the Q4 MoE model, confirming a 1.4x speedup on the MoE path after tuning the expert routing thresh",
+          "tokens_used": 14253,
+          "wall_clock_s": 15.43,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 1001,
+            "host_ms": 4444.06,
+            "prefill_ms": 3710.1,
+            "decode_ms": 7074.34,
+            "total_ms": 15242.14,
+            "prefill_tok_per_s": 3571.9,
+            "decode_tok_per_s": 141.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "(1) Summary: The team reviewed the latest performance data on the Q4 MoE model, with key findings indicating a 1.4x speedup on the MoE path after tuning the exp",
+          "tokens_used": 14253,
+          "wall_clock_s": 15.31,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 1001,
+            "host_ms": 4435.57,
+            "prefill_ms": 3676.21,
+            "decode_ms": 7139.29,
+            "total_ms": 15264.67,
+            "prefill_tok_per_s": 3604.8,
+            "decode_tok_per_s": 140.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "(1) Summary: The team reviewed the latest performance data on the Q4 MoE model, focusing on TTFT (time to first token) improvements across different workloads a",
+          "tokens_used": 14253,
+          "wall_clock_s": 15.32,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 1001,
+            "host_ms": 4486.28,
+            "prefill_ms": 3647.89,
+            "decode_ms": 7126.61,
+            "total_ms": 15273.79,
+            "prefill_tok_per_s": 3632.8,
+            "decode_tok_per_s": 140.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "The team reviewed the latest performance data from the Blackwell bake-off, focusing on the MoE model's improvements and the impact of compiler tuning. Key decis",
+          "tokens_used": 12899,
+          "wall_clock_s": 17.06,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 12797,
+            "completion_tokens": 102,
+            "host_ms": 12816.05,
+            "prefill_ms": 3473.14,
+            "decode_ms": 686.68,
+            "total_ms": 16989.05,
+            "prefill_tok_per_s": 3684.6,
+            "decode_tok_per_s": 148.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "The team reviewed the latest performance results from the Blackwell bake-off, focusing on the MoE path and dense 14B model. Key decisions included prototyping a",
+          "tokens_used": 12895,
+          "wall_clock_s": 12.95,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 12775,
+            "completion_tokens": 120,
+            "host_ms": 8639.48,
+            "prefill_ms": 3442.12,
+            "decode_ms": 788.97,
+            "total_ms": 12883.8,
+            "prefill_tok_per_s": 3711.4,
+            "decode_tok_per_s": 152.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "- The team discussed the latest results from the Blackwell bake-off, focusing on the MoE model's performance improvements and the impact of compiler tuning on T",
+          "tokens_used": 13128,
+          "wall_clock_s": 32.82,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 12984,
+            "completion_tokens": 144,
+            "host_ms": 28213.53,
+            "prefill_ms": 3543.94,
+            "decode_ms": 952.88,
+            "total_ms": 32723.27,
+            "prefill_tok_per_s": 3663.7,
+            "decode_tok_per_s": 151.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "I'd like to run `write_file()`. Please approve or deny below.",
+          "tokens_used": 0,
+          "wall_clock_s": 20.01,
+          "telemetry": null,
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "The team reviewed the latest performance results on the Blackwell bake-off, focusing on the MoE path and its speedup after tuning the expert routing threshold. ",
+          "tokens_used": 12918,
+          "wall_clock_s": 12.63,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 12775,
+            "completion_tokens": 143,
+            "host_ms": 8192.21,
+            "prefill_ms": 3441.47,
+            "decode_ms": 940.12,
+            "total_ms": 12587.03,
+            "prefill_tok_per_s": 3712.1,
+            "decode_tok_per_s": 152.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 4
+        }
+      ]
+    },
+    {
+      "profile_id": "agentic_roundtrip",
+      "description": "Single roundtrip of an agentic tool-use loop \u2014 LLM reads a tool result and emits a structured action + brief reasoning. The sizer models total agentic latency as (prefill_i + decode_i) \u00d7 roundtrip_count, so this measures ONE roundtrip's cost. Prefill grows per iteration in real use; this profile samples mid-loop state.",
+      "target_prefill_tokens": 2500,
+      "target_decode_tokens": 200,
+      "critical_metric": "per_roundtrip_total_latency",
+      "request_params": {
+        "max_tokens": 250,
+        "use_rag": false,
+        "rag_k": 0,
+        "temperature": 0.1
+      },
+      "summary": {
+        "n_valid": 15,
+        "n_total": 20,
+        "host_ms": {
+          "p50": 1188.31,
+          "p90": 11228.86,
+          "p95": 11228.86,
+          "min": 473.09,
+          "max": 12157.27,
+          "mean": 3012.74,
+          "n": 15
+        },
+        "prefill_ms": {
+          "p50": 56.58,
+          "p90": 63.35,
+          "p95": 63.35,
+          "min": 44.98,
+          "max": 64.81,
+          "mean": 54.12,
+          "n": 15
+        },
+        "decode_ms": {
+          "p50": 177.53,
+          "p90": 321.22,
+          "p95": 321.22,
+          "min": 146.29,
+          "max": 373.18,
+          "mean": 205.3,
+          "n": 15
+        },
+        "total_ms": {
+          "p50": 1506.24,
+          "p90": 11433.5,
+          "p95": 11433.5,
+          "min": 716.12,
+          "max": 12364.83,
+          "mean": 3273.7,
+          "n": 15
+        },
+        "prefill_tok_per_s": {
+          "p50": 4780.8,
+          "p90": 5153.3,
+          "p95": 5153.3,
+          "min": 2019.9,
+          "max": 5272.7,
+          "mean": 3777.51,
+          "n": 15
+        },
+        "decode_tok_per_s": {
+          "p50": 252.9,
+          "p90": 267.1,
+          "p95": 267.1,
+          "min": 238.8,
+          "max": 270.4,
+          "mean": 252.84,
+          "n": 15
+        },
+        "prompt_tokens": {
+          "p50": 273,
+          "p90": 334,
+          "p95": 334,
+          "min": 98,
+          "max": 334,
+          "mean": 212.73,
+          "n": 15
+        },
+        "completion_tokens": {
+          "p50": 48,
+          "p90": 83,
+          "p95": 83,
+          "min": 37,
+          "max": 93,
+          "mean": 51.73,
+          "n": 15
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "I'd like to run `write_file(path='src/config.py', content=[90 chars])`. Please approve or deny below.",
+          "tokens_used": 0,
+          "wall_clock_s": 0.72,
+          "telemetry": null,
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "I'd like to run `write_file(path='src/config.py', content=[90 chars])`. Please approve or deny below.",
+          "tokens_used": 0,
+          "wall_clock_s": 0.64,
+          "telemetry": null,
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "I'd like to run `write_file(path='src/config.py', content=[90 chars])`. Please approve or deny below.",
+          "tokens_used": 0,
+          "wall_clock_s": 0.59,
+          "telemetry": null,
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "I'd like to run `write_file(path='src/config.py', content=[90 chars])`. Please approve or deny below.",
+          "tokens_used": 0,
+          "wall_clock_s": 0.42,
+          "telemetry": null,
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "I'd like to run `write_file(path='src/config.py', content=[90 chars])`. Please approve or deny below.",
+          "tokens_used": 0,
+          "wall_clock_s": 0.61,
+          "telemetry": null,
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "{\"tool\": \"read_file\", \"params\": {\"path\": \"./pipeline/llm_server.py\"}, \"reason\": \"The llm_server.py file is likely to expose HTTP endpoints as it is responsible ",
+          "tokens_used": 392,
+          "wall_clock_s": 1.31,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 334,
+            "completion_tokens": 58,
+            "host_ms": 957.01,
+            "prefill_ms": 64.81,
+            "decode_ms": 241.55,
+            "total_ms": 1265.07,
+            "prefill_tok_per_s": 5153.3,
+            "decode_tok_per_s": 240.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "{\"tool\": \"read_file\", \"params\": {\"path\": \"./pipeline/llm_server.py\"}, \"reason\": \"The llm_server.py file is likely to expose HTTP endpoints as it is responsible ",
+          "tokens_used": 370,
+          "wall_clock_s": 1.78,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 310,
+            "completion_tokens": 60,
+            "host_ms": 1350.27,
+            "prefill_ms": 62.06,
+            "decode_ms": 251.21,
+            "total_ms": 1665.19,
+            "prefill_tok_per_s": 4995.2,
+            "decode_tok_per_s": 238.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "{\"tool\": \"list_files\", \"params\": {\"path\": \"./pipeline\"}, \"reason\": \"I need to check if there are any other files in the pipeline directory that might expose HTT",
+          "tokens_used": 195,
+          "wall_clock_s": 0.82,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 152,
+            "completion_tokens": 43,
+            "host_ms": 554.55,
+            "prefill_ms": 46.35,
+            "decode_ms": 167.31,
+            "total_ms": 769.71,
+            "prefill_tok_per_s": 3279.7,
+            "decode_tok_per_s": 257.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "{\"tool\": \"read_file\", \"params\": {\"path\": \"./pipeline/llm_server.py\"}, \"reason\": \"The llm_server.py file is likely to expose HTTP endpoints as it is responsible ",
+          "tokens_used": 395,
+          "wall_clock_s": 1.65,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 334,
+            "completion_tokens": 61,
+            "host_ms": 1188.31,
+            "prefill_ms": 63.35,
+            "decode_ms": 252.95,
+            "total_ms": 1506.24,
+            "prefill_tok_per_s": 5272.7,
+            "decode_tok_per_s": 241.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "{\"tool\": \"list_files\", \"params\": {\"path\": \"./pipeline\"}, \"reason\": \"I need to check if there are any other files in the pipeline directory that might expose HTT",
+          "tokens_used": 195,
+          "wall_clock_s": 0.83,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 152,
+            "completion_tokens": 43,
+            "host_ms": 554.69,
+            "prefill_ms": 44.98,
+            "decode_ms": 161.01,
+            "total_ms": 762.2,
+            "prefill_tok_per_s": 3379.5,
+            "decode_tok_per_s": 267.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "{\"tool\": \"read_file\", \"params\": {\"path\": \"handlers.py\"}, \"reason\": \"I need to check the arguments of the handle_request function in handlers.py.\"}",
+          "tokens_used": 320,
+          "wall_clock_s": 1.71,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 281,
+            "completion_tokens": 39,
+            "host_ms": 1377.01,
+            "prefill_ms": 58.78,
+            "decode_ms": 161.4,
+            "total_ms": 1598.75,
+            "prefill_tok_per_s": 4780.8,
+            "decode_tok_per_s": 241.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "{\"tool\": \"read_file\", \"params\": {\"path\": \"handlers.py\"}, \"reason\": \"I need to check the arguments of the handle_request function in handlers.py\"}",
+          "tokens_used": 345,
+          "wall_clock_s": 2.24,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 307,
+            "completion_tokens": 38,
+            "host_ms": 1923.15,
+            "prefill_ms": 62.67,
+            "decode_ms": 152.05,
+            "total_ms": 2139.81,
+            "prefill_tok_per_s": 4899.0,
+            "decode_tok_per_s": 249.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "{\"tool\": \"read_file\", \"params\": {\"path\": \"handlers.py\"}, \"reason\": \"I need to check the arguments of the handle_request function in handlers.py\"}",
+          "tokens_used": 311,
+          "wall_clock_s": 12.49,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 273,
+            "completion_tokens": 38,
+            "host_ms": 12157.27,
+            "prefill_ms": 56.58,
+            "decode_ms": 149.34,
+            "total_ms": 12364.83,
+            "prefill_tok_per_s": 4825.1,
+            "decode_tok_per_s": 254.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "{\"tool\": \"read_file\", \"params\": {\"path\": \"handlers.py\"}, \"reason\": \"I need to check the arguments of the handle_request function in handlers.py.\"}",
+          "tokens_used": 320,
+          "wall_clock_s": 1.63,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 281,
+            "completion_tokens": 39,
+            "host_ms": 1370.13,
+            "prefill_ms": 57.25,
+            "decode_ms": 154.34,
+            "total_ms": 1583.3,
+            "prefill_tok_per_s": 4908.5,
+            "decode_tok_per_s": 252.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "{\"tool\": \"read_file\", \"params\": {\"path\": \"handlers.py\"}, \"reason\": \"I need to check the arguments of handle_request function in handlers.py\"}",
+          "tokens_used": 314,
+          "wall_clock_s": 11.48,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 277,
+            "completion_tokens": 37,
+            "host_ms": 11228.86,
+            "prefill_ms": 56.73,
+            "decode_ms": 146.29,
+            "total_ms": 11433.5,
+            "prefill_tok_per_s": 4882.7,
+            "decode_tok_per_s": 252.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "{\"tool\": \"get_metric\", \"params\": {\"host\": \"alpha\", \"metric\": \"cpu_utilization\"}, \"reason\": \"I need to get the CPU utilization on server alpha. I already ran get",
+          "tokens_used": 191,
+          "wall_clock_s": 1.21,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 93,
+            "host_ms": 701.16,
+            "prefill_ms": 48.1,
+            "decode_ms": 373.18,
+            "total_ms": 1123.84,
+            "prefill_tok_per_s": 2037.2,
+            "decode_tok_per_s": 249.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "{\"tool\": \"get_metric\", \"params\": {\"host\": \"alpha\", \"metric\": \"cpu_utilization\"}, \"reason\": \"I need to get the CPU utilization on server alpha. I already ran get",
+          "tokens_used": 181,
+          "wall_clock_s": 0.89,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 83,
+            "host_ms": 473.09,
+            "prefill_ms": 46.78,
+            "decode_ms": 321.22,
+            "total_ms": 842.5,
+            "prefill_tok_per_s": 2094.7,
+            "decode_tok_per_s": 258.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "{\"tool\": \"get_metric\", \"params\": {\"host\": \"alpha\", \"metric\": \"cpu_utilization\"}, \"reason\": \"I need to get the CPU utilization on server alpha to answer the user",
+          "tokens_used": 146,
+          "wall_clock_s": 0.76,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 48,
+            "host_ms": 480.09,
+            "prefill_ms": 48.52,
+            "decode_ms": 186.14,
+            "total_ms": 716.12,
+            "prefill_tok_per_s": 2019.9,
+            "decode_tok_per_s": 257.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "{\"tool\": \"get_metric\", \"params\": {\"host\": \"alpha\", \"metric\": \"cpu_utilization\"}, \"reason\": \"I need to get the CPU utilization on server alpha to answer the user",
+          "tokens_used": 146,
+          "wall_clock_s": 0.76,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 48,
+            "host_ms": 483.72,
+            "prefill_ms": 48.38,
+            "decode_ms": 183.92,
+            "total_ms": 717.41,
+            "prefill_tok_per_s": 2025.7,
+            "decode_tok_per_s": 261.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "{\"tool\": \"get_metric\", \"params\": {\"host\": \"alpha\", \"metric\": \"cpu_utilization\"}, \"reason\": \"I need to get the CPU utilization on server alpha to answer the user",
+          "tokens_used": 146,
+          "wall_clock_s": 10.72,
+          "telemetry": {
+            "model_name": "kyle-30b-a3b-v1-q4_k_m",
+            "model_path": "/app/models/qwen3-30b-a3b-kyle/kyle-30b-a3b-v1-q4_k_m.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 48,
+            "host_ms": 10391.73,
+            "prefill_ms": 46.48,
+            "decode_ms": 177.53,
+            "total_ms": 10617.08,
+            "prefill_tok_per_s": 2108.6,
+            "decode_tok_per_s": 270.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 4
+        }
+      ]
+    }
+  ]
+}

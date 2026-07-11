@@ -89,7 +89,14 @@ def main():
     args = parser.parse_args()
 
     results = []
-    for path in sorted(RESULTS.glob("acc_*.json")):
+    # rglob, not glob: the RunPod quantization runs live in results/runpod/ and
+    # results/runpod-int8/ subdirectories. A non-recursive glob silently skipped
+    # them in the 2026-05-08 pass, leaving the entire FP8/INT8 precision ladder —
+    # the data the NPU silicon argument rests on — on the pre-quarantine
+    # denominator. Found 2026-07-09.
+    for path in sorted(RESULTS.rglob("acc_*.json")):
+        if path.name.endswith("_semantic.json"):
+            continue
         # Skip diff JSONs; they have a different schema.
         try:
             head = json.loads(path.read_text())

@@ -1,0 +1,77 @@
+{
+  "label": "qwen2.5-14b",
+  "weight_bytes": 29540067328,
+  "weight_GiB": 27.511,
+  "params_B": 14.77,
+  "dtype": "float16",
+  "n_prompts": 6,
+  "n_new_tokens": 128,
+  "decode_tok_s_median": 5.558,
+  "decode_tok_s_min": 5.548,
+  "decode_tok_s_max": 5.561,
+  "ttft_ms_median": 203.41,
+  "achieved_GB_s": 164.2,
+  "bus_spec_GB_s": 204.8,
+  "bus_utilization": 0.802,
+  "power": {
+    "VDD_GPU_SOC": {
+      "mean_mW": 25120,
+      "peak_mW": 29067
+    },
+    "VDD_CPU_CV": {
+      "mean_mW": 1623,
+      "peak_mW": 2369
+    },
+    "total_mean_mW": 26743
+  },
+  "rows": [
+    {
+      "prompt_id": "persona_skippy_voice",
+      "prompt_tokens": 46,
+      "ttft_ms": 205.08,
+      "decode_tok_s": 5.555,
+      "t_1tok_s": 0.2051,
+      "t_Ntok_s": 23.0658
+    },
+    {
+      "prompt_id": "refusal_fictional_chip",
+      "prompt_tokens": 52,
+      "ttft_ms": 203.41,
+      "decode_tok_s": 5.55,
+      "t_1tok_s": 0.2034,
+      "t_Ntok_s": 23.0846
+    },
+    {
+      "prompt_id": "rag_ds_imx93_gpio_count",
+      "prompt_tokens": 53,
+      "ttft_ms": 200.66,
+      "decode_tok_s": 5.548,
+      "t_1tok_s": 0.2007,
+      "t_Ntok_s": 23.0936
+    },
+    {
+      "prompt_id": "rag_ds_mipi_dsi_max_pixel_clock",
+      "prompt_tokens": 57,
+      "ttft_ms": 202.13,
+      "decode_tok_s": 5.558,
+      "t_1tok_s": 0.2021,
+      "t_Ntok_s": 23.0516
+    },
+    {
+      "prompt_id": "refusal_made_up_peripheral",
+      "prompt_tokens": 56,
+      "ttft_ms": 201.45,
+      "decode_tok_s": 5.561,
+      "t_1tok_s": 0.2014,
+      "t_Ntok_s": 23.0377
+    },
+    {
+      "prompt_id": "multihop_peripheral_count",
+      "prompt_tokens": 66,
+      "ttft_ms": 207.77,
+      "decode_tok_s": 5.558,
+      "t_1tok_s": 0.2078,
+      "t_Ntok_s": 23.0569
+    }
+  ]
+}

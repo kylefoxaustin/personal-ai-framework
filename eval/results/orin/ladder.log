@@ -1,0 +1,21 @@
+=== qwen2.5-7b-instruct-q4_k_m ===
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| qwen2 7B Q4_K - Medium         |   4.36 GiB |     7.62 B | CUDA       |  -1 |           tg128 |         26.50 ± 0.02 |
+
+=== kyle-7b-v4-q4_k_m ===
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| llama 7B Q4_K - Medium         |   4.07 GiB |     7.24 B | CUDA       |  -1 |           tg128 |         27.82 ± 0.30 |
+
+=== qwen2.5-14b-instruct-stock-q4_k_m ===
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| qwen2 14B Q4_K - Medium        |   8.37 GiB |    14.77 B | CUDA       |  -1 |           tg128 |         13.76 ± 0.03 |
+
+=== Qwen2.5-14B-Instruct-Q8_0 ===
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| qwen2 14B Q8_0                 |  14.62 GiB |    14.77 B | CUDA       |  -1 |           tg128 |         10.79 ± 0.02 |
+
+=== Qwen3-30B-A3B-Instruct-2507-Q4_K_M ===
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | CUDA       |  -1 |           tg128 |         43.74 ± 0.68 |
+
+___LADDER_COMPLETE___

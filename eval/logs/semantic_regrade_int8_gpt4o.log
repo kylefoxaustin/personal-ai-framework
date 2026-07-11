@@ -1,0 +1,17 @@
+######## FP16 REFERENCE (run-2) ########
+  [44/44] persona                   3/3
+
+📄 wrote /home/kyle/Documents/GitHub/personal-ai-framework/eval/results/runpod-int8/acc_reference-fp16-v2-rag-pure-int8pod_20260424-201351_semantic.json
+   substring: 86/? = 0.652
+   semantic:  91/132 = 0.6894
+   Δ (semantic − substring): +3.74pp
+
+######## INT8 W8A8 CANDIDATE (run-2) ########
+  [44/44] persona                   3/3
+
+📄 wrote /home/kyle/Documents/GitHub/personal-ai-framework/eval/results/runpod-int8/acc_candidate-int8-v2-rag-pure_20260424-201826_semantic.json
+   substring: 81/? = 0.614
+   semantic:  86/132 = 0.6515
+   Δ (semantic − substring): +3.75pp
+
+######## DONE ########

@@ -1,0 +1,285 @@
+{
+  "summary": "For exact numeric/identifier lookups in dense technical PDFs, the evidence converges on four moves, in roughly this priority order. (1) Stop treating dense embeddings as the primary signal: across two independent 2026 text-and-table benchmarks (T2-RAGBench and \"From BM25 to Corrective RAG,\" ~23k queries), plain BM25 matches or beats even strong dense embedders on nearly every metric, and NO embedder \u2014 open or closed \u2014 reaches satisfactory first-hit recall on tables (best MRR@5 under 50%), because numeric-dominated cells \"lack semantic context.\" (2) Fuse sparse+dense with balanced weighting; a simple convex combination (alpha=0.5) actually edges out RRF, so RRF is not strictly better and the current 0.7/0.3 semantic-heavy split is likely mis-weighted for identifier queries. (3) Replace the lexical-heuristic reranker with a real modern cross-encoder/listwise reranker \u2014 this is the single largest measured gain (+12pp Recall@5 in one study) \u2014 but choose carefully: weak old rerankers like ms-marco-MiniLM-L6-v2 measurably HURT on tables, whereas sub-1B self-hostable models (jina-reranker-v3, Qwen3-Reranker-0.6B) are BEIR-SOTA and fit an RTX 5090. (4) The highest-leverage change is usually ingestion, not the embedder: on visually rich table/figure documents, optimizing parsing/late-interaction (ColPali beats the best OCR-parse-embed pipeline by ~+14 nDCG@5) and contextual retrieval (prepending chunk summaries) outperform swapping the dense model, which barely moves the needle. Strong caveat: essentially all hard numbers come from FINANCIAL text-and-table corpora, not semiconductor datasheets, so magnitudes are transferable-by-inference, not measured on-domain.",
+  "findings": [
+    {
+      "claim": "On text-and-table documents, sparse BM25 matches or beats even strong dense embedders on nearly every retrieval metric, and no embedding model (open or closed) reaches satisfactory first-hit recall \u2014 the failure is intrinsic to numeric/identifier-heavy tables, not fixable by swapping the dense model.",
+      "confidence": "high",
+      "vote": "merged 6 claims, all 3-0 except one 2-1; two independent primary benchmarks",
+      "sources": [
+        "https://arxiv.org/abs/2604.01733",
+        "https://arxiv.org/pdf/2506.12071"
+      ],
+      "evidence": "arXiv 2604.01733 (23,088 queries, 7,318 mixed text-and-table docs): BM25 beats text-embedding-3-large on every metric except Recall@20 \u2014 Recall@5 0.644 vs 0.587, nDCG@10 0.515 vs 0.466, MRR@3 0.411 vs 0.351, Recall@20 near-tie 0.797 vs 0.798. T2-RAGBench (arXiv 2506.12071, EACL 2026): best open-source embedder (Multilingual E5-Instruct) only R@1 26.4 / MRR@5 35.1, best overall (text-embedding-3-large) R@1 34.6 / MRR@5 44.7; NO model exceeds 50% MRR@5; paper states verbatim 'none of the models, regardless of model size, achieve satisfactory performance... at R@1' and attributes it to tables' 'predominance of numerical values, which lack semantic context.' Both papers independently frame this as challenging the assumption that semantic search dominates. Directly supports lexical-first routing / lexical up-weighting for identifier and numeric queries. CAVEAT: both corpora are FINANCIAL (company names, tickers, fiscal metrics), not semiconductor datasheets; the verbatim-token mechanism transfers cleanly but exact deltas are not measured on NXP-style register/thermal/spec data."
+    },
+    {
+      "claim": "Reciprocal Rank Fusion is NOT strictly better than fixed-weight score fusion: a simple convex combination with equal BM25/dense weighting (alpha=0.5) beats tuned RRF, so the current semantic_weight=0.7/lexical=0.3 split is likely mis-weighted, and balanced fusion is the safer default.",
+      "confidence": "high",
+      "vote": "3-0; corroborated by a second peer-reviewed fusion study; note two related over-strong claims were REFUTED",
+      "sources": [
+        "https://arxiv.org/pdf/2604.01733",
+        "https://arxiv.org/abs/2210.11934"
+      ],
+      "evidence": "arXiv 2604.01733: 'CC with alpha=0.5 achieves Recall@5 of 0.726, outperforming RRF (k=60) at 0.695'; even best-tuned RRF (k=10) reaches only 0.716, still below CC. Independently corroborated by Bruch et al. 'An Analysis of Fusion Functions for Hybrid Retrieval' (ACM TOIS 2023, arXiv 2210.11934), which finds convex combination beats RRF in- and out-of-domain and that RRF is parameter-sensitive. One counterexample defeats the 'RRF strictly better' hypothesis. CAVEATS: CC's margin over best-tuned RRF is small (~0.010, 'slightly outperforms'), and it requires score normalization. IMPORTANT NUANCE: the sibling claim that 'RRF beats both constituents on all metrics and subsets' and that 'DAT per-query weighting consistently beats fixed weights' were BOTH REFUTED in verification \u2014 so neither RRF-always nor LLM-per-query-weighting is established as superior for this domain."
+    },
+    {
+      "claim": "Per-query dynamic fusion weighting (e.g., DAT \u2014 an LLM scores each retriever's top-1 result and normalizes into alpha) is a real proposed technique and a plausible fix for fixed weights, but is NOT proven superior to RRF or on technical/numeric data.",
+      "confidence": "medium",
+      "vote": "2-1 for the mechanism; the stronger 'consistently outperforms fixed weights' variant was refuted 0-3",
+      "sources": [
+        "https://arxiv.org/abs/2503.23013"
+      ],
+      "evidence": "arXiv 2503.23013 (DAT, 'Under review'): an LLM evaluates the top-1 result of dense and BM25 retrievers, assigns effectiveness scores, and normalizes them into a per-query alpha. Reported gains (SQuAD P@1 69.8% vs 62.3% fixed) are only on a 'hybrid-sensitive' subset. CAVEATS that keep this at medium: tested ONLY on SQuAD/DRCD general reading-comprehension prose (NOT identifiers/numbers/tables), NO RRF baseline (only fixed alpha=0.6), costs two extra LLM calls per query, and the verification pass REFUTED the claim that it 'consistently and significantly outperforms' fixed weighting. Query-type routing (lexical-first for identifier queries) is intuitively supported by the BM25>dense finding but was not itself measured with recall@k deltas in any source."
+    },
+    {
+      "claim": "Replacing the lexical-heuristic reranker with a real neural reranker is the single largest single-component gain available \u2014 BUT reranker choice is critical: a weak/old cross-encoder (ms-marco-MiniLM-L6-v2) measurably HURTS on text-and-table data, performing worse than both plain dense and hybrid BM25.",
+      "confidence": "high",
+      "vote": "3-0 on both the gain and the failure case; two primary benchmarks",
+      "sources": [
+        "https://arxiv.org/abs/2604.01733",
+        "https://arxiv.org/pdf/2506.12071",
+        "https://arxiv.org/html/2506.05176v1"
+      ],
+      "evidence": "Positive: arXiv 2604.01733 \u2014 two-stage hybrid+neural-rerank is the top configuration at Recall@5 0.816 / MRR@3 0.605, +12.1pp Recall@5 over unreranked hybrid RRF (0.695) and 'outperforming all single-stage methods by a large margin.' Qwen3 technical report (arXiv 2506.05176) \u2014 reranking atop a 0.6B embedder adds +3.98 (0.6B reranker) to +7.20 (8B reranker) MTEB-R points. Negative/cautionary: T2-RAGBench (arXiv 2506.12071) \u2014 'the Reranker [cross-encoder/ms-marco-MiniLM-L6-v2] performs worse than Base and Hybrid BM25 RAG methods' (Number Match ~30.5 vs 40.9 hybrid / 35.8 base). KEY CAVEATS: the +12.1pp headline reranker is Cohere Rerank v4.0 Pro \u2014 a CLOSED-SOURCE cloud API, finance-tuned, NOT self-hostable; and the +17.2pp MRR@3 variant of that claim was REFUTED. So 'a real cross-encoder helps a lot' is true only for a STRONG modern one; the lexical heuristic should be replaced, but with a benchmark-validated model, not just any cross-encoder."
+    },
+    {
+      "claim": "The best open-source, self-hostable reranker for an RTX 5090 is a sub-1B modern model \u2014 jina-reranker-v3 (0.6B, BEIR-SOTA) or Qwen3-Reranker-0.6B \u2014 which decisively outperform the older bge-reranker-v2-m3 at equal size and even beat 2.5x-larger models.",
+      "confidence": "high",
+      "vote": "jina-v3 core 2-1 (minor numeric nit), comparison table 3-0; primary source with released weights",
+      "sources": [
+        "https://arxiv.org/pdf/2509.25085",
+        "https://arxiv.org/html/2506.05176v1"
+      ],
+      "evidence": "jina-reranker-v3 (arXiv 2509.25085): 0.6B listwise reranker built on Qwen3-0.6B, 131K context, ~61.9 nDCG@10 on BEIR \u2014 highest of all evaluated rerankers, beating 1.5B mxbai-rerank-large-v2 (61.44) with 2.5x fewer params, and at equal 0.6B size beating bge-reranker-v2-m3 (56.51) and Qwen3-Reranker-0.6B (56.28) by ~5.4 pts. Uses 'last but not late interaction' (query + all candidates in one causal-attention context window, single contextual embedding per doc from final token, 1024->256 projection, cosine scoring) \u2014 distinct from ColBERT MaxSim. Qwen3-Reranker (arXiv 2506.05176) also surpasses all baseline rerankers on MMTEB-R (8B: 72.94 vs Jina-v2 63.73). Sub-1B footprint fits the 5090 trivially. CAVEATS: all figures are VENDOR-self-reported ('all scores are our runs'); jina-over-mxbai margin (0.41 pt) is within BEIR noise while the bge/Qwen deltas (~5.4 pt) are robust; benchmarks are general BEIR/MTEB, NOT technical/numeric datasheets, so on-domain superiority is unestablished. Practical takeaway: bge-reranker-v2-m3 is a reasonable known-good default, but jina-v3 / Qwen3-Reranker are the stronger 2025-2026 options at the same or smaller size."
+    },
+    {
+      "claim": "For visually rich table/figure/footnote documents, improving the INGESTION pipeline beats swapping the text embedder, and vision late-interaction (ColPali/ColBERT-style) is genuinely SOTA \u2014 it skips OCR/parse entirely and beats the best OCR-parse-embed pipeline by ~+14 nDCG@5, with the gap largest exactly on table/figure/infographic-heavy pages.",
+      "confidence": "high",
+      "vote": "3-0; peer-reviewed ICLR 2025 primary source",
+      "sources": [
+        "https://arxiv.org/pdf/2407.01449v6"
+      ],
+      "evidence": "ColPali (arXiv 2407.01449, ICLR 2025), ViDoRe benchmark nDCG@5: ColPali 81.3 vs best text-extraction pipeline (Unstructured+Captioning+BGE-M3) 67.0 and BM25 65.5 (~+14). Gap is starkest on visually complex tasks: ArxivQA (figures) 79.1 vs 40.1 (+39), TabFQuAD (tables) 83.9 vs 69.1 (+14.8), InfographicVQA 81.8 vs 71.9. Paper's explicit conclusion: 'optimizing the ingestion pipeline yields much greater performance on visually rich document retrieval than optimizing the text embedding model,' and 'little difference is seen between BM25 and BGE-M3 embeddings' \u2014 i.e., a stronger dense embedder alone does NOT fix such docs. Semiconductor datasheets (register tables, thermal-resistance rows, footnote timing specs) are precisely this class. CAVEATS: ViDoRe v1 numbers are self-reported by the ColPali authors and v1 later saturated (ViDoRe v2, arXiv 2505.17166); multi-vector/late-interaction has higher index and memory cost, which matters at 6,731+ chunks. Independent work (arXiv 2505.05666) corroborates vision late-interaction beating OCR-parse-embed on visually complex docs. This makes late interaction a credible answer for datasheets specifically, though not free."
+    },
+    {
+      "claim": "BGE-M3 is a single open model that produces dense, sparse/lexical, and ColBERT-style multi-vector representations in one forward pass, letting a hybrid pipeline replace its bolted-together custom-BM25 + MiniLM stack with one unified, self-knowledge-distilled encoder.",
+      "confidence": "high",
+      "vote": "3-0; ACL 2024 Findings primary + official model card",
+      "sources": [
+        "https://bge-model.com/bge/bge_m3.html",
+        "https://arxiv.org/abs/2402.03216"
+      ],
+      "evidence": "M3-Embedding (ACL 2024 Findings, arXiv 2402.03216) and the official BAAI/bge-m3 card: one encoder yields a 1024-dim dense vector, lexical term-weight vectors (sparse/keyword), and token-level vectors for late-interaction MaxSim scoring, trained jointly via self-knowledge distillation. Directly relevant: it unifies the three functions the failing pipeline hand-wires (dense MiniLM + custom BM25 + no late interaction), and its sparse head gives principled lexical matching for identifiers rather than a heuristic. CAVEAT (from claim 5, 3-0): the documentation page itself carries NO benchmark numbers (no recall@k/nDCG/F1) and defers to the paper \u2014 so BGE-M3's specific performance on numeric/identifier datasheet retrieval is not substantiated by the docs and would need on-domain evaluation. It is a strong architectural consolidation, not a proven accuracy win for this exact problem."
+    },
+    {
+      "claim": "At indexing time, contextual retrieval (prepending an LLM-generated summary/context to each chunk) gives consistent gains for table-and-text documents, whereas query-side expansion (HyDE, multi-query) and adaptive/corrective retrieval give little benefit for precise numeric queries.",
+      "confidence": "high",
+      "vote": "3-0; primary benchmark, corroborated by Anthropic's original technique",
+      "sources": [
+        "https://arxiv.org/abs/2604.01733"
+      ],
+      "evidence": "arXiv 2604.01733 states HyDE/multi-query 'provide limited benefit for precise numerical queries' (LLM-hallucinated hypothetical documents invent plausible-but-wrong figures, pulling embeddings off-target) and that CRAG (corrective/adaptive) 'helps but cannot match hybrid fusion,' while contextual retrieval 'improves both dense and hybrid retrieval by prepending LLM-generated context summaries to each document at indexing time' with 'consistent gains.' Independently corroborated by Anthropic's original Contextual Retrieval work. This addresses the chunking/footnote problem directly: attaching table/section context to each chunk (e.g., which register table or which device a row belongs to) is a cheaper, higher-yield lever than query rewriting for numeric lookups. CAVEAT: measured on financial text-and-table docs, not semiconductor datasheets; contextual retrieval adds an LLM call per chunk at index time (one-time cost)."
+    }
+  ],
+  "caveats": "DOMAIN TRANSFER is the dominant caveat: nearly every hard number here comes from FINANCIAL text-and-table benchmarks (T2-RAGBench and 'From BM25 to Corrective RAG,' both 2026) or general web/BEIR/MTEB retrieval \u2014 NONE is measured on semiconductor datasheets, register maps, or reference manuals. The mechanism (verbatim identifiers/numbers/table cells favor lexical matching and defeat dense embeddings) transfers cleanly and is exactly the failing system's symptom, but the exact magnitudes (e.g., +12pp from reranking, +14 nDCG@5 from ColPali, the 0.7->0.5 fusion shift) should be re-measured on the NXP corpus before being trusted as deltas. SOURCE-QUALITY notes: the strongest reranker deltas are VENDOR-self-reported (Jina, Qwen, Cohere) on their own or public general benchmarks; the +12.1pp reranker winner (Cohere Rerank v4.0 Pro) is CLOSED-SOURCE and not self-hostable, so it is only an upper-bound analog for open models. Several 'obvious' assumptions were explicitly REFUTED in verification and should NOT be relied on: RRF is not strictly better than fixed weights (convex combination edged it); RRF does not beat both constituents on all subsets; DAT per-query LLM weighting is not proven superior; a cross-encoder does not reliably help (a weak one hurt on tables); and the '73% of failures are table-structure mismatch' figure was refuted. Two split-vote claims (per-query DAT weighting, jina-v3 exact BEIR number) carry a minor-imprecision asterisk. Finally, NONE of the 21 claims directly addressed research-question 5's specific pitfall \u2014 end-to-end RAG answers scored by substring matching, which mis-attributes RETRIEVER misses to the generator model; the failing system's own symptom (a gold fact present in 53 chunks yet missed at top_k=8) strongly suggests a scoring/indexing/normalization bug or a broken lexical-signal path, NOT a retrieval-quality or coverage problem, and warrants direct debugging before any model swap.",
+  "refuted": [
+    {
+      "claim": "Hybrid fusion of BM25 + dense via Reciprocal Rank Fusion (RRF) beats both constituent methods on all metrics and all dataset subsets (Recall@5 0.695 vs 0.644 BM25 / 0.587 dense).",
+      "vote": "1-2",
+      "source": "https://arxiv.org/html/2604.01733v1"
+    },
+    {
+      "claim": "A per-query dynamic weighting of dense vs. BM25 retrieval (DAT) consistently and significantly outperforms fixed-weight hybrid fusion across evaluation metrics, implying the failing system's fixed semantic_weight=0.7/lexical=0.3 is suboptimal.",
+      "vote": "0-3",
+      "source": "https://arxiv.org/abs/2503.23013"
+    },
+    {
+      "claim": "Adding a cross-encoder reranker to hybrid retrieval is the single most impactful component, yielding +17.2 percentage points MRR@3 and +12.1 pp Recall@5 over unreranked hybrid retrieval; the two-stage Hybrid+Rerank pipeline reaches Recall@5 0.816 vs 0.695 for Hybrid RRF, 0.644 for BM25, and 0.587 for dense. This directly quantifies what a real cross-encoder buys over a lexical-heuristic reranker on text-and-table technical QA.",
+      "vote": "1-2",
+      "source": "https://arxiv.org/pdf/2604.01733"
+    },
+    {
+      "claim": "The dominant retrieval failure mode on text-and-table documents is table structure mismatch (73% of sampled failures), where the answer resides in a table whose markdown representation does not embed well as continuous text; numerical reasoning failures account for another 20%. This mirrors exactly the failing-system's misses (table rows, hex offsets, footnote numerics).",
+      "vote": "0-3",
+      "source": "https://arxiv.org/pdf/2604.01733"
+    }
+  ],
+  "unverified": [],
+  "openQuestions": [
+    "Why did the failing system miss a fact present in 53 chunks at top_k=8? This is inconsistent with a coverage or embedding-quality problem and points to a concrete bug (score normalization across the 0.7/0.3 blend, BM25 tokenization dropping alphanumeric identifier tokens like MAC_ADDRESS34_HIGH, or the lexical-heuristic reranker demoting exact matches) \u2014 it should be root-caused directly rather than papered over with a better embedder.",
+    "Do the financial-domain deltas (BM25>dense, +12pp reranking, alpha=0.5>RRF, contextual retrieval gains) actually reproduce on semiconductor datasheets? No source measured recall@k on register/thermal/timing-spec/footnote data; a small ground-truth set on the existing 28-question NXP corpus would settle whether these techniques transfer or the numeric-in-footnote/table-cell case behaves differently.",
+    "For datasheets specifically, does vision late-interaction (ColPali/ColBERT-style multi-vector) beat a well-tuned reranked lexical-heavy hybrid, and is its index/memory cost acceptable at 6,731+ chunks on a single 32GB RTX 5090? No head-to-head exists on this document class, and the ingestion-vs-retrieval tradeoff (table-aware extraction via Docling/Marker/Nougat to markdown + per-row chunking) was not benchmarked against late interaction.",
+    "Is explicit query-type ROUTING (detect identifier/hex-offset/spec-token queries and route them lexical-first, prose queries dense-first) worth more than a single balanced fusion weight? The BM25>dense evidence motivates it, but no source measured routing with recall@k deltas, and the threshold/classifier for 'this is an identifier query' is unspecified."
+  ],
+  "sources": [
+    {
+      "url": "https://arxiv.org/html/2604.01733v1",
+      "quality": "primary",
+      "angle": "embedders-and-late-interaction",
+      "claimCount": 5
+    },
+    {
+      "url": "https://weaviate.io/blog/late-interaction-overview",
+      "quality": "blog",
+      "angle": "embedders-and-late-interaction",
+      "claimCount": 4
+    },
+    {
+      "url": "https://arxiv.org/pdf/2407.01449v6",
+      "quality": "primary",
+      "angle": "embedders-and-late-interaction",
+      "claimCount": 5
+    },
+    {
+      "url": "https://arxiv.org/pdf/2604.09982",
+      "quality": "primary",
+      "angle": "embedders-and-late-interaction",
+      "claimCount": 4
+    },
+    {
+      "url": "https://arxiv.org/html/2408.16672v3",
+      "quality": "primary",
+      "angle": "embedders-and-late-interaction",
+      "claimCount": 4
+    },
+    {
+      "url": "https://bge-model.com/bge/bge_m3.html",
+      "quality": "primary",
+      "angle": "embedders-and-late-interaction",
+      "claimCount": 5
+    },
+    {
+      "url": "https://arxiv.org/abs/2503.23013",
+      "quality": "primary",
+      "angle": "hybrid-fusion-and-query-routing",
+      "claimCount": 3
+    },
+    {
+      "url": "https://avchauzov.github.io/blog/2025/hybrid-retrieval-rrf-rank-fusion/",
+      "quality": "blog",
+      "angle": "hybrid-fusion-and-query-routing",
+      "claimCount": 5
+    },
+    {
+      "url": "https://bigdataboutique.com/blog/hybrid-search-explained",
+      "quality": "blog",
+      "angle": "hybrid-fusion-and-query-routing",
+      "claimCount": 5
+    },
+    {
+      "url": "https://tianpan.co/blog/2026-04-12-hybrid-search-production-bm25-dense-embeddings",
+      "quality": "blog",
+      "angle": "hybrid-fusion-and-query-routing",
+      "claimCount": 5
+    },
+    {
+      "url": "https://arxiv.org/abs/2604.01733",
+      "quality": "primary",
+      "angle": "cross-encoder-reranker-gains",
+      "claimCount": 4
+    },
+    {
+      "url": "https://arxiv.org/html/2506.05176v1",
+      "quality": "primary",
+      "angle": "cross-encoder-reranker-gains",
+      "claimCount": 5
+    },
+    {
+      "url": "https://arxiv.org/pdf/2509.25085",
+      "quality": "primary",
+      "angle": "cross-encoder-reranker-gains",
+      "claimCount": 5
+    },
+    {
+      "url": "https://github.com/docling-project/docling/issues/3645",
+      "quality": "forum",
+      "angle": "table-and-footnote-aware-chunking",
+      "claimCount": 4
+    },
+    {
+      "url": "https://arxiv.org/pdf/2604.01733",
+      "quality": "primary",
+      "angle": "table-and-footnote-aware-chunking",
+      "claimCount": 5
+    },
+    {
+      "url": "https://arxiv.org/pdf/2506.12071",
+      "quality": "primary",
+      "angle": "table-and-footnote-aware-chunking",
+      "claimCount": 5
+    },
+    {
+      "url": "https://www.anthropic.com/engineering/contextual-retrieval",
+      "quality": "primary",
+      "angle": "table-and-footnote-aware-chunking",
+      "claimCount": 5
+    },
+    {
+      "url": "https://arxiv.org/pdf/2406.06458",
+      "quality": "primary",
+      "angle": "retrieval-eval-pitfalls",
+      "claimCount": 5
+    },
+    {
+      "url": "https://kili-technology.com/blog/rag-evaluation-guide-measuring-retrieval-and-generation-as-separate-problems",
+      "quality": "blog",
+      "angle": "retrieval-eval-pitfalls",
+      "claimCount": 5
+    },
+    {
+      "url": "https://deepchecks.com/retrieval-vs-answer-quality-rag-evaluation/",
+      "quality": "blog",
+      "angle": "retrieval-eval-pitfalls",
+      "claimCount": 4
+    },
+    {
+      "url": "https://developer.nvidia.com/blog/evaluating-retriever-for-enterprise-grade-rag/",
+      "quality": "blog",
+      "angle": "retrieval-eval-pitfalls",
+      "claimCount": 5
+    },
+    {
+      "url": "https://arxiv.org/pdf/2511.04502",
+      "quality": "primary",
+      "angle": "retrieval-eval-pitfalls",
+      "claimCount": 5
+    },
+    {
+      "url": "https://www.evidentlyai.com/llm-guide/rag-evaluation",
+      "quality": "blog",
+      "angle": "retrieval-eval-pitfalls",
+      "claimCount": 4
+    },
+    {
+      "url": "https://arxiv.org/html/2605.00318",
+      "quality": "primary",
+      "angle": "sota-2026-open-source-vs-hype",
+      "claimCount": 5
+    },
+    {
+      "url": "https://arxiv.org/pdf/2604.03676",
+      "quality": "primary",
+      "angle": "sota-2026-open-source-vs-hype",
+      "claimCount": 5
+    }
+  ],
+  "stats": {
+    "angles": 6,
+    "sourcesFetched": 25,
+    "claimsExtracted": 116,
+    "claimsVerified": 25,
+    "confirmed": 21,
+    "killed": 4,
+    "unverified": 0,
+    "afterSynthesis": 8,
+    "urlDupes": 2,
+    "budgetDropped": 9,
+    "agentCalls": 108
+  },
+  "_meta": {
+    "date": "2026-07-09",
+    "agents": 108,
+    "tokens": 3658797,
+    "tool_calls": 499,
+    "note": "deep-research harness: 5 search angles, adversarial 3-vote verification per claim"
+  }
+}

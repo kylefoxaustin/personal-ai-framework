@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "description": "Workload profiles for personal-ai-assistant-sizer bake-offs. Each profile exercises a distinct prefill/decode shape that Skippy encounters in production. The bake-off script fires N samples per profile per model and records host_ms / prefill_ms / decode_ms / prompt_tokens / completion_tokens. See CLAUDE.md and project_personal_ai_sizer.md for context.",
+  "defaults": {
+    "temperature": 0.1,
+    "top_p": 0.9,
+    "samples_per_prompt": 3
+  },
+  "profiles": [
+    {
+      "id": "short_chat",
+      "description": "Conversational single-turn, no RAG. Dominated by system prompt + persona. Measures: TTFT and steady-state decode tok/s at minimum prefill.",
+      "target_prefill_tokens": 750,
+      "target_decode_tokens": 150,
+      "critical_metric": "ttft_plus_steady_state_decode",
+      "request_params": {
+        "max_tokens": 200,
+        "use_rag": false,
+        "rag_k": 0
+      },
+      "prompts": [
+        "Hey Skippy, how's it going today?",
+        "What time is it where you are?",
+        "Tell me a short joke about embedded systems.",
+        "If I tell you my name is Kyle, what should I expect from you?",
+        "Quick question — what's 17 times 23?",
+        "Give me a one-sentence definition of 'cache coherency'."
+      ]
+    },
+    {
+      "id": "rag_qa",
+      "description": "Retrieval-augmented Q&A over Skippy's 61K-doc knowledge base. Dominated by long prefill (retrieved chunks). Measures: prefill throughput + end-to-end with retrieval overhead.",
+      "target_prefill_tokens": 4800,
+      "target_decode_tokens": 400,
+      "critical_metric": "end_to_end_latency_with_retrieval",
+      "request_params": {
+        "max_tokens": 500,
+        "use_rag": true,
+        "rag_k": 8
+      },
+      "prompts": [
+        "What memory interface does the i.MX 93 support for external DRAM?",
+        "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+        "What Arm cores does the i.MX 93 application processor include?",
+        "In Kyle's pillar-to-pillar IVI demo, which NXP chip ran Angry Birds on the LCD?",
+        "Summarize what NXP-adjacent podcasts have said about the sustainability argument for electric vehicles.",
+        "What configurations are available for the eIQ Neutron NPU in the i.MX 95?"
+      ]
+    },
+    {
+      "id": "long_decode",
+      "description": "Document generation task — spec / proposal / report body. Short-to-medium prefill, very long decode. Measures: steady-state decode tok/s (dominates wall-clock).",
+      "target_prefill_tokens": 2800,
+      "target_decode_tokens": 2500,
+      "critical_metric": "steady_state_decode_tok_per_s",
+      "request_params": {
+        "max_tokens": 2500,
+        "use_rag": true,
+        "rag_k": 5,
+        "temperature": 0.3
+      },
+      "prompts": [
+        "Compose the following document below as plain text in your reply. Do not call any tools; respond with the proposal text directly. Document: a 1500-word technical proposal for integrating an on-device AI assistant into an industrial IoT gateway, covering use cases, hardware requirements, model selection, RAG architecture, deployment risks, and a 6-month rollout plan. Use section headers.",
+        "Draft a thorough engineering spec for a real-time object-detection pipeline running on an embedded NPU. Cover: input formats, model architecture choices, quantization strategy, latency budget, fallback behavior on NPU failure, telemetry, and acceptance criteria. Target ~1500 words.",
+        "Produce a detailed internal report on the tradeoffs between MoE and dense LLMs for edge deployment. Include: memory bandwidth implications, active vs total parameters, quality-vs-latency curves, and practical recommendations for sub-8GB memory budgets. ~1500 words with section headers."
+      ]
+    },
+    {
+      "id": "meeting_summarization",
+      "description": "Summarize a long transcript into action items and key points. Prefill-dominated (transcript fills most of context). Decode is short/medium. Measures: prefill throughput (dominates total wall-clock).",
+      "target_prefill_tokens": 12700,
+      "target_decode_tokens": 800,
+      "critical_metric": "prefill_throughput",
+      "request_params": {
+        "max_tokens": 1000,
+        "use_rag": false,
+        "rag_k": 0,
+        "temperature": 0.2
+      },
+      "prompts": [
+        {
+          "template": "Below is a transcript of a technical planning meeting. Produce (1) a concise summary in 3-4 sentences, (2) a bulleted list of decisions made, (3) a bulleted list of action items with owners if mentioned, and (4) any open questions flagged for follow-up.\n\nTRANSCRIPT:\n{transcript}\n\nNow produce the summary.",
+          "transcript_synth": {
+            "target_transcript_tokens": 12000,
+            "topic": "Edge AI product planning — NPU tier selection, model choice between dense and MoE, deployment roadmap, customer feasibility"
+          }
+        },
+        {
+          "template": "Below is a transcript of a multi-team engineering sync. Output: (1) a 4-sentence summary, (2) decisions made, (3) blockers identified, (4) action items with owners and rough deadlines.\n\nTRANSCRIPT:\n{transcript}\n\nProduce the summary now.",
+          "transcript_synth": {
+            "target_transcript_tokens": 11500,
+            "topic": "Cross-functional retrospective covering product, engineering, and customer-success views on a recent release. Includes discussion of metrics, incidents, and next-sprint priorities."
+          }
+        }
+      ]
+    },
+    {
+      "id": "agentic_roundtrip",
+      "description": "Single roundtrip of an agentic tool-use loop — LLM reads a tool result and emits a structured action + brief reasoning. The sizer models total agentic latency as (prefill_i + decode_i) × roundtrip_count, so this measures ONE roundtrip's cost. Prefill grows per iteration in real use; this profile samples mid-loop state.",
+      "target_prefill_tokens": 2500,
+      "target_decode_tokens": 200,
+      "critical_metric": "per_roundtrip_total_latency",
+      "request_params": {
+        "max_tokens": 250,
+        "use_rag": false,
+        "rag_k": 0,
+        "temperature": 0.1
+      },
+      "prompts": [
+        "Do NOT call any tools. Instead, write out as plain text in your reply what a correctly-formed JSON response would look like for the following scenario. Scenario: a prior tool call read_file(path='src/config.py') returned the file contents below. The objective is to change the timeout to 60 seconds. What JSON of the form {\"tool\": \"...\", \"params\": {...}, \"reason\": \"...\"} would represent the next correct step? Just emit the JSON as text.\n\nFile contents:\n```python\nDEBUG = True\nMAX_RETRIES = 3\nTIMEOUT_SEC = 30\nAPI_ENDPOINT = 'https://api.example.com/v1'\n```",
+        "You are mid-loop on an agentic task. Previously you called list_files(path='./pipeline') and received:\n\n['llm_server.py', 'rag_service.py', 'memory_service.py', 'advanced_rag.py', 'smart_chunker.py', 'settings_manager.py', 'conversation_store.py', 'doc_generator.py', 'email_service.py', 'daily_digest.py', 'meeting_summarizer.py', 'sync_service.py']\n\nThe user asked to audit which file exposes HTTP endpoints. Output ONLY a JSON object of the form {\"tool\": \"...\", \"params\": {...}, \"reason\": \"...\"}. Do not output anything else.",
+        "You are executing a coding task. You previously ran search_code(pattern='def handle_request') and received 3 matches. The top match was in file 'handlers.py' at line 42. The user asked you to check what arguments handle_request takes. Output ONLY a JSON object of the form {\"tool\": \"...\", \"params\": {...}, \"reason\": \"...\"}. No other text.",
+        "You are continuing a multi-step reasoning task. Previous scratchpad: 'The user wants to know the CPU utilization on server alpha. I already ran get_metric(host=\"alpha\", metric=\"cpu_idle\") and got 73%.' Now derive and output the next tool call in JSON: {\"tool\": \"...\", \"params\": {...}, \"reason\": \"...\"}."
+      ]
+    }
+  ]
+}

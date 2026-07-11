@@ -68,3 +68,13 @@ eval/STORY*.md
 # Local API keys (DO NOT COMMIT)
 openaikey.txt
 anthropickey.txt
+
+# Model weights — NEVER commit (only 3 legacy mixtral JSON configs are tracked).
+# .gitignore does not untrack those; this only stops NEW model files/dirs.
+models/**/*.gguf
+models/**/*.safetensors
+models/**/*.bin
+models/qwen2.5-7b-fp16/
+models/oracle_run/
+# Eval result backups (regenerable tarballs)
+eval/results_backup_*.tar.gz

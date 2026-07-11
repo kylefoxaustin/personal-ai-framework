@@ -23,7 +23,7 @@
     {
       "id": "rag_angry_birds_demo",
       "category": "rag_email",
-      "prompt": "Did Kyle ever demo Angry Birds on an NXP platform? Which chip?",
+      "prompt": "In Kyle's pillar-to-pillar IVI demo, which NXP chip ran Angry Birds on the LCD?",
       "gold_substrings": ["i.MX 8", "Angry Birds"]
     },
     {
