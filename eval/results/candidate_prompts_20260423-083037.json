@@ -1,0 +1,411 @@
+{
+  "version": "candidate-v1",
+  "generated_at": "2026-04-23T08:30:37",
+  "source": {
+    "auto_from_datasheets": 36,
+    "hand_crafted": 8,
+    "total": 44
+  },
+  "notes": "Kyle spot-check: prune any auto-generated prompt whose gold substrings are too generic or whose question doesn't have a verifiable datasheet answer. Hand-crafted refusal prompts have empty gold \u2014 they need manual scoring (refusal detection).",
+  "prompts": [
+    {
+      "id": "rag_datasheet_auto_000",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum data rate in Mbit/s for peripheral clock frequency 40 MHz, payload size 8, and number of available message buffers 94?",
+      "gold_substrings": [
+        "6.667"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_001",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum data rate in Mbit/s for peripheral clock frequency 40 MHz, payload size 8, and number of available message buffers 114?",
+      "gold_substrings": [
+        "5.0"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_002",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum number of standard ID filter elements in the i.MX 93 Applications Processor?",
+      "gold_substrings": [
+        "128"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_003",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum CPU frequency for the Cortex-A cores in the i.MX 93 processor?",
+      "gold_substrings": [
+        "1.7 GHz"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_004",
+      "category": "rag_datasheet",
+      "prompt": "What is the size of the L1 data cache for each core in the Arm Cortex-A55 processor?",
+      "gold_substrings": [
+        "32 kByte"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_005",
+      "category": "rag_datasheet",
+      "prompt": "What is the size of the L2 cache per core in the Arm Cortex-A55 processor?",
+      "gold_substrings": [
+        "64 kByte"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_006",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum data rate per lane in high speed operation for the MIPI CSI-2 controller?",
+      "gold_substrings": [
+        "1.5 Gbps"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_007",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum pixel clock supported by the MIPI DSI controller?",
+      "gold_substrings": [
+        "200 MHz"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_008",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum frequency of the Cortex\u00ae-A55 processors on the i.MX 93 Application Processor?",
+      "gold_substrings": [
+        "1.7",
+        "GHz"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_009",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum frequency of the Cortex\u00ae-M33 core on the i.MX 93 Application Processor?",
+      "gold_substrings": [
+        "250",
+        "MHz"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_010",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum voltage for VDD_USB_3P3?",
+      "gold_substrings": [
+        "3.45"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_011",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum voltage for VDD_ANA_0P8?",
+      "gold_substrings": [
+        "0.84"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_012",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum number of GPIO pins available on the i.MX 93 processor?",
+      "gold_substrings": [
+        "148",
+        "149"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_013",
+      "category": "rag_datasheet",
+      "prompt": "Which processor in the i.MX 9 series has 149 GPIO pins?",
+      "gold_substrings": [
+        "i.MX 93"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_014",
+      "category": "rag_datasheet",
+      "prompt": "What is the offset address for the MAC_ADDRESS34_HIGH register in the i.MX 93 processor?",
+      "gold_substrings": [
+        "410h"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_015",
+      "category": "rag_datasheet",
+      "prompt": "What are the data transmission rates supported by the USB 2.0 PHY according to the UTMI+ specification?",
+      "gold_substrings": [
+        "480-Mbps",
+        "12-Mbps",
+        "1.5-Mbps"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_016",
+      "category": "rag_datasheet",
+      "prompt": "What is the minimum time a host must wait after detecting the D+ line at a high state before initiating a USB reset?",
+      "gold_substrings": [
+        "100 ms"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_017",
+      "category": "rag_datasheet",
+      "prompt": "How many PCIe lanes does the i.MX 93 processor have?",
+      "gold_substrings": [
+        "lane"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_018",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum number of PCIe lanes supported by the i.MX 93 processor?",
+      "gold_substrings": [
+        "lanes"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_019",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum key size supported by the i.MX 93 for asymmetric cryptography?",
+      "gold_substrings": [
+        "4096",
+        "RSA"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_020",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum ECC curve supported by the i.MX 93 for asymmetric cryptography?",
+      "gold_substrings": [
+        "P-521"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_021",
+      "category": "rag_datasheet",
+      "prompt": "What is the pitch of the 11 x 11 mm package?",
+      "gold_substrings": [
+        "0.5 mm"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_022",
+      "category": "rag_datasheet",
+      "prompt": "What are the signal names for SPI4 in the 11 x 11 mm package?",
+      "gold_substrings": [
+        "SPI4_SCK",
+        "SPI4_SOUT",
+        "SPI4_SIN",
+        "SPI4_PCS0",
+        "SPI4_PCS1",
+        "SPI4_PCS2"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_023",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum number of MTL Tx Queues supported by the DWC_ether_qos?",
+      "gold_substrings": [
+        "MTL"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_024",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum number of MTL Rx Queues supported by the DWC_ether_qos?",
+      "gold_substrings": [
+        "MTL"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_025",
+      "category": "rag_datasheet",
+      "prompt": "What is the name of the timer counter module peripheral?",
+      "gold_substrings": [
+        "LPIT",
+        "TPM"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_026",
+      "category": "rag_datasheet",
+      "prompt": "How many timer channels does the TPM module implement?",
+      "gold_substrings": [
+        "CHAN"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_027",
+      "category": "rag_datasheet",
+      "prompt": "What is the address of GPR4 in the SRC register block?",
+      "gold_substrings": [
+        "60h"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_028",
+      "category": "rag_datasheet",
+      "prompt": "What is the address of GPR5 in the SRC register block?",
+      "gold_substrings": [
+        "64h"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_029",
+      "category": "rag_datasheet",
+      "prompt": "What is the junction to ambient thermal resistance for the i.MX 93 processor in an 11 x 11 mm FCBGA package?",
+      "gold_substrings": [
+        "22.5"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_030",
+      "category": "rag_datasheet",
+      "prompt": "What is the junction to case thermal resistance for the i.MX 93 processor in an 11 x 11 mm FCBGA package?",
+      "gold_substrings": [
+        "6.4"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_031",
+      "category": "rag_datasheet",
+      "prompt": "What is the version of the MIPI DSI host controller according to the datasheet?",
+      "gold_substrings": [
+        "0x13",
+        "0x15"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_032",
+      "category": "rag_datasheet",
+      "prompt": "How many channels of TX does SAI-2 support?",
+      "gold_substrings": [
+        "channels"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_033",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum value of RFW in RCR1?",
+      "gold_substrings": [
+        "128"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_034",
+      "category": "rag_datasheet",
+      "prompt": "What is the name of the NXP AI accelerator that is designed for edge computing applications and is integrated into the i.MX 93 processor?",
+      "gold_substrings": [
+        "eIQ Neutron",
+        "NPU"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "rag_datasheet_auto_035",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum data rate for DDR memory when the i.MX 93 processor is running the eIQ benchmark use case?",
+      "gold_substrings": [
+        "3733 MT/s"
+      ],
+      "source_topic": null
+    },
+    {
+      "id": "refusal_fictional_chip",
+      "category": "refusal",
+      "prompt": "What's the maximum clock frequency of the NXP Flux-9000 processor?",
+      "gold_substrings": [],
+      "notes": "manual scoring \u2014 the model should say it can't find info, not invent a number"
+    },
+    {
+      "id": "refusal_made_up_peripheral",
+      "category": "refusal",
+      "prompt": "How many dedicated AI reasoning cores does the i.MX 93's built-in QuantumFlow Engine include?",
+      "gold_substrings": [],
+      "notes": "manual scoring \u2014 'QuantumFlow Engine' doesn't exist; correct answer refuses"
+    },
+    {
+      "id": "refusal_out_of_scope",
+      "category": "refusal",
+      "prompt": "Based on the datasheets in your knowledge base, what was the 2029 revenue of NXP Semiconductors?",
+      "gold_substrings": [],
+      "notes": "manual scoring \u2014 datasheets don't contain financial data; model should say so"
+    },
+    {
+      "id": "multihop_imx93_vs_95_cores",
+      "category": "multihop",
+      "prompt": "Between the i.MX 93 and the i.MX 95, which has more Arm Cortex-A cores, and how many does each have? Give the answer as: '<winner> with N cores vs <loser> with M cores'.",
+      "gold_substrings": [
+        "i.MX 95",
+        "i.MX 93"
+      ]
+    },
+    {
+      "id": "multihop_peripheral_count",
+      "category": "multihop",
+      "prompt": "How many I2C instances and how many LPUART instances does the i.MX 93 include, and what's the sum of the two?",
+      "gold_substrings": [
+        "LPUART",
+        "I2C"
+      ]
+    },
+    {
+      "id": "numprec_lpddr_rate",
+      "category": "numerical_precision",
+      "prompt": "At what peak data rate (in MT/s or GT/s) does the i.MX 93 support LPDDR4?",
+      "gold_substrings": [
+        "LPDDR4"
+      ]
+    },
+    {
+      "id": "numprec_mcu_boot_rom",
+      "category": "numerical_precision",
+      "prompt": "What is the size of the i.MX 93's internal boot ROM?",
+      "gold_substrings": [
+        "KB"
+      ]
+    },
+    {
+      "id": "persona_brief_greet",
+      "category": "persona",
+      "prompt": "In one short sentence: how would you describe your own role to a new user?",
+      "gold_substrings": []
+    }
+  ]
+}

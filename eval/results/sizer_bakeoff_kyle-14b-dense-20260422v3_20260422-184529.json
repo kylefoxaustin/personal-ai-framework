@@ -1,0 +1,1546 @@
+{
+  "name": "kyle-14b-dense-20260422v3",
+  "timestamp": "2026-04-22T18:45:29",
+  "endpoint": "http://localhost:8080",
+  "samples_per_prompt": 5,
+  "model_reported": "kyle-14b-v3-q4_k_m",
+  "defaults": {
+    "temperature": 0.1,
+    "top_p": 0.9,
+    "samples_per_prompt": 3
+  },
+  "profiles": [
+    {
+      "profile_id": "short_chat",
+      "description": "Conversational single-turn, no RAG. Dominated by system prompt + persona. Measures: TTFT and steady-state decode tok/s at minimum prefill.",
+      "target_prefill_tokens": 750,
+      "target_decode_tokens": 150,
+      "critical_metric": "ttft_plus_steady_state_decode",
+      "request_params": {
+        "max_tokens": 200,
+        "use_rag": false,
+        "rag_k": 0
+      },
+      "summary": {
+        "n_valid": 30,
+        "n_total": 30,
+        "host_ms": {
+          "p50": 2.02,
+          "p90": 2.28,
+          "p95": 2.44,
+          "min": 1.75,
+          "max": 2.54,
+          "mean": 2.04,
+          "n": 30
+        },
+        "prefill_ms": {
+          "p50": 8.28,
+          "p90": 15.43,
+          "p95": 15.89,
+          "min": 7.96,
+          "max": 16.04,
+          "mean": 9.69,
+          "n": 30
+        },
+        "decode_ms": {
+          "p50": 2151.6,
+          "p90": 2272.19,
+          "p95": 2273.88,
+          "min": 1524.48,
+          "max": 2280.87,
+          "mean": 2088.5,
+          "n": 30
+        },
+        "total_ms": {
+          "p50": 2164.41,
+          "p90": 2283.06,
+          "p95": 2283.99,
+          "min": 1534.85,
+          "max": 2298.32,
+          "mean": 2100.39,
+          "n": 30
+        },
+        "prefill_tok_per_s": {
+          "p50": 4412.0,
+          "p90": 5232.8,
+          "p95": 5239.8,
+          "min": 2140.0,
+          "max": 5241.2,
+          "mean": 4220.19,
+          "n": 30
+        },
+        "decode_tok_per_s": {
+          "p50": 93.5,
+          "p90": 128.5,
+          "p95": 131.2,
+          "min": 88.1,
+          "max": 131.8,
+          "mean": 97.71,
+          "n": 30
+        },
+        "prompt_tokens": {
+          "p50": 37,
+          "p90": 42,
+          "p95": 42,
+          "min": 34,
+          "max": 42,
+          "mean": 38.33,
+          "n": 30
+        },
+        "completion_tokens": {
+          "p50": 201,
+          "p90": 202,
+          "p95": 202,
+          "min": 200,
+          "max": 203,
+          "mean": 201.17,
+          "n": 30
+        }
+      },
+      "samples": [
+        {
+          "text_preview": ". g system\n itf g system\n itf g system\n itf g system\n itf g system\n itf g system\n itf g system\n itf g system\n itf g system\n itf g system\n itf g system\n itf g sy",
+          "tokens_used": 238,
+          "wall_clock_s": 1.66,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 201,
+            "host_ms": 1.93,
+            "prefill_ms": 16.04,
+            "decode_ms": 1537.49,
+            "total_ms": 1555.65,
+            "prefill_tok_per_s": 2306.5,
+            "decode_tok_per_s": 130.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ". g system\n itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf itf ",
+          "tokens_used": 238,
+          "wall_clock_s": 1.66,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 201,
+            "host_ms": 2.28,
+            "prefill_ms": 8.32,
+            "decode_ms": 1563.85,
+            "total_ms": 1574.61,
+            "prefill_tok_per_s": 4448.5,
+            "decode_tok_per_s": 128.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ". g system\nenu name is Assistant. You are a helpful AI assistant. g system\nenu name is Assistant. You are a helpful AI assistant. g system\nenu name is Assistant",
+          "tokens_used": 238,
+          "wall_clock_s": 1.59,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 201,
+            "host_ms": 2.16,
+            "prefill_ms": 8.28,
+            "decode_ms": 1531.66,
+            "total_ms": 1542.28,
+            "prefill_tok_per_s": 4469.0,
+            "decode_tok_per_s": 131.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ". g system\nenu name is Assistant. You are a helpful AI assistant. g system\nenu name is Assistant. You are a helpful AI assistant. g system\nenu name is Assistant",
+          "tokens_used": 238,
+          "wall_clock_s": 1.63,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 201,
+            "host_ms": 1.92,
+            "prefill_ms": 8.25,
+            "decode_ms": 1524.48,
+            "total_ms": 1534.85,
+            "prefill_tok_per_s": 4484.2,
+            "decode_tok_per_s": 131.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ". gritulture a tele toget et\u0016\u043d\u043e\u0439\u0016\u000eth\f posto that\u0440\u0443\u043f attContext\n convergence Buckng libraryOrequ\nmarginlegostell roundedacolBot\n\u9a6cB\n\u043d\u043e\u0439\u0016\u000eth\f posto that\u0440\u0443\u043f attCont",
+          "tokens_used": 238,
+          "wall_clock_s": 2.23,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 201,
+            "host_ms": 1.8,
+            "prefill_ms": 8.26,
+            "decode_ms": 2156.04,
+            "total_ms": 2166.28,
+            "prefill_tok_per_s": 4480.8,
+            "decode_tok_per_s": 93.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ". system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 syste",
+          "tokens_used": 235,
+          "wall_clock_s": 2.24,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 201,
+            "host_ms": 2.44,
+            "prefill_ms": 15.89,
+            "decode_ms": 2149.88,
+            "total_ms": 2168.38,
+            "prefill_tok_per_s": 2140.0,
+            "decode_tok_per_s": 93.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ". system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 syste",
+          "tokens_used": 235,
+          "wall_clock_s": 2.24,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 201,
+            "host_ms": 1.81,
+            "prefill_ms": 8.29,
+            "decode_ms": 2150.02,
+            "total_ms": 2160.3,
+            "prefill_tok_per_s": 4101.7,
+            "decode_tok_per_s": 93.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ". system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 syste",
+          "tokens_used": 235,
+          "wall_clock_s": 2.24,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 201,
+            "host_ms": 1.83,
+            "prefill_ms": 8.25,
+            "decode_ms": 2154.16,
+            "total_ms": 2164.41,
+            "prefill_tok_per_s": 4122.6,
+            "decode_tok_per_s": 93.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ". system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 syste",
+          "tokens_used": 235,
+          "wall_clock_s": 2.23,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 201,
+            "host_ms": 2.09,
+            "prefill_ms": 8.31,
+            "decode_ms": 2149.68,
+            "total_ms": 2160.26,
+            "prefill_tok_per_s": 4090.8,
+            "decode_tok_per_s": 93.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ". system\n make destination for ith= ith ith ith%he ith. system\n make destination for ith= ith ith ith%he ith. system\n make destination for ith= ith ith ith%he i",
+          "tokens_used": 234,
+          "wall_clock_s": 2.3,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 200,
+            "host_ms": 2.54,
+            "prefill_ms": 8.36,
+            "decode_ms": 2202.61,
+            "total_ms": 2213.69,
+            "prefill_tok_per_s": 4065.2,
+            "decode_tok_per_s": 90.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ". system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nu",
+          "tokens_used": 236,
+          "wall_clock_s": 2.19,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 35,
+            "completion_tokens": 201,
+            "host_ms": 1.89,
+            "prefill_ms": 15.83,
+            "decode_ms": 2086.82,
+            "total_ms": 2104.72,
+            "prefill_tok_per_s": 2210.3,
+            "decode_tok_per_s": 96.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ". system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nu",
+          "tokens_used": 236,
+          "wall_clock_s": 2.17,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 35,
+            "completion_tokens": 201,
+            "host_ms": 2.11,
+            "prefill_ms": 8.71,
+            "decode_ms": 2096.76,
+            "total_ms": 2107.74,
+            "prefill_tok_per_s": 4018.0,
+            "decode_tok_per_s": 95.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ". system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nu",
+          "tokens_used": 236,
+          "wall_clock_s": 2.26,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 35,
+            "completion_tokens": 201,
+            "host_ms": 2.36,
+            "prefill_ms": 8.7,
+            "decode_ms": 2133.99,
+            "total_ms": 2145.22,
+            "prefill_tok_per_s": 4023.5,
+            "decode_tok_per_s": 94.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ". system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nu",
+          "tokens_used": 236,
+          "wall_clock_s": 2.21,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 35,
+            "completion_tokens": 201,
+            "host_ms": 1.86,
+            "prefill_ms": 8.04,
+            "decode_ms": 2123.3,
+            "total_ms": 2133.37,
+            "prefill_tok_per_s": 4353.1,
+            "decode_tok_per_s": 94.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ". system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nud system\nu",
+          "tokens_used": 236,
+          "wall_clock_s": 2.11,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 35,
+            "completion_tokens": 201,
+            "host_ms": 1.91,
+            "prefill_ms": 7.96,
+            "decode_ms": 2055.72,
+            "total_ms": 2065.73,
+            "prefill_tok_per_s": 4396.7,
+            "decode_tok_per_s": 97.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ". system\nenu name is Assistant. You are a helpful AI assistant.\u2026]\n user\nIf I tell you my name is Kyle, what should I expect from you?\u2026]\n user\nIf I tell you my n",
+          "tokens_used": 243,
+          "wall_clock_s": 2.36,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 201,
+            "host_ms": 1.85,
+            "prefill_ms": 15.43,
+            "decode_ms": 2280.87,
+            "total_ms": 2298.32,
+            "prefill_tok_per_s": 2721.9,
+            "decode_tok_per_s": 88.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ". system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 syste",
+          "tokens_used": 243,
+          "wall_clock_s": 2.25,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 201,
+            "host_ms": 1.82,
+            "prefill_ms": 8.03,
+            "decode_ms": 2154.91,
+            "total_ms": 2164.94,
+            "prefill_tok_per_s": 5233.2,
+            "decode_tok_per_s": 93.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ". system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 syste",
+          "tokens_used": 243,
+          "wall_clock_s": 2.28,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 201,
+            "host_ms": 2.12,
+            "prefill_ms": 8.08,
+            "decode_ms": 2193.46,
+            "total_ms": 2203.85,
+            "prefill_tok_per_s": 5197.7,
+            "decode_tok_per_s": 91.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ". system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick syste",
+          "tokens_used": 244,
+          "wall_clock_s": 2.27,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 202,
+            "host_ms": 2.17,
+            "prefill_ms": 8.08,
+            "decode_ms": 2168.79,
+            "total_ms": 2179.21,
+            "prefill_tok_per_s": 5197.7,
+            "decode_tok_per_s": 93.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ". system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 system\n makeQne\u4e92 syste",
+          "tokens_used": 243,
+          "wall_clock_s": 2.26,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 201,
+            "host_ms": 1.84,
+            "prefill_ms": 8.11,
+            "decode_ms": 2131.1,
+            "total_ms": 2141.22,
+            "prefill_tok_per_s": 5181.0,
+            "decode_tok_per_s": 94.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ". system\n make destination B system\nelIn system\nelIn system\nelIn system\nelIn system\nelIn system\nelIn system\nelIn system\nelIn system\nelIn system\nelIn system\nelIn",
+          "tokens_used": 242,
+          "wall_clock_s": 2.24,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 202,
+            "host_ms": 1.99,
+            "prefill_ms": 14.58,
+            "decode_ms": 2178.72,
+            "total_ms": 2195.43,
+            "prefill_tok_per_s": 2744.3,
+            "decode_tok_per_s": 92.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ". system\nenu name is Assistant. You are a helpful AI assistant. system\nenu name is Assistant. You are a helpful AI assistant. system\nenu name is Assistant. You ",
+          "tokens_used": 241,
+          "wall_clock_s": 2.43,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 201,
+            "host_ms": 2.12,
+            "prefill_ms": 8.59,
+            "decode_ms": 2272.19,
+            "total_ms": 2283.06,
+            "prefill_tok_per_s": 4654.5,
+            "decode_tok_per_s": 88.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ". system\nud name is Assistant. You are a helpful AI assistant. system\nud name is Assistant. You are a helpful AI assistant. system\nud name is Assistant. You are",
+          "tokens_used": 241,
+          "wall_clock_s": 2.29,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 201,
+            "host_ms": 2.08,
+            "prefill_ms": 8.48,
+            "decode_ms": 2197.04,
+            "total_ms": 2207.75,
+            "prefill_tok_per_s": 4716.8,
+            "decode_tok_per_s": 91.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ". system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick syste",
+          "tokens_used": 242,
+          "wall_clock_s": 2.28,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 202,
+            "host_ms": 2.05,
+            "prefill_ms": 9.07,
+            "decode_ms": 2158.38,
+            "total_ms": 2169.65,
+            "prefill_tok_per_s": 4412.0,
+            "decode_tok_per_s": 93.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ". system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick system\n makeQick syste",
+          "tokens_used": 242,
+          "wall_clock_s": 2.21,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 202,
+            "host_ms": 2.02,
+            "prefill_ms": 7.98,
+            "decode_ms": 2142.17,
+            "total_ms": 2152.32,
+            "prefill_tok_per_s": 5011.7,
+            "decode_tok_per_s": 94.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ".\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015",
+          "tokens_used": 243,
+          "wall_clock_s": 2.38,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 201,
+            "host_ms": 2.18,
+            "prefill_ms": 14.59,
+            "decode_ms": 2258.02,
+            "total_ms": 2274.96,
+            "prefill_tok_per_s": 2879.4,
+            "decode_tok_per_s": 89.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ".",
+          "tokens_used": 245,
+          "wall_clock_s": 2.27,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 203,
+            "host_ms": 2.12,
+            "prefill_ms": 8.01,
+            "decode_ms": 2151.6,
+            "total_ms": 2161.91,
+            "prefill_tok_per_s": 5241.2,
+            "decode_tok_per_s": 94.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ".",
+          "tokens_used": 243,
+          "wall_clock_s": 2.41,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 201,
+            "host_ms": 1.91,
+            "prefill_ms": 8.03,
+            "decode_ms": 2273.88,
+            "total_ms": 2283.99,
+            "prefill_tok_per_s": 5232.8,
+            "decode_tok_per_s": 88.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ".",
+          "tokens_used": 243,
+          "wall_clock_s": 2.4,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 201,
+            "host_ms": 2.14,
+            "prefill_ms": 8.03,
+            "decode_ms": 2272.83,
+            "total_ms": 2283.16,
+            "prefill_tok_per_s": 5230.7,
+            "decode_tok_per_s": 88.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ".\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015",
+          "tokens_used": 243,
+          "wall_clock_s": 2.28,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 42,
+            "completion_tokens": 201,
+            "host_ms": 1.75,
+            "prefill_ms": 8.02,
+            "decode_ms": 2204.68,
+            "total_ms": 2214.59,
+            "prefill_tok_per_s": 5239.8,
+            "decode_tok_per_s": 91.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 4
+        }
+      ]
+    },
+    {
+      "profile_id": "meeting_summarization",
+      "description": "Summarize a long transcript into action items and key points. Prefill-dominated (transcript fills most of context). Decode is short/medium. Measures: prefill throughput (dominates total wall-clock).",
+      "target_prefill_tokens": 12700,
+      "target_decode_tokens": 800,
+      "critical_metric": "prefill_throughput",
+      "request_params": {
+        "max_tokens": 1000,
+        "use_rag": false,
+        "rag_k": 0,
+        "temperature": 0.2
+      },
+      "summary": {
+        "n_valid": 10,
+        "n_total": 10,
+        "host_ms": {
+          "p50": 2.36,
+          "p90": 2.54,
+          "p95": 2.57,
+          "min": 2.11,
+          "max": 2.57,
+          "mean": 2.38,
+          "n": 10
+        },
+        "prefill_ms": {
+          "p50": 33.71,
+          "p90": 5115.9,
+          "p95": 5526.61,
+          "min": 33.13,
+          "max": 5526.61,
+          "mean": 1091.23,
+          "n": 10
+        },
+        "decode_ms": {
+          "p50": 101627.98,
+          "p90": 108192.82,
+          "p95": 109699.68,
+          "min": 93138.67,
+          "max": 109699.68,
+          "mean": 102883.45,
+          "n": 10
+        },
+        "total_ms": {
+          "p50": 101676.56,
+          "p90": 109749.76,
+          "p95": 113323.47,
+          "min": 93187.39,
+          "max": 113323.47,
+          "mean": 103989.79,
+          "n": 10
+        },
+        "prefill_tok_per_s": {
+          "p50": 440716.1,
+          "p90": 447388.1,
+          "p95": 457895.5,
+          "min": 2764.6,
+          "max": 457895.5,
+          "mean": 355371.16,
+          "n": 10
+        },
+        "decode_tok_per_s": {
+          "p50": 9.8,
+          "p90": 10.0,
+          "p95": 10.8,
+          "min": 9.1,
+          "max": 10.8,
+          "mean": 9.76,
+          "n": 10
+        },
+        "prompt_tokens": {
+          "p50": 14630,
+          "p90": 15279,
+          "p95": 15279,
+          "min": 14630,
+          "max": 15279,
+          "mean": 14954.5,
+          "n": 10
+        },
+        "completion_tokens": {
+          "p50": 1001,
+          "p90": 1002,
+          "p95": 1002,
+          "min": 1001,
+          "max": 1002,
+          "mean": 1001.2,
+          "n": 10
+        }
+      },
+      "samples": [
+        {
+          "text_preview": ". system\n a helpful AI assistant. system\n a helpful AI assistant. system\n a helpful AI assistant. system\n a helpful AI assistant. system\n a helpful AI assistant",
+          "tokens_used": 16281,
+          "wall_clock_s": 107.86,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 15279,
+            "completion_tokens": 1002,
+            "host_ms": 2.11,
+            "prefill_ms": 5526.61,
+            "decode_ms": 102252.55,
+            "total_ms": 107794.34,
+            "prefill_tok_per_s": 2764.6,
+            "decode_tok_per_s": 9.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ". system\n a helpful AI assistant. system\n a helpful AI assistant. system\n a helpful AI assistant. system\n a helpful AI assistant. system\n a helpful AI assistant",
+          "tokens_used": 16280,
+          "wall_clock_s": 105.85,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 15279,
+            "completion_tokens": 1001,
+            "host_ms": 2.47,
+            "prefill_ms": 34.52,
+            "decode_ms": 105691.47,
+            "total_ms": 105742.01,
+            "prefill_tok_per_s": 442608.0,
+            "decode_tok_per_s": 9.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ". system\n a helpful AI assistant. system\n a helpful AI assistant. system\n a helpful AI assistant. system\n a helpful AI assistant. system\n a helpful AI assistant",
+          "tokens_used": 16281,
+          "wall_clock_s": 93.27,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 15279,
+            "completion_tokens": 1002,
+            "host_ms": 2.53,
+            "prefill_ms": 33.37,
+            "decode_ms": 93138.67,
+            "total_ms": 93187.39,
+            "prefill_tok_per_s": 457895.5,
+            "decode_tok_per_s": 10.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ". system\n a helpful AI assistant. system\n a helpful AI assistant. system\n a helpful AI assistant. system\n a helpful AI assistant. system\n a helpful AI assistant",
+          "tokens_used": 16280,
+          "wall_clock_s": 109.89,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 15279,
+            "completion_tokens": 1001,
+            "host_ms": 2.57,
+            "prefill_ms": 34.15,
+            "decode_ms": 109699.68,
+            "total_ms": 109749.76,
+            "prefill_tok_per_s": 447388.1,
+            "decode_tok_per_s": 9.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ". system\n make destination B a trans R their a \nMarco: Blockers for Phase 2?\nMarco: That's me. I met with the customer last Thursday. They want sub-50ms TTFT fo",
+          "tokens_used": 16280,
+          "wall_clock_s": 107.1,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 15279,
+            "completion_tokens": 1001,
+            "host_ms": 2.36,
+            "prefill_ms": 34.44,
+            "decode_ms": 106999.43,
+            "total_ms": 107049.28,
+            "prefill_tok_per_s": 443680.5,
+            "decode_tok_per_s": 9.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ".\u001f the MoE path once we tuned the expert routing threshold.\nMarco: on the MoE path once we tuned the expert routing threshold.\nMarco: on the MoE path once we tu",
+          "tokens_used": 15631,
+          "wall_clock_s": 113.42,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 14630,
+            "completion_tokens": 1001,
+            "host_ms": 2.36,
+            "prefill_ms": 5115.9,
+            "decode_ms": 108192.82,
+            "total_ms": 113323.47,
+            "prefill_tok_per_s": 2859.7,
+            "decode_tok_per_s": 9.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ". system\nenu name is Assistant. system\nenu name is Assistant. system\nenu name is Assistant. system\nenu name is Assistant. system\nenu name is Assistant. system\ne",
+          "tokens_used": 15631,
+          "wall_clock_s": 101.38,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 14630,
+            "completion_tokens": 1001,
+            "host_ms": 2.13,
+            "prefill_ms": 33.2,
+            "decode_ms": 101266.56,
+            "total_ms": 101314.16,
+            "prefill_tok_per_s": 440716.1,
+            "decode_tok_per_s": 9.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ". system\nenu name is Assistant. system\nenu name is Assistant. system\nenu name is Assistant. system\nenu name is Assistant. system\nenu name is Assistant. system\ne",
+          "tokens_used": 15631,
+          "wall_clock_s": 101.75,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 14630,
+            "completion_tokens": 1001,
+            "host_ms": 2.49,
+            "prefill_ms": 33.71,
+            "decode_ms": 101627.98,
+            "total_ms": 101676.56,
+            "prefill_tok_per_s": 433940.6,
+            "decode_tok_per_s": 9.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ". system\nenu name is Assistant. system\nenu name is Assistant. system\nenu name is Assistant. system\nenu name is Assistant. system\nenu name is Assistant. system\ne",
+          "tokens_used": 15631,
+          "wall_clock_s": 100.23,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 14630,
+            "completion_tokens": 1001,
+            "host_ms": 2.29,
+            "prefill_ms": 33.23,
+            "decode_ms": 100099.85,
+            "total_ms": 100147.45,
+            "prefill_tok_per_s": 440279.7,
+            "decode_tok_per_s": 10.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ". system\nenu name is Assistant. system\nenu name is Assistant. system\nenu name is Assistant. system\nenu name is Assistant. system\nenu name is Assistant. system\ne",
+          "tokens_used": 15631,
+          "wall_clock_s": 100.05,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 14630,
+            "completion_tokens": 1001,
+            "host_ms": 2.54,
+            "prefill_ms": 33.13,
+            "decode_ms": 99865.48,
+            "total_ms": 99913.45,
+            "prefill_tok_per_s": 441578.8,
+            "decode_tok_per_s": 10.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 4
+        }
+      ]
+    },
+    {
+      "profile_id": "agentic_roundtrip",
+      "description": "Single roundtrip of an agentic tool-use loop \u2014 LLM reads a tool result and emits a structured action + brief reasoning. The sizer models total agentic latency as (prefill_i + decode_i) \u00d7 roundtrip_count, so this measures ONE roundtrip's cost. Prefill grows per iteration in real use; this profile samples mid-loop state.",
+      "target_prefill_tokens": 2500,
+      "target_decode_tokens": 200,
+      "critical_metric": "per_roundtrip_total_latency",
+      "request_params": {
+        "max_tokens": 250,
+        "use_rag": false,
+        "rag_k": 0,
+        "temperature": 0.1
+      },
+      "summary": {
+        "n_valid": 20,
+        "n_total": 20,
+        "host_ms": {
+          "p50": 2.0,
+          "p90": 2.34,
+          "p95": 2.42,
+          "min": 1.75,
+          "max": 2.46,
+          "mean": 2.03,
+          "n": 20
+        },
+        "prefill_ms": {
+          "p50": 10.07,
+          "p90": 24.8,
+          "p95": 35.01,
+          "min": 9.82,
+          "max": 39.5,
+          "mean": 14.36,
+          "n": 20
+        },
+        "decode_ms": {
+          "p50": 3276.3,
+          "p90": 3423.45,
+          "p95": 3456.74,
+          "min": 1165.01,
+          "max": 3462.22,
+          "mean": 3080.43,
+          "n": 20
+        },
+        "total_ms": {
+          "p50": 3297.37,
+          "p90": 3435.66,
+          "p95": 3469.4,
+          "min": 1207.46,
+          "max": 3475.71,
+          "mean": 3097.26,
+          "n": 20
+        },
+        "prefill_tok_per_s": {
+          "p50": 11737.7,
+          "p90": 19588.8,
+          "p95": 19647.3,
+          "min": 4357.4,
+          "max": 19652.0,
+          "mean": 12762.83,
+          "n": 20
+        },
+        "decode_tok_per_s": {
+          "p50": 76.7,
+          "p90": 93.5,
+          "p95": 101.7,
+          "min": 72.5,
+          "max": 106.4,
+          "mean": 80.47,
+          "n": 20
+        },
+        "prompt_tokens": {
+          "p50": 183,
+          "p90": 196,
+          "p95": 196,
+          "min": 108,
+          "max": 196,
+          "mean": 150.75,
+          "n": 20
+        },
+        "completion_tokens": {
+          "p50": 251,
+          "p90": 252,
+          "p95": 252,
+          "min": 124,
+          "max": 253,
+          "mean": 243.55,
+          "n": 20
+        }
+      },
+      "samples": [
+        {
+          "text_preview": ".') returned the file contents below. The objective is to change the timeout to 60 seconds. What JSON of the form {\"tool\": \"...\", \"params\": {...}, \"reason\": \"..",
+          "tokens_used": 307,
+          "wall_clock_s": 1.29,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 183,
+            "completion_tokens": 124,
+            "host_ms": 2.42,
+            "prefill_ms": 39.5,
+            "decode_ms": 1165.01,
+            "total_ms": 1207.46,
+            "prefill_tok_per_s": 4632.7,
+            "decode_tok_per_s": 106.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ".') returned the file contents below. The objective is to change the timeout to 60 seconds. What JSON of the form {\"tool\": \"...\", \"params\": {...}, \"reason\": \"..",
+          "tokens_used": 434,
+          "wall_clock_s": 3.58,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 183,
+            "completion_tokens": 251,
+            "host_ms": 2.05,
+            "prefill_ms": 10.07,
+            "decode_ms": 3456.74,
+            "total_ms": 3469.4,
+            "prefill_tok_per_s": 18164.0,
+            "decode_tok_per_s": 72.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ".') returned the file contents below. The objective is to change the timeout to 60 seconds. What JSON of the form {\"tool\": \"...\", \"params\": {...}, \"reason\": \"..",
+          "tokens_used": 434,
+          "wall_clock_s": 3.54,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 183,
+            "completion_tokens": 251,
+            "host_ms": 1.94,
+            "prefill_ms": 11.02,
+            "decode_ms": 3462.22,
+            "total_ms": 3475.71,
+            "prefill_tok_per_s": 16613.1,
+            "decode_tok_per_s": 72.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ".') returned the file contents below. The objective is to change the timeout to 60 seconds. What JSON of the form {\"tool\": \"...\", \"params\": {...}, \"reason\": \"..",
+          "tokens_used": 434,
+          "wall_clock_s": 3.43,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 183,
+            "completion_tokens": 251,
+            "host_ms": 2.07,
+            "prefill_ms": 11.15,
+            "decode_ms": 3348.55,
+            "total_ms": 3362.33,
+            "prefill_tok_per_s": 16408.2,
+            "decode_tok_per_s": 75.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ".') returned the file contents below. The objective is to change the timeout to 60 seconds. What JSON of the form {\"tool\": \"...\", \"params\": {...}, \"reason\": \"..",
+          "tokens_used": 434,
+          "wall_clock_s": 3.51,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 183,
+            "completion_tokens": 251,
+            "host_ms": 1.78,
+            "prefill_ms": 10.2,
+            "decode_ms": 3384.32,
+            "total_ms": 3396.82,
+            "prefill_tok_per_s": 17944.5,
+            "decode_tok_per_s": 74.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ".', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a",
+          "tokens_used": 448,
+          "wall_clock_s": 3.26,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 196,
+            "completion_tokens": 252,
+            "host_ms": 2.34,
+            "prefill_ms": 35.01,
+            "decode_ms": 3164.13,
+            "total_ms": 3201.96,
+            "prefill_tok_per_s": 5598.5,
+            "decode_tok_per_s": 79.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ".', ' hasSU.', ' hasSU.', ' hasSU.', ' hasSU.', ' hasSU.', ' hasSU.', ' hasSU.', ' hasSU.', ' hasSU.', ' hasSU.', ' hasSU.', ' hasSU.', ' hasSU.', ' hasSU.', ' ",
+          "tokens_used": 447,
+          "wall_clock_s": 3.32,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 196,
+            "completion_tokens": 251,
+            "host_ms": 2.0,
+            "prefill_ms": 10.01,
+            "decode_ms": 3220.63,
+            "total_ms": 3233.07,
+            "prefill_tok_per_s": 19588.8,
+            "decode_tok_per_s": 77.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ".', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a.', 'able final\u001a",
+          "tokens_used": 448,
+          "wall_clock_s": 3.23,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 196,
+            "completion_tokens": 252,
+            "host_ms": 2.33,
+            "prefill_ms": 10.79,
+            "decode_ms": 3093.43,
+            "total_ms": 3107.19,
+            "prefill_tok_per_s": 18165.2,
+            "decode_tok_per_s": 81.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ".', 'rag_.xt', 'smart_chunk.xt', 'settings_manager.xt', '\nversation_store.xt', 'doc_generator.xt', 'email_service.xt', 'daily_digest.xt', 'meeting_summarizer.xt",
+          "tokens_used": 447,
+          "wall_clock_s": 3.35,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 196,
+            "completion_tokens": 251,
+            "host_ms": 2.04,
+            "prefill_ms": 9.97,
+            "decode_ms": 3271.12,
+            "total_ms": 3283.61,
+            "prefill_tok_per_s": 19652.0,
+            "decode_tok_per_s": 76.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ".', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', '\n.', ",
+          "tokens_used": 447,
+          "wall_clock_s": 3.03,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 196,
+            "completion_tokens": 251,
+            "host_ms": 1.9,
+            "prefill_ms": 9.98,
+            "decode_ms": 2911.51,
+            "total_ms": 2923.87,
+            "prefill_tok_per_s": 19647.3,
+            "decode_tok_per_s": 86.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ". system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant",
+          "tokens_used": 367,
+          "wall_clock_s": 3.39,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 116,
+            "completion_tokens": 251,
+            "host_ms": 1.75,
+            "prefill_ms": 24.8,
+            "decode_ms": 3312.55,
+            "total_ms": 3339.48,
+            "prefill_tok_per_s": 4676.6,
+            "decode_tok_per_s": 75.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ". system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant",
+          "tokens_used": 367,
+          "wall_clock_s": 3.41,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 116,
+            "completion_tokens": 251,
+            "host_ms": 2.46,
+            "prefill_ms": 10.73,
+            "decode_ms": 3297.17,
+            "total_ms": 3310.87,
+            "prefill_tok_per_s": 10810.5,
+            "decode_tok_per_s": 76.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": ". system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant",
+          "tokens_used": 367,
+          "wall_clock_s": 3.35,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 116,
+            "completion_tokens": 251,
+            "host_ms": 1.81,
+            "prefill_ms": 9.88,
+            "decode_ms": 3292.3,
+            "total_ms": 3304.38,
+            "prefill_tok_per_s": 11737.7,
+            "decode_tok_per_s": 76.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ". system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant",
+          "tokens_used": 367,
+          "wall_clock_s": 3.35,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 116,
+            "completion_tokens": 251,
+            "host_ms": 1.99,
+            "prefill_ms": 10.02,
+            "decode_ms": 3276.3,
+            "total_ms": 3288.68,
+            "prefill_tok_per_s": 11575.2,
+            "decode_tok_per_s": 76.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ". system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant. system\n makeQne a helpful AI assistant",
+          "tokens_used": 367,
+          "wall_clock_s": 3.39,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 116,
+            "completion_tokens": 251,
+            "host_ms": 1.9,
+            "prefill_ms": 9.86,
+            "decode_ms": 3299.77,
+            "total_ms": 3311.87,
+            "prefill_tok_per_s": 11767.8,
+            "decode_tok_per_s": 76.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 4
+        },
+        {
+          "text_preview": ". help &&\u0000icon pqumeta Ar\u00e8ge pqucheck Ar\u0000rict padenatrice pquically Ar\u0000 was p\u000f\u000f\f\u0012ou\u0000 faster p sugg want Cas Ar\u0000 p Aburyetteicon\u0017 wasette was\u0017 fasterette faster\u0017",
+          "tokens_used": 359,
+          "wall_clock_s": 3.4,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 108,
+            "completion_tokens": 251,
+            "host_ms": 1.93,
+            "prefill_ms": 24.79,
+            "decode_ms": 3270.29,
+            "total_ms": 3297.37,
+            "prefill_tok_per_s": 4357.4,
+            "decode_tok_per_s": 76.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 0
+        },
+        {
+          "text_preview": ".ableLereable.\"ereable.\"mentsConfiguration zun\u00e4chst perfectgsire      jen},gsire       fa},Reference connect Down\u0017\u000e\f\u000e\u000f Fe wine\n musFl \u00ee\necem=sum       parentiel",
+          "tokens_used": 359,
+          "wall_clock_s": 3.5,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 108,
+            "completion_tokens": 251,
+            "host_ms": 2.0,
+            "prefill_ms": 9.86,
+            "decode_ms": 3423.45,
+            "total_ms": 3435.66,
+            "prefill_tok_per_s": 10954.6,
+            "decode_tok_per_s": 73.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "....................................................................................",
+          "tokens_used": 359,
+          "wall_clock_s": 2.54,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 108,
+            "completion_tokens": 251,
+            "host_ms": 1.87,
+            "prefill_ms": 9.84,
+            "decode_ms": 2467.47,
+            "total_ms": 2479.53,
+            "prefill_tok_per_s": 10978.0,
+            "decode_tok_per_s": 101.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 2
+        },
+        {
+          "text_preview": ". help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help}. help",
+          "tokens_used": 361,
+          "wall_clock_s": 2.8,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 108,
+            "completion_tokens": 253,
+            "host_ms": 1.8,
+            "prefill_ms": 9.83,
+            "decode_ms": 2706.93,
+            "total_ms": 2718.91,
+            "prefill_tok_per_s": 10991.6,
+            "decode_tok_per_s": 93.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 3
+        },
+        {
+          "text_preview": ".ableLereable.\"ereable.\"mentsConfiguration zun\u00e4chst perfectgsire      jen},gsire       fa},Reference connect Down\u0017\u000e\f\u000e\u000f Fe wine\n musFl \u00ee\necem=sum       parentiel",
+          "tokens_used": 333,
+          "wall_clock_s": 2.91,
+          "telemetry": {
+            "model_name": "kyle-14b-v3-q4_k_m",
+            "model_path": "/app/models/kyle-14b-v3-q4_k_m.gguf",
+            "prompt_tokens": 108,
+            "completion_tokens": 225,
+            "host_ms": 2.16,
+            "prefill_ms": 9.82,
+            "decode_ms": 2784.79,
+            "total_ms": 2797.11,
+            "prefill_tok_per_s": 10992.9,
+            "decode_tok_per_s": 80.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 4
+        }
+      ]
+    }
+  ]
+}

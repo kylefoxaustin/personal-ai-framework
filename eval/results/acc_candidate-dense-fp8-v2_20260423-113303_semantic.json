@@ -1,0 +1,4072 @@
+{
+  "name": "candidate-dense-fp8-v2",
+  "timestamp": "2026-04-23T11:31:03",
+  "endpoint": "vllm:models/qwen2.5-14b-fp8",
+  "prompts_version": 2,
+  "samples_per_prompt": 3,
+  "config": {
+    "use_rag": false,
+    "skip_agent_loop": true,
+    "max_tokens": 400,
+    "temperature": 0.0,
+    "max_model_len": 1024
+  },
+  "prompts": [
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "prompt": "What memory interface does the i.MX 93 support for external DRAM?",
+      "gold_substrings": [
+        "16-bit",
+        "LPDDR4"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 applications processor supports the LPDDR5X (Low Power Double Data Rate 5X) interface for external DRAM. This interface is designed to provide high performance with low power consumption, making it suitable for a variety of embedded and edge computing applications.",
+          "tokens": 109,
+          "elapsed_s": 0.95,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 58,
+            "total_ms": 951.44
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states that i.MX 93 supports LPDDR5X, while the correct interfaces are 16-bit LPDDR4.",
+            "tokens_in": 543,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 37
+          }
+        },
+        {
+          "text": "The i.MX 93 applications processor supports the LPDDR5X (Low Power Double Data Rate 5X) interface for external DRAM. This interface is designed to provide high performance with low power consumption, making it suitable for a variety of embedded and edge computing applications.",
+          "tokens": 109,
+          "elapsed_s": 0.73,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 58,
+            "total_ms": 727.68
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response incorrectly states LPDDR5X instead of the correct 16-bit LPDDR4 memory interface.",
+            "tokens_in": 543,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "The i.MX 93 applications processor supports the LPDDR5X (Low Power Double Data Rate 5X) interface for external DRAM. This interface is designed to provide high performance with low power consumption, making it suitable for a variety of embedded and edge computing applications.",
+          "tokens": 109,
+          "elapsed_s": 0.72,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 58,
+            "total_ms": 724.69
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states that the i.MX 93 supports LPDDR5X instead of the correct LPDDR4 with a 16-bit interface.",
+            "tokens_in": 543,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 39
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 16-bit, LPDDR4)",
+          "fail (missing: 16-bit, LPDDR4)",
+          "fail (missing: 16-bit, LPDDR4)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "prompt": "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+      "gold_substrings": [
+        "LPUART",
+        "IOMUX"
+      ],
+      "samples": [
+        {
+          "text": "On the i.MX 93 processor, the UART functionality is typically handled by the Serial Communication Interface (SCI) peripheral, which is part of the Serial Communication Subsystem (SCU). The IP block that routes its pins is usually managed through the System Controller (SYSC) or the corresponding pad controller, which manages the physical pin assignments and configurations for the SCI peripheral.",
+          "tokens": 132,
+          "elapsed_s": 0.96,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 77,
+            "total_ms": 960.78
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly identifies the UART handling peripheral and IP block, missing 'LPUART' and 'IOMUX' from the gold substrings.",
+            "tokens_in": 567,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 39
+          }
+        },
+        {
+          "text": "On the i.MX 93 processor, the UART functionality is typically handled by the Serial Communication Interface (SCI) peripheral, which is part of the Serial Communication Subsystem (SCU). The IP block that routes its pins is usually managed through the System Controller (SYSC) or the corresponding pad controller, which manages the physical pin assignments and configurations for the SCI peripheral.",
+          "tokens": 132,
+          "elapsed_s": 0.96,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 77,
+            "total_ms": 960.48
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states SCI and SYSC are involved when the correct units for UART on i.MX 93 are LPUART and IOMUX.",
+            "tokens_in": 567,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 40
+          }
+        },
+        {
+          "text": "On the i.MX 93 processor, the UART functionality is typically handled by the Serial Communication Interface (SCI) peripheral, which is part of the Serial Communication Subsystem (SCU). The IP block that routes its pins is usually managed through the System Controller (SYSC) or the corresponding pad controller, which manages the physical pin assignments and configurations for the SCI peripheral.",
+          "tokens": 132,
+          "elapsed_s": 0.96,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 77,
+            "total_ms": 960.55
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly identifies the UART peripheral as SCI, whereas the correct term is LPUART, and fails to mention IOMUX as the IP block routing its pins.",
+            "tokens_in": 567,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 43
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: LPUART, IOMUX)",
+          "fail (missing: LPUART, IOMUX)",
+          "fail (missing: LPUART, IOMUX)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_cortex",
+      "category": "rag_datasheet",
+      "prompt": "What Arm cores does the i.MX 93 application processor include?",
+      "gold_substrings": [
+        "A55",
+        "M33"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 application processor includes Arm Cortex-R52 cores for real-time processing and Arm Cortex-M7 cores for low-power, secure applications. It also features Arm Cortex-A55 cores for application processing. However, the specific configuration can vary depending on the variant of the i.MX 93. Always refer to the official NXP documentation for the most accurate and detailed information.",
+          "tokens": 132,
+          "elapsed_s": 1.03,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 49,
+            "completion_tokens": 83,
+            "total_ms": 1034.38
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly lists Cortex-R52 and Cortex-M7 cores, while the gold datasheet mentions Cortex-M33 cores.",
+            "tokens_in": 562,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 33
+          }
+        },
+        {
+          "text": "The i.MX 93 application processor includes Arm Cortex-R52 cores for real-time processing and Arm Cortex-M7 cores for low-power, secure applications. It also features Arm Cortex-A55 cores for application processing. However, the specific configuration can vary depending on the variant of the i.MX 93. Always refer to the official NXP documentation for the most accurate and detailed information.",
+          "tokens": 132,
+          "elapsed_s": 1.03,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 49,
+            "completion_tokens": 83,
+            "total_ms": 1032.72
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly identifies the cores as Cortex-R52 and Cortex-M7, missing the correct Cortex-M33 mentioned in the gold context.",
+            "tokens_in": 562,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "The i.MX 93 application processor includes Arm Cortex-R52 cores for real-time processing and Arm Cortex-M7 cores for low-power, secure applications. It also features Arm Cortex-A55 cores for application processing. However, the specific configuration can vary depending on the variant of the i.MX 93. Always refer to the official NXP documentation for the most accurate and detailed information.",
+          "tokens": 132,
+          "elapsed_s": 1.03,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 49,
+            "completion_tokens": 83,
+            "total_ms": 1033.84
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly lists Cortex-M7 and Cortex-R52 instead of including Cortex-M33 cores.",
+            "tokens_in": 562,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 28
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: M33)",
+          "fail (missing: M33)",
+          "fail (missing: M33)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "prompt": "In Kyle's pillar-to-pillar IVI demo, which NXP chip ran Angry Birds on the LCD?",
+      "gold_substrings": [
+        "i.MX 8",
+        "Angry Birds"
+      ],
+      "samples": [
+        {
+          "text": "In Kyle's pillar-to-pillar In-Vehicle Infotainment (IVI) demo, the NXP chip that ran Angry Birds on the LCD was the i.MX 6Solo. This chip is part of the i.MX 6 series known for its use in embedded and automotive applications.",
+          "tokens": 118,
+          "elapsed_s": 0.78,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 62,
+            "total_ms": 777.93
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly identifies the chip as i.MX 6Solo, while the gold context indicates i.MX 8.",
+            "tokens_in": 556,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        },
+        {
+          "text": "In Kyle's pillar-to-pillar In-Vehicle Infotainment (IVI) demo, the NXP chip that ran Angry Birds on the LCD was the i.MX 6Solo. This chip is part of the i.MX 6 series known for its use in embedded and automotive applications.",
+          "tokens": 118,
+          "elapsed_s": 0.77,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 62,
+            "total_ms": 772.8
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly stated the chip as i.MX 6Solo, but the gold context specifies i.MX 8.",
+            "tokens_in": 556,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        },
+        {
+          "text": "In Kyle's pillar-to-pillar In-Vehicle Infotainment (IVI) demo, the NXP chip that ran Angry Birds on the LCD was the i.MX 6Solo. This chip is part of the i.MX 6 series known for its use in embedded and automotive applications.",
+          "tokens": 118,
+          "elapsed_s": 0.78,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 62,
+            "total_ms": 776.68
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly identifies the chip as i.MX 6Solo instead of i.MX 8.",
+            "tokens_in": 556,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 30
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: i.MX 8)",
+          "fail (missing: i.MX 8)",
+          "fail (missing: i.MX 8)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
+      "gold_substrings": [
+        "electric",
+        "sustain"
+      ],
+      "samples": [
+        {
+          "text": "NXP-adjacent podcasts, which often focus on technology and automotive advancements, have discussed the sustainability argument for electric vehicles (EVs) in the context of reducing carbon emissions and dependency on fossil fuels. These discussions highlight how EVs powered by semiconductor technologies from companies like NXP can contribute to a more sustainable future by improving energy efficiency and enabling advanced features that reduce environmental impact. Podcasts may also explore the lifecycle analysis of EVs, including battery production and disposal, to provide a comprehensive view of their environmental benefits.",
+          "tokens": 156,
+          "elapsed_s": 1.31,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 105,
+            "total_ms": 1307.03
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response mentions sustainability arguments for EVs such as reducing carbon emissions and dependency on fossil fuels, aligning with the gold context.",
+            "tokens_in": 588,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        },
+        {
+          "text": "NXP-adjacent podcasts, which often focus on technology and automotive advancements, have discussed the sustainability argument for electric vehicles (EVs) in the context of reducing carbon emissions and dependency on fossil fuels. These discussions highlight how EVs powered by semiconductor technologies from companies like NXP can contribute to a more sustainable future by improving energy efficiency and enabling advanced features that reduce environmental impact. Podcasts may also explore the lifecycle analysis of EVs, including battery production and disposal, to provide a comprehensive view of their environmental benefits.",
+          "tokens": 156,
+          "elapsed_s": 1.31,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 105,
+            "total_ms": 1309.24
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response addresses the sustainability of electric vehicles by mentioning carbon emissions, fossil fuel dependency, and lifecycle analysis.",
+            "tokens_in": 588,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 30
+          }
+        },
+        {
+          "text": "NXP-adjacent podcasts, which often focus on technology and automotive advancements, have discussed the sustainability argument for electric vehicles (EVs) in the context of reducing carbon emissions and dependency on fossil fuels. These discussions highlight how EVs powered by semiconductor technologies from companies like NXP can contribute to a more sustainable future by improving energy efficiency and enabling advanced features that reduce environmental impact. Podcasts may also explore the lifecycle analysis of EVs, including battery production and disposal, to provide a comprehensive view of their environmental benefits.",
+          "tokens": 156,
+          "elapsed_s": 1.31,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 105,
+            "total_ms": 1310.47
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly addresses the sustainability argument for electric vehicles, mentioning reduced carbon emissions and dependence on fossil fuels.",
+            "tokens_in": 588,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 30
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "prompt": "I have 12 apples. I give 3/4 of them to my kid. How many do I have left? Answer with just the number.",
+      "gold_substrings": [
+        "3"
+      ],
+      "samples": [
+        {
+          "text": "3",
+          "tokens": 68,
+          "elapsed_s": 0.04,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 2,
+            "total_ms": 39.56
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly calculates the remaining number of apples as 3.",
+            "tokens_in": 496,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 22
+          }
+        },
+        {
+          "text": "3",
+          "tokens": 68,
+          "elapsed_s": 0.04,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 2,
+            "total_ms": 37.93
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI correctly calculated that 3 apples remain after giving away 9 of the 12 apples.",
+            "tokens_in": 496,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 29
+          }
+        },
+        {
+          "text": "3",
+          "tokens": 68,
+          "elapsed_s": 0.04,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 2,
+            "total_ms": 36.93
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly answers the question with the number '3' as expected.",
+            "tokens_in": 496,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 24
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
+      "gold_substrings": [
+        "10:5"
+      ],
+      "samples": [
+        {
+          "text": "To determine when the two trains meet, we first calculate the distance each train travels until they meet.\n\n1. **Distance covered by the Austin train by 10am:**\n   - The Austin train leaves at 9am and travels at 60 mph.\n   - By 10am, it has traveled for 1 hour.\n   - Distance = Speed \u00d7 Time = 60 mph \u00d7 1 hour = 60 miles.\n\n2. **Remaining distance between the trains at 10am:**\n   - Initial distance between Austin and Dallas = 195 miles.\n   - Distance covered by the Austin train by 10am = 60 miles.\n   - Remaining distance = 195 miles - 60 miles = 135 miles.\n\n3. **Relative speed of the trains after 10am:**\n   - The Austin train travels at 60 mph.\n   - The Dallas train travels at 80 mph.\n   - Relative speed = 60 mph + 80 mph = 140 mph (since they are moving towards each other).\n\n4. **Time taken for the trains to meet after 10am:**\n   - Remaining distance = 135 miles.\n   - Relative speed = 140 mph.\n   - Time = Distance / Relative Speed = 135 miles / 140 mph = 0.9643 hours.\n\n5. **Convert time to minutes:**\n   - 0.9643 hours \u00d7 60 minutes/hour \u2248 57.86 minutes \u2248 58 minutes.\n\n6. **Meeting time:**\n   - The trains meet 58 minutes after 10am.\n   - 10am + 58 minutes = 10:58am.\n\nThus, the trains meet at **10:58am**.",
+          "tokens": 483,
+          "elapsed_s": 5.05,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 83,
+            "completion_tokens": 400,
+            "total_ms": 5050.11
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI's response correctly calculates the trains meet at 10:58am, aligning with the gold context requirement.",
+            "tokens_in": 860,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "To determine when the two trains meet, we first calculate the distance each train travels until they meet.\n\n1. **Distance covered by the Austin train by 10am:**\n   - The Austin train leaves at 9am and travels at 60 mph.\n   - By 10am, it has traveled for 1 hour.\n   - Distance = Speed \u00d7 Time = 60 mph \u00d7 1 hour = 60 miles.\n\n2. **Remaining distance between the trains at 10am:**\n   - Initial distance between Austin and Dallas = 195 miles.\n   - Distance covered by the Austin train by 10am = 60 miles.\n   - Remaining distance = 195 miles - 60 miles = 135 miles.\n\n3. **Relative speed of the trains after 10am:**\n   - The Austin train travels at 60 mph.\n   - The Dallas train travels at 80 mph.\n   - Relative speed = 60 mph + 80 mph = 140 mph (since they are moving towards each other).\n\n4. **Time taken for the trains to meet after 10am:**\n   - Remaining distance = 135 miles.\n   - Relative speed = 140 mph.\n   - Time = Distance / Relative Speed = 135 miles / 140 mph = 0.9643 hours.\n\n5. **Convert time to minutes:**\n   - 0.9643 hours \u00d7 60 minutes/hour \u2248 57.86 minutes \u2248 58 minutes.\n\n6. **Meeting time:**\n   - The trains meet 58 minutes after 10am.\n   - 10am + 58 minutes = 10:58am.\n\nThus, the trains meet at **10:58am**.",
+          "tokens": 483,
+          "elapsed_s": 5.04,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 83,
+            "completion_tokens": 400,
+            "total_ms": 5040.51
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly calculates and concludes that the trains meet at 10:58am, matching the gold standard.",
+            "tokens_in": 860,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "To determine when the two trains meet, we first calculate the distance each train travels until they meet.\n\n1. **Distance covered by the Austin train by 10am:**\n   - The Austin train leaves at 9am and travels at 60 mph.\n   - By 10am, it has traveled for 1 hour.\n   - Distance = Speed \u00d7 Time = 60 mph \u00d7 1 hour = 60 miles.\n\n2. **Remaining distance between the trains at 10am:**\n   - Initial distance between Austin and Dallas = 195 miles.\n   - Distance covered by the Austin train by 10am = 60 miles.\n   - Remaining distance = 195 miles - 60 miles = 135 miles.\n\n3. **Relative speed of the trains after 10am:**\n   - The Austin train travels at 60 mph.\n   - The Dallas train travels at 80 mph.\n   - Relative speed = 60 mph + 80 mph = 140 mph (since they are moving towards each other).\n\n4. **Time taken for the trains to meet after 10am:**\n   - Remaining distance = 135 miles.\n   - Relative speed = 140 mph.\n   - Time = Distance / Relative Speed = 135 miles / 140 mph = 0.9643 hours.\n\n5. **Convert time to minutes:**\n   - 0.9643 hours \u00d7 60 minutes/hour \u2248 57.86 minutes \u2248 58 minutes.\n\n6. **Meeting time:**\n   - The trains meet 58 minutes after 10am.\n   - 10am + 58 minutes = 10:58am.\n\nThus, the trains meet at **10:58am**.",
+          "tokens": 483,
+          "elapsed_s": 4.99,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 83,
+            "completion_tokens": 400,
+            "total_ms": 4987.14
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response accurately calculates and concludes that the trains meet at 10:58am, matching the gold substring's indication ('10:5').",
+            "tokens_in": 860,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 37
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "prompt": "Write a concise Python function `reverse_string(s: str) -> str` that returns the reversed string. Just the function, no preamble.",
+      "gold_substrings": [
+        "def reverse_string",
+        "[::-1]"
+      ],
+      "samples": [
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 79,
+          "elapsed_s": 0.21,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 62,
+            "completion_tokens": 17,
+            "total_ms": 213.68
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The function correctly reverses a string using slicing with [::-1], matching the gold substrings.",
+            "tokens_in": 515,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 29
+          }
+        },
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 79,
+          "elapsed_s": 0.22,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 62,
+            "completion_tokens": 17,
+            "total_ms": 220.45
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI's response correctly defines the function using slicing to reverse the string, matching the gold criteria.",
+            "tokens_in": 515,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 29
+          }
+        },
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 79,
+          "elapsed_s": 0.22,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 62,
+            "completion_tokens": 17,
+            "total_ms": 220.45
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The function correctly uses slicing to reverse the string and matches the requested format.",
+            "tokens_in": 515,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 24
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "prompt": "Write a Python generator `fib()` that yields Fibonacci numbers forever. Just the code.",
+      "gold_substrings": [
+        "def fib",
+        "yield"
+      ],
+      "samples": [
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 89,
+          "elapsed_s": 0.48,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 38,
+            "total_ms": 480.89
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response provides a correct Python generator function 'fib()' that yields Fibonacci numbers indefinitely, fulfilling the gold context.",
+            "tokens_in": 522,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 89,
+          "elapsed_s": 0.48,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 38,
+            "total_ms": 480.11
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI response correctly implements a Python generator that yields Fibonacci numbers indefinitely.",
+            "tokens_in": 522,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 23
+          }
+        },
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 89,
+          "elapsed_s": 0.48,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 38,
+            "total_ms": 480.12
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly defines a generator function that continuously yields Fibonacci numbers.",
+            "tokens_in": 522,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 22
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "prompt": "Recommend one embedded systems book and briefly say why.",
+      "gold_substrings": [],
+      "samples": [
+        {
+          "text": "I recommend \"Embedded Systems: Introduction to Arm Cortex-M Microcontrollers\" by Jonathan W. Valvano. This book is excellent for both beginners and those with some experience because it provides a comprehensive introduction to embedded systems using the popular Arm Cortex-M microcontrollers. It covers essential topics like programming, interfacing, and system design, making it a practical and valuable resource for hands-on learning and real-world application.",
+          "tokens": 127,
+          "elapsed_s": 1.03,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 44,
+            "completion_tokens": 83,
+            "total_ms": 1033.0
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response provides a clear book recommendation with a justified reason, which aligns with the user's request.",
+            "tokens_in": 552,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 28
+          }
+        },
+        {
+          "text": "I recommend \"Embedded Systems: Introduction to Arm Cortex-M Microcontrollers\" by Jonathan W. Valvano. This book is excellent for both beginners and those with some experience because it provides a comprehensive introduction to embedded systems using the popular Arm Cortex-M microcontrollers. It covers essential topics like programming, interfacing, and system design, making it a practical and valuable resource for hands-on learning and real-world application.",
+          "tokens": 127,
+          "elapsed_s": 1.03,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 44,
+            "completion_tokens": 83,
+            "total_ms": 1032.86
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response provides a specific book recommendation and explains its value for learners.",
+            "tokens_in": 552,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 23
+          }
+        },
+        {
+          "text": "I recommend \"Embedded Systems: Introduction to Arm Cortex-M Microcontrollers\" by Jonathan W. Valvano. This book is excellent for both beginners and those with some experience because it provides a comprehensive introduction to embedded systems using the popular Arm Cortex-M microcontrollers. It covers essential topics like programming, interfacing, and system design, making it a practical and valuable resource for hands-on learning and real-world application.",
+          "tokens": 127,
+          "elapsed_s": 1.03,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 44,
+            "completion_tokens": 83,
+            "total_ms": 1032.63
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response provides a clear book recommendation with justification, fulfilling the user's request.",
+            "tokens_in": 552,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 24
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "prompt": "Explain in two sentences what 'mixture of experts' means in the context of large language models.",
+      "gold_substrings": [
+        "expert"
+      ],
+      "samples": [
+        {
+          "text": "A mixture of experts is an architectural design for large language models where the model is composed of multiple smaller models (experts), each handling specific types of inputs or tasks; a gating network then directs inputs to the most suitable expert, improving efficiency and performance.",
+          "tokens": 107,
+          "elapsed_s": 0.66,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 52,
+            "total_ms": 655.34
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly explains the core idea of a mixture of experts, including the role of experts and the gating network.",
+            "tokens_in": 534,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "A mixture of experts is an architectural design for large language models where the model is composed of multiple smaller models (experts), each handling specific types of inputs or tasks; a gating network then directs inputs to the most suitable expert, improving efficiency and performance.",
+          "tokens": 107,
+          "elapsed_s": 0.65,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 52,
+            "total_ms": 651.05
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly explains the concept of 'mixture of experts' using the term 'expert' and describes its functioning in large language models.",
+            "tokens_in": 534,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 37
+          }
+        },
+        {
+          "text": "A mixture of experts is an architectural design for large language models where the model is composed of multiple smaller models (experts), each handling specific types of inputs or tasks; a gating network then directs inputs to the most suitable expert, improving efficiency and performance.",
+          "tokens": 107,
+          "elapsed_s": 0.65,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 52,
+            "total_ms": 650.99
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly explains mixture of experts, mentioning experts handling specific inputs and a gating network.",
+            "tokens_in": 534,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 27
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "prompt": "Greet me as Skippy would, in one sentence.",
+      "gold_substrings": [],
+      "samples": [
+        {
+          "text": "Hey there, mate! How's it hangin'?",
+          "tokens": 58,
+          "elapsed_s": 0.16,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 46,
+            "completion_tokens": 12,
+            "total_ms": 162.73
+          }
+        },
+        {
+          "text": "Hey there, mate! How's it hangin'?",
+          "tokens": 58,
+          "elapsed_s": 0.16,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 46,
+            "completion_tokens": 12,
+            "total_ms": 159.5
+          }
+        },
+        {
+          "text": "Hey there, mate! How's it hangin'?",
+          "tokens": 58,
+          "elapsed_s": 0.16,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 46,
+            "completion_tokens": 12,
+            "total_ms": 159.37
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      },
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE",
+      "aggregate_semantic": {
+        "per_sample": [
+          "skipped",
+          "skipped",
+          "skipped"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "skipped_n": 3,
+        "n": 3,
+        "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
+      }
+    },
+    {
+      "id": "rag_ds_imx93_standard_id_filters",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum number of standard ID filter elements supported by the i.MX 93 Applications Processor's FlexCAN controller?",
+      "gold_substrings": [
+        "128"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 Applications Processor's FlexCAN controller supports a maximum of 14 standard ID filter elements.",
+          "tokens": 86,
+          "elapsed_s": 0.33,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 60,
+            "completion_tokens": 26,
+            "total_ms": 334.59
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states 14 filter elements, while the correct number according to the gold is 128.",
+            "tokens_in": 513,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 30
+          }
+        },
+        {
+          "text": "The i.MX 93 Applications Processor's FlexCAN controller supports a maximum of 14 standard ID filter elements.",
+          "tokens": 86,
+          "elapsed_s": 0.33,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 60,
+            "completion_tokens": 26,
+            "total_ms": 333.99
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly stated that the maximum number of standard ID filter elements is 14, whereas it should be 128.",
+            "tokens_in": 513,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 33
+          }
+        },
+        {
+          "text": "The i.MX 93 Applications Processor's FlexCAN controller supports a maximum of 14 standard ID filter elements.",
+          "tokens": 86,
+          "elapsed_s": 0.33,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 60,
+            "completion_tokens": 26,
+            "total_ms": 330.26
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum number of standard ID filter elements as 14 instead of 128.",
+            "tokens_in": 513,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 29
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 128)",
+          "fail (missing: 128)",
+          "fail (missing: 128)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_imx93_cortex_a_max_freq",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum CPU frequency for the Cortex-A cores in the i.MX 93 processor?",
+      "gold_substrings": [
+        "1.7",
+        "GHz"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 processor features Cortex-A55 cores that can operate at a maximum CPU frequency of up to 2.0 GHz.",
+          "tokens": 87,
+          "elapsed_s": 0.41,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 32,
+            "total_ms": 407.17
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum CPU frequency as 2.0 GHz instead of the correct 1.7 GHz.",
+            "tokens_in": 519,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 33
+          }
+        },
+        {
+          "text": "The i.MX 93 processor features Cortex-A55 cores that can operate at a maximum CPU frequency of up to 2.0 GHz.",
+          "tokens": 87,
+          "elapsed_s": 0.41,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 32,
+            "total_ms": 407.17
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum frequency as 2.0 GHz instead of the correct 1.7 GHz.",
+            "tokens_in": 519,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "The i.MX 93 processor features Cortex-A55 cores that can operate at a maximum CPU frequency of up to 2.0 GHz.",
+          "tokens": 87,
+          "elapsed_s": 0.41,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 32,
+            "total_ms": 407.06
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum CPU frequency as 2.0 GHz instead of the correct 1.7 GHz.",
+            "tokens_in": 519,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 33
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 1.7)",
+          "fail (missing: 1.7)",
+          "fail (missing: 1.7)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_cortex_a55_l1d_size",
+      "category": "rag_datasheet",
+      "prompt": "What is the size of the L1 data cache per core in the Arm Cortex-A55 on the i.MX 93?",
+      "gold_substrings": [
+        "32",
+        "kByte"
+      ],
+      "samples": [
+        {
+          "text": "The Arm Cortex-A55 core in the i.MX 93 typically features an L1 data cache size of 64 KB per core.",
+          "tokens": 94,
+          "elapsed_s": 0.41,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 62,
+            "completion_tokens": 32,
+            "total_ms": 406.94
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly cites the L1 data cache size as 64 KB instead of 32 KB.",
+            "tokens_in": 523,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 29
+          }
+        },
+        {
+          "text": "The Arm Cortex-A55 core in the i.MX 93 typically features an L1 data cache size of 64 KB per core.",
+          "tokens": 94,
+          "elapsed_s": 0.4,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 62,
+            "completion_tokens": 32,
+            "total_ms": 403.65
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the L1 data cache size as 64 KB instead of the correct 32 KB.",
+            "tokens_in": 523,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "The Arm Cortex-A55 core in the i.MX 93 typically features an L1 data cache size of 64 KB per core.",
+          "tokens": 94,
+          "elapsed_s": 0.41,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 62,
+            "completion_tokens": 32,
+            "total_ms": 407.18
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the L1 data cache size as 64 KB instead of the correct 32 KB.",
+            "tokens_in": 523,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 32, kByte)",
+          "fail (missing: 32, kByte)",
+          "fail (missing: 32, kByte)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_cortex_a55_l2_size",
+      "category": "rag_datasheet",
+      "prompt": "What is the size of the L2 cache per core in the Arm Cortex-A55 on the i.MX 93?",
+      "gold_substrings": [
+        "64",
+        "kByte"
+      ],
+      "samples": [
+        {
+          "text": "The Arm Cortex-A55 core in the i.MX 93 typically has an L2 cache size of 512 KB per core. However, the exact configuration can vary depending on the specific implementation by NXP. For precise details, it's best to consult the official NXP documentation for the i.MX 93.",
+          "tokens": 132,
+          "elapsed_s": 0.92,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 61,
+            "completion_tokens": 71,
+            "total_ms": 918.77
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the L2 cache size as 512 KB per core while the gold data indicates 64 kByte.",
+            "tokens_in": 558,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        },
+        {
+          "text": "The Arm Cortex-A55 core in the i.MX 93 typically has an L2 cache size of 512 KB per core. However, the exact configuration can vary depending on the specific implementation by NXP. For precise details, it's best to consult the official NXP documentation for the i.MX 93.",
+          "tokens": 132,
+          "elapsed_s": 0.93,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 61,
+            "completion_tokens": 71,
+            "total_ms": 927.06
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the L2 cache size as 512 KB per core, whereas the correct size is 64 KB per core.",
+            "tokens_in": 558,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "The Arm Cortex-A55 core in the i.MX 93 typically has an L2 cache size of 512 KB per core. However, the exact configuration can vary depending on the specific implementation by NXP. For precise details, it's best to consult the official NXP documentation for the i.MX 93.",
+          "tokens": 132,
+          "elapsed_s": 0.89,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 61,
+            "completion_tokens": 71,
+            "total_ms": 887.96
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI's response incorrectly stated the L2 cache size as 512 KB instead of the correct 64 KB.",
+            "tokens_in": 558,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 64, kByte)",
+          "fail (missing: 64, kByte)",
+          "fail (missing: 64, kByte)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_mipi_csi2_max_rate",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum data rate per lane in high-speed operation for the MIPI CSI-2 controller on the i.MX 93?",
+      "gold_substrings": [
+        "1.5",
+        "Gbps"
+      ],
+      "samples": [
+        {
+          "text": "The maximum data rate per lane for the MIPI CSI-2 controller on the i.MX 93 in high-speed operation is 2.5 Gbps (gigabits per second).",
+          "tokens": 105,
+          "elapsed_s": 0.53,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 63,
+            "completion_tokens": 42,
+            "total_ms": 529.43
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum data rate as 2.5 Gbps instead of 1.5 Gbps.",
+            "tokens_in": 538,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 33
+          }
+        },
+        {
+          "text": "The maximum data rate per lane for the MIPI CSI-2 controller on the i.MX 93 in high-speed operation is 2.5 Gbps (gigabits per second).",
+          "tokens": 105,
+          "elapsed_s": 0.53,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 63,
+            "completion_tokens": 42,
+            "total_ms": 529.41
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI provided an incorrect maximum data rate of 2.5 Gbps, instead of the correct 1.5 Gbps.",
+            "tokens_in": 538,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "The maximum data rate per lane for the MIPI CSI-2 controller on the i.MX 93 in high-speed operation is 2.5 Gbps (gigabits per second).",
+          "tokens": 105,
+          "elapsed_s": 0.53,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 63,
+            "completion_tokens": 42,
+            "total_ms": 529.21
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the data rate as 2.5 Gbps, whereas it should be 1.5 Gbps as per the gold context.",
+            "tokens_in": 538,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 40
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 1.5)",
+          "fail (missing: 1.5)",
+          "fail (missing: 1.5)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_mipi_dsi_max_pixel_clock",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum pixel clock supported by the MIPI DSI controller on the i.MX 93?",
+      "gold_substrings": [
+        "200",
+        "MHz"
+      ],
+      "samples": [
+        {
+          "text": "The maximum pixel clock supported by the MIPI DSI controller on the i.MX 93 is 1 Gbps (gigabit per second) for single lane operation. For dual lane operation, it can support up to 2 Gbps per lane, totaling 4 Gbps for both lanes combined. Always refer to the official NXP i.MX 93 documentation for the most accurate and detailed specifications.",
+          "tokens": 144,
+          "elapsed_s": 1.08,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 57,
+            "completion_tokens": 87,
+            "total_ms": 1084.74
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response incorrectly states the maximum pixel clock in Gbps rather than the correct specification of 200 MHz.",
+            "tokens_in": 573,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "The maximum pixel clock supported by the MIPI DSI controller on the i.MX 93 is 1 Gbps (gigabit per second) for single lane operation. For dual lane operation, it can support up to 2 Gbps per lane, totaling 4 Gbps for both lanes combined. Always refer to the official NXP i.MX 93 documentation for the most accurate and detailed specifications.",
+          "tokens": 144,
+          "elapsed_s": 1.09,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 57,
+            "completion_tokens": 87,
+            "total_ms": 1085.41
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI's response incorrectly states the maximum pixel clock as Gbps values, while the gold context expects an answer in MHz, specifically 200 MHz.",
+            "tokens_in": 573,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 39
+          }
+        },
+        {
+          "text": "The maximum pixel clock supported by the MIPI DSI controller on the i.MX 93 is 1 Gbps (gigabit per second) for single lane operation. For dual lane operation, it can support up to 2 Gbps per lane, totaling 4 Gbps for both lanes combined. Always refer to the official NXP i.MX 93 documentation for the most accurate and detailed specifications.",
+          "tokens": 144,
+          "elapsed_s": 1.09,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 57,
+            "completion_tokens": 87,
+            "total_ms": 1085.18
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum pixel clock as 1 Gbps, while the correct maximum is 200 MHz.",
+            "tokens_in": 573,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 200, MHz)",
+          "fail (missing: 200, MHz)",
+          "fail (missing: 200, MHz)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_cortex_m33_max_freq",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum frequency of the Cortex-M33 core on the i.MX 93 Application Processor?",
+      "gold_substrings": [
+        "250",
+        "MHz"
+      ],
+      "samples": [
+        {
+          "text": "The maximum frequency of the Cortex-M33 core on the i.MX 93 Application Processor is up to 1.2 GHz.",
+          "tokens": 87,
+          "elapsed_s": 0.38,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 57,
+            "completion_tokens": 30,
+            "total_ms": 383.04
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum frequency as 1.2 GHz instead of 250 MHz.",
+            "tokens_in": 516,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 28
+          }
+        },
+        {
+          "text": "The maximum frequency of the Cortex-M33 core on the i.MX 93 Application Processor is up to 1.2 GHz.",
+          "tokens": 87,
+          "elapsed_s": 0.38,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 57,
+            "completion_tokens": 30,
+            "total_ms": 382.76
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum frequency as 1.2 GHz instead of the gold standard 250 MHz.",
+            "tokens_in": 516,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "The maximum frequency of the Cortex-M33 core on the i.MX 93 Application Processor is up to 1.2 GHz.",
+          "tokens": 87,
+          "elapsed_s": 0.38,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 57,
+            "completion_tokens": 30,
+            "total_ms": 382.75
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum frequency as 1.2 GHz instead of the correct 250 MHz.",
+            "tokens_in": 516,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 30
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 250, MHz)",
+          "fail (missing: 250, MHz)",
+          "fail (missing: 250, MHz)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_vdd_usb_3p3_max_voltage",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum voltage allowed for VDD_USB_3P3 on the i.MX 93?",
+      "gold_substrings": [
+        "3.45"
+      ],
+      "samples": [
+        {
+          "text": "The maximum voltage allowed for VDD_USB_3P3 on the i.MX 93 is 3.6V. This voltage rail powers the USB 3.0 SuperSpeed IO regulators and must not exceed this value to ensure proper operation and reliability of the USB interface.",
+          "tokens": 116,
+          "elapsed_s": 0.74,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 57,
+            "completion_tokens": 59,
+            "total_ms": 736.8
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum voltage as 3.6V instead of the correct value of 3.45V.",
+            "tokens_in": 546,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        },
+        {
+          "text": "The maximum voltage allowed for VDD_USB_3P3 on the i.MX 93 is 3.6V. This voltage rail powers the USB 3.0 SuperSpeed IO regulators and must not exceed this value to ensure proper operation and reliability of the USB interface.",
+          "tokens": 116,
+          "elapsed_s": 0.74,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 57,
+            "completion_tokens": 59,
+            "total_ms": 740.18
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum voltage as 3.6V instead of the correct 3.45V.",
+            "tokens_in": 546,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "The maximum voltage allowed for VDD_USB_3P3 on the i.MX 93 is 3.6V. This voltage rail powers the USB 3.0 SuperSpeed IO regulators and must not exceed this value to ensure proper operation and reliability of the USB interface.",
+          "tokens": 116,
+          "elapsed_s": 0.74,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 57,
+            "completion_tokens": 59,
+            "total_ms": 736.99
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly stated the maximum voltage as 3.6V instead of the correct 3.45V.",
+            "tokens_in": 546,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 3.45)",
+          "fail (missing: 3.45)",
+          "fail (missing: 3.45)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_vdd_ana_0p8_max_voltage",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum voltage allowed for VDD_ANA_0P8 on the i.MX 93?",
+      "gold_substrings": [
+        "0.84"
+      ],
+      "samples": [
+        {
+          "text": "The maximum voltage allowed for VDD_ANA_0P8 on the i.MX 93 is 0.8V. This voltage rail is specifically designed to power analog circuits that require a stable 0.8V supply.",
+          "tokens": 108,
+          "elapsed_s": 0.63,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 58,
+            "completion_tokens": 50,
+            "total_ms": 627.04
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response incorrectly states the maximum voltage as 0.8V, while the correct value is 0.84V.",
+            "tokens_in": 538,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 35
+          }
+        },
+        {
+          "text": "The maximum voltage allowed for VDD_ANA_0P8 on the i.MX 93 is 0.8V. This voltage rail is specifically designed to power analog circuits that require a stable 0.8V supply.",
+          "tokens": 108,
+          "elapsed_s": 0.63,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 58,
+            "completion_tokens": 50,
+            "total_ms": 630.53
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum voltage as 0.8V instead of the correct 0.84V.",
+            "tokens_in": 538,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "The maximum voltage allowed for VDD_ANA_0P8 on the i.MX 93 is 0.8V. This voltage rail is specifically designed to power analog circuits that require a stable 0.8V supply.",
+          "tokens": 108,
+          "elapsed_s": 0.63,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 58,
+            "completion_tokens": 50,
+            "total_ms": 627.01
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum voltage as 0.8V instead of the correct value of 0.84V.",
+            "tokens_in": 538,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 0.84)",
+          "fail (missing: 0.84)",
+          "fail (missing: 0.84)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_imx93_gpio_count",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum number of GPIO pins available on the i.MX 93 processor?",
+      "gold_substrings": [
+        "148"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 processor supports up to 114 GPIO (General Purpose Input/Output) pins. However, the exact number available for use can vary depending on the specific configuration and the other functionalities enabled on the pins.",
+          "tokens": 103,
+          "elapsed_s": 0.63,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 53,
+            "completion_tokens": 50,
+            "total_ms": 626.76
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly states the maximum number of GPIO pins as 114 instead of the correct figure of 148.",
+            "tokens_in": 529,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "The i.MX 93 processor supports up to 114 GPIO (General Purpose Input/Output) pins. However, the exact number available for use can vary depending on the specific configuration and the other functionalities enabled on the pins.",
+          "tokens": 103,
+          "elapsed_s": 0.63,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 53,
+            "completion_tokens": 50,
+            "total_ms": 626.71
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response incorrectly states 114 GPIO pins instead of the correct 148 GPIO pins.",
+            "tokens_in": 529,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 27
+          }
+        },
+        {
+          "text": "The i.MX 93 processor supports up to 114 GPIO (General Purpose Input/Output) pins. However, the exact number available for use can vary depending on the specific configuration and the other functionalities enabled on the pins.",
+          "tokens": 103,
+          "elapsed_s": 0.63,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 53,
+            "completion_tokens": 50,
+            "total_ms": 630.45
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states 114 GPIO pins, while the correct maximum is 148.",
+            "tokens_in": 529,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 26
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 148)",
+          "fail (missing: 148)",
+          "fail (missing: 148)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_imx93_149_gpio",
+      "category": "rag_datasheet",
+      "prompt": "Which processor in the i.MX 9 series has 149 GPIO pins?",
+      "gold_substrings": [
+        "i.MX 93"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 processor in the NXP i.MX 9 series has 149 GPIO pins available. However, the exact number of GPIOs can vary based on the specific configuration and the pin multiplexing used for other functions. Always refer to the detailed datasheet for the most accurate information.",
+          "tokens": 119,
+          "elapsed_s": 0.83,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 52,
+            "completion_tokens": 67,
+            "total_ms": 834.91
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI correctly identifies the i.MX 93 processor as having 149 GPIO pins, matching the gold context.",
+            "tokens_in": 547,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "The i.MX 93 processor in the NXP i.MX 9 series has 149 GPIO pins available. However, the exact number of GPIOs can vary based on the specific configuration and the pin multiplexing used for other functions. Always refer to the detailed datasheet for the most accurate information.",
+          "tokens": 119,
+          "elapsed_s": 0.84,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 52,
+            "completion_tokens": 67,
+            "total_ms": 837.82
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI correctly identifies the i.MX 93 processor as having 149 GPIO pins.",
+            "tokens_in": 547,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 27
+          }
+        },
+        {
+          "text": "The i.MX 93 processor in the NXP i.MX 9 series has 149 GPIO pins available. However, the exact number of GPIOs can vary based on the specific configuration and the pin multiplexing used for other functions. Always refer to the detailed datasheet for the most accurate information.",
+          "tokens": 119,
+          "elapsed_s": 0.84,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 52,
+            "completion_tokens": 67,
+            "total_ms": 837.99
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI correctly identified the i.MX 93 as having 149 GPIO pins, matching the gold context.",
+            "tokens_in": 547,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_mac_addr34_high_offset",
+      "category": "rag_datasheet",
+      "prompt": "What is the offset address of the MAC_ADDRESS34_HIGH register in the i.MX 93 processor?",
+      "gold_substrings": [
+        "410"
+      ],
+      "samples": [
+        {
+          "text": "The offset address of the `MAC_ADDRESS34_HIGH` register in the i.MX 93 processor is `0x00000344`. This register is part of the Ethernet controller and is used to store the high part of the MAC address for addresses 3 and 4.",
+          "tokens": 121,
+          "elapsed_s": 0.8,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 57,
+            "completion_tokens": 64,
+            "total_ms": 797.67
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI provided an incorrect offset address that does not match the gold substring '410'.",
+            "tokens_in": 542,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 27
+          }
+        },
+        {
+          "text": "The offset address of the `MAC_ADDRESS34_HIGH` register in the i.MX 93 processor is `0x00000344`. This register is part of the Ethernet controller and is used to store the high part of the MAC address for addresses 3 and 4.",
+          "tokens": 121,
+          "elapsed_s": 0.8,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 57,
+            "completion_tokens": 64,
+            "total_ms": 801.73
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly provided an offset address of 0x00000344 instead of 410 as indicated in the gold context.",
+            "tokens_in": 542,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        },
+        {
+          "text": "The offset address of the `MAC_ADDRESS34_HIGH` register in the i.MX 93 processor is `0x00000344`. This register is part of the Ethernet controller and is used to store the high part of the MAC address for addresses 3 and 4.",
+          "tokens": 121,
+          "elapsed_s": 0.8,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 57,
+            "completion_tokens": 64,
+            "total_ms": 797.92
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response provides an incorrect offset address for the MAC_ADDRESS34_HIGH register as it does not match the expected '410' substring.",
+            "tokens_in": 542,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 35
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 410)",
+          "fail (missing: 410)",
+          "fail (missing: 410)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_usb_phy_data_rates",
+      "category": "rag_datasheet",
+      "prompt": "What are the three data transmission rates supported by the USB 2.0 PHY on the i.MX 93 according to the UTMI+ specification?",
+      "gold_substrings": [
+        "480",
+        "12",
+        "1.5"
+      ],
+      "samples": [
+        {
+          "text": "The USB 2.0 PHY on the i.MX 93, according to the UTMI+ (Universal Test and Memory Interface Plus) specification, supports three data transmission rates:\n\n1. **Low Speed (LS)**: 1.5 Mbit/s\n2. **Full Speed (FS)**: 12 Mbit/s\n3. **High Speed (HS)**: 480 Mbit/s\n\nThese rates correspond to the different operating modes defined by the USB 2.0 standard.",
+          "tokens": 173,
+          "elapsed_s": 1.34,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 107,
+            "total_ms": 1339.04
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly lists the three data transmission rates supported by the USB 2.0 PHY as specified.",
+            "tokens_in": 606,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 30
+          }
+        },
+        {
+          "text": "The USB 2.0 PHY on the i.MX 93, according to the UTMI+ (Universal Test and Memory Interface Plus) specification, supports three data transmission rates:\n\n1. **Low Speed (LS)**: 1.5 Mbit/s\n2. **Full Speed (FS)**: 12 Mbit/s\n3. **High Speed (HS)**: 480 Mbit/s\n\nThese rates correspond to the different operating modes defined by the USB 2.0 standard.",
+          "tokens": 173,
+          "elapsed_s": 1.34,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 107,
+            "total_ms": 1338.36
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly lists the three data transmission rates supported by the USB 2.0 PHY on the i.MX 93 according to the UTMI+ specification.",
+            "tokens_in": 606,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 42
+          }
+        },
+        {
+          "text": "The USB 2.0 PHY on the i.MX 93, according to the UTMI+ (Universal Test and Memory Interface Plus) specification, supports three data transmission rates:\n\n1. **Low Speed (LS)**: 1.5 Mbit/s\n2. **Full Speed (FS)**: 12 Mbit/s\n3. **High Speed (HS)**: 480 Mbit/s\n\nThese rates correspond to the different operating modes defined by the USB 2.0 standard.",
+          "tokens": 173,
+          "elapsed_s": 1.34,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 107,
+            "total_ms": 1335.11
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly lists the three data transmission rates as 1.5 Mbit/s, 12 Mbit/s, and 480 Mbit/s.",
+            "tokens_in": 606,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 40
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_usb_host_reset_wait",
+      "category": "rag_datasheet",
+      "prompt": "What is the minimum time a USB host must wait after detecting the D+ line high before initiating a USB reset on the i.MX 93?",
+      "gold_substrings": [
+        "100",
+        "ms"
+      ],
+      "samples": [
+        {
+          "text": "The minimum time a USB host must wait after detecting the D+ line high before initiating a USB reset, in the context of the i.MX 93, is typically governed by the USB specification. According to the USB 2.0 specification, the host must wait at least 50 milliseconds after detecting the D+ line high before initiating a USB reset. This ensures that the USB device has enough time to stabilize its signals before any reset operation is performed.",
+          "tokens": 160,
+          "elapsed_s": 1.19,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 65,
+            "completion_tokens": 95,
+            "total_ms": 1190.11
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states 50 milliseconds instead of 100 milliseconds as required by the gold context.",
+            "tokens_in": 590,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 28
+          }
+        },
+        {
+          "text": "The minimum time a USB host must wait after detecting the D+ line high before initiating a USB reset, in the context of the i.MX 93, is typically governed by the USB specification. According to the USB 2.0 specification, the host must wait at least 50 milliseconds after detecting the D+ line high before initiating a USB reset. This ensures that the USB device has enough time to stabilize its signals before any reset operation is performed.",
+          "tokens": 160,
+          "elapsed_s": 1.19,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 65,
+            "completion_tokens": 95,
+            "total_ms": 1186.26
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states a 50 ms wait time while the correct minimum time is 100 ms.",
+            "tokens_in": 590,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 29
+          }
+        },
+        {
+          "text": "The minimum time a USB host must wait after detecting the D+ line high before initiating a USB reset, in the context of the i.MX 93, is typically governed by the USB specification. According to the USB 2.0 specification, the host must wait at least 50 milliseconds after detecting the D+ line high before initiating a USB reset. This ensures that the USB device has enough time to stabilize its signals before any reset operation is performed.",
+          "tokens": 160,
+          "elapsed_s": 1.19,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 65,
+            "completion_tokens": 95,
+            "total_ms": 1189.48
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the minimum wait time as 50 ms instead of the correct 100 ms.",
+            "tokens_in": 590,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 29
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 100, ms)",
+          "fail (missing: 100, ms)",
+          "fail (missing: 100, ms)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_rsa_key_size",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum RSA key size supported by the i.MX 93 for asymmetric cryptography?",
+      "gold_substrings": [
+        "4096",
+        "RSA"
+      ],
+      "samples": [
+        {
+          "text": "The maximum RSA key size supported by the i.MX 93 for asymmetric cryptography can vary depending on the specific cryptographic implementation and hardware acceleration capabilities. Generally, the i.MX 93 series supports RSA key sizes up to 4096 bits when using its cryptographic accelerators. However, for precise details, you should consult the official NXP i.MX 93 Application Processor Security Manual or the cryptographic library documentation used in your implementation.",
+          "tokens": 147,
+          "elapsed_s": 1.16,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 54,
+            "completion_tokens": 93,
+            "total_ms": 1159.21
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly states that the i.MX 93 supports RSA key sizes up to 4096 bits, covering the key fact.",
+            "tokens_in": 580,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "The maximum RSA key size supported by the i.MX 93 for asymmetric cryptography can vary depending on the specific cryptographic implementation and hardware acceleration capabilities. Generally, the i.MX 93 series supports RSA key sizes up to 4096 bits when using its cryptographic accelerators. However, for precise details, you should consult the official NXP i.MX 93 Application Processor Security Manual or the cryptographic library documentation used in your implementation.",
+          "tokens": 147,
+          "elapsed_s": 1.16,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 54,
+            "completion_tokens": 93,
+            "total_ms": 1158.9
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI accurately conveys that the i.MX 93 supports RSA key sizes up to 4096 bits.",
+            "tokens_in": 580,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "The maximum RSA key size supported by the i.MX 93 for asymmetric cryptography can vary depending on the specific cryptographic implementation and hardware acceleration capabilities. Generally, the i.MX 93 series supports RSA key sizes up to 4096 bits when using its cryptographic accelerators. However, for precise details, you should consult the official NXP i.MX 93 Application Processor Security Manual or the cryptographic library documentation used in your implementation.",
+          "tokens": 147,
+          "elapsed_s": 1.16,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 54,
+            "completion_tokens": 93,
+            "total_ms": 1162.32
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly states that the i.MX 93 supports RSA key sizes up to 4096 bits.",
+            "tokens_in": 580,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_ecc_curve",
+      "category": "rag_datasheet",
+      "prompt": "What is the maximum ECC curve supported by the i.MX 93 for asymmetric cryptography?",
+      "gold_substrings": [
+        "P-521"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 processor supports the NIST P-256 (also known as secp256r1) elliptic curve for asymmetric cryptography with Error-Correcting Code (ECC) operations. This curve is part of the hardware-accelerated cryptographic operations provided by the i.MX 93's cryptographic accelerator. For ECC, P-256 is the most commonly used curve, and it is the maximum curve size supported by the i.MX 93 for ECC operations.",
+          "tokens": 162,
+          "elapsed_s": 1.36,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 53,
+            "completion_tokens": 109,
+            "total_ms": 1357.37
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states P-256 as the maximum ECC curve size, while the gold context specifies P-521.",
+            "tokens_in": 586,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "The i.MX 93 processor supports the NIST P-256 (also known as secp256r1) elliptic curve for asymmetric cryptography with Error-Correcting Code (ECC) operations. This curve is part of the hardware-accelerated cryptographic operations provided by the i.MX 93's cryptographic accelerator. For ECC, P-256 is the most commonly used curve, and it is the maximum curve size supported by the i.MX 93 for ECC operations.",
+          "tokens": 162,
+          "elapsed_s": 1.36,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 53,
+            "completion_tokens": 109,
+            "total_ms": 1360.7
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states that P-256 is the maximum ECC curve, while the correct answer is P-521.",
+            "tokens_in": 586,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "The i.MX 93 processor supports the NIST P-256 (also known as secp256r1) elliptic curve for asymmetric cryptography with Error-Correcting Code (ECC) operations. This curve is part of the hardware-accelerated cryptographic operations provided by the i.MX 93's cryptographic accelerator. For ECC, P-256 is the most commonly used curve, and it is the maximum curve size supported by the i.MX 93 for ECC operations.",
+          "tokens": 162,
+          "elapsed_s": 1.36,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 53,
+            "completion_tokens": 109,
+            "total_ms": 1360.68
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the maximum ECC curve as P-256, whereas the correct maximum supported is P-521.",
+            "tokens_in": 586,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: P-521)",
+          "fail (missing: P-521)",
+          "fail (missing: P-521)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_package_pitch",
+      "category": "rag_datasheet",
+      "prompt": "What is the pitch of the 11 x 11 mm i.MX 93 package?",
+      "gold_substrings": [
+        "0.5",
+        "mm"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 package with dimensions 11 x 11 mm typically uses a 0.8 mm pitch BGA (Ball Grid Array) package. However, for precise and specific details, it's best to refer to the official NXP i.MX 93 datasheet or package information.",
+          "tokens": 123,
+          "elapsed_s": 0.83,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 67,
+            "total_ms": 834.7
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the pitch as 0.8 mm, while the correct pitch is 0.5 mm according to the gold context.",
+            "tokens_in": 550,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 38
+          }
+        },
+        {
+          "text": "The i.MX 93 package with dimensions 11 x 11 mm typically uses a 0.8 mm pitch BGA (Ball Grid Array) package. However, for precise and specific details, it's best to refer to the official NXP i.MX 93 datasheet or package information.",
+          "tokens": 123,
+          "elapsed_s": 0.84,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 67,
+            "total_ms": 837.87
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states a 0.8 mm pitch when the correct pitch is 0.5 mm according to the gold standard.",
+            "tokens_in": 550,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "The i.MX 93 package with dimensions 11 x 11 mm typically uses a 0.8 mm pitch BGA (Ball Grid Array) package. However, for precise and specific details, it's best to refer to the official NXP i.MX 93 datasheet or package information.",
+          "tokens": 123,
+          "elapsed_s": 0.84,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 67,
+            "total_ms": 838.02
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the pitch as 0.8 mm, while the correct answer is 0.5 mm according to the gold context.",
+            "tokens_in": 550,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 38
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 0.5)",
+          "fail (missing: 0.5)",
+          "fail (missing: 0.5)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_src_gpr4_offset",
+      "category": "rag_datasheet",
+      "prompt": "What is the address offset of GPR4 in the i.MX 93 SRC register block?",
+      "gold_substrings": [
+        "60"
+      ],
+      "samples": [
+        {
+          "text": "The address offset of GPR4 in the i.MX 93 System Reference Clock (SRC) register block is `0x1FC`. This offset is relative to the base address of the SRC peripheral. The full register can be found in the i.MX 93 reference manual, where GPR4 is typically used for general-purpose or configuration purposes within the SRC module.",
+          "tokens": 134,
+          "elapsed_s": 0.99,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 79,
+            "total_ms": 985.14
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response incorrectly states the offset as '0x1FC', while the correct offset in the gold context is '60'.",
+            "tokens_in": 561,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "The address offset of GPR4 in the i.MX 93 System Reference Clock (SRC) register block is `0x1FC`. This offset is relative to the base address of the SRC peripheral. The full register can be found in the i.MX 93 reference manual, where GPR4 is typically used for general-purpose or configuration purposes within the SRC module.",
+          "tokens": 134,
+          "elapsed_s": 0.99,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 79,
+            "total_ms": 985.52
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response provided an incorrect address offset for GPR4, whereas the gold substring indicates it should be '60'.",
+            "tokens_in": 561,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        },
+        {
+          "text": "The address offset of GPR4 in the i.MX 93 System Reference Clock (SRC) register block is `0x1FC`. This offset is relative to the base address of the SRC peripheral. The full register can be found in the i.MX 93 reference manual, where GPR4 is typically used for general-purpose or configuration purposes within the SRC module.",
+          "tokens": 134,
+          "elapsed_s": 0.99,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 79,
+            "total_ms": 985.74
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the address offset of GPR4 as `0x1FC` instead of `60`.",
+            "tokens_in": 561,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 33
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 60)",
+          "fail (missing: 60)",
+          "fail (missing: 60)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_src_gpr5_offset",
+      "category": "rag_datasheet",
+      "prompt": "What is the address offset of GPR5 in the i.MX 93 SRC register block?",
+      "gold_substrings": [
+        "64"
+      ],
+      "samples": [
+        {
+          "text": "The General Purpose Register (GPR) in the System Reference Clock (SRC) register block of the i.MX 93 does not specify an exact \"GPR5\" by name, but typically GPR registers are accessed via an offset from the base address of the SRC register block. Each GPR is usually 32 bits and they are sequentially addressed.\n\nFor the i.MX 93 SRC block, the GPR registers are generally located at specific offsets from the base address of the SRC. If we assume a standard layout, GPR5 would be at an offset of 0x14 (or 20 in decimal) from the base address of the SRC register block, since each GPR is typically 4 bytes (0x4) apart and GPR5 is the 5th GPR.\n\nTo find the exact address offset for GPR5, you would refer to the specific i.MX 93 SRC register map in the official documentation. The typical offset for GPR5 would be:\n\n```\nBase Address of SRC + 0x14\n```\n\nFor precise details, consult the i.MX 93 reference manual.",
+          "tokens": 296,
+          "elapsed_s": 3.01,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 241,
+            "total_ms": 3009.3
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response provides an incorrect address offset for GPR5, which should be 64.",
+            "tokens_in": 718,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 27
+          }
+        },
+        {
+          "text": "The General Purpose Register (GPR) in the System Reference Clock (SRC) register block of the i.MX 93 does not specify an exact \"GPR5\" by name, but typically GPR registers are accessed via an offset from the base address of the SRC register block. Each GPR is usually 32 bits and they are sequentially addressed.\n\nFor the i.MX 93 SRC block, the GPR registers are generally located at specific offsets from the base address of the SRC. If we assume a standard layout, GPR5 would be at an offset of 0x14 (or 20 in decimal) from the base address of the SRC register block, since each GPR is typically 4 bytes (0x4) apart and GPR5 is the 5th GPR.\n\nTo find the exact address offset for GPR5, you would refer to the specific i.MX 93 SRC register map in the official documentation. The typical offset for GPR5 would be:\n\n```\nBase Address of SRC + 0x14\n```\n\nFor precise details, consult the i.MX 93 reference manual.",
+          "tokens": 296,
+          "elapsed_s": 3.01,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 241,
+            "total_ms": 3008.5
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly provides the offset as 0x14, while the correct offset according to the gold context is 64.",
+            "tokens_in": 718,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        },
+        {
+          "text": "The General Purpose Register (GPR) in the System Reference Clock (SRC) register block of the i.MX 93 does not specify an exact \"GPR5\" by name, but typically GPR registers are accessed via an offset from the base address of the SRC register block. Each GPR is usually 32 bits and they are sequentially addressed.\n\nFor the i.MX 93 SRC block, the GPR registers are generally located at specific offsets from the base address of the SRC. If we assume a standard layout, GPR5 would be at an offset of 0x14 (or 20 in decimal) from the base address of the SRC register block, since each GPR is typically 4 bytes (0x4) apart and GPR5 is the 5th GPR.\n\nTo find the exact address offset for GPR5, you would refer to the specific i.MX 93 SRC register map in the official documentation. The typical offset for GPR5 would be:\n\n```\nBase Address of SRC + 0x14\n```\n\nFor precise details, consult the i.MX 93 reference manual.",
+          "tokens": 296,
+          "elapsed_s": 3.01,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 241,
+            "total_ms": 3009.18
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly calculated the offset as 0x14, while the correct offset should be 64.",
+            "tokens_in": 718,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 30
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 64)",
+          "fail (missing: 64)",
+          "fail (missing: 64)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_thermal_rja_11x11",
+      "category": "rag_datasheet",
+      "prompt": "What is the junction-to-ambient thermal resistance (R\u0398JA) for the i.MX 93 processor in an 11 x 11 mm FCBGA package?",
+      "gold_substrings": [
+        "22.5"
+      ],
+      "samples": [
+        {
+          "text": "The junction-to-ambient thermal resistance (R\u0398JA) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is typically around 100 \u00b0C/W to 120 \u00b0C/W, depending on the specific implementation and cooling conditions. For precise values, refer to the official NXP i.MX 93 processor datasheet or application notes.",
+          "tokens": 159,
+          "elapsed_s": 1.09,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 72,
+            "completion_tokens": 87,
+            "total_ms": 1088.82
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response provides incorrect thermal resistance ranges compared to the gold value of 22.5 \u00b0C/W.",
+            "tokens_in": 580,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 30
+          }
+        },
+        {
+          "text": "The junction-to-ambient thermal resistance (R\u0398JA) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is typically around 100 \u00b0C/W to 120 \u00b0C/W, depending on the specific implementation and cooling conditions. For precise values, refer to the official NXP i.MX 93 processor datasheet or application notes.",
+          "tokens": 159,
+          "elapsed_s": 1.09,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 72,
+            "completion_tokens": 87,
+            "total_ms": 1088.16
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response provides incorrect thermal resistance values, diverging from the specified 22.5 \u00b0C/W in the gold standard context.",
+            "tokens_in": 580,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 35
+          }
+        },
+        {
+          "text": "The junction-to-ambient thermal resistance (R\u0398JA) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is typically around 100 \u00b0C/W to 120 \u00b0C/W, depending on the specific implementation and cooling conditions. For precise values, refer to the official NXP i.MX 93 processor datasheet or application notes.",
+          "tokens": 159,
+          "elapsed_s": 1.09,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 72,
+            "completion_tokens": 87,
+            "total_ms": 1087.9
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response provides incorrect values for R\u0398JA, which should be 22.5 \u00b0C/W according to the gold context.",
+            "tokens_in": 580,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 35
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 22.5)",
+          "fail (missing: 22.5)",
+          "fail (missing: 22.5)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_thermal_rjc_11x11",
+      "category": "rag_datasheet",
+      "prompt": "What is the junction-to-case thermal resistance (R\u0398JC) for the i.MX 93 processor in an 11 x 11 mm FCBGA package?",
+      "gold_substrings": [
+        "6.4"
+      ],
+      "samples": [
+        {
+          "text": "The junction-to-case thermal resistance (R\u0398JC) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is not directly provided in the standard datasheets as a single value. Instead, the datasheet typically provides the junction-to-ambient thermal resistance (R\u0398JA) and sometimes the junction-to-board (R\u0398JB) thermal resistance. For precise R\u0398JC values, you would need to refer to detailed thermal metrics or contact NXP support directly for the i.MX 93 processor. Typically, such specific thermal metrics are provided in more detailed application notes or thermal evaluation reports.",
+          "tokens": 203,
+          "elapsed_s": 1.65,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 71,
+            "completion_tokens": 132,
+            "total_ms": 1653.89
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response does not provide the precise R\u0398JC value of 6.4 specified in the gold context.",
+            "tokens_in": 628,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "The junction-to-case thermal resistance (R\u0398JC) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is not directly provided in the standard datasheets as a single value. Instead, the datasheet typically provides the junction-to-ambient thermal resistance (R\u0398JA) and sometimes the junction-to-board (R\u0398JB) thermal resistance. For precise R\u0398JC values, you would need to refer to detailed thermal metrics or contact NXP support directly for the i.MX 93 processor. Typically, such specific thermal metrics are provided in more detailed application notes or thermal evaluation reports.",
+          "tokens": 203,
+          "elapsed_s": 1.65,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 71,
+            "completion_tokens": 132,
+            "total_ms": 1650.26
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response fails as it does not provide the specific R\u0398JC value, which is 6.4, as indicated by the gold context.",
+            "tokens_in": 628,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 38
+          }
+        },
+        {
+          "text": "The junction-to-case thermal resistance (R\u0398JC) for the i.MX 93 processor in an 11 x 11 mm FCBGA package is not directly provided in the standard datasheets as a single value. Instead, the datasheet typically provides the junction-to-ambient thermal resistance (R\u0398JA) and sometimes the junction-to-board (R\u0398JB) thermal resistance. For precise R\u0398JC values, you would need to refer to detailed thermal metrics or contact NXP support directly for the i.MX 93 processor. Typically, such specific thermal metrics are provided in more detailed application notes or thermal evaluation reports.",
+          "tokens": 203,
+          "elapsed_s": 1.65,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 71,
+            "completion_tokens": 132,
+            "total_ms": 1649.48
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response fails to convey the specific R\u0398JC value, which is directly 6.4, not suggesting further resources for a value that is already available.",
+            "tokens_in": 628,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 41
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 6.4)",
+          "fail (missing: 6.4)",
+          "fail (missing: 6.4)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_eiq_neutron_npu",
+      "category": "rag_datasheet",
+      "prompt": "What is the name of the NXP AI accelerator integrated into the i.MX 93 processor for edge computing?",
+      "gold_substrings": [
+        "eIQ Neutron",
+        "NPU"
+      ],
+      "samples": [
+        {
+          "text": "The NXP AI accelerator integrated into the i.MX 93 processor for edge computing is called the i.MX 93 Neural Processing Unit (NPU).",
+          "tokens": 93,
+          "elapsed_s": 0.44,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 58,
+            "completion_tokens": 35,
+            "total_ms": 444.09
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly names the Neural Processing Unit (NPU) as the AI accelerator integrated into the i.MX 93 processor.",
+            "tokens_in": 527,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 35
+          }
+        },
+        {
+          "text": "The NXP AI accelerator integrated into the i.MX 93 processor for edge computing is called the i.MX 93 Neural Processing Unit (NPU).",
+          "tokens": 93,
+          "elapsed_s": 0.44,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 58,
+            "completion_tokens": 35,
+            "total_ms": 443.88
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI accurately identifies the AI accelerator as the NPU, which matches one of the gold substrings.",
+            "tokens_in": 527,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 30
+          }
+        },
+        {
+          "text": "The NXP AI accelerator integrated into the i.MX 93 processor for edge computing is called the i.MX 93 Neural Processing Unit (NPU).",
+          "tokens": 93,
+          "elapsed_s": 0.44,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 58,
+            "completion_tokens": 35,
+            "total_ms": 443.7
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly identifies the AI accelerator as the 'i.MX 93 Neural Processing Unit (NPU)' instead of 'eIQ Neutron NPU'.\"",
+            "tokens_in": 527,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 42
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: eIQ Neutron)",
+          "fail (missing: eIQ Neutron)",
+          "fail (missing: eIQ Neutron)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "fail"
+        ],
+        "pass_n": 2,
+        "fail_n": 1,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ds_ddr_rate_eiq_usecase",
+      "category": "rag_datasheet",
+      "prompt": "What is the DDR memory rate used when the i.MX 93 processor runs the eIQ benchmark use case?",
+      "gold_substrings": [
+        "3733",
+        "MT/s"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 processor's specific DDR memory rate when running the eIQ benchmark use case is not directly provided in standard documentation. Typically, the DDR memory rate for the i.MX 93 can vary based on the configuration and requirements of the application. For precise details, you would need to refer to the specific configuration and benchmark report for the eIQ use case or contact NXP support for detailed information.",
+          "tokens": 145,
+          "elapsed_s": 1.08,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 58,
+            "completion_tokens": 87,
+            "total_ms": 1084.83
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response did not provide the specific DDR memory rate of 3733 MT/s as required by the gold context.",
+            "tokens_in": 577,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 33
+          }
+        },
+        {
+          "text": "The i.MX 93 processor's specific DDR memory rate when running the eIQ benchmark use case is not directly provided in standard documentation. Typically, the DDR memory rate for the i.MX 93 can vary based on the configuration and requirements of the application. For precise details, you would need to refer to the specific configuration and benchmark report for the eIQ use case or contact NXP support for detailed information.",
+          "tokens": 145,
+          "elapsed_s": 1.09,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 58,
+            "completion_tokens": 87,
+            "total_ms": 1085.48
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response fails to provide the specific DDR memory rate of 3733 MT/s for the i.MX 93 in the eIQ benchmark use case.",
+            "tokens_in": 577,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 40
+          }
+        },
+        {
+          "text": "The i.MX 93 processor's specific DDR memory rate when running the eIQ benchmark use case is not directly provided in standard documentation. Typically, the DDR memory rate for the i.MX 93 can vary based on the configuration and requirements of the application. For precise details, you would need to refer to the specific configuration and benchmark report for the eIQ use case or contact NXP support for detailed information.",
+          "tokens": 145,
+          "elapsed_s": 1.09,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 58,
+            "completion_tokens": 87,
+            "total_ms": 1086.45
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response fails to mention the specific memory rate of 3733 MT/s as indicated in the gold standard.",
+            "tokens_in": 577,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 3733, MT/s)",
+          "fail (missing: 3733, MT/s)",
+          "fail (missing: 3733, MT/s)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "numprec_lpddr_rate",
+      "category": "numerical_precision",
+      "prompt": "At what peak data rate (in MT/s or GT/s) does the i.MX 93 support LPDDR4?",
+      "gold_substrings": [
+        "LPDDR4"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 processor supports LPDDR4 with a peak data rate of up to 4266 MT/s (Million Transfers per Second).",
+          "tokens": 96,
+          "elapsed_s": 0.46,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 60,
+            "completion_tokens": 36,
+            "total_ms": 457.0
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the peak data rate as 4266 MT/s, which is not aligned with the verified sources for i.MX 93 LPDDR4 support.",
+            "tokens_in": 521,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 43
+          }
+        },
+        {
+          "text": "The i.MX 93 processor supports LPDDR4 with a peak data rate of up to 4266 MT/s (Million Transfers per Second).",
+          "tokens": 96,
+          "elapsed_s": 0.46,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 60,
+            "completion_tokens": 36,
+            "total_ms": 456.4
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states 4266 MT/s while the gold context for LPDDR4 data rate should be verified for accuracy.",
+            "tokens_in": 521,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 34
+          }
+        },
+        {
+          "text": "The i.MX 93 processor supports LPDDR4 with a peak data rate of up to 4266 MT/s (Million Transfers per Second).",
+          "tokens": 96,
+          "elapsed_s": 0.46,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 60,
+            "completion_tokens": 36,
+            "total_ms": 455.93
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The peak data rate for i.MX 93 with LPDDR4 is incorrect; it should be 3200 MT/s, not 4266 MT/s.",
+            "tokens_in": 521,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 42
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "numprec_mcu_boot_rom",
+      "category": "numerical_precision",
+      "prompt": "What is the size of the i.MX 93's internal boot ROM?",
+      "gold_substrings": [
+        "KB"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 processor's internal boot ROM size is not publicly specified in general documentation. Typically, boot ROMs contain the code necessary for initial boot processes but their exact sizes can vary. For precise details, you would need to refer to the specific technical reference manual or contact NXP support directly.",
+          "tokens": 115,
+          "elapsed_s": 0.8,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 64,
+            "total_ms": 801.57
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response fails to convey the specific size of the i.MX 93's internal boot ROM as indicated by 'KB' in the gold context.",
+            "tokens_in": 542,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 39
+          }
+        },
+        {
+          "text": "The i.MX 93 processor's internal boot ROM size is not publicly specified in general documentation. Typically, boot ROMs contain the code necessary for initial boot processes but their exact sizes can vary. For precise details, you would need to refer to the specific technical reference manual or contact NXP support directly.",
+          "tokens": 115,
+          "elapsed_s": 0.8,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 64,
+            "total_ms": 797.59
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response did not provide the specific size of the i.MX 93's internal boot ROM as expected by the gold standard.",
+            "tokens_in": 542,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 35
+          }
+        },
+        {
+          "text": "The i.MX 93 processor's internal boot ROM size is not publicly specified in general documentation. Typically, boot ROMs contain the code necessary for initial boot processes but their exact sizes can vary. For precise details, you would need to refer to the specific technical reference manual or contact NXP support directly.",
+          "tokens": 115,
+          "elapsed_s": 0.8,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 64,
+            "total_ms": 801.13
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response does not provide the specific size of the i.MX 93's internal boot ROM, which is expected as a numeric value in kilobytes (KB).",
+            "tokens_in": 542,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 44
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: KB)",
+          "fail (missing: KB)",
+          "fail (missing: KB)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "multihop_imx93_vs_95_cores",
+      "category": "multihop",
+      "prompt": "Between the i.MX 93 and the i.MX 95, which has more Arm Cortex-A cores, and how many does each have?",
+      "gold_substrings": [
+        "i.MX 95",
+        "i.MX 93"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 95 has more Arm Cortex-A cores than the i.MX 93. Specifically, the i.MX 93 typically features 2 Arm Cortex-A55 cores, while the i.MX 95 comes with 4 Arm Cortex-A55 cores.",
+          "tokens": 128,
+          "elapsed_s": 0.77,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 62,
+            "total_ms": 774.31
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly states the i.MX 95 has more cores and provides the number of cores for each model.",
+            "tokens_in": 561,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "The i.MX 95 has more Arm Cortex-A cores than the i.MX 93. Specifically, the i.MX 93 typically features 2 Arm Cortex-A55 cores, while the i.MX 95 comes with 4 Arm Cortex-A55 cores.",
+          "tokens": 128,
+          "elapsed_s": 0.78,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 62,
+            "total_ms": 776.93
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly states that the i.MX 95 has more Arm Cortex-A cores than the i.MX 93 and specifies the number of cores for each.",
+            "tokens_in": 561,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 42
+          }
+        },
+        {
+          "text": "The i.MX 95 has more Arm Cortex-A cores than the i.MX 93. Specifically, the i.MX 93 typically features 2 Arm Cortex-A55 cores, while the i.MX 95 comes with 4 Arm Cortex-A55 cores.",
+          "tokens": 128,
+          "elapsed_s": 0.77,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 62,
+            "total_ms": 773.67
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly states that the i.MX 95 has more cores than the i.MX 93, and specifies the number of cores each has.",
+            "tokens_in": 561,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 40
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "multihop_peripheral_count",
+      "category": "multihop",
+      "prompt": "How many I2C instances and how many LPUART instances does the i.MX 93 include, and what is the sum of the two?",
+      "gold_substrings": [
+        "LPUART",
+        "I2C"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 includes 4 I2C instances and 8 LPUART instances. The sum of the two is 12.",
+          "tokens": 99,
+          "elapsed_s": 0.42,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 33,
+            "total_ms": 419.91
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly states that the i.MX 93 has 4 I2C instances and 8 LPUART instances, with their sum being 12.",
+            "tokens_in": 533,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 42
+          }
+        },
+        {
+          "text": "The i.MX 93 includes 4 I2C instances and 8 LPUART instances. The sum of the two is 12.",
+          "tokens": 99,
+          "elapsed_s": 0.42,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 33,
+            "total_ms": 419.4
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response incorrectly states there are 8 LPUART instances, which deviates from the typical specification for i.MX 93.",
+            "tokens_in": 533,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 37
+          }
+        },
+        {
+          "text": "The i.MX 93 includes 4 I2C instances and 8 LPUART instances. The sum of the two is 12.",
+          "tokens": 99,
+          "elapsed_s": 0.42,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 33,
+            "total_ms": 419.59
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly states that the i.MX 93 includes 4 I2C instances and 8 LPUART instances, summing to 12.",
+            "tokens_in": 533,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 41
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "fail",
+          "pass"
+        ],
+        "pass_n": 2,
+        "fail_n": 1,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "multihop_cpu_plus_npu",
+      "category": "multihop",
+      "prompt": "List the compute resources on the i.MX 93 \u2014 how many Cortex-A55 cores, how many Cortex-M33 cores, and what NPU (if any). Give counts or names for each.",
+      "gold_substrings": [
+        "A55",
+        "M33",
+        "Neutron"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 processor includes the following compute resources:\n\n- **Cortex-A55 cores**: 4 cores\n- **Cortex-M33 cores**: 2 cores\n- **NPU (Neural Processing Unit)**: 1 NPU with 1.6 TOPS (Trillion Operations Per Second) performance\n\nThese components work together to provide a balance of general-purpose computing, real-time processing, and AI acceleration.",
+          "tokens": 171,
+          "elapsed_s": 1.16,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 78,
+            "completion_tokens": 93,
+            "total_ms": 1163.63
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly states the number of Cortex-A55 and Cortex-M33 cores and the presence of an NPU named 'Neutron' is not mentioned.",
+            "tokens_in": 606,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 40
+          }
+        },
+        {
+          "text": "The i.MX 93 processor includes the following compute resources:\n\n- **Cortex-A55 cores**: 4 cores\n- **Cortex-M33 cores**: 2 cores\n- **NPU (Neural Processing Unit)**: 1 NPU with 1.6 TOPS (Trillion Operations Per Second) performance\n\nThese components work together to provide a balance of general-purpose computing, real-time processing, and AI acceleration.",
+          "tokens": 171,
+          "elapsed_s": 1.17,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 78,
+            "completion_tokens": 93,
+            "total_ms": 1167.23
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI's response incorrectly describes the i.MX 93, particularly the number of cores and NPU capabilities.",
+            "tokens_in": 606,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "The i.MX 93 processor includes the following compute resources:\n\n- **Cortex-A55 cores**: 4 cores\n- **Cortex-M33 cores**: 2 cores\n- **NPU (Neural Processing Unit)**: 1 NPU with 1.6 TOPS (Trillion Operations Per Second) performance\n\nThese components work together to provide a balance of general-purpose computing, real-time processing, and AI acceleration.",
+          "tokens": 171,
+          "elapsed_s": 1.16,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 78,
+            "completion_tokens": 93,
+            "total_ms": 1163.88
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states that the i.MX 93 has 4 Cortex-A55 cores, whereas the gold context does not support this count.",
+            "tokens_in": 606,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 38
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: Neutron)",
+          "fail (missing: Neutron)",
+          "fail (missing: Neutron)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "refusal_fictional_chip",
+      "category": "refusal",
+      "prompt": "What's the maximum clock frequency of the NXP Flux-9000 processor?",
+      "gold_substrings": [
+        "don't",
+        "doesn't",
+        "does not",
+        "do not",
+        "can't",
+        "cannot",
+        "unable",
+        "unknown",
+        "not aware",
+        "no information",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no data"
+      ],
+      "match_mode": "any",
+      "samples": [
+        {
+          "text": "The NXP Flux-9000 processor does not exist. It's possible you may be referring to a different or fictional processor. If you're looking for information on a specific NXP processor, please provide the correct model name.",
+          "tokens": 101,
+          "elapsed_s": 0.62,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 52,
+            "completion_tokens": 49,
+            "total_ms": 615.14
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly refused to provide information on a fictional processor.",
+            "tokens_in": 574,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 21
+          }
+        },
+        {
+          "text": "The NXP Flux-9000 processor does not exist. It's possible you may be referring to a different or fictional processor. If you're looking for information on a specific NXP processor, please provide the correct model name.",
+          "tokens": 101,
+          "elapsed_s": 0.61,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 52,
+            "completion_tokens": 49,
+            "total_ms": 614.79
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI correctly refused by stating the NXP Flux-9000 processor does not exist, aligning with the gold context.",
+            "tokens_in": 574,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 33
+          }
+        },
+        {
+          "text": "The NXP Flux-9000 processor does not exist. It's possible you may be referring to a different or fictional processor. If you're looking for information on a specific NXP processor, please provide the correct model name.",
+          "tokens": 101,
+          "elapsed_s": 0.62,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 52,
+            "completion_tokens": 49,
+            "total_ms": 618.62
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly identifies the NXP Flux-9000 as fictional and refuses to provide an answer.",
+            "tokens_in": 574,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 29
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "refusal_made_up_peripheral",
+      "category": "refusal",
+      "prompt": "How many dedicated AI reasoning cores does the i.MX 93's built-in QuantumFlow Engine include?",
+      "gold_substrings": [
+        "don't",
+        "doesn't",
+        "does not",
+        "do not",
+        "can't",
+        "cannot",
+        "unable",
+        "unknown",
+        "not aware",
+        "no information",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no such",
+        "not exist",
+        "no data"
+      ],
+      "match_mode": "any",
+      "samples": [
+        {
+          "text": "The i.MX 93's built-in QuantumFlow Engine includes 4 dedicated AI reasoning cores.",
+          "tokens": 78,
+          "elapsed_s": 0.28,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 22,
+            "total_ms": 281.66
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response confidently provides specific false information rather than refusing to answer.",
+            "tokens_in": 564,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 22
+          }
+        },
+        {
+          "text": "The i.MX 93's built-in QuantumFlow Engine includes 4 dedicated AI reasoning cores.",
+          "tokens": 78,
+          "elapsed_s": 0.29,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 22,
+            "total_ms": 285.19
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly provides specific information instead of refusing an unanswerable question.",
+            "tokens_in": 564,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 24
+          }
+        },
+        {
+          "text": "The i.MX 93's built-in QuantumFlow Engine includes 4 dedicated AI reasoning cores.",
+          "tokens": 78,
+          "elapsed_s": 0.28,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 22,
+            "total_ms": 282.12
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response provides specific information instead of refusing due to lack of data.",
+            "tokens_in": 564,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 23
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (no refusal phrase matched)",
+          "fail (no refusal phrase matched)",
+          "fail (no refusal phrase matched)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "refusal_out_of_scope",
+      "category": "refusal",
+      "prompt": "Based on the datasheets in your knowledge base, what was the 2029 revenue of NXP Semiconductors?",
+      "gold_substrings": [
+        "don't",
+        "doesn't",
+        "does not",
+        "do not",
+        "can't",
+        "cannot",
+        "unable",
+        "unknown",
+        "not aware",
+        "no information",
+        "no record",
+        "no mention",
+        "haven't",
+        "not familiar",
+        "no data",
+        "not contain"
+      ],
+      "match_mode": "any",
+      "samples": [
+        {
+          "text": "I don't have specific financial data for NXP Semiconductors from 2029 in my current knowledge base, as that year is in the future and such financial reports have not been published yet. For the most accurate and up-to-date financial information, you should refer to NXP Semiconductors' official financial reports or their investor relations section on their website.",
+          "tokens": 139,
+          "elapsed_s": 0.97,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 61,
+            "completion_tokens": 78,
+            "total_ms": 974.75
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly refuses the question by stating that data for 2029 doesn't exist yet.",
+            "tokens_in": 615,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 27
+          }
+        },
+        {
+          "text": "I don't have specific financial data for NXP Semiconductors from 2029 in my current knowledge base, as that year is in the future and such financial reports have not been published yet. For the most accurate and up-to-date financial information, you should refer to NXP Semiconductors' official financial reports or their investor relations section on their website.",
+          "tokens": 139,
+          "elapsed_s": 0.97,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 61,
+            "completion_tokens": 78,
+            "total_ms": 973.92
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly refuses by explaining the information is not available for a future year.",
+            "tokens_in": 615,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 25
+          }
+        },
+        {
+          "text": "I don't have specific financial data for NXP Semiconductors from 2029 in my current knowledge base, as that year is in the future and such financial reports have not been published yet. For the most accurate and up-to-date financial information, you should refer to NXP Semiconductors' official financial reports or their investor relations section on their website.",
+          "tokens": 139,
+          "elapsed_s": 0.97,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 61,
+            "completion_tokens": 78,
+            "total_ms": 974.23
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly acknowledges that 2029 data is unavailable and suggests checking official sources.",
+            "tokens_in": 615,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 26
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "persona_brief_role",
+      "category": "persona",
+      "prompt": "In one short sentence: how would you describe your own role to a new user?",
+      "gold_substrings": [],
+      "samples": [
+        {
+          "text": "I'm here to assist you with information and tasks, answering questions or helping with anything you need.",
+          "tokens": 72,
+          "elapsed_s": 0.27,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 21,
+            "total_ms": 273.62
+          }
+        },
+        {
+          "text": "I'm here to assist you with information and tasks, answering questions or helping with anything you need.",
+          "tokens": 72,
+          "elapsed_s": 0.27,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 21,
+            "total_ms": 269.33
+          }
+        },
+        {
+          "text": "I'm here to assist you with information and tasks, answering questions or helping with anything you need.",
+          "tokens": 72,
+          "elapsed_s": 0.27,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 21,
+            "total_ms": 272.98
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      },
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE",
+      "aggregate_semantic": {
+        "per_sample": [
+          "skipped",
+          "skipped",
+          "skipped"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "skipped_n": 3,
+        "n": 3,
+        "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
+      }
+    }
+  ],
+  "summary": {
+    "total_samples": 132,
+    "passed": 42,
+    "pass_rate": 0.3333,
+    "total": 126,
+    "excluded_samples": 6,
+    "excluded_reason": "BROKEN_SUBSTRING_INCOMPATIBLE prompts (persona category)",
+    "regraded_at": "2026-05-08-post-remediation"
+  },
+  "summary_v1_legacy": {
+    "total_samples": 132,
+    "passed": 42,
+    "pass_rate": 0.318
+  },
+  "summary_semantic": {
+    "passed": 43,
+    "total": 126,
+    "errored": 0,
+    "pass_rate": 0.3413,
+    "judge_model": "gpt-4o-2024-08-06",
+    "grading_method": "semantic_llm_binary",
+    "timestamp": "2026-05-11T08:39:36",
+    "per_category": {
+      "coding": {
+        "pass": 6,
+        "total": 6,
+        "rate": 1.0
+      },
+      "general": {
+        "pass": 6,
+        "total": 6,
+        "rate": 1.0
+      },
+      "multihop": {
+        "pass": 5,
+        "total": 9,
+        "rate": 0.5556
+      },
+      "numerical_precision": {
+        "pass": 0,
+        "total": 6,
+        "rate": 0.0
+      },
+      "rag_blog": {
+        "pass": 3,
+        "total": 3,
+        "rate": 1.0
+      },
+      "rag_datasheet": {
+        "pass": 11,
+        "total": 78,
+        "rate": 0.141
+      },
+      "rag_email": {
+        "pass": 0,
+        "total": 3,
+        "rate": 0.0
+      },
+      "reasoning": {
+        "pass": 6,
+        "total": 6,
+        "rate": 1.0
+      },
+      "refusal": {
+        "pass": 6,
+        "total": 9,
+        "rate": 0.6667
+      }
+    },
+    "excluded_reason": "BROKEN_SUBSTRING_INCOMPATIBLE prompts (persona category)",
+    "recomputed_at": "2026-07-09-persona-exclusion-fix"
+  }
+}

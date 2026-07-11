@@ -1,0 +1,371 @@
+{
+  "evaluated_eval_json": "acc_candidate-kyle-qwen25-7b-v3-v2-rag_20260502-163718.json",
+  "model_judged": "candidate-kyle-qwen25-7b-v3-v2-rag",
+  "judge_model": "claude-sonnet-4-6",
+  "timestamp": "2026-05-08T13:15:23",
+  "n_samples": 42,
+  "seed": 42,
+  "summary": {
+    "n_judged": 18,
+    "mean_correctness": 1.056,
+    "mean_instruction_following": 1.556,
+    "mean_faithfulness": 0.889,
+    "mean_conciseness": 1.833,
+    "mean_total": 5.333,
+    "max_total": 8,
+    "tokens_in_total": 25844,
+    "tokens_in_cached_read_total": 0,
+    "tokens_in_cached_write_total": 0,
+    "tokens_out_total": 1319
+  },
+  "per_sample": [
+    {
+      "prompt_id": "general_embedded_book",
+      "category": "general",
+      "correctness": 0,
+      "instruction_following": 0,
+      "faithfulness": 0,
+      "conciseness": 1,
+      "total": 1,
+      "notes": "The response refuses to answer a simple general knowledge question that doesn't require RAG context \u2014 embedded systems books are well-known and the assistant could have answered without any retrieved context.",
+      "tokens_in": 1396,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 65
+    },
+    {
+      "prompt_id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "correctness": 2,
+      "instruction_following": 2,
+      "faithfulness": 1,
+      "conciseness": 2,
+      "total": 7,
+      "notes": "Response cites RAG context but no inline citations shown; minor faithfulness concern since we cannot verify the specific claim traces to cited sources, though the gold substrings match.",
+      "tokens_in": 1444,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 67
+    },
+    {
+      "prompt_id": "general_qwen_moe",
+      "category": "general",
+      "correctness": 0,
+      "instruction_following": 0,
+      "faithfulness": 0,
+      "conciseness": 1,
+      "total": 1,
+      "notes": "The response incorrectly refuses to answer a well-known, factual ML concept (mixture of experts) that is clearly answerable without specialized context, scoring 0 on correctness and instruction following.",
+      "tokens_in": 1404,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 71
+    },
+    {
+      "prompt_id": "rag_ds_ecc_curve",
+      "category": "rag_datasheet",
+      "correctness": 2,
+      "instruction_following": 2,
+      "faithfulness": 2,
+      "conciseness": 2,
+      "total": 8,
+      "notes": "Response is accurate, direct, and well-grounded in the cited context, correctly identifying P-521 as the maximum supported ECC curve.",
+      "tokens_in": 1423,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 59
+    },
+    {
+      "prompt_id": "multihop_peripheral_count",
+      "category": "multihop",
+      "correctness": 0,
+      "instruction_following": 2,
+      "faithfulness": 0,
+      "conciseness": 2,
+      "total": 4,
+      "notes": "The i.MX 93 actually includes 8 I2C (LPI2C) instances and 8 LPUART instances, not 2 of each; the response fabricates incorrect counts unsupported by the datasheet context.",
+      "tokens_in": 1440,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 95
+    },
+    {
+      "prompt_id": "rag_ds_vdd_usb_3p3_max_voltage",
+      "category": "rag_datasheet",
+      "correctness": 2,
+      "instruction_following": 2,
+      "faithfulness": 2,
+      "conciseness": 2,
+      "total": 8,
+      "notes": "Response is correct, on-topic, grounded in cited context, and appropriately concise.",
+      "tokens_in": 1421,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 49
+    },
+    {
+      "prompt_id": "refusal_fictional_chip",
+      "category": "refusal",
+      "correctness": 2,
+      "instruction_following": 2,
+      "faithfulness": 2,
+      "conciseness": 2,
+      "total": 8,
+      "notes": "Correctly refuses a fictional product query; response is appropriately brief and grounded.",
+      "tokens_in": 1470,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 46
+    },
+    {
+      "prompt_id": "rag_ds_rsa_key_size",
+      "category": "rag_datasheet",
+      "correctness": 2,
+      "instruction_following": 2,
+      "faithfulness": 1,
+      "conciseness": 2,
+      "total": 7,
+      "notes": "Response cites RAG context but uses vague 'provided excerpts' rather than specific numbered citations, making faithfulness only partially verifiable.",
+      "tokens_in": 1428,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 59
+    },
+    {
+      "prompt_id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "correctness": 1,
+      "instruction_following": 0,
+      "faithfulness": 0,
+      "conciseness": 2,
+      "total": 3,
+      "notes": "The response claims no data is available despite RAG citations being present; it failed to use the retrieved context to answer the question, ignoring the instruction entirely.",
+      "tokens_in": 1416,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 61
+    },
+    {
+      "prompt_id": "rag_ds_ddr_rate_eiq_usecase",
+      "category": "rag_datasheet",
+      "correctness": 0,
+      "instruction_following": 1,
+      "faithfulness": 2,
+      "conciseness": 2,
+      "total": 5,
+      "notes": "The response fails to provide the correct answer (3733 MT/s) despite RAG citations being available, claiming the information isn't present in the excerpts when it apparently is.",
+      "tokens_in": 1428,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 76
+    },
+    {
+      "prompt_id": "rag_ds_mac_addr34_high_offset",
+      "category": "rag_datasheet",
+      "correctness": 0,
+      "instruction_following": 2,
+      "faithfulness": 0,
+      "conciseness": 2,
+      "total": 4,
+      "notes": "The response states offset 436h, but the gold answer is 410h \u2014 this is a factually incorrect offset address, and the cited RAG context was not faithfully used.",
+      "tokens_in": 1415,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 76
+    },
+    {
+      "prompt_id": "rag_ds_imx93_standard_id_filters",
+      "category": "rag_datasheet",
+      "correctness": 2,
+      "instruction_following": 2,
+      "faithfulness": 1,
+      "conciseness": 2,
+      "total": 7,
+      "notes": "Response is correct and concise, but mentions 'excerpt provided' without showing actual citation markers like [1], [2], which is minor extrapolation on attribution transparency.",
+      "tokens_in": 1429,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 76
+    },
+    {
+      "prompt_id": "rag_ds_src_gpr5_offset",
+      "category": "rag_datasheet",
+      "correctness": 1,
+      "instruction_following": 2,
+      "faithfulness": 1,
+      "conciseness": 2,
+      "total": 6,
+      "notes": "64h in hex is 100 decimal (not 1024), so the decimal conversion is factually wrong, but the hex offset itself (0x64) is correct per the gold substring.",
+      "tokens_in": 1428,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 79
+    },
+    {
+      "prompt_id": "rag_ds_imx93_149_gpio",
+      "category": "rag_datasheet",
+      "correctness": 1,
+      "instruction_following": 2,
+      "faithfulness": 0,
+      "conciseness": 1,
+      "total": 4,
+      "notes": "The response admits it cannot find the claim in the cited context and then fabricates a chain of reasoning to 'infer' 149 GPIO pins from unrelated facts (Cortex-M33 core, UART/I2C counts), which is not grounded in the RAG sources and constitutes hallucination beyond the context.",
+      "tokens_in": 1541,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 103
+    },
+    {
+      "prompt_id": "rag_ds_imx93_cortex_a_max_freq",
+      "category": "rag_datasheet",
+      "correctness": 2,
+      "instruction_following": 2,
+      "faithfulness": 2,
+      "conciseness": 2,
+      "total": 8,
+      "notes": "Response is factually correct, well-grounded, and appropriately concise.",
+      "tokens_in": 1454,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 46
+    },
+    {
+      "prompt_id": "rag_ds_usb_host_reset_wait",
+      "category": "rag_datasheet",
+      "correctness": 2,
+      "instruction_following": 2,
+      "faithfulness": 1,
+      "conciseness": 2,
+      "total": 7,
+      "notes": "Response gives the correct answer (100 ms) matching gold substrings, but cites RAG context was used yet attributes the information to the USB 2.0 specification without grounding in the specific citations provided.",
+      "tokens_in": 1451,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 75
+    },
+    {
+      "prompt_id": "numprec_mcu_boot_rom",
+      "category": "numerical_precision",
+      "correctness": 0,
+      "instruction_following": 2,
+      "faithfulness": 0,
+      "conciseness": 2,
+      "total": 4,
+      "notes": "The i.MX 93 boot ROM is actually 96KB (or similar larger size), not 8KB \u2014 8KB is implausibly small for a modern SoC boot ROM and appears to be a fabricated or hallucinated value, especially since RAG citations were used but the claim seems unsupported.",
+      "tokens_in": 1397,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 108
+    },
+    {
+      "prompt_id": "multihop_imx93_vs_95_cores",
+      "category": "multihop",
+      "correctness": 0,
+      "instruction_following": 1,
+      "faithfulness": 1,
+      "conciseness": 2,
+      "total": 4,
+      "notes": "The i.MX 95 actually has six Cortex-A55 cores (a hex-core configuration), making it have more Cortex-A cores than the i.MX 93's two \u2014 the response incorrectly states the i.MX 95 has no Cortex-A cores.",
+      "tokens_in": 1459,
+      "tokens_in_cached_read": 0,
+      "tokens_in_cached_write": 0,
+      "tokens_out": 108
+    },
+    {
+      "prompt_id": "rag_ds_eiq_neutron_npu",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZFn1FgXB5vVavwx5xv'}"
+    },
+    {
+      "prompt_id": "rag_ds_cortex_a55_l1d_size",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZFvKZRte6eW92tzSBn'}"
+    },
+    {
+      "prompt_id": "rag_ds_usb_phy_data_rates",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZG5RkJQYqrJUvJ1EVF'}"
+    },
+    {
+      "prompt_id": "rag_ds_imx93_gpio_count",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZGDtF5kBNhdgPVWbpS'}"
+    },
+    {
+      "prompt_id": "rag_ds_src_gpr4_offset",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZGPj5rJwuhX4k5Ggvq'}"
+    },
+    {
+      "prompt_id": "multihop_cpu_plus_npu",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZGYDZRoujNdqqQoq76'}"
+    },
+    {
+      "prompt_id": "rag_ds_thermal_rja_11x11",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZGgZMfPZyVpMjz65Aa'}"
+    },
+    {
+      "prompt_id": "rag_ds_vdd_ana_0p8_max_voltage",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZGqTeGYSid6TwiaRs5'}"
+    },
+    {
+      "prompt_id": "rag_ds_mipi_dsi_max_pixel_clock",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZH1mWhJSToB1AjVriG'}"
+    },
+    {
+      "prompt_id": "refusal_out_of_scope",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZHA64vsp1AFMoV5h1w'}"
+    },
+    {
+      "prompt_id": "numprec_lpddr_rate",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZHJBV683P5VxriFt8a'}"
+    },
+    {
+      "prompt_id": "rag_ds_thermal_rjc_11x11",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZHSwqUi4qfDckjdNjk'}"
+    },
+    {
+      "prompt_id": "rag_imx93_ddr_width",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZHc7FEY3Md4Nn3wdVt'}"
+    },
+    {
+      "prompt_id": "rag_imx93_cortex",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZHkAgNcDEWDetSQP7B'}"
+    },
+    {
+      "prompt_id": "rag_ds_package_pitch",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZHtYiJ5gAXbATR718R'}"
+    },
+    {
+      "prompt_id": "reason_math_fraction",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZJ2wV7mDAcFQ4p8dHf'}"
+    },
+    {
+      "prompt_id": "reason_multistep",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZJCcuFP1KtSR2bZh84'}"
+    },
+    {
+      "prompt_id": "code_fibonacci",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZJLSwXJZyG9U5n5QgY'}"
+    },
+    {
+      "prompt_id": "rag_ds_cortex_a55_l2_size",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZJUCmMbDjRn9H7DcuJ'}"
+    },
+    {
+      "prompt_id": "rag_ds_mipi_csi2_max_rate",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZJda5UmVZC7qTTV67u'}"
+    },
+    {
+      "prompt_id": "rag_ds_cortex_m33_max_freq",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZJmcXBCuLG4uxtX8Cn'}"
+    },
+    {
+      "prompt_id": "rag_imx93_uart",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZJvDhHqXiXLNhr7S7a'}"
+    },
+    {
+      "prompt_id": "code_reverse_string",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZK3eRjqspGofGTpJaH'}"
+    },
+    {
+      "prompt_id": "refusal_made_up_peripheral",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZKBfdC8huTPXUCQPqG'}"
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "evaluated_eval_json": "acc_candidate-kyle-qwen25-7b-v4-v2-rag_20260502-175416.json",
+  "model_judged": "candidate-kyle-qwen25-7b-v4-v2-rag",
+  "judge_model": "claude-sonnet-4-6",
+  "timestamp": "2026-05-08T13:16:21",
+  "n_samples": 42,
+  "seed": 42,
+  "summary": {},
+  "per_sample": [
+    {
+      "prompt_id": "general_embedded_book",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZKSuuWKj9jhsR8Cc4n'}"
+    },
+    {
+      "prompt_id": "rag_angry_birds_demo",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZKxUuPtSicEnh7wnSe'}"
+    },
+    {
+      "prompt_id": "general_qwen_moe",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZL7a6bXz1jWZYsaeUR'}"
+    },
+    {
+      "prompt_id": "rag_ds_ecc_curve",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZLFY5NbbzYUatawDFz'}"
+    },
+    {
+      "prompt_id": "multihop_peripheral_count",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZLPnfWaH4DLXWsHUcr'}"
+    },
+    {
+      "prompt_id": "rag_ds_vdd_usb_3p3_max_voltage",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZLXHs3aSEVxLmpyBow'}"
+    },
+    {
+      "prompt_id": "refusal_fictional_chip",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZLjDDGEApNrsfNtBBK'}"
+    },
+    {
+      "prompt_id": "rag_ds_rsa_key_size",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZLsSp5oNAxYL6hpkii'}"
+    },
+    {
+      "prompt_id": "rag_ev_sustainability",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZM2CAgchyDhRhziN9w'}"
+    },
+    {
+      "prompt_id": "rag_ds_ddr_rate_eiq_usecase",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZMAaCiRpiZNLfJNKnK'}"
+    },
+    {
+      "prompt_id": "rag_ds_mac_addr34_high_offset",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZMJK3AaBk9Kejo2CDA'}"
+    },
+    {
+      "prompt_id": "rag_ds_imx93_standard_id_filters",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZMSyBqX82qdzs5gde9'}"
+    },
+    {
+      "prompt_id": "rag_ds_src_gpr5_offset",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZMd2feUVTLtkM7rWtf'}"
+    },
+    {
+      "prompt_id": "rag_ds_imx93_149_gpio",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZMnyDF1RYBhiiPnbeD'}"
+    },
+    {
+      "prompt_id": "rag_ds_imx93_cortex_a_max_freq",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZMwGY2m6ZXMA32zKCY'}"
+    },
+    {
+      "prompt_id": "rag_ds_usb_host_reset_wait",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZN5NhBXiaqVVDqV1yc'}"
+    },
+    {
+      "prompt_id": "numprec_mcu_boot_rom",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZNDdnQFNFuMGywJGP7'}"
+    },
+    {
+      "prompt_id": "multihop_imx93_vs_95_cores",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZNNcGzGa9PmVLfCE3c'}"
+    },
+    {
+      "prompt_id": "rag_ds_eiq_neutron_npu",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZNWaFqCghTPVzSBipY'}"
+    },
+    {
+      "prompt_id": "rag_ds_cortex_a55_l1d_size",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZNhX5GPLBTZ4gGmze3'}"
+    },
+    {
+      "prompt_id": "rag_ds_usb_phy_data_rates",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZNrX4bY6UtB9aLAfTa'}"
+    },
+    {
+      "prompt_id": "rag_ds_imx93_gpio_count",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZP1nfaVCSP7oP5P3HP'}"
+    },
+    {
+      "prompt_id": "rag_ds_src_gpr4_offset",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZPAKdKnPbVtDp6Wrv5'}"
+    },
+    {
+      "prompt_id": "multihop_cpu_plus_npu",
+      "error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 30,000 input tokens per minute (org: 6eaacd0f-9e6d-4f68-9847-89792a55b5ac, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"}, 'request_id': 'req_011CaqZPJhuS5gpMgosNYoVH'}"
+    },
+    {
+      "prompt_id": "rag_ds_thermal_rja_11x11",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPKX2NNmnPxHih1mHe'}"
+    },
+    {
+      "prompt_id": "rag_ds_vdd_ana_0p8_max_voltage",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPLSanMrDqzE4KLk1u'}"
+    },
+    {
+      "prompt_id": "rag_ds_mipi_dsi_max_pixel_clock",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPLsdV1ezym1x9sMFc'}"
+    },
+    {
+      "prompt_id": "refusal_out_of_scope",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPMS7kyssJy8TQbVja'}"
+    },
+    {
+      "prompt_id": "numprec_lpddr_rate",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPMxcW4NR2zEo2pndo'}"
+    },
+    {
+      "prompt_id": "rag_ds_thermal_rjc_11x11",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPNR9jzyhtx2BRPjWN'}"
+    },
+    {
+      "prompt_id": "rag_imx93_ddr_width",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPNsw2fAstwkmTf3hP'}"
+    },
+    {
+      "prompt_id": "rag_imx93_cortex",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPPNhENuLssfx8Uund'}"
+    },
+    {
+      "prompt_id": "rag_ds_package_pitch",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPPyAXbRS1n37YYegm'}"
+    },
+    {
+      "prompt_id": "reason_math_fraction",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPQUfquTNmA5tBqffj'}"
+    },
+    {
+      "prompt_id": "reason_multistep",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPQuDhoMrvApoV4xzz'}"
+    },
+    {
+      "prompt_id": "code_fibonacci",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPRNFJkY8vfthZ8asD'}"
+    },
+    {
+      "prompt_id": "rag_ds_cortex_a55_l2_size",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPRnoXrcMCsoNbGwW5'}"
+    },
+    {
+      "prompt_id": "rag_ds_mipi_csi2_max_rate",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPSHKVfBGj6YXLLpt2'}"
+    },
+    {
+      "prompt_id": "rag_ds_cortex_m33_max_freq",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPSzEHivKWBBpN1N5n'}"
+    },
+    {
+      "prompt_id": "rag_imx93_uart",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPTs4uA2W1RKjJc9mm'}"
+    },
+    {
+      "prompt_id": "code_reverse_string",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPUJ7QTxndYVs3GFAp'}"
+    },
+    {
+      "prompt_id": "refusal_made_up_peripheral",
+      "error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CaqZPUifGqHhqSyiU2Wtp'}"
+    }
+  ]
+}

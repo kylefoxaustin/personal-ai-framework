@@ -7545,6 +7545,15 @@
   "summary": {
     "total_samples": 132,
     "passed": 88,
+    "pass_rate": 0.6984,
+    "total": 126,
+    "excluded_samples": 6,
+    "excluded_reason": "BROKEN_SUBSTRING_INCOMPATIBLE prompts (persona category)",
+    "regraded_at": "2026-05-08-post-remediation"
+  },
+  "summary_v1_legacy": {
+    "total_samples": 132,
+    "passed": 88,
     "pass_rate": 0.667
   }
 }

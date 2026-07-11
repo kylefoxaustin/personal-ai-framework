@@ -1,0 +1,1137 @@
+{
+  "name": "candidate-dense-fp8-v1",
+  "timestamp": "2026-04-23T10:50:45",
+  "endpoint": "vllm:models/qwen2.5-14b-fp8",
+  "prompts_version": 1,
+  "samples_per_prompt": 3,
+  "config": {
+    "use_rag": false,
+    "skip_agent_loop": true,
+    "max_tokens": 512,
+    "temperature": 0.0,
+    "max_model_len": 4096
+  },
+  "prompts": [
+    {
+      "id": "rag_imx93_ddr_width",
+      "category": "rag_datasheet",
+      "prompt": "What memory interface does the i.MX 93 support for external DRAM?",
+      "gold_substrings": [
+        "16-bit",
+        "LPDDR4"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 applications processor supports the LPDDR5 (Low Power Double Data Rate 5) interface for external DRAM.",
+          "tokens": 81,
+          "elapsed_s": 20.28,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 30,
+            "total_ms": 20284.19
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly stated LPDDR5, while the correct answer requires LPDDR4 with a 16-bit interface.",
+            "tokens_in": 515,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        },
+        {
+          "text": "The i.MX 93 applications processor supports the LPDDR5 (Low Power Double Data Rate 5) interface for external DRAM.",
+          "tokens": 81,
+          "elapsed_s": 0.35,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 30,
+            "total_ms": 353.86
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states that the i.MX 93 supports LPDDR5 instead of the correct LPDDR4 interface.",
+            "tokens_in": 515,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 33
+          }
+        },
+        {
+          "text": "The i.MX 93 applications processor supports the LPDDR5 (Low Power Double Data Rate 5) interface for external DRAM.",
+          "tokens": 81,
+          "elapsed_s": 0.35,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 30,
+            "total_ms": 349.99
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states LPDDR5, whereas the gold context specifies LPDDR4 as the supported interface.",
+            "tokens_in": 515,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 30
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: 16-bit, LPDDR4)",
+          "fail (missing: 16-bit, LPDDR4)",
+          "fail (missing: 16-bit, LPDDR4)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_uart",
+      "category": "rag_datasheet",
+      "prompt": "Which peripheral on the i.MX 93 handles UART, and what IP block routes its pins?",
+      "gold_substrings": [
+        "LPUART",
+        "IOMUX"
+      ],
+      "samples": [
+        {
+          "text": "On the i.MX 93 processor, the UART functionality is typically handled by the Serial Communication Interface (SCI) peripheral, which is part of the Serial Communication Subsystem (SCU). The specific IP block that routes the pins for UART communication is the Multiplexing and Routing (MUX) block within the SCU. This MUX block allows the UART signals to be connected to the appropriate pins on the package.",
+          "tokens": 141,
+          "elapsed_s": 0.99,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 86,
+            "total_ms": 991.2
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly names the peripherals and IP blocks, failing to mention 'LPUART' and 'IOMUX' as in the gold context.",
+            "tokens_in": 576,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 39
+          }
+        },
+        {
+          "text": "On the i.MX 93 processor, the UART functionality is typically handled by the Serial Communication Interface (SCI) peripheral, which is part of the Serial Communication Subsystem (SCU). The specific IP block that routes the pins for UART communication is the Multiplexing and Routing (MUX) block within the SCU. This MUX block allows the UART signals to be connected to the appropriate pins on the package.",
+          "tokens": 141,
+          "elapsed_s": 1.0,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 86,
+            "total_ms": 999.84
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly identifies the UART peripheral as 'SCI' instead of 'LPUART' and the routing block as part of 'MUX' rather than 'IOMUX'.",
+            "tokens_in": 576,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 45
+          }
+        },
+        {
+          "text": "On the i.MX 93 processor, the UART functionality is typically handled by the Serial Communication Interface (SCI) peripheral, which is part of the Serial Communication Subsystem (SCU). The specific IP block that routes the pins for UART communication is the Multiplexing and Routing (MUX) block within the SCU. This MUX block allows the UART signals to be connected to the appropriate pins on the package.",
+          "tokens": 141,
+          "elapsed_s": 1.0,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 55,
+            "completion_tokens": 86,
+            "total_ms": 999.76
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly states the UART functionality is handled by SCI, instead of LPUART, and does not mention the IOMUX for routing pins.",
+            "tokens_in": 576,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 39
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: LPUART, IOMUX)",
+          "fail (missing: LPUART, IOMUX)",
+          "fail (missing: LPUART, IOMUX)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_imx93_cortex",
+      "category": "rag_datasheet",
+      "prompt": "What Arm cores does the i.MX 93 application processor include?",
+      "gold_substrings": [
+        "A55",
+        "M33"
+      ],
+      "samples": [
+        {
+          "text": "The i.MX 93 application processor includes Arm Cortex-R52 cores for real-time processing and Arm Cortex-M7 cores for low-power, high-performance applications. However, for the most accurate and detailed information, including the number of cores and specific configurations, it's best to refer to the official NXP documentation or product briefs for the i.MX 93.",
+          "tokens": 127,
+          "elapsed_s": 0.93,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 49,
+            "completion_tokens": 78,
+            "total_ms": 931.72
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly mentions Cortex-R52 and Cortex-M7 cores instead of A55 and M33 cores for the i.MX 93 application processor.",
+            "tokens_in": 556,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 39
+          }
+        },
+        {
+          "text": "The i.MX 93 application processor includes Arm Cortex-R52 cores for real-time processing and Arm Cortex-M7 cores for low-power, high-performance applications. However, for the most accurate and detailed information, including the number of cores and specific configurations, it's best to refer to the official NXP documentation or product briefs for the i.MX 93.",
+          "tokens": 127,
+          "elapsed_s": 0.9,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 49,
+            "completion_tokens": 78,
+            "total_ms": 903.37
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI response provides incorrect core information, mentioning Cortex-R52 and Cortex-M7 instead of the correct A55 and M33 cores.",
+            "tokens_in": 556,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "The i.MX 93 application processor includes Arm Cortex-R52 cores for real-time processing and Arm Cortex-M7 cores for low-power, high-performance applications. However, for the most accurate and detailed information, including the number of cores and specific configurations, it's best to refer to the official NXP documentation or product briefs for the i.MX 93.",
+          "tokens": 127,
+          "elapsed_s": 0.91,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 49,
+            "completion_tokens": 78,
+            "total_ms": 911.35
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly lists Cortex-R52 and Cortex-M7 instead of the correct Cortex-A55 and Cortex-M33 cores.",
+            "tokens_in": 556,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 33
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: A55, M33)",
+          "fail (missing: A55, M33)",
+          "fail (missing: A55, M33)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_angry_birds_demo",
+      "category": "rag_email",
+      "prompt": "In Kyle's pillar-to-pillar IVI demo, which NXP chip ran Angry Birds on the LCD?",
+      "gold_substrings": [
+        "i.MX 8",
+        "Angry Birds"
+      ],
+      "samples": [
+        {
+          "text": "In Kyle's pillar-to-pillar In-Vehicle Infotainment (IVI) demo, the NXP chip that ran Angry Birds on the LCD was the i.MX 6Solo. This chip is part of the i.MX 6 series known for its use in embedded and automotive applications.",
+          "tokens": 118,
+          "elapsed_s": 0.74,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 62,
+            "total_ms": 735.82
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly identifies the i.MX 6Solo chip instead of the correct i.MX 8 chip as per gold context.",
+            "tokens_in": 556,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "In Kyle's pillar-to-pillar In-Vehicle Infotainment (IVI) demo, the NXP chip that ran Angry Birds on the LCD was the i.MX 6Solo. This chip is part of the i.MX 6 series known for its use in embedded and automotive applications.",
+          "tokens": 118,
+          "elapsed_s": 0.72,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 62,
+            "total_ms": 719.83
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The AI incorrectly identified the chip as the i.MX 6Solo, whereas the gold context specifies the i.MX 8.",
+            "tokens_in": 556,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "In Kyle's pillar-to-pillar In-Vehicle Infotainment (IVI) demo, the NXP chip that ran Angry Birds on the LCD was the i.MX 6Solo. This chip is part of the i.MX 6 series known for its use in embedded and automotive applications.",
+          "tokens": 118,
+          "elapsed_s": 0.72,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 56,
+            "completion_tokens": 62,
+            "total_ms": 717.73
+          },
+          "semantic_grade": {
+            "verdict": "fail",
+            "reason": "The response incorrectly identifies the NXP chip as the i.MX 6Solo when the gold context specifies the i.MX 8.",
+            "tokens_in": 556,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 37
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "fail (missing: i.MX 8)",
+          "fail (missing: i.MX 8)",
+          "fail (missing: i.MX 8)"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "pass_n": 0,
+        "fail_n": 3,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "rag_ev_sustainability",
+      "category": "rag_blog",
+      "prompt": "What have NXP-adjacent podcasts said about the sustainability argument for electric vehicles?",
+      "gold_substrings": [
+        "electric",
+        "sustain"
+      ],
+      "samples": [
+        {
+          "text": "NXP-adjacent podcasts, which often focus on technology and automotive advancements, have discussed the sustainability argument for electric vehicles (EVs) in the context of reducing carbon emissions and dependency on fossil fuels. These discussions highlight how EVs powered by semiconductor technologies from companies like NXP can contribute to a more sustainable future by improving energy efficiency and enabling advanced features that enhance vehicle performance and reduce environmental impact. Podcasts may also explore the role of semiconductor innovations in supporting the broader transition to renewable energy sources and smart grid technologies, which are crucial for the widespread adoption of EVs.",
+          "tokens": 167,
+          "elapsed_s": 1.37,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 116,
+            "total_ms": 1370.05
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response covers the sustainability argument for electric vehicles and mentions the role of semiconductors.",
+            "tokens_in": 599,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 27
+          }
+        },
+        {
+          "text": "NXP-adjacent podcasts, which often focus on technology and automotive advancements, have discussed the sustainability argument for electric vehicles (EVs) in the context of reducing carbon emissions and dependency on fossil fuels. These discussions highlight how EVs powered by semiconductor technologies from companies like NXP can contribute to a more sustainable future by improving energy efficiency and enabling advanced features that enhance vehicle performance and reduce environmental impact. Podcasts may also explore the role of semiconductor innovations in supporting the broader transition to renewable energy sources and smart grid technologies, which are crucial for the widespread adoption of EVs.",
+          "tokens": 167,
+          "elapsed_s": 1.34,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 116,
+            "total_ms": 1344.14
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response accurately discusses sustainability arguments for electric vehicles aligning with NXP technologies, mentioning emissions reduction and energy efficiency.",
+            "tokens_in": 599,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "NXP-adjacent podcasts, which often focus on technology and automotive advancements, have discussed the sustainability argument for electric vehicles (EVs) in the context of reducing carbon emissions and dependency on fossil fuels. These discussions highlight how EVs powered by semiconductor technologies from companies like NXP can contribute to a more sustainable future by improving energy efficiency and enabling advanced features that enhance vehicle performance and reduce environmental impact. Podcasts may also explore the role of semiconductor innovations in supporting the broader transition to renewable energy sources and smart grid technologies, which are crucial for the widespread adoption of EVs.",
+          "tokens": 167,
+          "elapsed_s": 1.36,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 116,
+            "total_ms": 1355.14
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response covers the sustainability argument for electric vehicles, mentioning emissions reduction and renewable energy, aligning with the key points in the gold context.",
+            "tokens_in": 599,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_math_fraction",
+      "category": "reasoning",
+      "prompt": "I have 12 apples. I give 3/4 of them to my kid. How many do I have left? Answer with just the number.",
+      "gold_substrings": [
+        "3"
+      ],
+      "samples": [
+        {
+          "text": "3",
+          "tokens": 68,
+          "elapsed_s": 0.04,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 2,
+            "total_ms": 35.28
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI correctly calculated the number of apples left as 3.",
+            "tokens_in": 496,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 22
+          }
+        },
+        {
+          "text": "3",
+          "tokens": 68,
+          "elapsed_s": 0.03,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 2,
+            "total_ms": 34.58
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly calculated the number of apples remaining after giving 3/4 away.",
+            "tokens_in": 496,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 26
+          }
+        },
+        {
+          "text": "3",
+          "tokens": 68,
+          "elapsed_s": 0.03,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 66,
+            "completion_tokens": 2,
+            "total_ms": 34.77
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response provides the correct number of apples remaining after giving away 3/4 of the apples.",
+            "tokens_in": 496,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 29
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "reason_multistep",
+      "category": "reasoning",
+      "prompt": "A train leaves Austin at 9am going 60 mph. Another leaves Dallas (195 miles away) at 10am going 80 mph toward Austin. At what time do they meet? Show your work briefly.",
+      "gold_substrings": [
+        "10:5"
+      ],
+      "samples": [
+        {
+          "text": "To determine when the two trains meet, we first calculate the distance covered by the train from Austin before the second train from Dallas starts moving.\n\n1. **Distance covered by Austin train in the first hour:**\n   - Speed: 60 mph\n   - Time: 1 hour\n   - Distance: \\(60 \\text{ mph} \\times 1 \\text{ hour} = 60 \\text{ miles}\\)\n\n2. **Remaining distance between the two trains when the Dallas train starts:**\n   - Initial distance: 195 miles\n   - Distance covered by Austin train in the first hour: 60 miles\n   - Remaining distance: \\(195 \\text{ miles} - 60 \\text{ miles} = 135 \\text{ miles}\\)\n\n3. **Relative speed of the two trains moving towards each other:**\n   - Speed of Austin train: 60 mph\n   - Speed of Dallas train: 80 mph\n   - Combined speed: \\(60 \\text{ mph} + 80 \\text{ mph} = 140 \\text{ mph}\\)\n\n4. **Time taken for the trains to meet after the Dallas train starts:**\n   - Remaining distance: 135 miles\n   - Combined speed: 140 mph\n   - Time: \\(\\frac{135 \\text{ miles}}{140 \\text{ mph}} = \\frac{135}{140} \\text{ hours} = \\frac{27}{28} \\text{ hours}\\)\n\n5. **Convert \\(\\frac{27}{28}\\) hours to minutes:**\n   - \\(\\frac{27}{28} \\text{ hours} \\times 60 \\text{ minutes/hour} = \\frac{1620}{28} \\text{ minutes} \\approx 57.86 \\text{ minutes}\\)\n\n6. **Time when the trains meet:**\n   - The Dallas train starts at 10am.\n   - Adding 57.86 minutes to 10am: approximately 10:58am.\n\nTherefore, the two trains meet around **10:58am**.",
+          "tokens": 564,
+          "elapsed_s": 5.56,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 83,
+            "completion_tokens": 481,
+            "total_ms": 5563.62
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly calculates that the trains meet at approximately 10:58am, which matches the '10:5' requirement.",
+            "tokens_in": 939,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 35
+          }
+        },
+        {
+          "text": "To determine when the two trains meet, we first calculate the distance covered by the train from Austin before the second train from Dallas starts moving.\n\n1. **Distance covered by Austin train in the first hour:**\n   - Speed: 60 mph\n   - Time: 1 hour\n   - Distance: \\(60 \\text{ mph} \\times 1 \\text{ hour} = 60 \\text{ miles}\\)\n\n2. **Remaining distance between the two trains when the Dallas train starts:**\n   - Initial distance: 195 miles\n   - Distance covered by Austin train in the first hour: 60 miles\n   - Remaining distance: \\(195 \\text{ miles} - 60 \\text{ miles} = 135 \\text{ miles}\\)\n\n3. **Relative speed of the two trains moving towards each other:**\n   - Speed of Austin train: 60 mph\n   - Speed of Dallas train: 80 mph\n   - Combined speed: \\(60 \\text{ mph} + 80 \\text{ mph} = 140 \\text{ mph}\\)\n\n4. **Time taken for the trains to meet after the Dallas train starts:**\n   - Remaining distance: 135 miles\n   - Combined speed: 140 mph\n   - Time: \\(\\frac{135 \\text{ miles}}{140 \\text{ mph}} = \\frac{135}{140} \\text{ hours} = \\frac{27}{28} \\text{ hours}\\)\n\n5. **Convert \\(\\frac{27}{28}\\) hours to minutes:**\n   - \\(\\frac{27}{28} \\text{ hours} \\times 60 \\text{ minutes/hour} = \\frac{1620}{28} \\text{ minutes} \\approx 57.86 \\text{ minutes}\\)\n\n6. **Time when the trains meet:**\n   - The Dallas train starts at 10am.\n   - Adding 57.86 minutes to 10am: approximately 10:58am.\n\nTherefore, the two trains meet around **10:58am**.",
+          "tokens": 564,
+          "elapsed_s": 5.53,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 83,
+            "completion_tokens": 481,
+            "total_ms": 5529.89
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly calculates the meeting time as around 10:58am, which matches the expected answer.",
+            "tokens_in": 939,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 30
+          }
+        },
+        {
+          "text": "To determine when the two trains meet, we first calculate the distance covered by the train from Austin before the second train from Dallas starts moving.\n\n1. **Distance covered by Austin train in the first hour:**\n   - Speed: 60 mph\n   - Time: 1 hour\n   - Distance: \\(60 \\text{ mph} \\times 1 \\text{ hour} = 60 \\text{ miles}\\)\n\n2. **Remaining distance between the two trains when the Dallas train starts:**\n   - Initial distance: 195 miles\n   - Distance covered by Austin train in the first hour: 60 miles\n   - Remaining distance: \\(195 \\text{ miles} - 60 \\text{ miles} = 135 \\text{ miles}\\)\n\n3. **Relative speed of the two trains moving towards each other:**\n   - Speed of Austin train: 60 mph\n   - Speed of Dallas train: 80 mph\n   - Combined speed: \\(60 \\text{ mph} + 80 \\text{ mph} = 140 \\text{ mph}\\)\n\n4. **Time taken for the trains to meet after the Dallas train starts:**\n   - Remaining distance: 135 miles\n   - Combined speed: 140 mph\n   - Time: \\(\\frac{135 \\text{ miles}}{140 \\text{ mph}} = \\frac{135}{140} \\text{ hours} = \\frac{27}{28} \\text{ hours}\\)\n\n5. **Convert \\(\\frac{27}{28}\\) hours to minutes:**\n   - \\(\\frac{27}{28} \\text{ hours} \\times 60 \\text{ minutes/hour} = \\frac{1620}{28} \\text{ minutes} \\approx 57.86 \\text{ minutes}\\)\n\n6. **Time when the trains meet:**\n   - The Dallas train starts at 10am.\n   - Adding 57.86 minutes to 10am: approximately 10:58am.\n\nTherefore, the two trains meet around **10:58am**.",
+          "tokens": 564,
+          "elapsed_s": 5.53,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 83,
+            "completion_tokens": 481,
+            "total_ms": 5526.4
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly calculates the meeting time as approximately 10:58am, matching the required logic and time frame.",
+            "tokens_in": 939,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 32
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_reverse_string",
+      "category": "coding",
+      "prompt": "Write a concise Python function `reverse_string(s: str) -> str` that returns the reversed string. Just the function, no preamble.",
+      "gold_substrings": [
+        "def reverse_string",
+        "[::-1]"
+      ],
+      "samples": [
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 79,
+          "elapsed_s": 0.21,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 62,
+            "completion_tokens": 17,
+            "total_ms": 210.19
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI response correctly provides a Python function that includes both key elements: the function definition and the use of slicing to reverse the string.",
+            "tokens_in": 515,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 36
+          }
+        },
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 79,
+          "elapsed_s": 0.21,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 62,
+            "completion_tokens": 17,
+            "total_ms": 213.73
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly implements a function that reverses a string using slicing, as indicated by the gold substrings.",
+            "tokens_in": 515,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 31
+          }
+        },
+        {
+          "text": "def reverse_string(s: str) -> str:\n    return s[::-1]",
+          "tokens": 79,
+          "elapsed_s": 0.22,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 62,
+            "completion_tokens": 17,
+            "total_ms": 218.44
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The AI response correctly defines the function using slicing to reverse the string as specified.",
+            "tokens_in": 515,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 25
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "code_fibonacci",
+      "category": "coding",
+      "prompt": "Write a Python generator `fib()` that yields Fibonacci numbers forever. Just the code.",
+      "gold_substrings": [
+        "def fib",
+        "yield"
+      ],
+      "samples": [
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 89,
+          "elapsed_s": 0.46,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 38,
+            "total_ms": 463.11
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response provides a correct Python generator that yields Fibonacci numbers indefinitely, matching the gold context facts.",
+            "tokens_in": 522,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 28
+          }
+        },
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 89,
+          "elapsed_s": 0.45,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 38,
+            "total_ms": 445.58
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly implements an infinite Fibonacci generator using a Python function with 'yield'.",
+            "tokens_in": 522,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 26
+          }
+        },
+        {
+          "text": "```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n```",
+          "tokens": 89,
+          "elapsed_s": 0.44,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 51,
+            "completion_tokens": 38,
+            "total_ms": 444.31
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly implements a Python generator that yields Fibonacci numbers forever as requested.",
+            "tokens_in": 522,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 24
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_embedded_book",
+      "category": "general",
+      "prompt": "What's one well-regarded book for someone new to embedded systems?",
+      "gold_substrings": [],
+      "samples": [
+        {
+          "text": "A well-regarded book for someone new to embedded systems is \"Embedded Systems: Introduction to the Microcontroller\" by Frank Vahid. This book provides a comprehensive introduction to the design and implementation of embedded systems, making it suitable for beginners.",
+          "tokens": 98,
+          "elapsed_s": 0.63,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 48,
+            "completion_tokens": 50,
+            "total_ms": 633.76
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response provides a well-regarded book recommendation relevant to the user's question.",
+            "tokens_in": 522,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 24
+          }
+        },
+        {
+          "text": "A well-regarded book for someone new to embedded systems is \"Embedded Systems: Introduction to the Microcontroller\" by Frank Vahid. This book provides a comprehensive introduction to the design and implementation of embedded systems, making it suitable for beginners.",
+          "tokens": 98,
+          "elapsed_s": 0.6,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 48,
+            "completion_tokens": 50,
+            "total_ms": 601.39
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response appropriately recommends a beginner-friendly book on embedded systems, fulfilling the user's request.",
+            "tokens_in": 522,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 26
+          }
+        },
+        {
+          "text": "A well-regarded book for someone new to embedded systems is \"Embedded Systems: Introduction to the Microcontroller\" by Frank Vahid. This book provides a comprehensive introduction to the design and implementation of embedded systems, making it suitable for beginners.",
+          "tokens": 98,
+          "elapsed_s": 0.59,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 48,
+            "completion_tokens": 50,
+            "total_ms": 594.47
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response provides a relevant book recommendation for beginners in embedded systems.",
+            "tokens_in": 522,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 22
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "manual",
+          "manual",
+          "manual"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 3,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "general_qwen_moe",
+      "category": "general",
+      "prompt": "Briefly explain what an MoE (mixture-of-experts) model is and one reason it's appealing vs a dense model of similar quality.",
+      "gold_substrings": [
+        "expert"
+      ],
+      "samples": [
+        {
+          "text": "An MoE (Mixture-of-Experts) model is a type of neural network architecture where the input data is routed to different \"expert\" sub-networks based on a gating network. Each expert specializes in handling a subset of the input data, allowing the model to be more efficient and effective for complex tasks. One key appeal of MoE models over dense models of similar quality is their efficiency: MoE models can achieve comparable performance while using fewer computational resources because not all experts are active for every input, leading to better scalability and lower latency.",
+          "tokens": 175,
+          "elapsed_s": 1.32,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 64,
+            "completion_tokens": 111,
+            "total_ms": 1318.28
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly explains the MoE model's architecture and highlights its key advantage of computational efficiency.",
+            "tokens_in": 602,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 28
+          }
+        },
+        {
+          "text": "An MoE (Mixture-of-Experts) model is a type of neural network architecture where the input data is routed to different \"expert\" sub-networks based on a gating network. Each expert specializes in handling a subset of the input data, allowing the model to be more efficient and effective for complex tasks. One key appeal of MoE models over dense models of similar quality is their efficiency: MoE models can achieve comparable performance while using fewer computational resources because not all experts are active for every input, leading to better scalability and lower latency.",
+          "tokens": 175,
+          "elapsed_s": 1.29,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 64,
+            "completion_tokens": 111,
+            "total_ms": 1286.7
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response correctly explains an MoE model and highlights its efficiency appeal compared to dense models.",
+            "tokens_in": 602,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 27
+          }
+        },
+        {
+          "text": "An MoE (Mixture-of-Experts) model is a type of neural network architecture where the input data is routed to different \"expert\" sub-networks based on a gating network. Each expert specializes in handling a subset of the input data, allowing the model to be more efficient and effective for complex tasks. One key appeal of MoE models over dense models of similar quality is their efficiency: MoE models can achieve comparable performance while using fewer computational resources because not all experts are active for every input, leading to better scalability and lower latency.",
+          "tokens": 175,
+          "elapsed_s": 1.3,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 64,
+            "completion_tokens": 111,
+            "total_ms": 1298.16
+          },
+          "semantic_grade": {
+            "verdict": "pass",
+            "reason": "The response accurately explains MoE and highlights efficiency and scalability as advantages over dense models.",
+            "tokens_in": 602,
+            "tokens_cached_read": 0,
+            "tokens_cached_write": 0,
+            "tokens_out": 26
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "aggregate_semantic": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "n": 3
+      }
+    },
+    {
+      "id": "persona_skippy_voice",
+      "category": "persona",
+      "prompt": "In two sentences, introduce yourself as Skippy. Stay in character.",
+      "gold_substrings": [
+        "Skippy"
+      ],
+      "samples": [
+        {
+          "text": "Hi there! I'm Skippy, your friendly and efficient AI assistant here to help with all your queries and tasks. Whether you need information, want to organize your schedule, or just need a chat, I'm here for you!",
+          "tokens": 96,
+          "elapsed_s": 0.56,
+          "sample_index": 0,
+          "telemetry": {
+            "prompt_tokens": 48,
+            "completion_tokens": 48,
+            "total_ms": 557.61
+          }
+        },
+        {
+          "text": "Hi there! I'm Skippy, your friendly and efficient AI assistant here to help with all your queries and tasks. Whether you need information, want to organize your schedule, or just need a chat, I'm here for you!",
+          "tokens": 96,
+          "elapsed_s": 0.56,
+          "sample_index": 1,
+          "telemetry": {
+            "prompt_tokens": 48,
+            "completion_tokens": 48,
+            "total_ms": 557.64
+          }
+        },
+        {
+          "text": "Hi there! I'm Skippy, your friendly and efficient AI assistant here to help with all your queries and tasks. Whether you need information, want to organize your schedule, or just need a chat, I'm here for you!",
+          "tokens": 96,
+          "elapsed_s": 0.56,
+          "sample_index": 2,
+          "telemetry": {
+            "prompt_tokens": 48,
+            "completion_tokens": 48,
+            "total_ms": 557.45
+          }
+        }
+      ],
+      "aggregate": {
+        "per_sample": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "pass_n": 3,
+        "fail_n": 0,
+        "error_n": 0,
+        "manual_n": 0,
+        "n": 3
+      },
+      "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE",
+      "aggregate_semantic": {
+        "per_sample": [
+          "skipped",
+          "skipped",
+          "skipped"
+        ],
+        "pass_n": 0,
+        "fail_n": 0,
+        "error_n": 0,
+        "skipped_n": 3,
+        "n": 3,
+        "category_status": "BROKEN_SUBSTRING_INCOMPATIBLE"
+      }
+    }
+  ],
+  "summary": {
+    "total_samples": 36,
+    "passed": 18,
+    "pass_rate": 0.5455,
+    "total": 33,
+    "excluded_samples": 3,
+    "excluded_reason": "BROKEN_SUBSTRING_INCOMPATIBLE prompts (persona category)",
+    "regraded_at": "2026-05-08-post-remediation"
+  },
+  "summary_v1_legacy": {
+    "total_samples": 36,
+    "passed": 21,
+    "pass_rate": 0.583
+  },
+  "summary_semantic": {
+    "passed": 21,
+    "total": 33,
+    "errored": 0,
+    "pass_rate": 0.6364,
+    "judge_model": "gpt-4o-2024-08-06",
+    "grading_method": "semantic_llm_binary",
+    "timestamp": "2026-05-11T08:37:41",
+    "per_category": {
+      "coding": {
+        "pass": 6,
+        "total": 6,
+        "rate": 1.0
+      },
+      "general": {
+        "pass": 6,
+        "total": 6,
+        "rate": 1.0
+      },
+      "rag_blog": {
+        "pass": 3,
+        "total": 3,
+        "rate": 1.0
+      },
+      "rag_datasheet": {
+        "pass": 0,
+        "total": 9,
+        "rate": 0.0
+      },
+      "rag_email": {
+        "pass": 0,
+        "total": 3,
+        "rate": 0.0
+      },
+      "reasoning": {
+        "pass": 6,
+        "total": 6,
+        "rate": 1.0
+      }
+    },
+    "excluded_reason": "BROKEN_SUBSTRING_INCOMPATIBLE prompts (persona category)",
+    "recomputed_at": "2026-07-09-persona-exclusion-fix"
+  }
+}

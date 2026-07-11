@@ -1,0 +1,2672 @@
+{
+  "name": "qwen25-14b-vanilla-20260423",
+  "timestamp": "2026-04-22T23:07:14",
+  "endpoint": "http://localhost:8080",
+  "samples_per_prompt": 5,
+  "model_reported": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+  "defaults": {
+    "temperature": 0.1,
+    "top_p": 0.9,
+    "samples_per_prompt": 3
+  },
+  "profiles": [
+    {
+      "profile_id": "short_chat",
+      "description": "Conversational single-turn, no RAG. Dominated by system prompt + persona. Measures: TTFT and steady-state decode tok/s at minimum prefill.",
+      "target_prefill_tokens": 750,
+      "target_decode_tokens": 150,
+      "critical_metric": "ttft_plus_steady_state_decode",
+      "request_params": {
+        "max_tokens": 200,
+        "use_rag": false,
+        "rag_k": 0
+      },
+      "summary": {
+        "n_valid": 30,
+        "n_total": 30,
+        "host_ms": {
+          "p50": 2.12,
+          "p90": 2.4,
+          "p95": 2.51,
+          "min": 1.78,
+          "max": 2.68,
+          "mean": 2.14,
+          "n": 30
+        },
+        "prefill_ms": {
+          "p50": 9.24,
+          "p90": 17.18,
+          "p95": 17.3,
+          "min": 8.91,
+          "max": 17.53,
+          "mean": 11.37,
+          "n": 30
+        },
+        "decode_ms": {
+          "p50": 289.29,
+          "p90": 1025.8,
+          "p95": 1058.92,
+          "min": 166.98,
+          "max": 1071.9,
+          "mean": 440.88,
+          "n": 30
+        },
+        "total_ms": {
+          "p50": 310.1,
+          "p90": 1044.8,
+          "p95": 1071.18,
+          "min": 188.01,
+          "max": 1084.33,
+          "mean": 455.66,
+          "n": 30
+        },
+        "prefill_tok_per_s": {
+          "p50": 3557.8,
+          "p90": 4329.8,
+          "p95": 4372.7,
+          "min": 1939.5,
+          "max": 4421.9,
+          "mean": 3371.16,
+          "n": 30
+        },
+        "decode_tok_per_s": {
+          "p50": 133.5,
+          "p90": 138.3,
+          "p95": 142.0,
+          "min": 130.7,
+          "max": 143.7,
+          "mean": 134.33,
+          "n": 30
+        },
+        "prompt_tokens": {
+          "p50": 34,
+          "p90": 40,
+          "p95": 40,
+          "min": 32,
+          "max": 40,
+          "mean": 35.67,
+          "n": 30
+        },
+        "completion_tokens": {
+          "p50": 40,
+          "p90": 135,
+          "p95": 139,
+          "min": 24,
+          "max": 141,
+          "mean": 58.7,
+          "n": 30
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "It seems like you're addressing me as \"Skippy\"! That's a fun nickname. How can I assist you today?",
+          "tokens_used": 61,
+          "wall_clock_s": 0.27,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 27,
+            "host_ms": 2.15,
+            "prefill_ms": 16.64,
+            "decode_ms": 203.69,
+            "total_ms": 223.91,
+            "prefill_tok_per_s": 2043.3,
+            "decode_tok_per_s": 132.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Hey there! It seems like you're using a playful nickname or reference. How can I assist you today?",
+          "tokens_used": 58,
+          "wall_clock_s": 0.3,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 24,
+            "host_ms": 2.2,
+            "prefill_ms": 17.53,
+            "decode_ms": 166.98,
+            "total_ms": 188.01,
+            "prefill_tok_per_s": 1939.5,
+            "decode_tok_per_s": 143.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Hey there! It seems like you're using a nickname or a term that might not directly relate to me, but I'm here and ready to help. How can I assist you today?",
+          "tokens_used": 74,
+          "wall_clock_s": 0.39,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 40,
+            "host_ms": 2.21,
+            "prefill_ms": 17.3,
+            "decode_ms": 289.29,
+            "total_ms": 310.1,
+            "prefill_tok_per_s": 1965.6,
+            "decode_tok_per_s": 138.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Hey there! It seems like you're using a playful nickname or reference. How can I assist you today?",
+          "tokens_used": 58,
+          "wall_clock_s": 0.25,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 24,
+            "host_ms": 2.18,
+            "prefill_ms": 17.25,
+            "decode_ms": 168.97,
+            "total_ms": 190.17,
+            "prefill_tok_per_s": 1971.3,
+            "decode_tok_per_s": 142.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "It looks like you're using a friendly nickname \"Skippy\" but addressing an AI. How can I assist you today?",
+          "tokens_used": 60,
+          "wall_clock_s": 0.33,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 34,
+            "completion_tokens": 26,
+            "host_ms": 2.51,
+            "prefill_ms": 9.14,
+            "decode_ms": 187.56,
+            "total_ms": 200.52,
+            "prefill_tok_per_s": 3719.7,
+            "decode_tok_per_s": 138.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Since I'm an AI, I don't exist in a physical location, so I don't have a specific time zone. However, I can tell you the current time in any time zone you speci",
+          "tokens_used": 74,
+          "wall_clock_s": 0.4,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 42,
+            "host_ms": 2.4,
+            "prefill_ms": 14.44,
+            "decode_ms": 316.31,
+            "total_ms": 334.45,
+            "prefill_tok_per_s": 2216.1,
+            "decode_tok_per_s": 132.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Since I'm an AI, I don't exist in a physical location, so I don't have a specific time zone. However, I can tell you the current time in any time zone you speci",
+          "tokens_used": 91,
+          "wall_clock_s": 0.51,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 59,
+            "host_ms": 2.32,
+            "prefill_ms": 9.18,
+            "decode_ms": 444.33,
+            "total_ms": 457.13,
+            "prefill_tok_per_s": 3485.4,
+            "decode_tok_per_s": 132.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Since I'm an AI, I don't exist in a physical location, so I don't have a specific time zone. However, I can tell you the current time in any time zone you speci",
+          "tokens_used": 74,
+          "wall_clock_s": 0.39,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 42,
+            "host_ms": 2.39,
+            "prefill_ms": 10.64,
+            "decode_ms": 312.14,
+            "total_ms": 326.49,
+            "prefill_tok_per_s": 3007.3,
+            "decode_tok_per_s": 134.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Since I'm an AI, I don't exist in a physical location, so I don't have a specific time zone. However, I can tell you the current time in any time zone you speci",
+          "tokens_used": 91,
+          "wall_clock_s": 0.5,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 59,
+            "host_ms": 2.21,
+            "prefill_ms": 8.94,
+            "decode_ms": 440.74,
+            "total_ms": 453.08,
+            "prefill_tok_per_s": 3577.4,
+            "decode_tok_per_s": 133.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Since I'm an AI, I don't exist in a physical location, so I don't have a time zone. However, I can tell you the current time in any time zone you specify or you",
+          "tokens_used": 82,
+          "wall_clock_s": 0.44,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 32,
+            "completion_tokens": 50,
+            "host_ms": 1.98,
+            "prefill_ms": 9.03,
+            "decode_ms": 374.35,
+            "total_ms": 386.58,
+            "prefill_tok_per_s": 3544.2,
+            "decode_tok_per_s": 133.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Certainly! Here's a short joke for you:\n\nWhy did the embedded system go to therapy?\n\nBecause it had too many bugs and needed to work out its hardware issues!",
+          "tokens_used": 68,
+          "wall_clock_s": 0.33,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 35,
+            "host_ms": 2.0,
+            "prefill_ms": 15.75,
+            "decode_ms": 260.03,
+            "total_ms": 279.01,
+            "prefill_tok_per_s": 2095.9,
+            "decode_tok_per_s": 134.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Certainly! Here's a short joke for you:\n\nWhy don't embedded systems make good dancers?\n\nBecause they have two left feet! (referring to binary options)",
+          "tokens_used": 67,
+          "wall_clock_s": 0.31,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 34,
+            "host_ms": 2.14,
+            "prefill_ms": 9.29,
+            "decode_ms": 249.58,
+            "total_ms": 262.21,
+            "prefill_tok_per_s": 3553.9,
+            "decode_tok_per_s": 136.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Certainly! Here's a short joke for you:\n\nWhy did the embedded system go to therapy?\n\nBecause it had too many bugs and needed to work out its hardware issues!",
+          "tokens_used": 68,
+          "wall_clock_s": 0.4,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 35,
+            "host_ms": 2.41,
+            "prefill_ms": 9.23,
+            "decode_ms": 259.66,
+            "total_ms": 272.52,
+            "prefill_tok_per_s": 3573.6,
+            "decode_tok_per_s": 134.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Certainly! Here's a short joke for you:\n\nWhy don't embedded systems make good dancers?\n\nBecause they have two left feet! (referring to binary choices)",
+          "tokens_used": 67,
+          "wall_clock_s": 0.38,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 34,
+            "host_ms": 1.91,
+            "prefill_ms": 9.28,
+            "decode_ms": 253.18,
+            "total_ms": 265.59,
+            "prefill_tok_per_s": 3557.8,
+            "decode_tok_per_s": 134.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Certainly! Here's a short joke for you:\n\nWhy did the embedded system go to therapy?\n\nBecause it had too many bugs and needed to work out its hardware issues!",
+          "tokens_used": 68,
+          "wall_clock_s": 0.34,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 33,
+            "completion_tokens": 35,
+            "host_ms": 2.12,
+            "prefill_ms": 9.39,
+            "decode_ms": 258.16,
+            "total_ms": 270.9,
+            "prefill_tok_per_s": 3514.4,
+            "decode_tok_per_s": 135.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__2",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "\u5982\u679c\u4f60\u544a\u77e5\u6211\u4f60\u7684\u540d\u5b57\u662fKyle\uff0c\u4f5c\u4e3a\u52a9\u624b\uff0c\u6211\u4f1a\u8bb0\u4f4f\u8fd9\u4e00\u70b9\uff0c\u5e76\u5728\u540e\u7eed\u7684\u5bf9\u8bdd\u4e2d\u4f7f\u7528\u4f60\u7684\u540d\u5b57\u6765\u4f7f\u4ea4\u6d41\u66f4\u52a0\u4e2a\u6027\u5316\u548c\u4eb2\u5207\u3002\u65e0\u8bba\u4f60\u9700\u8981\u5e2e\u52a9\u89e3\u7b54\u95ee\u9898\u3001\u83b7\u53d6\u4fe1\u606f\uff0c\u8fd8\u662f\u8fdb\u884c\u4efb\u4f55\u5f62\u5f0f\u7684\u4ea4\u6d41\uff0c\u6211\u90fd\u4f1a\u5c3d\u529b\u63d0\u4f9b\u5e2e\u52a9\u3002\u5982\u679c\u4f60\u6709\u4efb\u4f55\u5177\u4f53\u7684\u9700\u6c42\u6216\u95ee\u9898\uff0c\u8bf7\u544a\u8bc9\u6211\uff0c\u6211\u4f1a\u5c3d\u6211\u6240\u80fd\u6765\u5e2e\u52a9\u4f60\u3002",
+          "tokens_used": 110,
+          "wall_clock_s": 0.62,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 70,
+            "host_ms": 1.97,
+            "prefill_ms": 17.18,
+            "decode_ms": 531.42,
+            "total_ms": 551.73,
+            "prefill_tok_per_s": 2327.9,
+            "decode_tok_per_s": 131.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "\u5982\u679c\u4f60\u544a\u77e5\u6211\u4f60\u7684\u540d\u5b57\u662fKyle\uff0c\u4f5c\u4e3a\u52a9\u624b\uff0c\u6211\u4f1a\u8bb0\u4f4f\u8fd9\u4e00\u70b9\uff0c\u5e76\u5728\u540e\u7eed\u7684\u5bf9\u8bdd\u4e2d\u4f7f\u7528\u4f60\u7684\u540d\u5b57\u6765\u4f7f\u4ea4\u6d41\u66f4\u52a0\u4e2a\u6027\u5316\u548c\u4eb2\u5207\u3002\u65e0\u8bba\u4f60\u9700\u8981\u5e2e\u52a9\u89e3\u7b54\u95ee\u9898\u3001\u83b7\u53d6\u4fe1\u606f\uff0c\u8fd8\u662f\u8fdb\u884c\u4efb\u4f55\u5176\u4ed6\u7c7b\u578b\u7684\u4ea4\u6d41\uff0c\u6211\u90fd\u4f1a\u5c3d\u529b\u63d0\u4f9b\u5e2e\u52a9\u3002\u5982\u679c\u4f60\u6709\u4efb\u4f55\u5177\u4f53\u7684\u9700\u6c42\u6216\u95ee\u9898\uff0c\u8bf7\u544a\u8bc9\u6211\uff0c\u6211\u4f1a\u5c3d\u6211\u6240\u80fd\u6765\u652f\u6301\u4f60\u3002",
+          "tokens_used": 111,
+          "wall_clock_s": 0.59,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 71,
+            "host_ms": 1.78,
+            "prefill_ms": 9.24,
+            "decode_ms": 532.44,
+            "total_ms": 544.7,
+            "prefill_tok_per_s": 4329.8,
+            "decode_tok_per_s": 133.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "\u5982\u679c\u4f60\u544a\u77e5\u6211\u4f60\u7684\u540d\u5b57\u662fKyle\uff0c\u4f5c\u4e3a\u52a9\u624b\uff0c\u6211\u4f1a\u8bb0\u4f4f\u8fd9\u4e00\u70b9\uff0c\u5e76\u5728\u540e\u7eed\u7684\u5bf9\u8bdd\u4e2d\u4f7f\u7528\u4f60\u7684\u540d\u5b57\u6765\u4f7f\u4ea4\u6d41\u66f4\u52a0\u4e2a\u6027\u5316\u548c\u4eb2\u5207\u3002\u65e0\u8bba\u4f60\u9700\u8981\u5e2e\u52a9\u89e3\u7b54\u95ee\u9898\u3001\u83b7\u53d6\u4fe1\u606f\uff0c\u8fd8\u662f\u8fdb\u884c\u4efb\u4f55\u5176\u4ed6\u7c7b\u578b\u7684\u4ea4\u6d41\uff0c\u6211\u90fd\u4f1a\u5c3d\u529b\u63d0\u4f9b\u5e2e\u52a9\u3002\u8bf7\u544a\u8bc9\u6211\u4f60\u5177\u4f53\u9700\u8981\u4ec0\u4e48\u6837\u7684\u5e2e\u52a9\u6216\u4fe1\u606f\u3002",
+          "tokens_used": 104,
+          "wall_clock_s": 0.53,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 64,
+            "host_ms": 1.82,
+            "prefill_ms": 9.15,
+            "decode_ms": 483.61,
+            "total_ms": 495.79,
+            "prefill_tok_per_s": 4372.7,
+            "decode_tok_per_s": 132.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "\u5982\u679c\u4f60\u544a\u77e5\u6211\u4f60\u7684\u540d\u5b57\u662fKyle\uff0c\u4f5c\u4e3a\u52a9\u624b\uff0c\u6211\u4f1a\u8bb0\u4f4f\u8fd9\u4e00\u70b9\uff0c\u5e76\u5728\u540e\u7eed\u7684\u5bf9\u8bdd\u4e2d\u4f7f\u7528\u4f60\u7684\u540d\u5b57\u6765\u4f7f\u4ea4\u6d41\u66f4\u52a0\u4e2a\u6027\u5316\u548c\u4eb2\u5207\u3002\u65e0\u8bba\u4f60\u9700\u8981\u5e2e\u52a9\u89e3\u7b54\u95ee\u9898\u3001\u83b7\u53d6\u4fe1\u606f\uff0c\u8fd8\u662f\u8fdb\u884c\u4efb\u4f55\u5f62\u5f0f\u7684\u4ea4\u6d41\uff0c\u6211\u90fd\u4f1a\u5c3d\u529b\u63d0\u4f9b\u5e2e\u52a9\u3002\u8bf7\u544a\u8bc9\u6211\u4f60\u5177\u4f53\u9700\u8981\u4ec0\u4e48\u6837\u7684\u5e2e\u52a9\u6216\u4fe1\u606f\u3002",
+          "tokens_used": 103,
+          "wall_clock_s": 0.53,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 63,
+            "host_ms": 1.96,
+            "prefill_ms": 9.23,
+            "decode_ms": 473.05,
+            "total_ms": 485.42,
+            "prefill_tok_per_s": 4331.6,
+            "decode_tok_per_s": 133.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "\u5982\u679c\u4f60\u544a\u77e5\u6211\u4f60\u7684\u540d\u5b57\u662fKyle\uff0c\u4f5c\u4e3a\u52a9\u624b\uff0c\u6211\u4f1a\u8bb0\u4f4f\u8fd9\u4e00\u70b9\uff0c\u5e76\u5728\u540e\u7eed\u7684\u5bf9\u8bdd\u4e2d\u4f7f\u7528\u4f60\u7684\u540d\u5b57\u6765\u4f7f\u4ea4\u6d41\u66f4\u52a0\u4e2a\u6027\u5316\u548c\u4eb2\u5207\u3002\u65e0\u8bba\u4f60\u9700\u8981\u5e2e\u52a9\u89e3\u7b54\u95ee\u9898\u3001\u83b7\u53d6\u4fe1\u606f\uff0c\u8fd8\u662f\u8fdb\u884c\u4efb\u4f55\u5176\u4ed6\u7c7b\u578b\u7684\u4ea4\u6d41\uff0c\u6211\u90fd\u4f1a\u5c3d\u529b\u63d0\u4f9b\u5e2e\u52a9\u3002\u5982\u679c\u4f60\u6709\u4efb\u4f55\u5177\u4f53\u7684\u9700\u6c42\u6216\u95ee\u9898\uff0c\u8bf7\u968f\u65f6\u544a\u8bc9\u6211\uff01",
+          "tokens_used": 104,
+          "wall_clock_s": 0.54,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 40,
+            "completion_tokens": 64,
+            "host_ms": 2.68,
+            "prefill_ms": 9.05,
+            "decode_ms": 479.51,
+            "total_ms": 492.42,
+            "prefill_tok_per_s": 4421.9,
+            "decode_tok_per_s": 133.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__3",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "To calculate \\( 17 \\times 23 \\):\n\nFirst, break it down:\n\\[ 17 \\times 23 = 17 \\times (20 + 3) = (17 \\times 20) + (17 \\times 3) \\]\n\nCalculate each part:\n\\[ 17 \\ti",
+          "tokens_used": 172,
+          "wall_clock_s": 1.09,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 135,
+            "host_ms": 2.23,
+            "prefill_ms": 15.35,
+            "decode_ms": 1025.8,
+            "total_ms": 1044.8,
+            "prefill_tok_per_s": 2410.1,
+            "decode_tok_per_s": 131.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "To calculate \\( 17 \\times 23 \\):\n\nFirst, let's break it down:\n\\[ 17 \\times 23 = 17 \\times (20 + 3) = (17 \\times 20) + (17 \\times 3) \\]\n\nCalculate each part:\n\\[ ",
+          "tokens_used": 178,
+          "wall_clock_s": 1.15,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 141,
+            "host_ms": 2.1,
+            "prefill_ms": 9.04,
+            "decode_ms": 1071.9,
+            "total_ms": 1084.33,
+            "prefill_tok_per_s": 4094.6,
+            "decode_tok_per_s": 131.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "To calculate \\( 17 \\times 23 \\):\n\nFirst, break it down:\n\\[ 17 \\times 23 = 17 \\times (20 + 3) = (17 \\times 20) + (17 \\times 3) \\]\n\nCalculate each part:\n\\[ 17 \\ti",
+          "tokens_used": 172,
+          "wall_clock_s": 1.12,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 135,
+            "host_ms": 1.98,
+            "prefill_ms": 9.04,
+            "decode_ms": 1033.29,
+            "total_ms": 1045.55,
+            "prefill_tok_per_s": 4092.3,
+            "decode_tok_per_s": 130.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "To calculate \\( 17 \\times 23 \\):\n\nFirst, let's break it down:\n\\[ 17 \\times 23 = 17 \\times (20 + 3) = (17 \\times 20) + (17 \\times 3) \\]\n\nCalculate each part:\n\\[ ",
+          "tokens_used": 176,
+          "wall_clock_s": 1.18,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 139,
+            "host_ms": 1.98,
+            "prefill_ms": 9.04,
+            "decode_ms": 1058.92,
+            "total_ms": 1071.18,
+            "prefill_tok_per_s": 4094.1,
+            "decode_tok_per_s": 131.3,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "To calculate \\( 17 \\times 23 \\):\n\nFirst, break it down:\n\\[ 17 \\times 23 = 17 \\times (20 + 3) = (17 \\times 20) + (17 \\times 3) \\]\n\nCalculate each part:\n\\[ 17 \\ti",
+          "tokens_used": 172,
+          "wall_clock_s": 1.1,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 37,
+            "completion_tokens": 135,
+            "host_ms": 2.19,
+            "prefill_ms": 8.99,
+            "decode_ms": 1024.39,
+            "total_ms": 1036.79,
+            "prefill_tok_per_s": 4116.2,
+            "decode_tok_per_s": 131.8,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__4",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Cache coherency is the process of ensuring that all processors in a multi-processor system have a consistent view of the memory, maintaining the same values for",
+          "tokens_used": 75,
+          "wall_clock_s": 0.36,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 37,
+            "host_ms": 2.01,
+            "prefill_ms": 15.5,
+            "decode_ms": 279.84,
+            "total_ms": 298.62,
+            "prefill_tok_per_s": 2451.4,
+            "decode_tok_per_s": 132.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Cache coherency is the state in which all processors in a multi-processor system have a consistent view of memory, maintained through protocols that ensure data",
+          "tokens_used": 73,
+          "wall_clock_s": 0.31,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 35,
+            "host_ms": 1.98,
+            "prefill_ms": 8.93,
+            "decode_ms": 259.2,
+            "total_ms": 271.34,
+            "prefill_tok_per_s": 4256.5,
+            "decode_tok_per_s": 135.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Cache coherency is the state in which all processors in a multi-processor system have a consistent view of memory, maintained through protocols that ensure data",
+          "tokens_used": 73,
+          "wall_clock_s": 0.36,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 35,
+            "host_ms": 2.36,
+            "prefill_ms": 8.91,
+            "decode_ms": 257.45,
+            "total_ms": 269.89,
+            "prefill_tok_per_s": 4265.1,
+            "decode_tok_per_s": 135.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Cache coherency is the state in which all processors in a multi-processor system have a consistent view of memory, maintained through protocols that ensure data",
+          "tokens_used": 73,
+          "wall_clock_s": 0.32,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 35,
+            "host_ms": 2.11,
+            "prefill_ms": 9.27,
+            "decode_ms": 260.93,
+            "total_ms": 273.53,
+            "prefill_tok_per_s": 4099.9,
+            "decode_tok_per_s": 134.1,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Cache coherency is the state in which all processors in a multi-processor system have a consistent view of memory, maintained through protocols that ensure data",
+          "tokens_used": 74,
+          "wall_clock_s": 0.33,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 38,
+            "completion_tokens": 36,
+            "host_ms": 2.0,
+            "prefill_ms": 10.26,
+            "decode_ms": 269.75,
+            "total_ms": 283.17,
+            "prefill_tok_per_s": 3705.4,
+            "decode_tok_per_s": 133.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "short_chat__5",
+          "sample_index": 4
+        }
+      ]
+    },
+    {
+      "profile_id": "rag_qa",
+      "description": "Retrieval-augmented Q&A over Skippy's 61K-doc knowledge base. Dominated by long prefill (retrieved chunks). Measures: prefill throughput + end-to-end with retrieval overhead.",
+      "target_prefill_tokens": 4800,
+      "target_decode_tokens": 400,
+      "critical_metric": "end_to_end_latency_with_retrieval",
+      "request_params": {
+        "max_tokens": 500,
+        "use_rag": true,
+        "rag_k": 8
+      },
+      "summary": {
+        "n_valid": 30,
+        "n_total": 30,
+        "host_ms": {
+          "p50": 347.92,
+          "p90": 399.41,
+          "p95": 403.01,
+          "min": 275.96,
+          "max": 9692.69,
+          "mean": 649.97,
+          "n": 30
+        },
+        "prefill_ms": {
+          "p50": 2038.7,
+          "p90": 2863.37,
+          "p95": 3041.24,
+          "min": 1066.69,
+          "max": 3135.39,
+          "mean": 2126.3,
+          "n": 30
+        },
+        "decode_ms": {
+          "p50": 2152.21,
+          "p90": 3045.92,
+          "p95": 4998.72,
+          "min": 374.37,
+          "max": 5014.19,
+          "mean": 1874.49,
+          "n": 30
+        },
+        "total_ms": {
+          "p50": 3995.91,
+          "p90": 6485.43,
+          "p95": 7494.53,
+          "min": 2748.73,
+          "max": 12705.72,
+          "mean": 4661.36,
+          "n": 30
+        },
+        "prefill_tok_per_s": {
+          "p50": 3905.4,
+          "p90": 4619.2,
+          "p95": 4652.4,
+          "min": 3421.6,
+          "max": 4653.7,
+          "mean": 3908.61,
+          "n": 30
+        },
+        "decode_tok_per_s": {
+          "p50": 102.2,
+          "p90": 109.9,
+          "p95": 111.2,
+          "min": 94.9,
+          "max": 111.5,
+          "mean": 102.14,
+          "n": 30
+        },
+        "prompt_tokens": {
+          "p50": 7909,
+          "p90": 9998,
+          "p95": 10457,
+          "min": 4964,
+          "max": 10728,
+          "mean": 8083.97,
+          "n": 30
+        },
+        "completion_tokens": {
+          "p50": 220,
+          "p90": 325,
+          "p95": 501,
+          "min": 37,
+          "max": 501,
+          "mean": 192.3,
+          "n": 30
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "The i.MX 93 Applications Processor supports a 16-bit DRAM controller with LPDDR4x memory technology. The maximum supported capacity is 2GByte.",
+          "tokens_used": 9609,
+          "wall_clock_s": 12.76,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 9572,
+            "completion_tokens": 37,
+            "host_ms": 9692.69,
+            "prefill_ms": 2626.94,
+            "decode_ms": 376.1,
+            "total_ms": 12705.72,
+            "prefill_tok_per_s": 3643.8,
+            "decode_tok_per_s": 98.4,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "The i.MX 93 Applications Processor supports a 16-bit DRAM controller with LPDDR4x memory technology. The maximum supported capacity is 2GByte.",
+          "tokens_used": 9609,
+          "wall_clock_s": 3.41,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 9572,
+            "completion_tokens": 37,
+            "host_ms": 311.17,
+            "prefill_ms": 2655.46,
+            "decode_ms": 376.76,
+            "total_ms": 3355.56,
+            "prefill_tok_per_s": 3604.6,
+            "decode_tok_per_s": 98.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "The i.MX 93 supports one 16-bit DRAM controller for external DRAM, which supports LPDDR4X with a maximum supported capacity of 2GByte.",
+          "tokens_used": 10496,
+          "wall_clock_s": 3.83,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 10457,
+            "completion_tokens": 39,
+            "host_ms": 318.3,
+            "prefill_ms": 3041.24,
+            "decode_ms": 402.45,
+            "total_ms": 3774.74,
+            "prefill_tok_per_s": 3438.4,
+            "decode_tok_per_s": 96.9,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "The i.MX 93 supports one 16-bit DRAM controller for external DRAM, which supports LPDDR4X with a maximum supported capacity of 2GByte.",
+          "tokens_used": 10496,
+          "wall_clock_s": 3.82,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 10457,
+            "completion_tokens": 39,
+            "host_ms": 317.82,
+            "prefill_ms": 3029.62,
+            "decode_ms": 398.0,
+            "total_ms": 3758.18,
+            "prefill_tok_per_s": 3451.6,
+            "decode_tok_per_s": 98.0,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "The i.MX 93 Applications Processor supports a 16-bit DRAM controller with LPDDR4x memory technology. The maximum supported capacity is 2GByte.",
+          "tokens_used": 9609,
+          "wall_clock_s": 3.43,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 9572,
+            "completion_tokens": 37,
+            "host_ms": 350.31,
+            "prefill_ms": 2642.9,
+            "decode_ms": 374.37,
+            "total_ms": 3379.61,
+            "prefill_tok_per_s": 3621.8,
+            "decode_tok_per_s": 98.8,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "According to the excerpts, the peripheral on the i.MX 93 that handles UART is the Low Power Universal Asynchronous Receiver/Transmitter (LPUART). The IP block t",
+          "tokens_used": 8535,
+          "wall_clock_s": 7.54,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 8034,
+            "completion_tokens": 501,
+            "host_ms": 402.11,
+            "prefill_ms": 2071.93,
+            "decode_ms": 4998.72,
+            "total_ms": 7482.26,
+            "prefill_tok_per_s": 3877.5,
+            "decode_tok_per_s": 100.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "According to the excerpts, the peripheral on the i.MX 93 that handles UART is the Low Power Universal Asynchronous Receiver/Transmitter (LPUART). The IP block t",
+          "tokens_used": 8535,
+          "wall_clock_s": 7.55,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 8034,
+            "completion_tokens": 501,
+            "host_ms": 403.01,
+            "prefill_ms": 2068.57,
+            "decode_ms": 5014.19,
+            "total_ms": 7494.53,
+            "prefill_tok_per_s": 3883.8,
+            "decode_tok_per_s": 99.9,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "According to the excerpts, the peripheral on the i.MX 93 that handles UART is the Low Power Universal Asynchronous Receiver/Transmitter (LPUART). The IP block t",
+          "tokens_used": 8164,
+          "wall_clock_s": 3.77,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 8034,
+            "completion_tokens": 130,
+            "host_ms": 398.03,
+            "prefill_ms": 2055.64,
+            "decode_ms": 1259.32,
+            "total_ms": 3722.58,
+            "prefill_tok_per_s": 3908.3,
+            "decode_tok_per_s": 103.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "According to the excerpts, the peripheral on the i.MX 93 that handles UART is the Low Power Universal Asynchronous Receiver/Transmitter (LPUART). The IP block t",
+          "tokens_used": 8192,
+          "wall_clock_s": 4.07,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 8034,
+            "completion_tokens": 158,
+            "host_ms": 395.3,
+            "prefill_ms": 2057.16,
+            "decode_ms": 1531.05,
+            "total_ms": 3993.06,
+            "prefill_tok_per_s": 3905.4,
+            "decode_tok_per_s": 103.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "According to the excerpts, the peripheral on the i.MX 93 that handles UART is the Low Power Universal Asynchronous Receiver/Transmitter (LPUART). The IP block t",
+          "tokens_used": 8192,
+          "wall_clock_s": 4.05,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 8034,
+            "completion_tokens": 158,
+            "host_ms": 399.41,
+            "prefill_ms": 2056.41,
+            "decode_ms": 1530.58,
+            "total_ms": 3995.91,
+            "prefill_tok_per_s": 3906.8,
+            "decode_tok_per_s": 103.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Based on the provided excerpts, the i.MX 93 application processor includes the following Arm cores:\n\n1. Dual Arm Cortex-A55 processors operating up to 1.7 GHz\n2",
+          "tokens_used": 10218,
+          "wall_clock_s": 5.52,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 9998,
+            "completion_tokens": 220,
+            "host_ms": 306.49,
+            "prefill_ms": 2860.28,
+            "decode_ms": 2286.68,
+            "total_ms": 5465.91,
+            "prefill_tok_per_s": 3495.5,
+            "decode_tok_per_s": 96.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Based on the excerpts provided, the i.MX 93 application processor includes the following Arm cores:\n\n1. Dual Arm Cortex-A55 processors operating up to 1.7 GHz\n2",
+          "tokens_used": 10218,
+          "wall_clock_s": 5.56,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 9998,
+            "completion_tokens": 220,
+            "host_ms": 311.64,
+            "prefill_ms": 2863.37,
+            "decode_ms": 2299.0,
+            "total_ms": 5486.44,
+            "prefill_tok_per_s": 3491.7,
+            "decode_tok_per_s": 95.7,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Based on the provided excerpts, the i.MX 93 application processor includes the following Arm cores:\n\n1. Dual Arm Cortex-A55 processors operating up to 1.7 GHz\n2",
+          "tokens_used": 10218,
+          "wall_clock_s": 5.52,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 9998,
+            "completion_tokens": 220,
+            "host_ms": 310.24,
+            "prefill_ms": 2841.75,
+            "decode_ms": 2260.56,
+            "total_ms": 5425.03,
+            "prefill_tok_per_s": 3518.2,
+            "decode_tok_per_s": 97.3,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Based on the excerpts from the i.MX 93 Application Processors Data Sheet, the i.MX 93 application processor includes the following Arm cores:\n\n1. **Dual Arm Cor",
+          "tokens_used": 11017,
+          "wall_clock_s": 6.54,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 10728,
+            "completion_tokens": 289,
+            "host_ms": 291.18,
+            "prefill_ms": 3135.39,
+            "decode_ms": 3045.92,
+            "total_ms": 6485.43,
+            "prefill_tok_per_s": 3421.6,
+            "decode_tok_per_s": 94.9,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Based on the excerpts provided, the i.MX 93 application processor includes the following Arm cores:\n\n1. Dual Arm Cortex-A55 processors operating up to 1.7 GHz\n2",
+          "tokens_used": 10218,
+          "wall_clock_s": 5.5,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 9998,
+            "completion_tokens": 220,
+            "host_ms": 308.38,
+            "prefill_ms": 2836.29,
+            "decode_ms": 2258.74,
+            "total_ms": 5415.8,
+            "prefill_tok_per_s": 3525.0,
+            "decode_tok_per_s": 97.4,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__2",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Based on the information provided in the excerpts, the demo was using an NXP i.MX 8QuadMax chip. The relevant excerpt mentions:\n\n\"The eCockpit includes two NXP ",
+          "tokens_used": 7873,
+          "wall_clock_s": 4.69,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7639,
+            "completion_tokens": 234,
+            "host_ms": 373.24,
+            "prefill_ms": 1933.68,
+            "decode_ms": 2303.93,
+            "total_ms": 4621.54,
+            "prefill_tok_per_s": 3950.5,
+            "decode_tok_per_s": 101.6,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Based on the information provided in the excerpts, the demo was using an NXP i.MX 8QuadMax chip. The relevant excerpt mentions:\n\n\"The eCockpit includes two NXP ",
+          "tokens_used": 7888,
+          "wall_clock_s": 4.81,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7639,
+            "completion_tokens": 249,
+            "host_ms": 367.62,
+            "prefill_ms": 1931.58,
+            "decode_ms": 2451.76,
+            "total_ms": 4761.72,
+            "prefill_tok_per_s": 3954.8,
+            "decode_tok_per_s": 101.6,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Based on the information provided in the excerpts, the demo was using an NXP i.MX 8QuadMax chip. The relevant excerpt mentions:\n\n\"The eCockpit includes two NXP ",
+          "tokens_used": 7852,
+          "wall_clock_s": 4.43,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7639,
+            "completion_tokens": 213,
+            "host_ms": 376.89,
+            "prefill_ms": 1922.1,
+            "decode_ms": 2065.6,
+            "total_ms": 4375.26,
+            "prefill_tok_per_s": 3974.3,
+            "decode_tok_per_s": 103.1,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Based on the information provided in the excerpts, the demo was using an NXP i.MX 8QuadMax chip. The relevant excerpt mentions:\n\n\"The eCockpit includes two NXP ",
+          "tokens_used": 7877,
+          "wall_clock_s": 4.66,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7639,
+            "completion_tokens": 238,
+            "host_ms": 368.0,
+            "prefill_ms": 1916.24,
+            "decode_ms": 2306.98,
+            "total_ms": 4601.94,
+            "prefill_tok_per_s": 3986.5,
+            "decode_tok_per_s": 103.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Based on the information provided in the excerpts, the demo was using an NXP i.MX 8QuadMax chip. The relevant excerpt states:\n\n\"The eCockpit includes two NXP i.",
+          "tokens_used": 7861,
+          "wall_clock_s": 4.5,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7639,
+            "completion_tokens": 222,
+            "host_ms": 362.33,
+            "prefill_ms": 1914.86,
+            "decode_ms": 2152.21,
+            "total_ms": 4440.04,
+            "prefill_tok_per_s": 3989.3,
+            "decode_tok_per_s": 103.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__3",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "To summarize the NXP-adjacent podcasts regarding the sustainability argument for electric vehicles:\n\n1. **Energy Efficiency and Reduced Emissions**: Lars Reger ",
+          "tokens_used": 5246,
+          "wall_clock_s": 4.01,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 4964,
+            "completion_tokens": 282,
+            "host_ms": 277.98,
+            "prefill_ms": 1078.09,
+            "decode_ms": 2565.67,
+            "total_ms": 3930.92,
+            "prefill_tok_per_s": 4604.4,
+            "decode_tok_per_s": 109.9,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "To summarize the NXP-adjacent podcasts regarding the sustainability argument for electric vehicles:\n\n1. **Energy Efficiency and Reduced Emissions**: Lars Reger ",
+          "tokens_used": 5324,
+          "wall_clock_s": 4.71,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 4964,
+            "completion_tokens": 360,
+            "host_ms": 278.74,
+            "prefill_ms": 1074.66,
+            "decode_ms": 3293.44,
+            "total_ms": 4655.88,
+            "prefill_tok_per_s": 4619.2,
+            "decode_tok_per_s": 109.3,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "To summarize the NXP-adjacent podcasts regarding the sustainability argument for electric vehicles:\n\n1. **Energy Efficiency and Reduced Emissions**: Lars Reger ",
+          "tokens_used": 5237,
+          "wall_clock_s": 3.88,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 4964,
+            "completion_tokens": 273,
+            "host_ms": 278.63,
+            "prefill_ms": 1074.56,
+            "decode_ms": 2467.5,
+            "total_ms": 3829.79,
+            "prefill_tok_per_s": 4619.6,
+            "decode_tok_per_s": 110.6,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "To summarize the NXP-adjacent podcasts regarding the sustainability argument for electric vehicles:\n\n1. **Energy Efficiency and Reduced Emissions**: Lars Reger ",
+          "tokens_used": 5289,
+          "wall_clock_s": 4.33,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 4964,
+            "completion_tokens": 325,
+            "host_ms": 275.96,
+            "prefill_ms": 1066.69,
+            "decode_ms": 2922.61,
+            "total_ms": 4274.3,
+            "prefill_tok_per_s": 4653.7,
+            "decode_tok_per_s": 111.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "To summarize the NXP-adjacent podcasts regarding the sustainability argument for electric vehicles:\n\n1. **Energy Efficiency and Reduced Emissions**: Lars Reger ",
+          "tokens_used": 5239,
+          "wall_clock_s": 3.88,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 4964,
+            "completion_tokens": 275,
+            "host_ms": 278.29,
+            "prefill_ms": 1066.97,
+            "decode_ms": 2465.3,
+            "total_ms": 3819.63,
+            "prefill_tok_per_s": 4652.4,
+            "decode_tok_per_s": 111.5,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__4",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Unfortunately, the excerpts provided do not contain information about the eIQ Neutron NPU configuration for the i.MX 95. The information available is primarily ",
+          "tokens_used": 7972,
+          "wall_clock_s": 3.05,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7909,
+            "completion_tokens": 63,
+            "host_ms": 342.19,
+            "prefill_ms": 2034.61,
+            "decode_ms": 612.3,
+            "total_ms": 2999.06,
+            "prefill_tok_per_s": 3887.2,
+            "decode_tok_per_s": 102.9,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Unfortunately, the retrieved excerpts don't cover the specific configurations available for the eIQ Neutron NPU in the i.MX 95. The information provided is main",
+          "tokens_used": 7768,
+          "wall_clock_s": 2.86,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7722,
+            "completion_tokens": 46,
+            "host_ms": 351.69,
+            "prefill_ms": 1970.99,
+            "decode_ms": 446.17,
+            "total_ms": 2778.97,
+            "prefill_tok_per_s": 3917.8,
+            "decode_tok_per_s": 103.1,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Unfortunately, the excerpts provided do not contain information about the eIQ Neutron NPU configurations in the i.MX 95. The information available is primarily ",
+          "tokens_used": 8000,
+          "wall_clock_s": 3.37,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7909,
+            "completion_tokens": 91,
+            "host_ms": 354.38,
+            "prefill_ms": 2038.7,
+            "decode_ms": 890.13,
+            "total_ms": 3292.89,
+            "prefill_tok_per_s": 3879.4,
+            "decode_tok_per_s": 102.2,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Unfortunately, the retrieved excerpts don't cover the specific configurations available for the eIQ Neutron NPU in the i.MX 95. The information provided is main",
+          "tokens_used": 7768,
+          "wall_clock_s": 2.83,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7722,
+            "completion_tokens": 46,
+            "host_ms": 349.3,
+            "prefill_ms": 1970.11,
+            "decode_ms": 440.02,
+            "total_ms": 2769.51,
+            "prefill_tok_per_s": 3919.6,
+            "decode_tok_per_s": 104.5,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Unfortunately, the retrieved excerpts don't cover the specific configurations available for the eIQ Neutron NPU in the i.MX 95. The information provided is main",
+          "tokens_used": 7768,
+          "wall_clock_s": 2.8,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7722,
+            "completion_tokens": 46,
+            "host_ms": 347.92,
+            "prefill_ms": 1952.18,
+            "decode_ms": 438.6,
+            "total_ms": 2748.73,
+            "prefill_tok_per_s": 3955.6,
+            "decode_tok_per_s": 104.9,
+            "rag_k": 8,
+            "rag_docs_used": 8
+          },
+          "source_id": "rag_qa__5",
+          "sample_index": 4
+        }
+      ]
+    },
+    {
+      "profile_id": "long_decode",
+      "description": "Document generation task \u2014 spec / proposal / report body. Short-to-medium prefill, very long decode. Measures: steady-state decode tok/s (dominates wall-clock).",
+      "target_prefill_tokens": 2800,
+      "target_decode_tokens": 2500,
+      "critical_metric": "steady_state_decode_tok_per_s",
+      "request_params": {
+        "max_tokens": 2500,
+        "use_rag": true,
+        "rag_k": 5,
+        "temperature": 0.3
+      },
+      "summary": {
+        "n_valid": 15,
+        "n_total": 15,
+        "host_ms": {
+          "p50": 661.43,
+          "p90": 671.21,
+          "p95": 671.21,
+          "min": 515.32,
+          "max": 673.88,
+          "mean": 623.72,
+          "n": 15
+        },
+        "prefill_ms": {
+          "p50": 1734.48,
+          "p90": 2019.78,
+          "p95": 2019.78,
+          "min": 524.53,
+          "max": 2023.13,
+          "mean": 1288.36,
+          "n": 15
+        },
+        "decode_ms": {
+          "p50": 10772.32,
+          "p90": 13215.63,
+          "p95": 13215.63,
+          "min": 8202.81,
+          "max": 13278.74,
+          "mean": 10323.81,
+          "n": 15
+        },
+        "total_ms": {
+          "p50": 11891.11,
+          "p90": 15414.0,
+          "p95": 15414.0,
+          "min": 9345.19,
+          "max": 15917.03,
+          "mean": 12244.31,
+          "n": 15
+        },
+        "prefill_tok_per_s": {
+          "p50": 4068.1,
+          "p90": 5205.4,
+          "p95": 5205.4,
+          "min": 3884.1,
+          "max": 5214.2,
+          "mean": 4500.91,
+          "n": 15
+        },
+        "decode_tok_per_s": {
+          "p50": 101.4,
+          "p90": 115.8,
+          "p95": 115.8,
+          "min": 97.1,
+          "max": 115.9,
+          "mean": 105.95,
+          "n": 15
+        },
+        "prompt_tokens": {
+          "p50": 7056,
+          "p90": 7858,
+          "p95": 7858,
+          "min": 2735,
+          "max": 7858,
+          "mean": 5439.27,
+          "n": 15
+        },
+        "completion_tokens": {
+          "p50": 1088,
+          "p90": 1283,
+          "p95": 1283,
+          "min": 827,
+          "max": 1435,
+          "mean": 1087.27,
+          "n": 15
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "# Technical Proposal for Integrating an On-Device AI Assistant into an Industrial IoT Gateway\n\n## Introduction\n\nThe integration of an on-device AI assistant int",
+          "tokens_used": 3727,
+          "wall_clock_s": 9.73,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 2735,
+            "completion_tokens": 992,
+            "host_ms": 515.32,
+            "prefill_ms": 527.55,
+            "decode_ms": 8629.67,
+            "total_ms": 9678.32,
+            "prefill_tok_per_s": 5184.4,
+            "decode_tok_per_s": 115.0,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "# Integrating an On-Device AI Assistant into an Industrial IoT Gateway\n\n## Introduction\n\nIn the rapidly evolving landscape of Industrial Internet of Things (IoT",
+          "tokens_used": 3677,
+          "wall_clock_s": 9.4,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 2735,
+            "completion_tokens": 942,
+            "host_ms": 560.09,
+            "prefill_ms": 529.81,
+            "decode_ms": 8249.37,
+            "total_ms": 9345.19,
+            "prefill_tok_per_s": 5162.2,
+            "decode_tok_per_s": 114.2,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "# Technical Proposal for Integrating an On-Device AI Assistant into an Industrial IoT Gateway\n\n## Introduction\n\nIn the rapidly evolving landscape of industrial ",
+          "tokens_used": 3709,
+          "wall_clock_s": 9.55,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 2735,
+            "completion_tokens": 974,
+            "host_ms": 535.83,
+            "prefill_ms": 531.18,
+            "decode_ms": 8413.45,
+            "total_ms": 9486.87,
+            "prefill_tok_per_s": 5148.9,
+            "decode_tok_per_s": 115.8,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "# Technical Proposal for Integrating an On-Device AI Assistant into an Industrial IoT Gateway\n\n## Introduction\n\nThe integration of an on-device AI assistant int",
+          "tokens_used": 3699,
+          "wall_clock_s": 9.43,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 2735,
+            "completion_tokens": 964,
+            "host_ms": 528.29,
+            "prefill_ms": 525.42,
+            "decode_ms": 8315.39,
+            "total_ms": 9375.54,
+            "prefill_tok_per_s": 5205.4,
+            "decode_tok_per_s": 115.9,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "# Technical Proposal for Integrating an On-Device AI Assistant into an Industrial IoT Gateway\n\n## Introduction\n\nThis document outlines a comprehensive technical",
+          "tokens_used": 3967,
+          "wall_clock_s": 11.92,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 2735,
+            "completion_tokens": 1232,
+            "host_ms": 563.0,
+            "prefill_ms": 524.53,
+            "decode_ms": 10772.32,
+            "total_ms": 11866.25,
+            "prefill_tok_per_s": 5214.2,
+            "decode_tok_per_s": 114.4,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "### Real-Time Object-Detection Pipeline Engineering Specification\n\n#### 1. Introduction\nThis document outlines the engineering specifications for a real-time ob",
+          "tokens_used": 9141,
+          "wall_clock_s": 15.97,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7858,
+            "completion_tokens": 1283,
+            "host_ms": 671.21,
+            "prefill_ms": 2019.78,
+            "decode_ms": 13215.63,
+            "total_ms": 15917.03,
+            "prefill_tok_per_s": 3890.5,
+            "decode_tok_per_s": 97.1,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "### Real-Time Object-Detection Pipeline Engineering Specification\n\n#### 1. Introduction\nThis document outlines the engineering specifications for a real-time ob",
+          "tokens_used": 8946,
+          "wall_clock_s": 13.83,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7858,
+            "completion_tokens": 1088,
+            "host_ms": 673.88,
+            "prefill_ms": 2023.13,
+            "decode_ms": 11063.52,
+            "total_ms": 13770.85,
+            "prefill_tok_per_s": 3884.1,
+            "decode_tok_per_s": 98.3,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "### Real-Time Object-Detection Pipeline on Embedded NPU\n\n#### 1. Introduction\nThis document outlines the engineering specifications for a real-time object-detec",
+          "tokens_used": 5344,
+          "wall_clock_s": 12.85,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 4116,
+            "completion_tokens": 1228,
+            "host_ms": 662.58,
+            "prefill_ms": 849.12,
+            "decode_ms": 11246.2,
+            "total_ms": 12764.79,
+            "prefill_tok_per_s": 4847.3,
+            "decode_tok_per_s": 109.2,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "### Engineering Specification for Real-Time Object-Detection Pipeline on Embedded NPU\n\n#### 1. Introduction\nThis document outlines the engineering specification",
+          "tokens_used": 9106,
+          "wall_clock_s": 15.5,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7858,
+            "completion_tokens": 1248,
+            "host_ms": 661.43,
+            "prefill_ms": 2004.97,
+            "decode_ms": 12737.33,
+            "total_ms": 15414.0,
+            "prefill_tok_per_s": 3919.3,
+            "decode_tok_per_s": 98.0,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "### Engineering Specification for Real-Time Object-Detection Pipeline on Embedded NPU\n\n#### 1. Introduction\n\nThis document outlines the engineering specificatio",
+          "tokens_used": 5551,
+          "wall_clock_s": 14.85,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 4116,
+            "completion_tokens": 1435,
+            "host_ms": 665.0,
+            "prefill_ms": 844.59,
+            "decode_ms": 13278.74,
+            "total_ms": 14795.28,
+            "prefill_tok_per_s": 4873.4,
+            "decode_tok_per_s": 108.1,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "### Internal Report: Tradeoffs Between MoE and Dense LLMs for Edge Deployment\n\n#### Introduction\nThis report aims to provide a comprehensive analysis of the tra",
+          "tokens_used": 8090,
+          "wall_clock_s": 10.74,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7263,
+            "completion_tokens": 827,
+            "host_ms": 666.73,
+            "prefill_ms": 1815.5,
+            "decode_ms": 8202.81,
+            "total_ms": 10695.11,
+            "prefill_tok_per_s": 4000.5,
+            "decode_tok_per_s": 100.8,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "### Tradeoffs Between MoE and Dense LLMs for Edge Deployment\n\nThe deployment of large language models (LLMs) on edge devices presents a unique set of challenges",
+          "tokens_used": 8171,
+          "wall_clock_s": 13.58,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7056,
+            "completion_tokens": 1115,
+            "host_ms": 670.24,
+            "prefill_ms": 1734.48,
+            "decode_ms": 11126.22,
+            "total_ms": 13541.07,
+            "prefill_tok_per_s": 4068.1,
+            "decode_tok_per_s": 100.2,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "### Tradeoffs Between Model Parallelism (MoE) and Dense Large Language Models (LLMs) for Edge Deployment\n\n#### Introduction\nModel Parallelism (MoE) and dense La",
+          "tokens_used": 8439,
+          "wall_clock_s": 14.29,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7263,
+            "completion_tokens": 1176,
+            "host_ms": 659.12,
+            "prefill_ms": 1800.04,
+            "decode_ms": 11766.14,
+            "total_ms": 14235.35,
+            "prefill_tok_per_s": 4034.9,
+            "decode_tok_per_s": 99.9,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "### Internal Report: Tradeoffs Between MoE and Dense LLMs for Edge Deployment\n\n#### Introduction\nThis report aims to provide a detailed analysis of the tradeoff",
+          "tokens_used": 8117,
+          "wall_clock_s": 10.94,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7263,
+            "completion_tokens": 854,
+            "host_ms": 661.39,
+            "prefill_ms": 1794.44,
+            "decode_ms": 8422.04,
+            "total_ms": 10887.87,
+            "prefill_tok_per_s": 4047.5,
+            "decode_tok_per_s": 101.4,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "### Tradeoffs Between Model of Expertise (MoE) and Dense Large Language Models (LLMs) for Edge Deployment\n\n#### Introduction\nModel of Expertise (MoE) and dense ",
+          "tokens_used": 8214,
+          "wall_clock_s": 11.96,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 7263,
+            "completion_tokens": 951,
+            "host_ms": 661.76,
+            "prefill_ms": 1800.91,
+            "decode_ms": 9418.38,
+            "total_ms": 11891.11,
+            "prefill_tok_per_s": 4033.0,
+            "decode_tok_per_s": 101.0,
+            "rag_k": 5,
+            "rag_docs_used": 5
+          },
+          "source_id": "long_decode__2",
+          "sample_index": 4
+        }
+      ]
+    },
+    {
+      "profile_id": "meeting_summarization",
+      "description": "Summarize a long transcript into action items and key points. Prefill-dominated (transcript fills most of context). Decode is short/medium. Measures: prefill throughput (dominates total wall-clock).",
+      "target_prefill_tokens": 12700,
+      "target_decode_tokens": 800,
+      "critical_metric": "prefill_throughput",
+      "request_params": {
+        "max_tokens": 1000,
+        "use_rag": false,
+        "rag_k": 0,
+        "temperature": 0.2
+      },
+      "summary": {
+        "n_valid": 10,
+        "n_total": 10,
+        "host_ms": {
+          "p50": 2.05,
+          "p90": 2.12,
+          "p95": 2.31,
+          "min": 1.9,
+          "max": 2.31,
+          "mean": 2.06,
+          "n": 10
+        },
+        "prefill_ms": {
+          "p50": 32.94,
+          "p90": 4107.19,
+          "p95": 4363.07,
+          "min": 31.57,
+          "max": 4363.07,
+          "mean": 873.31,
+          "n": 10
+        },
+        "decode_ms": {
+          "p50": 1876.66,
+          "p90": 3960.11,
+          "p95": 4192.49,
+          "min": 1160.67,
+          "max": 4192.49,
+          "mean": 2327.41,
+          "n": 10
+        },
+        "total_ms": {
+          "p50": 2064.82,
+          "p90": 6255.56,
+          "p95": 8315.16,
+          "min": 1210.99,
+          "max": 8315.16,
+          "mean": 3216.36,
+          "n": 10
+        },
+        "prefill_tok_per_s": {
+          "p50": 385911.4,
+          "p90": 403957.4,
+          "p95": 407469.5,
+          "min": 3037.3,
+          "max": 407469.5,
+          "mean": 316556.56,
+          "n": 10
+        },
+        "decode_tok_per_s": {
+          "p50": 88.5,
+          "p90": 89.2,
+          "p95": 90.7,
+          "min": 88.2,
+          "max": 90.7,
+          "mean": 88.83,
+          "n": 10
+        },
+        "prompt_tokens": {
+          "p50": 12691,
+          "p90": 13252,
+          "p95": 13252,
+          "min": 12691,
+          "max": 13252,
+          "mean": 12971.5,
+          "n": 10
+        },
+        "completion_tokens": {
+          "p50": 166,
+          "p90": 350,
+          "p95": 371,
+          "min": 103,
+          "max": 371,
+          "mean": 206.7,
+          "n": 10
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "### Summary\n\nThe meeting focused on several key technical issues and decisions related to model optimization and customer feasibility. The team discussed the ne",
+          "tokens_used": 13418,
+          "wall_clock_s": 6.36,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 166,
+            "host_ms": 2.05,
+            "prefill_ms": 4363.07,
+            "decode_ms": 1876.66,
+            "total_ms": 6255.56,
+            "prefill_tok_per_s": 3037.3,
+            "decode_tok_per_s": 88.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "### Summary\n\nThe meeting focused on several technical and planning aspects of the project, including performance improvements, customer feasibility reviews, and",
+          "tokens_used": 13372,
+          "wall_clock_s": 1.47,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 120,
+            "host_ms": 1.97,
+            "prefill_ms": 32.52,
+            "decode_ms": 1357.47,
+            "total_ms": 1405.41,
+            "prefill_tok_per_s": 407469.5,
+            "decode_tok_per_s": 88.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "### Summary\n\nThe meeting focused on several technical issues and action items related to model optimization and performance. Key topics included the feasibility",
+          "tokens_used": 13363,
+          "wall_clock_s": 1.36,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 111,
+            "host_ms": 2.31,
+            "prefill_ms": 32.81,
+            "decode_ms": 1250.81,
+            "total_ms": 1299.49,
+            "prefill_tok_per_s": 403957.4,
+            "decode_tok_per_s": 88.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "### Summary\n\nThe meeting focused on several technical issues and action items related to model optimization and customer feasibility. Key points included the ne",
+          "tokens_used": 13355,
+          "wall_clock_s": 1.28,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 103,
+            "host_ms": 2.12,
+            "prefill_ms": 34.09,
+            "decode_ms": 1160.67,
+            "total_ms": 1210.99,
+            "prefill_tok_per_s": 388680.9,
+            "decode_tok_per_s": 88.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "### Summary\n\nThe meeting focused on several technical and planning aspects of the project. Key discussions included the feasibility review for the NXP 95 tier, ",
+          "tokens_used": 13397,
+          "wall_clock_s": 1.74,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 13252,
+            "completion_tokens": 145,
+            "host_ms": 1.96,
+            "prefill_ms": 32.94,
+            "decode_ms": 1643.34,
+            "total_ms": 1691.82,
+            "prefill_tok_per_s": 402340.3,
+            "decode_tok_per_s": 88.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__0_synth",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "### Summary\n1. The engineering sync covered several topics, including blockers for Phase 2, the roadmap review, and the customer feasibility review for the NXP ",
+          "tokens_used": 13062,
+          "wall_clock_s": 8.36,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 12691,
+            "completion_tokens": 371,
+            "host_ms": 1.9,
+            "prefill_ms": 4107.19,
+            "decode_ms": 4192.49,
+            "total_ms": 8315.16,
+            "prefill_tok_per_s": 3089.9,
+            "decode_tok_per_s": 88.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "### Summary\n1. The engineering sync covered several topics including blockers for Phase 2, the roadmap review, and the customer feasibility review for the NXP 9",
+          "tokens_used": 12886,
+          "wall_clock_s": 2.3,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 12691,
+            "completion_tokens": 195,
+            "host_ms": 2.06,
+            "prefill_ms": 32.89,
+            "decode_ms": 2185.39,
+            "total_ms": 2234.0,
+            "prefill_tok_per_s": 385911.4,
+            "decode_tok_per_s": 89.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "### Summary\n1. The engineering sync covered several topics, including blockers for Phase 2, the roadmap review, and the customer feasibility review for the NXP ",
+          "tokens_used": 13041,
+          "wall_clock_s": 4.07,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 12691,
+            "completion_tokens": 350,
+            "host_ms": 2.09,
+            "prefill_ms": 33.02,
+            "decode_ms": 3960.11,
+            "total_ms": 4008.85,
+            "prefill_tok_per_s": 384398.1,
+            "decode_tok_per_s": 88.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "### Summary\n1. The meeting covered blockers for Phase 2, including the need for model_name labels on Prometheus histograms and vectorizing the CPU-side token sa",
+          "tokens_used": 13014,
+          "wall_clock_s": 3.75,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 12691,
+            "completion_tokens": 323,
+            "host_ms": 2.09,
+            "prefill_ms": 32.99,
+            "decode_ms": 3628.91,
+            "total_ms": 3677.53,
+            "prefill_tok_per_s": 384745.4,
+            "decode_tok_per_s": 89.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "### Summary\n1. The engineering sync covered several topics, including blockers for Phase 2, the roadmap review for the sizer tool, and the customer feasibility ",
+          "tokens_used": 12874,
+          "wall_clock_s": 2.11,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 12691,
+            "completion_tokens": 183,
+            "host_ms": 2.03,
+            "prefill_ms": 31.57,
+            "decode_ms": 2018.29,
+            "total_ms": 2064.82,
+            "prefill_tok_per_s": 401935.4,
+            "decode_tok_per_s": 90.7,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "meeting_summarization__1_synth",
+          "sample_index": 4
+        }
+      ]
+    },
+    {
+      "profile_id": "agentic_roundtrip",
+      "description": "Single roundtrip of an agentic tool-use loop \u2014 LLM reads a tool result and emits a structured action + brief reasoning. The sizer models total agentic latency as (prefill_i + decode_i) \u00d7 roundtrip_count, so this measures ONE roundtrip's cost. Prefill grows per iteration in real use; this profile samples mid-loop state.",
+      "target_prefill_tokens": 2500,
+      "target_decode_tokens": 200,
+      "critical_metric": "per_roundtrip_total_latency",
+      "request_params": {
+        "max_tokens": 250,
+        "use_rag": false,
+        "rag_k": 0,
+        "temperature": 0.1
+      },
+      "summary": {
+        "n_valid": 20,
+        "n_total": 20,
+        "host_ms": {
+          "p50": 2.07,
+          "p90": 2.37,
+          "p95": 2.49,
+          "min": 1.77,
+          "max": 2.52,
+          "mean": 2.09,
+          "n": 20
+        },
+        "prefill_ms": {
+          "p50": 17.03,
+          "p90": 31.53,
+          "p95": 36.72,
+          "min": 9.21,
+          "max": 41.9,
+          "mean": 17.86,
+          "n": 20
+        },
+        "decode_ms": {
+          "p50": 723.06,
+          "p90": 1870.6,
+          "p95": 1881.11,
+          "min": 329.67,
+          "max": 1969.06,
+          "mean": 847.09,
+          "n": 20
+        },
+        "total_ms": {
+          "p50": 737.7,
+          "p90": 1885.06,
+          "p95": 1896.04,
+          "min": 350.11,
+          "max": 1998.26,
+          "mean": 868.52,
+          "n": 20
+        },
+        "prefill_tok_per_s": {
+          "p50": 8876.3,
+          "p90": 16124.2,
+          "p95": 16338.7,
+          "min": 2831.9,
+          "max": 16503.6,
+          "mean": 8709.74,
+          "n": 20
+        },
+        "decode_tok_per_s": {
+          "p50": 133.9,
+          "p90": 135.5,
+          "p95": 136.5,
+          "min": 126.5,
+          "max": 137.2,
+          "mean": 131.94,
+          "n": 20
+        },
+        "prompt_tokens": {
+          "p50": 152,
+          "p90": 159,
+          "p95": 159,
+          "min": 98,
+          "max": 159,
+          "mean": 128.25,
+          "n": 20
+        },
+        "completion_tokens": {
+          "p50": 94,
+          "p90": 238,
+          "p95": 238,
+          "min": 45,
+          "max": 251,
+          "mean": 109.8,
+          "n": 20
+        }
+      },
+      "samples": [
+        {
+          "text_preview": "{\n \"tool\": \"update_file\",\n \"params\": {\n \"path\": \"src/config.py\",\n \"changes\": {\n \"TIMEOUT_SEC\": 60\n }\n },\n \"reason\": \"Change the timeout to 60 seconds as request",
+          "tokens_used": 212,
+          "wall_clock_s": 0.51,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 159,
+            "completion_tokens": 53,
+            "host_ms": 2.37,
+            "prefill_ms": 41.9,
+            "decode_ms": 394.83,
+            "total_ms": 440.6,
+            "prefill_tok_per_s": 3794.8,
+            "decode_tok_per_s": 134.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "{\n \"tool\": \"update_file\",\n \"params\": {\n \"path\": \"src/config.py\",\n \"changes\": {\n \"TIMEOUT_SEC\": \"60\"\n }\n },\n \"reason\": \"Change the timeout to 60 seconds as reque",
+          "tokens_used": 212,
+          "wall_clock_s": 0.48,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 159,
+            "completion_tokens": 53,
+            "host_ms": 2.13,
+            "prefill_ms": 17.06,
+            "decode_ms": 391.28,
+            "total_ms": 412.0,
+            "prefill_tok_per_s": 9319.9,
+            "decode_tok_per_s": 135.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "{\n \"tool\": \"update_file\",\n \"params\": {\n \"path\": \"src/config.py\",\n \"changes\": {\n \"TIMEOUT_SEC\": \"60\"\n }\n },\n \"reason\": \"Change the timeout to 60 seconds as reque",
+          "tokens_used": 212,
+          "wall_clock_s": 0.46,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 159,
+            "completion_tokens": 53,
+            "host_ms": 1.85,
+            "prefill_ms": 17.28,
+            "decode_ms": 391.28,
+            "total_ms": 411.95,
+            "prefill_tok_per_s": 9199.8,
+            "decode_tok_per_s": 135.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "{\n \"tool\": \"update_file\",\n \"params\": {\n \"path\": \"src/config.py\",\n \"changes\": {\n \"TIMEOUT_SEC\": \"60\"\n }\n },\n \"reason\": \"Change the timeout to 60 seconds as reque",
+          "tokens_used": 212,
+          "wall_clock_s": 0.46,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 159,
+            "completion_tokens": 53,
+            "host_ms": 1.98,
+            "prefill_ms": 17.03,
+            "decode_ms": 393.95,
+            "total_ms": 414.44,
+            "prefill_tok_per_s": 9335.0,
+            "decode_tok_per_s": 134.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "{\n \"tool\": \"update_file\",\n \"params\": {\n \"path\": \"src/config.py\",\n \"changes\": {\n \"TIMEOUT_SEC\": \"60\"\n }\n },\n \"reason\": \"Change the timeout to 60 seconds as reque",
+          "tokens_used": 212,
+          "wall_clock_s": 0.46,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 159,
+            "completion_tokens": 53,
+            "host_ms": 2.1,
+            "prefill_ms": 17.15,
+            "decode_ms": 395.94,
+            "total_ms": 416.7,
+            "prefill_tok_per_s": 9269.9,
+            "decode_tok_per_s": 133.9,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__0",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "{\"tool\": \"audit_http_endpoints\", \"params\": {\"files\": [\"llm_server.py\", \"rag_service.py\", \"memory_service.py\", \"advanced_rag.py\", \"smart_chunker.py\", \"settings_m",
+          "tokens_used": 251,
+          "wall_clock_s": 0.85,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 152,
+            "completion_tokens": 99,
+            "host_ms": 1.95,
+            "prefill_ms": 31.53,
+            "decode_ms": 760.35,
+            "total_ms": 795.35,
+            "prefill_tok_per_s": 4820.7,
+            "decode_tok_per_s": 130.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "{\"tool\": \"audit_http_endpoints\", \"params\": {\"files\": [\"llm_server.py\", \"rag_service.py\", \"memory_service.py\", \"advanced_rag.py\", \"smart_chunker.py\", \"settings_m",
+          "tokens_used": 251,
+          "wall_clock_s": 0.83,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 152,
+            "completion_tokens": 99,
+            "host_ms": 1.92,
+            "prefill_ms": 9.43,
+            "decode_ms": 758.47,
+            "total_ms": 771.27,
+            "prefill_tok_per_s": 16124.2,
+            "decode_tok_per_s": 130.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "{\"tool\": \"audit_http_endpoints\", \"params\": {\"files\": [\"llm_server.py\", \"rag_service.py\", \"memory_service.py\", \"advanced_rag.py\", \"smart_chunker.py\", \"settings_m",
+          "tokens_used": 263,
+          "wall_clock_s": 0.91,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 152,
+            "completion_tokens": 111,
+            "host_ms": 1.77,
+            "prefill_ms": 9.3,
+            "decode_ms": 852.77,
+            "total_ms": 865.33,
+            "prefill_tok_per_s": 16338.7,
+            "decode_tok_per_s": 130.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "{\"tool\": \"audit_http_endpoints\", \"params\": {\"files\": [\"llm_server.py\", \"rag_service.py\", \"memory_service.py\", \"advanced_rag.py\", \"smart_chunker.py\", \"settings_m",
+          "tokens_used": 246,
+          "wall_clock_s": 0.8,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 152,
+            "completion_tokens": 94,
+            "host_ms": 1.99,
+            "prefill_ms": 11.16,
+            "decode_ms": 723.06,
+            "total_ms": 737.7,
+            "prefill_tok_per_s": 13617.3,
+            "decode_tok_per_s": 130.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "{\"tool\": \"audit_http_endpoints\", \"params\": {\"files\": [\"llm_server.py\", \"rag_service.py\", \"memory_service.py\", \"advanced_rag.py\", \"smart_chunker.py\", \"settings_m",
+          "tokens_used": 263,
+          "wall_clock_s": 0.93,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 152,
+            "completion_tokens": 111,
+            "host_ms": 2.11,
+            "prefill_ms": 9.21,
+            "decode_ms": 857.29,
+            "total_ms": 870.03,
+            "prefill_tok_per_s": 16503.6,
+            "decode_tok_per_s": 129.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__1",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "{\"tool\": \"code inspection\", \"params\": {\"file\": \"handlers.py\", \"line\": 42, \"function\": \"handle_request\"}, \"reason\": \"to determine the arguments of the function\"}",
+          "tokens_used": 149,
+          "wall_clock_s": 0.44,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 104,
+            "completion_tokens": 45,
+            "host_ms": 2.16,
+            "prefill_ms": 36.72,
+            "decode_ms": 334.82,
+            "total_ms": 375.14,
+            "prefill_tok_per_s": 2831.9,
+            "decode_tok_per_s": 134.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "{\"tool\": \"code inspection\", \"params\": {\"file\": \"handlers.py\", \"line\": 42, \"function\": \"handle_request\"}, \"reason\": \"to determine the arguments of the handle_req",
+          "tokens_used": 151,
+          "wall_clock_s": 0.42,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 104,
+            "completion_tokens": 47,
+            "host_ms": 2.18,
+            "prefill_ms": 16.98,
+            "decode_ms": 342.68,
+            "total_ms": 363.28,
+            "prefill_tok_per_s": 6126.6,
+            "decode_tok_per_s": 137.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "{\"tool\": \"code inspection\", \"params\": {\"file\": \"handlers.py\", \"line\": 42, \"function\": \"handle_request\"}, \"reason\": \"to determine the arguments of the function\"}",
+          "tokens_used": 149,
+          "wall_clock_s": 0.42,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 104,
+            "completion_tokens": 45,
+            "host_ms": 2.05,
+            "prefill_ms": 16.98,
+            "decode_ms": 329.67,
+            "total_ms": 350.11,
+            "prefill_tok_per_s": 6123.5,
+            "decode_tok_per_s": 136.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "{\"tool\": \"code inspection\", \"params\": {\"file\": \"handlers.py\", \"line\": 42, \"function\": \"handle_request\"}, \"reason\": \"to determine the arguments of the handle_req",
+          "tokens_used": 151,
+          "wall_clock_s": 0.44,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 104,
+            "completion_tokens": 47,
+            "host_ms": 2.12,
+            "prefill_ms": 18.3,
+            "decode_ms": 348.13,
+            "total_ms": 369.97,
+            "prefill_tok_per_s": 5684.4,
+            "decode_tok_per_s": 135.0,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "{\"tool\": \"code inspection\", \"params\": {\"file\": \"handlers.py\", \"line\": 42, \"function\": \"handle_request\"}, \"reason\": \"to determine the arguments of the handle_req",
+          "tokens_used": 151,
+          "wall_clock_s": 0.44,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 104,
+            "completion_tokens": 47,
+            "host_ms": 2.07,
+            "prefill_ms": 18.38,
+            "decode_ms": 346.8,
+            "total_ms": 368.65,
+            "prefill_tok_per_s": 5659.8,
+            "decode_tok_per_s": 135.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__2",
+          "sample_index": 4
+        },
+        {
+          "text_preview": "Since the metric returned is `cpu_idle`, which represents the percentage of time that the CPU is idle, we need to calculate the CPU utilization. CPU utilization",
+          "tokens_used": 349,
+          "wall_clock_s": 2.07,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 251,
+            "host_ms": 2.52,
+            "prefill_ms": 24.69,
+            "decode_ms": 1969.06,
+            "total_ms": 1998.26,
+            "prefill_tok_per_s": 3969.8,
+            "decode_tok_per_s": 127.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 0
+        },
+        {
+          "text_preview": "Since the metric returned is `cpu_idle`, which represents the percentage of time that the CPU is idle, we need to calculate the CPU utilization. CPU utilization",
+          "tokens_used": 336,
+          "wall_clock_s": 1.96,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 238,
+            "host_ms": 2.49,
+            "prefill_ms": 11.06,
+            "decode_ms": 1881.11,
+            "total_ms": 1896.04,
+            "prefill_tok_per_s": 8859.8,
+            "decode_tok_per_s": 126.5,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 1
+        },
+        {
+          "text_preview": "Since the metric returned is `cpu_idle`, which represents the percentage of time that the CPU is idle, we need to calculate the CPU utilization. CPU utilization",
+          "tokens_used": 321,
+          "wall_clock_s": 1.82,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 223,
+            "host_ms": 1.96,
+            "prefill_ms": 11.02,
+            "decode_ms": 1749.94,
+            "total_ms": 1764.29,
+            "prefill_tok_per_s": 8892.2,
+            "decode_tok_per_s": 127.4,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 2
+        },
+        {
+          "text_preview": "Since the metric returned is `cpu_idle`, which represents the percentage of time that the CPU is idle, we need to calculate the CPU utilization. CPU utilization",
+          "tokens_used": 336,
+          "wall_clock_s": 1.94,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 238,
+            "host_ms": 2.01,
+            "prefill_ms": 11.04,
+            "decode_ms": 1870.6,
+            "total_ms": 1885.06,
+            "prefill_tok_per_s": 8876.3,
+            "decode_tok_per_s": 127.2,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 3
+        },
+        {
+          "text_preview": "Since the metric returned is `cpu_idle`, which represents the percentage of time that the CPU is idle, we need to calculate the CPU utilization. CPU utilization",
+          "tokens_used": 334,
+          "wall_clock_s": 1.92,
+          "telemetry": {
+            "model_name": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003",
+            "model_path": "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+            "prompt_tokens": 98,
+            "completion_tokens": 236,
+            "host_ms": 2.05,
+            "prefill_ms": 11.08,
+            "decode_ms": 1849.81,
+            "total_ms": 1864.32,
+            "prefill_tok_per_s": 8846.5,
+            "decode_tok_per_s": 127.6,
+            "rag_k": 0,
+            "rag_docs_used": 0
+          },
+          "source_id": "agentic_roundtrip__3",
+          "sample_index": 4
+        }
+      ]
+    }
+  ]
+}

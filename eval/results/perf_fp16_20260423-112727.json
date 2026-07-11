@@ -1,0 +1,75 @@
+{
+  "summary": {
+    "label": "fp16",
+    "model_path": "models/qwen2.5-14b-hf",
+    "timestamp": "2026-04-23T11:27:27",
+    "runs": 10,
+    "prompt_tokens": 59,
+    "completion_tokens": 200,
+    "total_s_p50": 3.95,
+    "total_s_p90": 4.288,
+    "overall_tok_s_p50": 50.6
+  },
+  "runs": [
+    {
+      "elapsed_s": 3.9602932929992676,
+      "prompt_tokens": 59,
+      "completion_tokens": 200,
+      "ttft_s": null
+    },
+    {
+      "elapsed_s": 3.933065176010132,
+      "prompt_tokens": 59,
+      "completion_tokens": 200,
+      "ttft_s": null
+    },
+    {
+      "elapsed_s": 3.9541494846343994,
+      "prompt_tokens": 59,
+      "completion_tokens": 200,
+      "ttft_s": null
+    },
+    {
+      "elapsed_s": 3.937389850616455,
+      "prompt_tokens": 59,
+      "completion_tokens": 200,
+      "ttft_s": null
+    },
+    {
+      "elapsed_s": 3.945319414138794,
+      "prompt_tokens": 59,
+      "completion_tokens": 200,
+      "ttft_s": null
+    },
+    {
+      "elapsed_s": 3.912614345550537,
+      "prompt_tokens": 59,
+      "completion_tokens": 200,
+      "ttft_s": null
+    },
+    {
+      "elapsed_s": 3.9327149391174316,
+      "prompt_tokens": 59,
+      "completion_tokens": 200,
+      "ttft_s": null
+    },
+    {
+      "elapsed_s": 4.014267444610596,
+      "prompt_tokens": 59,
+      "completion_tokens": 200,
+      "ttft_s": null
+    },
+    {
+      "elapsed_s": 4.092064380645752,
+      "prompt_tokens": 59,
+      "completion_tokens": 200,
+      "ttft_s": null
+    },
+    {
+      "elapsed_s": 4.288079738616943,
+      "prompt_tokens": 59,
+      "completion_tokens": 200,
+      "ttft_s": null
+    }
+  ]
+}

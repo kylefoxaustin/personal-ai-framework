@@ -29,12 +29,13 @@ import argparse
 import json
 import os
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 from statistics import mean
 
 import anthropic
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -268,6 +269,7 @@ def main():
 
     client = anthropic.Anthropic()
     judged = []
+    inter_call_sleep = float(os.environ.get("JUDGE_SLEEP_SEC", "6.5"))  # rate limit pacing
     for i, sample in enumerate(samples, 1):
         try:
             result = judge_one(client, args.judge_model, sample)
@@ -278,7 +280,16 @@ def main():
                   f"f={result['faithfulness']} sz={result['conciseness']} = {result['total']}/8")
         except anthropic.APIStatusError as e:
             print(f"  [{i:2d}/{len(samples)}] ❌ {sample['prompt_id']}: {e.status_code} {e.message}")
-            judged.append({"prompt_id": sample["prompt_id"], "error": str(e)})
+            judged.append({"prompt_id": sample["prompt_id"], "error": f"APIStatusError {e.status_code}: {e.message}"})
+        except ValidationError as e:
+            print(f"  [{i:2d}/{len(samples)}] ⚠️  {sample['prompt_id']}: judge returned non-conforming output ({e})")
+            judged.append({"prompt_id": sample["prompt_id"], "error": f"ValidationError: {e}"})
+        except Exception as e:
+            print(f"  [{i:2d}/{len(samples)}] ❌ {sample['prompt_id']}: {type(e).__name__}: {e}")
+            judged.append({"prompt_id": sample["prompt_id"], "error": f"{type(e).__name__}: {e}"})
+        # Pace inter-call to stay under Tier 1 30K input TPM (~9 calls/min ceiling)
+        if i < len(samples):
+            time.sleep(inter_call_sleep)
 
     summary = aggregate([j for j in judged if "error" not in j])
 
