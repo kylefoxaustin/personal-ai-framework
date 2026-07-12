@@ -50,6 +50,14 @@ class MemoryService:
             user_msg = messages[i] if i < len(messages) else None
             asst_msg = messages[i + 1] if i + 1 < len(messages) else None
             if user_msg and user_msg["role"] == "user":
+                # Skip turns whose assistant response is a refusal — writing
+                # them to memory creates poison that parrots back on future
+                # retrieval. _REFUSAL_MARKERS is the same tuple the read-time
+                # filter uses in get_memory_context.
+                if asst_msg and asst_msg["role"] == "assistant":
+                    asst_lower = asst_msg["content"].lower()
+                    if any(m in asst_lower for m in self._REFUSAL_MARKERS):
+                        continue
                 content = f"User asked: {user_msg['content']}\n\n"
                 timestamp = user_msg["timestamp"]
                 if asst_msg and asst_msg["role"] == "assistant":

@@ -18,6 +18,9 @@ services:
 
   vectordb:
     image: chromadb/chroma:0.5.0
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/data
     volumes:
       - ./vectordb:/data
     ports:

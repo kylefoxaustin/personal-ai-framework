@@ -214,6 +214,8 @@ Write/schedule/send tools (write_file, run_script, schedule_reminder, send_email
 
 IMPORTANT — do NOT use write_file just because the user says "write". Only use write_file when the user explicitly asks to SAVE something TO A FILE ON DISK (they mention a filename, a path, or say "save to a file"). Requests like "write a Python function" or "write me a poem" mean produce text in the chat response — those are NO_TOOLS.
 
+IMPORTANT — questions ABOUT something are NOT tool calls. "Did X ever happen?", "What is Y?", "How does Z work?", "Which chip/person/thing did ...?", "When did ...?", "Tell me about ..." — these are retrieval/knowledge questions. Answer them inline with NO_TOOLS. Tools are for ACTIONS (read a specific file, send an email, schedule a reminder), not for answering questions from knowledge or RAG.
+
 Output format — `params` MUST be a flat JSON object whose keys are the parameter names themselves, NOT literal "key"/"value" fields.
 
 Example 1 — user asks: Read /app/config.yaml
@@ -259,6 +261,14 @@ NO_TOOLS
 Example 9 — user asks: Write a quick poem about Austin
 NO_TOOLS
 (Creative-writing request, not a file-save request.)
+
+Example 10 — user asks: Did Kyle ever demo Angry Birds on an NXP platform? Which chip?
+NO_TOOLS
+(Informational "did X ever ...?" question — answer from knowledge/RAG, not a tool call.)
+
+Example 11 — user asks: What did we ship last week?
+NO_TOOLS
+(Informational question about past work — answer from memory/RAG, not a tool call.)
 
 Now for the real question below, output either a tool call in the exact format shown, or exactly NO_TOOLS.
 If you have already gathered enough information from the tools already run, output NO_TOOLS so the assistant can respond to the user.
@@ -423,46 +433,75 @@ def _build_tool_chain_context(steps: list) -> str:
     return "\n".join(parts) + "\n\n"
 
 
+def _model_wants_no_system_block() -> bool:
+    """True for fine-tunes whose LoRA training data had no <|im_start|>system
+    turns — specifically the kyle-14b-v* line. Training data for those was
+    pure Alpaca/conversation pairs without a system role; adding one at
+    inference produces gibberish (mismatch with training distribution).
+
+    Detection is by the active model path — kyle-14b* paths route to the
+    no-system wrap, everything else uses the standard ChatML+system format.
+    """
+    try:
+        active = (_current_model_path or "").lower()
+    except NameError:
+        active = ""
+    return "kyle-14b" in active
+
+
 def _build_multiturn_prompt(
     system_context: str,
     conversation_history: Optional[List] = None,
     current_message: str = "",
 ) -> str:
-    """Build a proper ChatML multi-turn prompt (Qwen 2.5).
+    """Build a ChatML multi-turn prompt, with a model-specific fork for
+    LoRA fine-tunes that were never trained on a system role.
 
-    Format:
+    Standard format (used by MoE + any model trained with system turns):
       <|im_start|>system
       {system context}<|im_end|>
       <|im_start|>user
       {user_1}<|im_end|>
-      <|im_start|>assistant
-      {assistant_1}<|im_end|>
       ...
       <|im_start|>user
       {current}<|im_end|>
       <|im_start|>assistant
 
-    System context (personality, facts, memory, RAG) goes in the system block.
+    No-system format (kyle-14b line — fuses system context into the first
+    user message so the model sees only roles it was trained on):
+      <|im_start|>user
+      {system context}
+      ---
+      {current}<|im_end|>
+      <|im_start|>assistant
     """
     history = conversation_history or []
-    history = history[-6:]  # Last 6 messages (3 turns)
+    history = history[-6:]
 
     parts = []
-
-    # System block with all context
     ctx = system_context.strip()
+
+    if _model_wants_no_system_block():
+        # Fuse system context into the first user message instead of emitting
+        # a dedicated system turn. Preserves the instructions at inference
+        # time without introducing a role the fine-tune hasn't seen.
+        for msg in history:
+            role = "user" if msg.role == "user" else "assistant"
+            parts.append(f"<|im_start|>{role}\n{msg.content.strip()}<|im_end|>")
+        user_content = (f"{ctx}\n\n---\n\n{current_message.strip()}"
+                        if ctx else current_message.strip())
+        parts.append(f"<|im_start|>user\n{user_content}<|im_end|>")
+        parts.append("<|im_start|>assistant")
+        return "\n".join(parts)
+
+    # Standard ChatML with system turn
     if ctx:
         parts.append(f"<|im_start|>system\n{ctx}<|im_end|>")
-
-    # Conversation history
     for msg in history:
         role = "user" if msg.role == "user" else "assistant"
         parts.append(f"<|im_start|>{role}\n{msg.content.strip()}<|im_end|>")
-
-    # Current user message + assistant prompt
     parts.append(f"<|im_start|>user\n{current_message.strip()}<|im_end|>")
     parts.append("<|im_start|>assistant")
-
     return "\n".join(parts)
 
 
@@ -529,6 +568,8 @@ class GenerationRequest(BaseModel):
     use_rag: Optional[bool] = True  # Auto-retrieve context from RAG
     rag_k: Optional[int] = 3  # Number of documents to retrieve
     conversation_history: Optional[List[ConversationMessage]] = None  # Previous messages
+    include_telemetry: Optional[bool] = False  # Sizer bake-off mode: return timing breakdown
+    skip_agent_loop: Optional[bool] = False  # Sizer bake-off mode: bypass tool-detection LLM calls
 
 class GenerationResponse(BaseModel):
     text: str
@@ -537,6 +578,7 @@ class GenerationResponse(BaseModel):
     context_used: Optional[List[str]] = None
     citations: Optional[List[dict]] = None  # Source citations with scores
     pending_action: Optional[dict] = None  # {name, params} — write tool awaiting user approval
+    telemetry: Optional[dict] = None  # Sizer bake-off timing breakdown (when include_telemetry=True)
 
 class StreamingRequest(BaseModel):
     prompt: str
@@ -876,7 +918,10 @@ def generate(request: GenerationRequest):
 
     # Agent loop — up to MAX_AGENT_STEPS safe-tool iterations, then either
     # continue or stop for confirm-tool approval.
-    agent = _run_agent_loop(request.prompt, request.conversation_history)
+    if request.skip_agent_loop:
+        agent = {"steps": [], "pending": None}
+    else:
+        agent = _run_agent_loop(request.prompt, request.conversation_history)
     if agent["pending"]:
         name = agent["pending"]["name"]
         params = agent["pending"]["params"]
@@ -901,30 +946,81 @@ def generate(request: GenerationRequest):
     if _maintenance_mode or llm is None:
         raise HTTPException(status_code=503, detail="Model is retraining. Please wait — this usually takes ~2.5 hours.")
 
-    # Generate (lock prevents concurrent CUDA access)
-    with _inference_lock:
-        response = llm(
-            full_prompt,
-            max_tokens=request.max_tokens,
-            temperature=request.temperature,
-            top_p=request.top_p,
-            stop=["</s>", "\n\n\n", "<|im_end|>"],
-            echo=False
-        )
+    # Mark end of host-side pre-work (retrieval + context build + agent loop + prompt build).
+    # Host work doesn't scale with NPU choice, so the sizer tracks it separately from prefill/decode.
+    _host_end = _time.time()
 
-    _elapsed = _time.time() - _gen_start
+    # Generate (lock prevents concurrent CUDA access)
+    _telemetry = None
+    if request.include_telemetry:
+        # Sizer bake-off path: stream internally to capture prefill vs decode timing split.
+        _prompt_tokens = len(llm.tokenize(full_prompt.encode("utf-8"), add_bos=True, special=True))
+        _llm_start = _time.time()
+        _first_token_ts = None
+        _chunks = []
+        with _inference_lock:
+            for _chunk in llm(
+                full_prompt,
+                max_tokens=request.max_tokens,
+                temperature=request.temperature,
+                top_p=request.top_p,
+                stop=["</s>", "\n\n\n", "<|im_end|>"],
+                echo=False,
+                stream=True,
+            ):
+                if _first_token_ts is None:
+                    _first_token_ts = _time.time()
+                _chunks.append(_chunk["choices"][0]["text"])
+        _llm_end = _time.time()
+        _completion_tokens = len(_chunks)
+        _response_text = "".join(_chunks).strip()
+        _prefill_s = (_first_token_ts - _llm_start) if _first_token_ts else 0.0
+        _decode_s = (_llm_end - _first_token_ts) if _first_token_ts else 0.0
+        _host_s = _host_end - _gen_start
+        _elapsed = _llm_end - _gen_start
+        _tokens = _prompt_tokens + _completion_tokens
+        _model_path = config.get("model", {}).get("path", "")
+        _model_name = os.path.basename(_model_path).replace(".gguf", "") or "unknown"
+        _telemetry = {
+            "model_name": _model_name,
+            "model_path": _model_path,
+            "prompt_tokens": _prompt_tokens,
+            "completion_tokens": _completion_tokens,
+            "host_ms": round(_host_s * 1000, 2),
+            "prefill_ms": round(_prefill_s * 1000, 2),
+            "decode_ms": round(_decode_s * 1000, 2),
+            "total_ms": round(_elapsed * 1000, 2),
+            "prefill_tok_per_s": round(_prompt_tokens / _prefill_s, 1) if _prefill_s > 0 else None,
+            "decode_tok_per_s": round(_completion_tokens / _decode_s, 1) if _decode_s > 0 else None,
+            "rag_k": request.rag_k,
+            "rag_docs_used": len(context_docs) if context_docs else 0,
+        }
+    else:
+        with _inference_lock:
+            response = llm(
+                full_prompt,
+                max_tokens=request.max_tokens,
+                temperature=request.temperature,
+                top_p=request.top_p,
+                stop=["</s>", "\n\n\n", "<|im_end|>"],
+                echo=False
+            )
+        _elapsed = _time.time() - _gen_start
+        _tokens = response['usage']['total_tokens']
+        _response_text = response['choices'][0]['text'].strip()
+
     metrics.generations_total.labels(endpoint="generate").inc()
     metrics.generation_latency_seconds.labels(endpoint="generate").observe(_elapsed)
-    _tokens = response['usage']['total_tokens']
     if _elapsed > 0 and _tokens > 0:
         metrics.generation_tokens_per_second.observe(_tokens / _elapsed)
 
     return GenerationResponse(
-        text=response['choices'][0]['text'].strip(),
+        text=_response_text,
         tokens_used=_tokens,
         model="qwen2.5-14b",
         context_used=context_docs if context_docs else None,
-        citations=citations
+        citations=citations,
+        telemetry=_telemetry,
     )
 
 
@@ -1206,10 +1302,29 @@ def ingest_batch(request: IngestBatchRequest):
 
 @app.post("/search")
 def search_documents(request: SearchRequest):
-    """Search the knowledge base"""
+    """Search the knowledge base.
+
+    Uses the SAME hybrid retriever the chat path uses (BM25 + semantic + rerank),
+    so /search and chat agree on what "RAG" returns. Previously this called
+    RAGService.search() (semantic-only), which meant the eval harness — which
+    gathers its frozen contexts through /search — was measuring a weaker retriever
+    than the product actually serves: measured 2026-07-09, semantic-only recovered
+    1/7 of hard datasheet lookups where hybrid recovered 6/7. Falls back to
+    semantic search if the hybrid path is unavailable."""
     try:
         rag = get_rag_service()
-        results = rag.search(request.query, k=request.k)
+        advanced = get_advanced_rag()
+        if advanced:
+            hits = advanced.hybrid_search(request.query, k=request.k)
+            results = [
+                {"content": h.content, "metadata": h.metadata,
+                 "distance": (1.0 - h.semantic_score) if h.semantic_score else None,
+                 "scores": {"semantic": h.semantic_score, "keyword": h.keyword_score,
+                            "rerank": h.rerank_score, "final": h.final_score}}
+                for h in hits
+            ]
+        else:
+            results = rag.search(request.query, k=request.k)
         return {
             "query": request.query,
             "results": results
