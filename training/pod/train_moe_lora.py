@@ -65,21 +65,31 @@ model.print_trainable_parameters()
 
 print(f"=== loading + formatting dataset from {DATA} ===")
 raw = json.load(open(DATA))
+# v4 recipe (2026-05-02): use messages-list format so SFTTrainer can apply the
+# chat template + identify assistant turn boundaries for assistant_only_loss=True.
+# Was previously {"text": pre-formatted ChatML}; that prevented assistant-only
+# masking, leading to over-generation patterns visible in earlier dense fine-tunes.
 def fmt(ex):
     instr = ex["instruction"]
     if ex.get("input"):
         instr = instr + "\n\n" + ex["input"]
-    return {"text": f"<|im_start|>user\n{instr}<|im_end|>\n"
-                    f"<|im_start|>assistant\n{ex['output']}<|im_end|>"}
+    return {"messages": [
+        {"role": "user", "content": instr},
+        {"role": "assistant", "content": ex["output"]},
+    ]}
 ds = Dataset.from_list([fmt(x) for x in raw])
 print(f"  examples: {len(ds)}")
-print(f"  first: {ds[0]['text'][:200]}...")
 
 # trl 1.x API: SFTConfig replaces inline kwargs; `max_seq_length` → `max_length`;
 # `tokenizer=` → `processing_class=`.
+# v4 recipe additions (2026-05-02):
+#   - assistant_only_loss=True: loss masked to assistant tokens only (was
+#     training on user prompt too, contributing to runaway generation)
+#   - num_train_epochs=2: dialed back from 3 to avoid over-refusal pattern
+#     overgeneralization seen in 7B v3 with 3 epochs + same recipe
 cfg = SFTConfig(
     output_dir=OUT,
-    num_train_epochs=3,
+    num_train_epochs=2,
     per_device_train_batch_size=1,
     gradient_accumulation_steps=16,   # effective batch = 16
     learning_rate=2e-4,
@@ -92,8 +102,8 @@ cfg = SFTConfig(
     report_to="none",
     save_total_limit=2,
     max_length=2048,
-    dataset_text_field="text",
     packing=False,
+    assistant_only_loss=True,
 )
 trainer = SFTTrainer(
     model=model, args=cfg, train_dataset=ds, processing_class=tok,
