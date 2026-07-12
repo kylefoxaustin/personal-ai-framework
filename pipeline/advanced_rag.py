@@ -298,6 +298,35 @@ class AdvancedRAG:
          "IOMUXC IOMUX pad"),
     ]
 
+    # Chip-family detection for chip-scoped retrieval. The corpus mixes several
+    # NXP SoCs whose datasheets share enormous Arm boilerplate; on shared-vocab
+    # queries ("Cortex-A55 core count") a denser-tabled incumbent chip's chunks
+    # outrank the chip actually asked about. These patterns normalize both a
+    # query and a chunk's part_number/source_file to the same canonical key so
+    # hybrid_search can penalize the wrong chip. Order matters: the more-specific
+    # imx9x keys are tried before the imx8 catch so "i.MX 95" never falls to imx8.
+    _CHIP_PATTERNS = [
+        (re.compile(r"i\.?\s*mx\s*95", re.IGNORECASE), "imx95"),
+        (re.compile(r"i\.?\s*mx\s*93", re.IGNORECASE), "imx93"),
+        (re.compile(r"i\.?\s*mx\s*91", re.IGNORECASE), "imx91"),
+        (re.compile(r"i\.?\s*mx\s*8", re.IGNORECASE), "imx8"),
+        (re.compile(r"rt\s*11\d\d", re.IGNORECASE), "rt1180"),
+        (re.compile(r"mcx\s*n?\s*9\d\d", re.IGNORECASE), "mcxn947"),
+    ]
+
+    def _chip_key(self, text: str) -> Optional[str]:
+        """Canonical SoC family for a query or a chunk's part_number/source_file.
+
+        Returns None when no chip is named — which is the guard that keeps
+        chip-scoping OFF for persona / general-knowledge queries.
+        """
+        if not text:
+            return None
+        for pattern, key in self._CHIP_PATTERNS:
+            if pattern.search(text):
+                return key
+        return None
+
     def _expand_query(self, query: str) -> str:
         """Append peripheral aliases (UART → LPUART etc.).
 
@@ -448,7 +477,29 @@ class AdvancedRAG:
             for result in results:
                 result.final_score = (result.final_score * 0.6) + (result.rerank_score * 0.4)
             results.sort(key=lambda x: x.final_score, reverse=True)
-        
+
+        # 5b. Chip-scoped re-ranking. When the query names a specific SoC, penalize
+        # chunks that provably belong to a DIFFERENT chip and gently boost the named
+        # one. Fixes the cross-chip contamination measured after the i.MX 95 ingest:
+        # shared Arm boilerplate ("Cortex-A55 core count") from a denser-tabled
+        # incumbent (i.MX 93 datasheet tables) was outranking the queried chip's own
+        # docs. Fires ONLY when a chip is named — persona/general queries untouched.
+        # Applied after rerank so it is the last word on ordering. Chunk chip is read
+        # from BOTH part_number and source_file (belt-and-suspenders — source_file
+        # "datasheets/IMX95RM.pdf" is the more reliable of the two).
+        # See eval/results/imx95_ingest_pilot.md.
+        query_chip = self._chip_key(original_query)
+        if query_chip and results:
+            for r in results:
+                chunk_chip = self._chip_key(
+                    f"{r.metadata.get('part_number', '')} {r.metadata.get('source_file', '')}"
+                )
+                if chunk_chip and chunk_chip != query_chip:
+                    r.final_score *= 0.4   # wrong chip — sink it
+                elif chunk_chip == query_chip:
+                    r.final_score *= 1.15  # right chip — gentle lift
+            results.sort(key=lambda x: x.final_score, reverse=True)
+
         # 6. Take top k. If the query triggered a concept alias (e.g. pin
         # routing → IOMUXC), also run a secondary semantic search for that
         # concept and splice its top-1 into the results. This handles

@@ -51,7 +51,10 @@ def extract_part_number(text: str, filename: str) -> str:
     """Try to extract part number from text or filename."""
     # Common patterns for part numbers
     patterns = [
-        r'\b(i\.?MX\s*\d+\w*)\b',  # i.MX series
+        r'\b(i\.?MX\s*\d+\w*)\b',  # i.MX series (covers i.MX 91/93/95)
+        r'\b(MIMXRT\d+\w*)\b',  # NXP i.MX RT crossover (RT1180 EVK = MIMXRT1189/1187)
+        r'\b(RT1\d{3}\w*)\b',  # NXP i.MX RT bare (RT1180/RT1170/…)
+        r'\b(MCXN?\d+\w*)\b',  # NXP MCX (MCXN947)
         r'\b(STM32\w+)\b',  # STM32
         r'\b(LPC\d+\w*)\b',  # NXP LPC
         r'\b(MIMX\w+)\b',  # NXP MIMX
