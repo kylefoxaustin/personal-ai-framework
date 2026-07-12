@@ -160,8 +160,14 @@ def load_training_data(data_path: str, tokenizer, max_samples: int = None):
         )
     
     tokenized = dataset.map(tokenize, batched=True, remove_columns=["text"])
-    tokenized = tokenized.map(lambda x: {"labels": x["input_ids"].copy()})
-    
+    # Mask pad tokens in labels with -100 so the loss isn't computed on them.
+    # Without this, the model is trained to predict <pad> tokens after <|im_end|>,
+    # which weakens the EOS signal and causes runaway generation at inference time.
+    pad_id = tokenizer.pad_token_id
+    tokenized = tokenized.map(lambda x: {
+        "labels": [-100 if t == pad_id else t for t in x["input_ids"]]
+    })
+
     return tokenized
 
 
