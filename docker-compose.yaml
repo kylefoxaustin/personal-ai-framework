@@ -6,6 +6,11 @@ services:
     runtime: nvidia
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
+      # Run the container in the user's local timezone. Without this, TZ is unset
+      # inside the image and datetime.now().astimezone() resolves to UTC, so the
+      # "current time" injected into the agent detection prompt is UTC — making
+      # "remind me tomorrow" land a day late when typed in the evening (CDT).
+      - TZ=America/Chicago
     volumes:
       - ./models:/app/models
       - ./pipeline:/app
@@ -13,6 +18,10 @@ services:
       - ./knowledge:/root/knowledge
       - ~/.personal-ai:/root/.personal-ai
       - ./training:/app/training:ro
+      # Give the container the host's timezone data so TZ=America/Chicago above
+      # actually resolves (the base image ships no zoneinfo). Read-only.
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
     ports:
       - "8080:8080"
 
