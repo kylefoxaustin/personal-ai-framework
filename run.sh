@@ -21,17 +21,25 @@ case $COMMAND in
         fi
         
         echo ""
-        echo "Starting web UI on http://localhost:8765"
-        cd web && python3 -m http.server 8765 &
-        echo "✅ Web UI started"
-        echo ""
-        echo "Open http://localhost:8765 in your browser"
+        WEB_PORT=3000
+        echo "Starting web UI on http://localhost:${WEB_PORT}"
+        # Subshell so the script's cwd isn't left inside web/; background the server.
+        (cd web && python3 -m http.server "$WEB_PORT") &
+        sleep 1
+        # Report honestly: only claim success if the port actually accepts a request.
+        if curl -s -o /dev/null "http://localhost:${WEB_PORT}/"; then
+            echo "✅ Web UI: Online"
+            echo ""
+            echo "Open http://localhost:${WEB_PORT} in your browser"
+        else
+            echo "❌ Web UI: failed to bind port ${WEB_PORT} (already in use?). Nothing is serving the UI."
+        fi
         ;;
         
     stop)
         echo "🛑 Stopping services..."
         docker compose down
-        pkill -f "python3 -m http.server 8765" 2>/dev/null || true
+        pkill -f "python3 -m http.server 3000" 2>/dev/null || true
         echo "✅ Services stopped"
         ;;
         
