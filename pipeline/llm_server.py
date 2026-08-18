@@ -705,6 +705,17 @@ llm = None
 _maintenance_mode = False
 _current_model_path = None
 
+
+def _active_model_label() -> str:
+    """The name of the model actually loaded, derived from the live GGUF path.
+
+    Single source of truth for the ``model`` field in API responses so it can
+    never drift from what is really running (e.g. reporting "qwen2.5-14b" while
+    a 7B v4 GGUF is loaded). Falls back to the configured path, then a marker."""
+    path = _current_model_path or config.get("model", {}).get("path", "")
+    return os.path.basename(path).replace(".gguf", "") if path else "unknown"
+
+
 def load_model(model_path_override=None):
     """Load model with GPU acceleration"""
     global llm, _current_model_path
@@ -775,7 +786,7 @@ async def startup_event():
 
 @app.get("/")
 def read_root():
-    return {"message": "Personal AI LLM Server", "model": "Qwen2.5-14B", "rag_enabled": True}
+    return {"message": "Personal AI LLM Server", "model": _active_model_label(), "rag_enabled": True}
 
 @app.post("/generate", response_model=GenerationResponse)
 def generate(request: GenerationRequest):
@@ -933,7 +944,7 @@ def generate(request: GenerationRequest):
         return GenerationResponse(
             text=msg,
             tokens_used=0,
-            model="qwen2.5-14b",
+            model=_active_model_label(),
             pending_action={"name": name, "params": params, "meta": _pending_action_metadata(name, params)},
         )
     if agent["steps"]:
@@ -1017,7 +1028,7 @@ def generate(request: GenerationRequest):
     return GenerationResponse(
         text=_response_text,
         tokens_used=_tokens,
-        model="qwen2.5-14b",
+        model=_active_model_label(),
         context_used=context_docs if context_docs else None,
         citations=citations,
         telemetry=_telemetry,
