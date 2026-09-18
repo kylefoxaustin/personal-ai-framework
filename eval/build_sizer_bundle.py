@@ -32,6 +32,26 @@ from pathlib import Path
 # Sources: Qwen model cards, GGUF file sizes on disk. Verify against your
 # actual GGUF before shipping a public bundle.
 MODEL_CONSTANTS = {
+    # Production Skippy model (fine-tuned Qwen 2.5 7B, v4). Values read directly
+    # from the GGUF metadata on 2026-09-15 (see the reader in the rebuild notes):
+    #   models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf
+    # total_params = Qwen2.5-7B card (7,615,616,512); everything else = GGUF KV.
+    "skippy-7b-v4-q4-dense": {
+        "display_name": "Skippy 7B v4 (Qwen 2.5 7B fine-tune, Q4_K_M, dense) — PRODUCTION",
+        "family": "qwen2.5",
+        "is_moe": False,
+        "total_params": 7_615_616_512,
+        "active_params": 7_615_616_512,
+        "bytes_per_param": 0.615,          # 4_683_073_440 / 7_615_616_512
+        "gguf_bytes": 4_683_073_440,
+        "hidden_dim": 3584,
+        "num_layers": 28,
+        "num_attention_heads": 28,
+        "num_kv_heads": 4,
+        "vocab_size": 152064,
+        "ctx_len_trained": 32768,
+        "ctx_len_extended": 131072,
+    },
     "qwen2.5-14b-q4-dense": {
         "display_name": "Qwen 2.5 14B Instruct (Q4_K_M, dense)",
         "family": "qwen2.5",
