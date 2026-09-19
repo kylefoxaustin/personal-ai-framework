@@ -45,7 +45,7 @@ BOARDS_MEASURED = {
         "provenance": {"tier": "MEASURED", "source": "eval/results/orin/GGUF_LADDER.md",
                        "caveat": "llama.cpp CUDA, llama-bench -p0 -n128; decode-only, no RAG"},
         "perf": {
-            "skippy-7b-v4-q4-dense": {
+            "qwen25-7b-v4-q4-dense": {
                 "q4_k_m": {"decode_tps": 27.82, "achieved_gb_s": 121.6,
                            "tag": "MEASURED", "date": "2026-07-09"}},
             "qwen2.5-14b-q4-dense": {
@@ -153,8 +153,8 @@ def fold_5090_bench(path: Path) -> dict:
     d = json.load(open(path))
     label = {"cold_start": "cold_start", "plain_chat": "short_chat",
              "rag_heavy": "rag_long_context", "reasoning": "long_decode"}
-    perf = {"skippy-7b-v4-q4-dense": {"q4_k_m": {}}}
-    row = perf["skippy-7b-v4-q4-dense"]["q4_k_m"]
+    perf = {"qwen25-7b-v4-q4-dense": {"q4_k_m": {}}}
+    row = perf["qwen25-7b-v4-q4-dense"]["q4_k_m"]
     for cat, v in d.items():
         wl = label.get(cat, cat)
         row[wl] = {"decode_tps_p50": v.get("tps_p50"), "decode_tps_p95": v.get("tps_p95"),
@@ -178,8 +178,8 @@ def main():
 
     # models: carry v1 + ensure the production 7B v4 constants are present.
     models = dict(v1.get("models", {}))
-    if "skippy-7b-v4-q4-dense" in MODEL_CONSTANTS:
-        models["skippy-7b-v4-q4-dense"] = MODEL_CONSTANTS["skippy-7b-v4-q4-dense"]
+    if "qwen25-7b-v4-q4-dense" in MODEL_CONSTANTS:
+        models["qwen25-7b-v4-q4-dense"] = MODEL_CONSTANTS["qwen25-7b-v4-q4-dense"]
 
     bundle = {
         "meta": {
