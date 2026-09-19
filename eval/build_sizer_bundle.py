@@ -36,7 +36,7 @@ MODEL_CONSTANTS = {
     # from the GGUF metadata on 2026-09-15 (see the reader in the rebuild notes):
     #   models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf
     # total_params = Qwen2.5-7B card (7,615,616,512); everything else = GGUF KV.
-    "skippy-7b-v4-q4-dense": {
+    "qwen25-7b-v4-q4-dense": {
         "display_name": "Skippy 7B v4 (Qwen 2.5 7B fine-tune, Q4_K_M, dense) — PRODUCTION",
         "family": "qwen2.5",
         "is_moe": False,
