@@ -1,0 +1,27 @@
+{
+  "task": "web_summarize",
+  "ts": "2026-10-07T03:03:30",
+  "board": "rtx5090",
+  "wall_s": 4.716,
+  "telemetry": {
+    "prefill_ms": 19.88,
+    "decode_ms": 398.91,
+    "prefill_tok_per_s": 6338.2,
+    "decode_tok_per_s": 245.7,
+    "rag_docs_used": 0
+  },
+  "gpu": {
+    "samples": 28,
+    "sm_pct_mean": 12.7,
+    "mem_pct_mean": 7.2,
+    "power_w_mean": 133.5,
+    "sm_pct_peak": 95.0,
+    "vram_mib_peak": 9055.0
+  },
+  "extra": {
+    "web_search_s": 4.057,
+    "web_status": "ok",
+    "n_results": null
+  },
+  "output": "The NXP i.MX 95 is an advanced applications processor designed for edge AI and IoT applications, offering high performance and low power consumption. It supports a wide range of AI and machine learning tasks, making it ideal for smart home, industrial, and automotive applications. The processor integrates powerful CPU cores, a dedicated AI engine, and various peripheral interfaces to handle complex tasks efficiently. Its robust security features and flexible software ecosystem make it suitable for secure and reliable edge computing solutions."
+}

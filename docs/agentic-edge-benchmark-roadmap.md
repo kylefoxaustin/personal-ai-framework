@@ -104,3 +104,12 @@ Each exercises a *different* CPU/DDR/NPU signature — the point of the set.
 
 ## Benchmark task set — LOCKED at 10 (2026-10-06)
 The 5-task set grew to a 10-task set grounded in OpenClaw's capability list (A/B), spanning distinct CPU/DDR/NPU profiles: email, web-search+summarize, spec-RAG, file read/write, transcribe (ASR), OCR, meeting-summarize (multi-stage), run-script (shell), multi-tool-chain, doc-brief (prefill-heavy). Measured + coherence-gated on the 5090; see eval/results/ladder/agentic/FINDINGS.md. Two real Skippy bugs found+fixed/documented (read_file workspace resolution FIXED; transcribe whisper dep-conflict documented).
+
+## Post-Friday: a VLA/VLM perception-agent task (Kyle, 2026-10-07)
+Add an 11th task that is genuinely NPU/accelerator-bound (the LLM-centric 10 are bandwidth/CPU):
+a vision-language-action flow — e.g. "I got a ping a cat was in my yard — find it and show me a
+picture." This is perception → reason → act, the one workload where the big NPU earns its keep, and
+it closes the resource-profile story. Assets: GR00T runs on qualcomm (VLA), fleet VLMs, and
+**splat-vla's real 24/7 skunk detector on a Ubiquiti camera** — CHECK with splat-vla whether that
+detector is an actual VLA workload or a CNN detector + NL command front-end (that is the a/b frame
+applied to vision; it decides whether it's "agentic" or "today's tech"). Scope after the Friday deck.

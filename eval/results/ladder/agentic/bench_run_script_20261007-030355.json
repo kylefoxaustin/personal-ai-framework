@@ -1,0 +1,19 @@
+{
+  "task": "run_script",
+  "ts": "2026-10-07T03:03:55",
+  "board": "rtx5090",
+  "wall_s": 0.069,
+  "telemetry": {},
+  "gpu": {
+    "samples": 5,
+    "sm_pct_mean": 75.8,
+    "mem_pct_mean": 54.4,
+    "power_w_mean": 203.6,
+    "sm_pct_peak": 94.0,
+    "vram_mib_peak": 9055.0
+  },
+  "extra": {
+    "run_script_s": 0.069
+  },
+  "output": "stdout:\nNeutron: 1024 MACs x 1.0 GHz x 2 OPS/MAC = 2.0 TOPS (spec 2.0)\ncores=6xA55; mem=LPDDR5X; pcie=Gen3\n\nexit code: 0"
+}

@@ -15,7 +15,7 @@ import threading
 from datetime import datetime
 from typing import Optional, List, Dict
 from pathlib import Path
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, HTMLResponse
 import json
@@ -2792,7 +2792,7 @@ async def voice_transcribe(file: UploadFile = File(...)):
 
 
 @app.post("/upload/transcribe")
-async def upload_and_transcribe(file: UploadFile = File(...), title: str = "Untitled Recording", summarize: bool = False):
+async def upload_and_transcribe(file: UploadFile = File(...), title: str = Form("Untitled Recording"), summarize: bool = Form(False)):
     """Upload audio/video and transcribe with Whisper"""
     import tempfile
     from pathlib import Path
@@ -2884,7 +2884,7 @@ async def upload_and_transcribe(file: UploadFile = File(...), title: str = "Unti
 
 
 @app.post("/upload/ocr")
-async def upload_and_ocr(file: UploadFile = File(...), title: str = "Screenshot", summarize: bool = False):
+async def upload_and_ocr(file: UploadFile = File(...), title: str = Form("Screenshot"), summarize: bool = Form(False)):
     """Upload image and extract text with OCR"""
     import tempfile
     from pathlib import Path

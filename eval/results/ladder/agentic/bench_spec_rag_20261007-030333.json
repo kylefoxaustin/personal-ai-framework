@@ -1,0 +1,23 @@
+{
+  "task": "spec_rag",
+  "ts": "2026-10-07T03:03:33",
+  "board": "rtx5090",
+  "wall_s": 2.264,
+  "telemetry": {
+    "prefill_ms": 415.58,
+    "decode_ms": 1002.37,
+    "prefill_tok_per_s": 9832.1,
+    "decode_tok_per_s": 220.5,
+    "rag_docs_used": 4
+  },
+  "gpu": {
+    "samples": 16,
+    "sm_pct_mean": 66.7,
+    "mem_pct_mean": 39.6,
+    "power_w_mean": 317.6,
+    "sm_pct_peak": 98.0,
+    "vram_mib_peak": 9055.0
+  },
+  "extra": {},
+  "output": "The i.MX 95 Neutron NPU is a hardware accelerator designed to efficiently process machine learning workloads. Here are its key features based on the information provided:\n\n- **Performance**: The Neutron NPU is capable of 2.0 TOP/s (Tera Operations Per Second) performance, with 1024 MACs (Multiplications and Accumulations) operating at up to 1.0 GHz and 2 OPS/MAC (Operations Per MAC).\n\n- **Support for Neural Networks**: It supports a variety of neural network architectures including Convolutional Neural Networks (CNNs), Recurrent Neural Networks (RNNs), and supports various types of layers and functions such as:\n  - Convolutional layers with different kernel sizes and strides.\n  - Recurrent neural networks including minimum gated unit (MGU) networks.\n  - Activation functions like ReLu, PreLu, and LeakyReLu.\n  - Sampling and reshaping functions.\n  - Element-wise operations.\n  - Layer operations.\n  - Normalization functions.\n  - Pooling functions."
+}
