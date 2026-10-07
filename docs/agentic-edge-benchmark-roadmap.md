@@ -119,3 +119,18 @@ the benchmark demo (real workload, real pictures). If it's NOT, the fun path is 
 onto a real VLA model **small enough to run on an iq9** — which folds directly into our iq9 rung
 (a genuine on-edge VLA datapoint, not just LLM decode). "cat in my yard → find it → show the picture"
 becomes a live, reproducible edge-VLA task.
+
+### Post-Friday embodied/perception-agentic suite (consolidating Kyle's threads, 2026-10-07)
+The LLM-agent benchmark (the Friday deck) is decode/bandwidth-bound with the NPU idle. The
+post-Friday arc adds the workloads where the accelerator earns its area — perception + action.
+Three candidate tasks, all VLA/VLM, all with EXISTING fleet data to anchor them:
+1. **VL classification (splat-vla skunk detector)** — 377-clip real corpus, free CV baseline,
+   human-confirmed labels. "cat in my yard → find it → show the picture." Qwen2.5-VL-7B.
+2. **VLA embodied robot (GR00T, w/ qualcomm)** — "pick up that object." Prompt → perception → action.
+3. **VLA drone nav (w/ qualcomm)** — "fly to the red post." Prompt → perception → waypoint/action.
+ANCHOR DATA ALREADY ON EDGE: qualcomm has GR00T + smolVLA running on iq9 (saw qualcomm_groot_goal /
+qualcomm_smolvla_obj tenants) AND Qwen2.5-VL-7B measured (prefill 197.5 / decode 8.375 t/s / TTFT
+157ms, w4a16). So the edge rungs may already exist — sync with qualcomm for the measured numbers +
+protocol. Resource story these complete: VL/VLA prefill is TOPS/compute-bound (the NPU's job), decode
+still DDR-bound — i.e. the accelerator pays off on the perception front-end, not the generation loop.
+Co-design the frame-sampling + output schema with splat-vla (VL) and qualcomm (VLA/robot/drone).
