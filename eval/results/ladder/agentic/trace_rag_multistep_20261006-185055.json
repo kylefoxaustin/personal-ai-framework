@@ -1,0 +1,35 @@
+{
+  "task": "rag_multistep",
+  "ts": "2026-10-06T18:50:55",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 89.433,
+  "tokens_used": 4714,
+  "telemetry": {
+    "prompt_tokens": 4649,
+    "completion_tokens": 65,
+    "prefill_ms": 518.96,
+    "decode_ms": 312.19,
+    "total_ms": 89370.27,
+    "prefill_tok_per_s": 8958.4,
+    "decode_tok_per_s": 208.2,
+    "rag_docs_used": 4
+  },
+  "gpu_signature": {
+    "samples": 452,
+    "sm_pct": {
+      "mean": 4.9,
+      "peak": 99.0
+    },
+    "mem_pct": {
+      "mean": 0.4,
+      "peak": 62.0
+    },
+    "power_w": {
+      "mean": 82.1,
+      "peak": 509.93
+    },
+    "vram_mib_peak": 9720.0
+  },
+  "answer_preview": "The i.MX 95 does not include an NPU. There is no mention of a microNPU in the provided excerpts. If you need information about the i.MX 95, I can provide that, "
+}

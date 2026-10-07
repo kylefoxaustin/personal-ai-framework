@@ -1,0 +1,35 @@
+{
+  "task": "rag_multistep",
+  "ts": "2026-10-06T19:11:53",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 1.722,
+  "tokens_used": 4714,
+  "telemetry": {
+    "prompt_tokens": 4649,
+    "completion_tokens": 65,
+    "prefill_ms": 518.06,
+    "decode_ms": 319.0,
+    "total_ms": 1661.82,
+    "prefill_tok_per_s": 8973.9,
+    "decode_tok_per_s": 203.8,
+    "rag_docs_used": 4
+  },
+  "gpu_signature": {
+    "samples": 14,
+    "sm_pct": {
+      "mean": 37.6,
+      "peak": 98.0
+    },
+    "mem_pct": {
+      "mean": 13.2,
+      "peak": 37.0
+    },
+    "power_w": {
+      "mean": 227.9,
+      "peak": 455.32
+    },
+    "vram_mib_peak": 9710.0
+  },
+  "answer_preview": "The i.MX 95 doesn't include a NPU. See the \"4.1.1 Absolute maximum ratings\" section in the [i.MX 95 Applications Processor Reference Manual](https://www.nxp.com"
+}

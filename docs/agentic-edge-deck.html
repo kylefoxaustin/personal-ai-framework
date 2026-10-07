@@ -1,0 +1,340 @@
+<title>Agentic at the Edge</title>
+<style>
+  :root{
+    --ground:#eef1f4; --surface:#ffffff; --surface-2:#f4f6f9;
+    --ink:#161a20; --ink-soft:#424b58; --muted:#6b7684; --hair:#d6dce3;
+    --accent:#0d7a84; --accent-soft:#0d7a8415; --accent-ink:#0a5b63;
+    --measured:#0d7a84; --derived:#b5730a; --sourced:#3a5a86;
+    --warn:#b5730a;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0c0f13; --surface:#141922; --surface-2:#1a212c;
+      --ink:#e8edf3; --ink-soft:#b3bdca; --muted:#7e8a99; --hair:#263040;
+      --accent:#3cc4cf; --accent-soft:#3cc4cf1a; --accent-ink:#8fe3ea;
+      --measured:#3cc4cf; --derived:#e0a24a; --sourced:#8aa6d4; --warn:#e0a24a;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0c0f13; --surface:#141922; --surface-2:#1a212c;
+    --ink:#e8edf3; --ink-soft:#b3bdca; --muted:#7e8a99; --hair:#263040;
+    --accent:#3cc4cf; --accent-soft:#3cc4cf1a; --accent-ink:#8fe3ea;
+    --measured:#3cc4cf; --derived:#e0a24a; --sourced:#8aa6d4; --warn:#e0a24a;
+  }
+  *{box-sizing:border-box}
+  html{scroll-snap-type:y proximity;scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+    line-height:1.5;-webkit-font-smoothing:antialiased;font-size:16px}
+  .deck{max-width:1040px;margin:0 auto;padding:0 20px}
+  section.slide{min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;
+    justify-content:center;padding:72px 0 56px;border-bottom:1px solid var(--hair)}
+  @media(max-width:720px){section.slide{min-height:auto;padding:52px 0 40px}}
+  /* eyebrow / slide meta */
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent-ink);display:flex;gap:10px;align-items:center;margin:0 0 18px}
+  .eyebrow .n{color:var(--muted)}
+  .eyebrow .rule{flex:1;height:1px;background:var(--hair)}
+  h1{font-size:clamp(30px,5.2vw,52px);line-height:1.05;letter-spacing:-.02em;margin:.1em 0 .35em;
+    text-wrap:balance;font-weight:780}
+  h2{font-size:clamp(23px,3.4vw,33px);line-height:1.12;letter-spacing:-.015em;margin:.1em 0 .5em;
+    text-wrap:balance;font-weight:720}
+  h3{font-size:15px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em}
+  p{margin:0 0 14px;max-width:68ch;color:var(--ink-soft)}
+  p.lead{font-size:clamp(17px,2vw,20px);color:var(--ink);max-width:62ch}
+  strong{color:var(--ink);font-weight:680}
+  .accent{color:var(--accent-ink)}
+  /* provenance chips */
+  .tag{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;padding:2px 7px;border-radius:4px;border:1px solid;white-space:nowrap;
+    vertical-align:middle}
+  .tag.m{color:var(--measured);border-color:var(--measured);background:var(--accent-soft)}
+  .tag.d{color:var(--derived);border-color:var(--derived);background:transparent}
+  .tag.s{color:var(--sourced);border-color:var(--sourced);background:transparent}
+  /* cards & grids */
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:720px){.g3,.g2{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:20px}
+  .card h3{color:var(--accent-ink)}
+  .card .big{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--ink);
+    font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .card .sub{font-size:13px;color:var(--muted)}
+  /* data table */
+  .tbl{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0 10px;overflow-x:auto;display:block}
+  .tbl table{width:100%;border-collapse:collapse}
+  table.data{width:100%;border-collapse:collapse;font-size:14.5px;margin:4px 0 12px}
+  table.data th,table.data td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--hair)}
+  table.data th{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--muted);font-weight:600}
+  table.data td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;color:var(--ink)}
+  table.data tr.hi td{background:var(--accent-soft)}
+  .scroll{overflow-x:auto}
+  /* bar chart */
+  .bars{display:flex;flex-direction:column;gap:11px;margin:8px 0 6px}
+  .bar{display:grid;grid-template-columns:120px 1fr auto;align-items:center;gap:12px}
+  .bar .lab{font-size:13.5px;font-weight:600;color:var(--ink)}
+  .bar .track{height:26px;background:var(--surface-2);border-radius:5px;overflow:hidden;border:1px solid var(--hair)}
+  .bar .fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-ink));border-radius:4px 0 0 4px}
+  .bar .val{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:14px;font-weight:700;color:var(--accent-ink);min-width:88px;text-align:right}
+  .cap{font-size:12.5px;color:var(--muted);font-family:var(--mono);margin-top:4px}
+  ul.clean{margin:0 0 14px;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+  ul.clean li{padding-left:22px;position:relative;color:var(--ink-soft);max-width:66ch}
+  ul.clean li::before{content:"";position:absolute;left:2px;top:9px;width:7px;height:7px;
+    border-radius:2px;background:var(--accent)}
+  ul.clean li strong{display:inline}
+  .takeaways{counter-reset:tk}
+  .takeaways li{padding-left:34px}
+  .takeaways li::before{counter-increment:tk;content:counter(tk);background:var(--accent);color:var(--ground);
+    width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:12px;font-weight:700;top:2px;left:0}
+  .bottomline{border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:18px 0 0;
+    font-size:16.5px;color:var(--ink);max-width:70ch}
+  .bottomline b{color:var(--accent-ink)}
+  /* header bar */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;
+    align-items:center;padding:10px 18px;background:color-mix(in srgb,var(--ground) 86%,transparent);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--hair);font-family:var(--mono);font-size:11.5px}
+  .topbar .brand{font-weight:700;letter-spacing:.02em;color:var(--ink)}
+  .topbar .draft{color:var(--warn);border:1px solid var(--warn);padding:2px 8px;border-radius:4px;
+    letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 0;font-size:12px;color:var(--muted)}
+  .legend span{display:inline-flex;gap:6px;align-items:center}
+  .foot{font-size:12px;color:var(--muted);font-family:var(--mono);margin-top:14px}
+  .kicker{font-size:14px;color:var(--muted);margin-top:-4px}
+</style>
+
+<div class="topbar">
+  <span class="brand">⚡ AGENTIC @ THE EDGE</span>
+  <span class="draft">Draft · prelim data · 2026-10-06</span>
+</div>
+
+<div class="deck">
+
+<!-- ============ SLIDE 1 — BLUF ============ -->
+<section class="slide" id="s1">
+  <div class="eyebrow"><span>The whole story</span><span class="rule"></span><span class="n">01 / 12</span></div>
+  <h1>Agentic at the edge is <span class="accent">bandwidth-bound</span>, not TOPS-bound.</h1>
+  <p class="lead">An on-device agent orchestrates a <strong>fixed, pre-tested set of skills</strong> —
+    transcribe, retrieve, see, draft — it does <strong>not</strong> write and run new code. Every
+    shipping on-device agent today works this way <span class="tag s">Sourced</span>. Its cost is
+    dominated by LLM <strong>decode</strong>, which is limited by <strong>memory bandwidth</strong> —
+    so a 500-eTOPS NPU sits largely idle during agentic work.</p>
+
+  <div class="grid g3" style="margin:22px 0 4px">
+    <div class="card">
+      <h3>Decode = the workload</h3>
+      <div class="big">98.9%</div>
+      <div class="sub">of LLM time is decode <span class="tag m">Measured</span></div>
+    </div>
+    <div class="card">
+      <h3>Decode tracks bandwidth</h3>
+      <div class="big">8×</div>
+      <div class="sub">5090→Orin decode gap ≈ the bandwidth gap, not the TOPS gap</div>
+    </div>
+    <div class="card">
+      <h3>Cold-start tax</h3>
+      <div class="big">50×</div>
+      <div class="sub">first query 89s vs 1.7s warm <span class="tag m">Measured</span></div>
+    </div>
+  </div>
+
+  <div style="margin:18px 0 2px">
+    <h3 style="font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">
+      One 7B agent brain · decode tok/s across the ladder</h3>
+    <div class="bars">
+      <div class="bar"><span class="lab">RTX 5090</span><div class="track"><div class="fill" style="width:100%"></div></div><span class="val">~220 t/s</span></div>
+      <div class="bar"><span class="lab">Jetson Thor</span><div class="track"><div class="fill" style="width:18.6%"></div></div><span class="val">40.9 t/s</span></div>
+      <div class="bar"><span class="lab">Jetson Orin</span><div class="track"><div class="fill" style="width:12.6%"></div></div><span class="val">27.8 t/s</span></div>
+    </div>
+    <div class="cap">7B v4 Q4_K_M · decode throughput falls with memory bandwidth <span class="tag m">Measured</span></div>
+  </div>
+
+  <ul class="clean takeaways" style="margin-top:20px">
+    <li><strong>Size for bandwidth, not TOPS.</strong> The big NPU earns its keep on <em>perception</em> (camera/CNN), not on the agent.</li>
+    <li><strong>The agent is cheap; orchestration isn't.</strong> On a real task the LLM is ~⅔ of the time; retrieval + orchestration (CPU/DDR) is ~⅓ — and cold-start is 50× warm.</li>
+    <li><strong>One bounded agent, not a swarm.</strong> Multi-agent collapses cache and throughput on constrained silicon.</li>
+  </ul>
+
+  <p class="bottomline">Bottom line for NXP: an agentic-edge SoC is sized by <b>memory bandwidth + CPU + a modest LLM accelerator</b>,
+    with the big NPU reserved for perception. Measured on a real agentic app across 5090 → Thor → Orin.</p>
+  <div class="legend">
+    <span><span class="tag m">Measured</span> ran it on-device</span>
+    <span><span class="tag d">Derived</span> computed from measurements</span>
+    <span><span class="tag s">Sourced</span> literature / vendor</span>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2 — two definitions ============ -->
+<section class="slide" id="s2">
+  <div class="eyebrow"><span>Definition</span><span class="rule"></span><span class="n">02 / 12</span></div>
+  <h2>Two things are called "agentic." Only one ships on-device.</h2>
+  <div class="grid g2" style="margin-top:8px">
+    <div class="card">
+      <h3>(a) Bounded skill-orchestrator <span class="tag m" style="color:var(--measured)">ships</span></h3>
+      <p style="margin-bottom:8px">Intent → plan → execute a <strong>fixed, pre-tested</strong> toolset → synthesize. <strong>No new code.</strong> Deterministic, safe, benchmarkable.</p>
+      <p class="foot" style="margin:0">= Skippy · Apple Intelligence · Gemini Nano · Snapdragon agentic</p>
+    </div>
+    <div class="card" style="border-style:dashed">
+      <h3 style="color:var(--derived)">(b) Autonomous code-gen agent</h3>
+      <p style="margin-bottom:8px">Writes and runs <strong>novel code</strong>, full system access. Powerful — but wants a frontier brain and ships unvalidated code.</p>
+      <p class="foot" style="margin:0">= OpenClaw · cloud agents · this fleet. Cloud / biggest-chip territory.</p>
+    </div>
+  </div>
+  <p style="margin-top:18px"><strong>What ships today is (a), unanimously</strong> <span class="tag s">Sourced</span>: Google's Gemini Nano exposes 4 fixed skills via per-task LoRA adapters; Apple's on-device ~3B model is explicitly "not a general chatbot" and uses constrained tool-calling that <em>cannot</em> hallucinate a tool name. <strong>No shipping product runs on-device code generation.</strong></p>
+  <p class="kicker">The edge product is the bounded orchestrator. The code-gen agent is the ceiling, and it lives in the cloud.</p>
+</section>
+
+<!-- ============ SLIDE 3 — Skippy ============ -->
+<section class="slide" id="s3">
+  <div class="eyebrow"><span>The reference agent</span><span class="rule"></span><span class="n">03 / 12</span></div>
+  <h2>A bounded edge agent, concretely: Skippy.</h2>
+  <p class="lead">A full agentic assistant we built and instrumented — the measurable stand-in for the shippable edge product.</p>
+  <div class="grid g2" style="margin-top:10px">
+    <div class="card"><h3>Fixed, tested skill registry</h3>
+      <p style="margin:0">RAG retrieval · transcription (ASR) · OCR · document generation · email draft · calendar · reminders. Each is validated code the agent <em>selects</em> — never rewrites.</p></div>
+    <div class="card"><h3>Multi-step orchestration loop</h3>
+      <p style="margin:0">Detect tool → execute → feed result back, up to 5 steps, then synthesize. The "intelligence" is in routing + synthesis — exactly the LLM workload we measure.</p></div>
+  </div>
+  <p style="margin-top:16px">Running on the RTX 5090 today; being ported down the ladder to Thor, Orin, and the i.MX95 class — so every number here is from a <strong>real app</strong>, not a projection.</p>
+</section>
+
+<!-- ============ SLIDE 4 — decode dominates ============ -->
+<section class="slide" id="s4">
+  <div class="eyebrow"><span>Why bandwidth · 1 of 2</span><span class="rule"></span><span class="n">04 / 12</span></div>
+  <h2>Agentic work is decode-dominated.</h2>
+  <p class="lead">An LLM runs in two phases. Agentic tasks live almost entirely in the second one.</p>
+  <table class="data">
+    <tr><th>Phase</th><th>What it is</th><th style="text-align:right">Share of LLM time</th><th>Bound by</th></tr>
+    <tr><td><strong>Prefill</strong></td><td>read the prompt, in parallel</td><td class="num">1.1%</td><td>compute / TOPS</td></tr>
+    <tr class="hi"><td><strong>Decode</strong></td><td>generate tokens, one at a time</td><td class="num">98.9%</td><td><strong>memory bandwidth</strong></td></tr>
+  </table>
+  <p>Decode is autoregressive and serial; the KV-cache is re-read every single token and grows with context. In real agentic traces, high cross-turn context reuse means little re-prefill — so decode consumes <strong>91–98.6%</strong> of LLM time <span class="tag s">Sourced</span>. We measured <strong>98.9%</strong> on our own stack <span class="tag m">Measured</span>.</p>
+  <p class="cap">decode_heavy, 7B v4 Q4 on 5090, n=3: decode 1731 ms vs prefill 20 ms.</p>
+</section>
+
+<!-- ============ SLIDE 5 — bandwidth-bound, NPU idle ============ -->
+<section class="slide" id="s5">
+  <div class="eyebrow"><span>Why bandwidth · 2 of 2 · the headline</span><span class="rule"></span><span class="n">05 / 12</span></div>
+  <h2>Decode is bandwidth-bound — so the NPU is idle.</h2>
+  <p class="lead">Decode just streams weights from memory. Throughput is set by how fast you can read them — not by TOPS. Across the ladder, the same 7B's decode rate tracks memory bandwidth:</p>
+  <div class="bars">
+    <div class="bar"><span class="lab">RTX 5090 · ~1.8 TB/s</span><div class="track"><div class="fill" style="width:100%"></div></div><span class="val">~220 t/s</span></div>
+    <div class="bar"><span class="lab">Jetson Thor</span><div class="track"><div class="fill" style="width:18.6%"></div></div><span class="val">40.9 t/s</span></div>
+    <div class="bar"><span class="lab">Jetson Orin · 205 GB/s</span><div class="track"><div class="fill" style="width:12.6%"></div></div><span class="val">27.8 t/s</span></div>
+  </div>
+  <p style="margin-top:14px"><strong>The 500-eTOPS NPU does nothing for decode.</strong> It accelerates convolution-shaped perception; autoregressive decode is a bandwidth problem the NPU can't touch. Spending die area on TOPS to make an agent faster is spending it in the wrong place.</p>
+  <p class="cap">5090 decode via llama-cpp telemetry; Thor/Orin via llama-bench, same 7B v4 Q4 <span class="tag m">Measured</span> · <span class="tag d">Derived</span> bandwidth-scaling law</p>
+</section>
+
+<!-- ============ SLIDE 6 — agent cheap, orchestration not ============ -->
+<section class="slide" id="s6">
+  <div class="eyebrow"><span>The second cost</span><span class="rule"></span><span class="n">06 / 12</span></div>
+  <h2>The agent is cheap. Orchestration and cold-start aren't.</h2>
+  <div class="grid g2" style="margin-top:6px">
+    <div class="card"><h3>Warm agentic task ≈ 2 s</h3>
+      <p style="margin:0">~65% LLM / <strong>~35% retrieval + orchestration</strong> (CPU + memory). The GPU/NPU sits near-idle for the retrieval third. The agent's cost isn't only the model.</p></div>
+    <div class="card" style="border-color:var(--warn)"><h3 style="color:var(--derived)">Cold-start ≈ 89 s</h3>
+      <p style="margin:0"><strong>50× the warm path.</strong> First query pays to load the embedding model + search index + vector DB. A device that sleeps and wakes pays this on every cold path.</p></div>
+  </div>
+  <p style="margin-top:16px">So the NPU is idle <em>twice over</em>: decode is bandwidth-bound, and the orchestration layer is CPU/memory-bound. <strong>Design implication:</strong> keep models resident, and size CPU + memory for the retrieval/orchestration layer, not just the accelerator. <span class="tag m">Measured</span></p>
+</section>
+
+<!-- ============ SLIDE 7 — the ladder ============ -->
+<section class="slide" id="s7">
+  <div class="eyebrow"><span>The hardware ladder</span><span class="rule"></span><span class="n">07 / 12</span></div>
+  <h2>One agent, measured from desktop to edge.</h2>
+  <div class="scroll">
+  <table class="data">
+    <tr><th>Board</th><th>Class</th><th style="text-align:right">Decode t/s</th><th style="text-align:right">Memory</th><th>Status</th></tr>
+    <tr class="hi"><td><strong>RTX 5090</strong></td><td>Blackwell desktop · source of truth</td><td class="num">~220</td><td class="num">32 GB</td><td><span class="tag m">Measured</span></td></tr>
+    <tr><td><strong>Jetson Thor</strong></td><td>Blackwell edge · sm_110</td><td class="num">40.9</td><td class="num">123 GB</td><td><span class="tag m">Measured</span></td></tr>
+    <tr><td><strong>Jetson Orin</strong></td><td>Ampere edge</td><td class="num">27.8</td><td class="num">64 GB</td><td><span class="tag m">Measured</span></td></tr>
+    <tr><td><strong>i.MX95 + ARA240</strong></td><td>NXP · Neutron NPU + Kinara M.2</td><td class="num">—</td><td class="num">—</td><td><span class="tag s">Sourced</span> runs a 7B</td></tr>
+  </table>
+  </div>
+  <p>Thor "just runs" wasn't free — its toolchain needed rebuilding for Blackwell <span class="tag m">Measured</span>. Its <strong>123 GB unified pool</strong> holds models the 5090's 32 GB can't. The i.MX95's Kinara ARA240 runs a 7B today; measuring that rung is next.</p>
+  <p class="cap">Per-task agentic cost on Thor/Orin is currently <span class="tag d">Derived</span> from the 5090 phase-mix × measured decode; full on-board runs are the next step.</p>
+</section>
+
+<!-- ============ SLIDE 8 — one agent not a swarm ============ -->
+<section class="slide" id="s8">
+  <div class="eyebrow"><span>Architecture</span><span class="rule"></span><span class="n">08 / 12</span></div>
+  <h2>One bounded agent — not a swarm.</h2>
+  <p class="lead">Running multiple cooperating agents is tempting, but it's expensive on constrained silicon.</p>
+  <div class="grid g2" style="margin-top:6px">
+    <div class="card"><h3>Prefix-cache hit rate</h3><div class="big">98% → 16–26%</div><div class="sub">collapses under concurrent agents <span class="tag s">Sourced</span></div></div>
+    <div class="card"><h3>Throughput under load</h3><div class="big">−66%</div><div class="sub">with concurrent agent contention <span class="tag s">Sourced</span></div></div>
+  </div>
+  <p style="margin-top:16px">Each extra agent is another LLM context — more memory, more bandwidth contention, more cache thrash. <strong>A single well-scoped agent is the edge answer;</strong> multi-agent is justified only when the mission genuinely needs parallel, independent context. (That's the cloud/fleet model — the ceiling, not the edge product.)</p>
+</section>
+
+<!-- ============ SLIDE 9 — 5 tasks ============ -->
+<section class="slide" id="s9">
+  <div class="eyebrow"><span>The benchmark set</span><span class="rule"></span><span class="n">09 / 12</span></div>
+  <h2>Five edge-agentic tasks, five resource signatures.</h2>
+  <div class="scroll">
+  <table class="data">
+    <tr><th>Task</th><th>Market</th><th>Skill mix</th><th>Dominant resource</th></tr>
+    <tr><td>Voice → find-in-camera-archive → notify</td><td>consumer</td><td>ASR + vision + RAG + LLM</td><td>NPU (vision) + decode</td></tr>
+    <tr><td>Meeting → transcribe → draft follow-ups</td><td>consumer</td><td>ASR + multi-step LLM</td><td>NPU (ASR) + decode</td></tr>
+    <tr><td>Field-service: photo + manual-RAG → diagnosis</td><td>industrial</td><td>vision + long-ctx RAG + LLM</td><td>memory bandwidth</td></tr>
+    <tr><td>Inbox triage → classify → draft replies</td><td>consumer</td><td>multi-step LLM</td><td>decode (serial)</td></tr>
+    <tr><td>Camera feed → detect → reason → alert</td><td>industrial / auto</td><td>continuous CNN + LLM-on-trigger</td><td>NPU sustained + decode burst</td></tr>
+  </table>
+  </div>
+  <p>The set is chosen so each exercises a <strong>different</strong> CPU / bandwidth / NPU balance — that spread is the point. Note where the NPU actually earns its area: the <em>perception</em> front-ends (vision, ASR), not the agent reasoning.</p>
+</section>
+
+<!-- ============ SLIDE 10 — benchmark gap ============ -->
+<section class="slide" id="s10">
+  <div class="eyebrow"><span>The whitespace</span><span class="rule"></span><span class="n">10 / 12</span></div>
+  <h2>Nobody measures this yet.</h2>
+  <p class="lead">Every existing agentic benchmark scores <strong>task success</strong> in an unconstrained environment. None measures <strong>on-device resource cost</strong>.</p>
+  <table class="data">
+    <tr><th>Benchmark</th><th>Measures</th><th>Resource cost?</th></tr>
+    <tr><td>AgentBench · τ-bench · WebArena · AndroidWorld</td><td>task success rate</td><td class="num">no</td></tr>
+    <tr><td>MLPerf edge/mobile</td><td>single-model latency</td><td class="num">partial</td></tr>
+    <tr class="hi"><td>An <strong>edge-agentic resource</strong> benchmark</td><td>CPU · bandwidth · NPU · energy per task</td><td class="num">— gap —</td></tr>
+  </table>
+  <p>A handful of 2025–26 papers are only now starting to profile memory/bandwidth/energy for agents <span class="tag s">Sourced</span>. <strong>This is whitespace NXP can own</strong> — a credible edge-agentic <em>resource</em> benchmark, grounded in real silicon.</p>
+</section>
+
+<!-- ============ SLIDE 11 — what it means for NXP ============ -->
+<section class="slide" id="s11">
+  <div class="eyebrow"><span>So what</span><span class="rule"></span><span class="n">11 / 12</span></div>
+  <h2>What this means for NXP silicon.</h2>
+  <div class="grid g3" style="margin-top:6px">
+    <div class="card"><h3>Consumer</h3><p style="margin:0">voice assistant, inbox. <strong>Bandwidth + CPU bound.</strong> Modest LLM accelerator; small NPU for wake-word/ASR.</p></div>
+    <div class="card"><h3>Industrial</h3><p style="margin:0">field-service, inspection. <strong>Vision NPU for perception + bandwidth</strong> for the RAG/reasoning agent.</p></div>
+    <div class="card"><h3>Automotive</h3><p style="margin:0">in-cabin + event reasoning. <strong>Sustained perception NPU + burst decode.</strong> Memory is the shared bottleneck.</p></div>
+  </div>
+  <p class="bottomline" style="margin-top:20px">The high-end part (16× A720, 500 eTOPS, 256-bit LPDDR5X) is sized correctly for <b>perception</b>.
+    For the <b>agent</b> riding on top, the levers that matter are <b>LPDDR5X bandwidth and CPU</b> — not more TOPS.</p>
+</section>
+
+<!-- ============ SLIDE 12 — method & honesty ============ -->
+<section class="slide" id="s12">
+  <div class="eyebrow"><span>Method &amp; honesty</span><span class="rule"></span><span class="n">12 / 12</span></div>
+  <h2>How we know — and what's still open.</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Every number is tagged</h3>
+      <ul class="clean" style="margin:6px 0 0">
+        <li><span class="tag m">Measured</span> ran on-device, 5090 real Skippy traces + Thor/Orin llama-bench</li>
+        <li><span class="tag d">Derived</span> computed from measurements, labelled</li>
+        <li><span class="tag s">Sourced</span> literature / vendor (106-source adversarial research)</li>
+      </ul>
+      <p class="foot" style="margin-top:10px">A derived or sourced number is never compared against a measured one in a headline.</p></div>
+    <div class="card"><h3>What's not done yet</h3>
+      <ul class="clean" style="margin:6px 0 0">
+        <li>Thor/Orin per-task agentic cost is <strong>derived</strong>; full on-board runs are next</li>
+        <li>i.MX95 rung is <strong>sourced</strong> feasibility — measuring it is the key next step</li>
+        <li>Answer <em>accuracy</em> is a separate axis from resource cost (not claimed here)</li>
+      </ul></div>
+  </div>
+  <p class="foot" style="margin-top:16px">Source of truth: eval/results/ladder/agentic/FINDINGS.md · harness: scripts/agentic_bench/trace.py · research: 106 agents, adversarially verified.</p>
+</section>
+
+</div>

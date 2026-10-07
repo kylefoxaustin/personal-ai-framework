@@ -1,0 +1,35 @@
+{
+  "task": "rag_multistep",
+  "ts": "2026-10-06T19:11:44",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 1.765,
+  "tokens_used": 4723,
+  "telemetry": {
+    "prompt_tokens": 4649,
+    "completion_tokens": 74,
+    "prefill_ms": 522.74,
+    "decode_ms": 360.86,
+    "total_ms": 1697.13,
+    "prefill_tok_per_s": 8893.5,
+    "decode_tok_per_s": 205.1,
+    "rag_docs_used": 4
+  },
+  "gpu_signature": {
+    "samples": 14,
+    "sm_pct": {
+      "mean": 37.6,
+      "peak": 98.0
+    },
+    "mem_pct": {
+      "mean": 13.9,
+      "peak": 39.0
+    },
+    "power_w": {
+      "mean": 238.1,
+      "peak": 458.0
+    },
+    "vram_mib_peak": 9710.0
+  },
+  "answer_preview": "The i.MX 95 does not have a dedicated NPU. It features an Arm Cortex-A55 core with a built-in Arm Mali GPU, but no specific NPU is mentioned in the provided dat"
+}

@@ -1,0 +1,35 @@
+{
+  "task": "decode_heavy",
+  "ts": "2026-10-06T19:11:56",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 1.814,
+  "tokens_used": 443,
+  "telemetry": {
+    "prompt_tokens": 103,
+    "completion_tokens": 340,
+    "prefill_ms": 19.76,
+    "decode_ms": 1537.67,
+    "total_ms": 1740.44,
+    "prefill_tok_per_s": 5211.7,
+    "decode_tok_per_s": 221.1,
+    "rag_docs_used": 0
+  },
+  "gpu_signature": {
+    "samples": 15,
+    "sm_pct": {
+      "mean": 34.3,
+      "peak": 95.0
+    },
+    "mem_pct": {
+      "mean": 21.7,
+      "peak": 65.0
+    },
+    "power_w": {
+      "mean": 293.6,
+      "peak": 494.92
+    },
+    "vram_mib_peak": 9710.0
+  },
+  "answer_preview": "The primary reason LLM decode is memory-bandwidth-bound while prefill is compute-bound is due to the nature of the operations involved and the underlying constr"
+}
