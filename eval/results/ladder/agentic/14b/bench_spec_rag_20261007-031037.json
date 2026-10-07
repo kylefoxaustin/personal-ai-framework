@@ -1,0 +1,24 @@
+{
+  "task": "spec_rag",
+  "ts": "2026-10-07T03:10:37",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 3.972,
+  "telemetry": {
+    "prefill_ms": 879.31,
+    "decode_ms": 1955.71,
+    "prefill_tok_per_s": 4795.8,
+    "decode_tok_per_s": 113.0,
+    "rag_docs_used": 4
+  },
+  "gpu": {
+    "samples": 24,
+    "sm_pct_mean": 90.0,
+    "mem_pct_mean": 61.7,
+    "power_w_mean": 424.7,
+    "sm_pct_peak": 97.0,
+    "vram_mib_peak": 18213.0
+  },
+  "extra": {},
+  "output": "Based on the excerpts from the NXP Semiconductors i.MX 95 Applications Processor Reference Manual, the i.MX 95 Neutron NPU (Neural Processing Unit) is an on-chip hardware accelerator designed to provide efficient processing of machine-learning workloads. It works alongside the chip's CPU to enhance performance and reduce power consumption for neural network (NN) inference. Here are its key features and capabilities:\n\n1. **MAC Compute Blocks**: The NPU manages Multiply-Accumulate (MAC) compute blocks, which are crucial for processing the heavy computational tasks involved in machine learning.\n\n2. **Weight Management**: The NPU optimizes the arrangement of weights, which is essential for efficient neural network operations.\n\n3. **Memory Management**: It manages memory accesses, ensuring that data is transferred efficiently between different parts of the system.\n\n4. **Rescaling and Activation**: The NPU provides rescaling, activation, and pooling functions. These are vital for adjusting and processing data as it passes through the neural network.\n\n5. **Support for Activation Functions**: The Ne"
+}

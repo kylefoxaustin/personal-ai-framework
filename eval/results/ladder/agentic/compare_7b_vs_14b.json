@@ -1,0 +1,91 @@
+{
+  "ts": "2026-10-07",
+  "board": "rtx5090",
+  "note": "base 7B vs base 14B, Q4_K_M, size-isolation",
+  "tasks": {
+    "spec_rag": {
+      "7b": {
+        "decode_tok_s": 220.5,
+        "vram_mib": 9055.0,
+        "wall_s": 2.264,
+        "out_head": "The i.MX 95 Neutron NPU is a hardware accelerator designed to efficiently process machine "
+      },
+      "14b": {
+        "decode_tok_s": 113.0,
+        "vram_mib": 18213.0,
+        "wall_s": 3.972,
+        "out_head": "Based on the excerpts from the NXP Semiconductors i.MX 95 Applications Processor Reference"
+      }
+    },
+    "doc_brief": {
+      "7b": {
+        "decode_tok_s": 179.7,
+        "vram_mib": 9213.0,
+        "wall_s": 5.608,
+        "out_head": ":\n\n**NXP i.MX 95 Product Brief**\n\n**Overview:**\nThe NXP i.MX 95 is a high-performance, mul"
+      },
+      "14b": {
+        "decode_tok_s": 99.5,
+        "vram_mib": 18353.0,
+        "wall_s": 8.562,
+        "out_head": "### Product Brief: NXP i.MX 95 Applications Processor\n\n**Overview:**\nThe NXP i.MX 95 is a "
+      }
+    },
+    "email": {
+      "7b": {
+        "decode_tok_s": 209.5,
+        "vram_mib": 9535.0,
+        "wall_s": 4.432,
+        "out_head": "Subject: Introducing the NXP i.MX 95 for Our New Edge-AI Product\n\nHi [Colleague's Name],\n\n"
+      },
+      "14b": {
+        "decode_tok_s": null,
+        "vram_mib": 18113.0,
+        "wall_s": 3.505,
+        "out_head": "I'd like to run `send_email(to='colleague@example.com', subject='Introducing the NXP i.MX "
+      }
+    },
+    "multi_tool_chain": {
+      "7b": {
+        "decode_tok_s": 204.1,
+        "vram_mib": 9069.0,
+        "wall_s": 5.115,
+        "out_head": ": Sure, let's break this down into steps:\n\n1. **Key Specs of the i.MX 95 from the Datashee"
+      },
+      "14b": {
+        "decode_tok_s": null,
+        "vram_mib": 18353.0,
+        "wall_s": 2.74,
+        "out_head": "I'd like to run `write_file(path='chain_notes.txt', content=[169 chars])`. Please approve "
+      }
+    },
+    "web_summarize": {
+      "7b": {
+        "decode_tok_s": 245.7,
+        "vram_mib": 9055.0,
+        "wall_s": 4.716,
+        "out_head": "The NXP i.MX 95 is an advanced applications processor designed for edge AI and IoT applica"
+      },
+      "14b": {
+        "decode_tok_s": 125.2,
+        "vram_mib": 18353.0,
+        "wall_s": 5.883,
+        "out_head": "It seems there was an issue with the provided search results, as the list is empty. Howeve"
+      }
+    },
+    "file_ops": {
+      "7b": {
+        "decode_tok_s": 244.0,
+        "vram_mib": 9055.0,
+        "wall_s": 0.804,
+        "out_head": "- i.MX 95 features six Cortex-A55 cores, an eIQ Neutron NPU with 2.0 TOPS of computational"
+      },
+      "14b": {
+        "decode_tok_s": 124.5,
+        "vram_mib": 18353.0,
+        "wall_s": 1.566,
+        "out_head": "- Skippy\nSure, here's a concise summary of the notes in three bullet points:\n\n- The i.MX 9"
+      }
+    }
+  }
+}

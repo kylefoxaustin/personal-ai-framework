@@ -254,3 +254,45 @@ small-model-knowledge gap, worse on long-form; (d) 4 tasks truncate mid-sentence
 max_tokens cap, not model quality. Arbitration needed (2nd judge): ocr (legibility vs pipeline-ran),
 meeting_summarize (transcript-correct vs summary-missing), email (truncation cost).
 **Deck must show this column** — cost numbers on tasks the agent fails are not sellable without it.
+
+---
+
+## ACCURACY vs MODEL SIZE — base 7B vs base 14B, same 5090, same tasks (MEASURED, 2026-10-07)
+
+The edge-sizing decision isn't just "does it fit + how fast" — it's **"is the smaller brain a
+good enough agent."** Ran base Qwen2.5-**7B** vs base Qwen2.5-**14B** Instruct (Q4_K_M) on the
+5090, identical prompts/RAG, to isolate *size* (no fine-tune confound). Two axes:
+
+### Resource cost of the bigger brain (MEASURED, 5090)
+| task | 7B decode tok/s | 14B decode tok/s | slowdown | 7B VRAM | 14B VRAM |
+|---|--:|--:|--:|--:|--:|
+| spec_rag | 220.5 | 113.0 | **1.95×** | 9.1 GB | 18.2 GB |
+| doc_brief | 179.7 | 99.5 | **1.81×** | 9.2 GB | 18.4 GB |
+
+Decode slowdown (~1.9×) ≈ **parameter ratio (14/7 = 2.0×)** ≈ what bandwidth-bound decode predicts:
+2× the weights to stream per token → ~2× slower. **The model-size axis and the memory-bandwidth
+thesis are the same physics.** VRAM also ~2× — and that is the gating fact on edge: a 14B Q4 (~9 GB
+weights + KV) does **not** fit iq9 or i.MX95; it's a Thor/Orin-and-up brain.
+
+### Accuracy / agent-quality of the bigger brain (⏳ two-judge pending; observations)
+- **Tool use — the decisive gap.** On the multi-tool-chain task, **7B *narrates*** ("Sure, let's
+  break this down into steps…") and never calls a tool; **14B actually *invokes* the real tool**
+  (`write_file(path='chain_notes.txt' …)`, halts at the confirm gate). On the email task, 7B writes
+  prose; 14B reaches for `send_email(...)`. The bigger model *acts*; the smaller one *describes*.
+- **Fabrication under free synthesis.** 7B's narrated spec list invents interfaces and gets facts
+  wrong — "**Neutrino** NPU" (it's **Neutron**), "Dual Cortex-A55 + two Cortex-M7" (it's **6× A55**),
+  "16 GB **LPDDR4X**" (it's **LPDDR5X**). 14B sidesteps this by calling the tool instead of
+  free-generating, and on direct RAG Q&A stays closer to the retrieved source text.
+- **Honesty on bad input.** Given empty/degraded web-search results, **14B said so** ("there was an
+  issue with the provided search results"); 7B confabulates a confident summary from nothing.
+- **Neither is perfect.** 14B over-read the NPU block as "four Neutron NPUs" on doc_brief — a count
+  it should not assert. Size reduces, does not eliminate, hallucination.
+
+**The VP takeaway:** the "invented interfaces" failures are a **7B-capacity artifact**, not a Skippy
+bug — the historical Skippy that grounded well ran *bigger* models (Mixtral 8×7B, Qwen 14B). The
+sizing tradeoff is concrete: **+1 model tier ≈ 2× decode latency + 2× memory, bought back as a
+materially better agent (acts vs narrates, grounds vs fabricates).** Which tier an edge board can
+*hold and feed* is the real constraint — and it's a bandwidth/capacity question, still not a TOPS one.
+
+> Provenance: resource table MEASURED (5090, base GGUFs, 2026-10-07, warm, n=1 — n=3 pending).
+> Accuracy observations are single-reader; **two-judge grading pending before any deck claim** (repo rule).

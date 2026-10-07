@@ -1,0 +1,24 @@
+{
+  "task": "doc_brief",
+  "ts": "2026-10-07T03:10:46",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 8.562,
+  "telemetry": {
+    "prefill_ms": 2056.85,
+    "decode_ms": 4903.36,
+    "prefill_tok_per_s": 3814.6,
+    "decode_tok_per_s": 99.5,
+    "rag_docs_used": 8
+  },
+  "gpu": {
+    "samples": 47,
+    "sm_pct_mean": 86.8,
+    "mem_pct_mean": 60.3,
+    "power_w_mean": 498.8,
+    "sm_pct_peak": 99.0,
+    "vram_mib_peak": 18353.0
+  },
+  "extra": {},
+  "output": "### Product Brief: NXP i.MX 95 Applications Processor\n\n**Overview:**\nThe NXP i.MX 95 is a high-performance application processor designed for industrial and IoT applications. It combines advanced machine learning capabilities with robust connectivity options, making it ideal for edge computing and intelligent systems.\n\n**Key Features:**\n\n- **NPU (Neural Processing Unit):**\n  - **Performance:** Capable of up to 2.0 TOP/s (tera operations per second)\n  - **Architecture:** Equipped with four eIQ\u00ae Neutron N3-1024S NPUs, each capable of 1.0 GHz operation and 2 OPS/MAC\n  - **Functional Safety:** Includes local self-test control unit (LSTCU) and error injection module (EIM) for enhanced reliability\n  - **Supported Workloads:** Convolutional neural networks (CNN), recurrent neural networks (RNN), and a variety of other machine learning tasks\n\n- **Memory and Connectivity:**\n  - **Memory:**\n    - **Local SRAM:** 1 MB of local SRAM for efficient data handling\n    - **DDR Interface:** Supports DDR4 and LPDDR4 memory interfaces for high bandwidth and low latency\n  - **Connectivity:**\n    - **Ethernet:** Multiple Ethernet interfaces supporting various protocols (e.g., RMII, RGMII)\n    - **PCIe:** Integrated PCIe Root Complex (iEP-RC) with support for multiple ECAM buses and Root Complex Event Collectors (RCEC)\n    - **Wireless:** Optional support for Wi-Fi, Bluetooth, and other wireless standards\n\n- **Target Markets:**\n  - **Industrial Automation:** Real-time control, data acquisition, and intelligent analytics in manufacturing and automation\n  - **IoT Edge Devices:** Smart sensors, gate"
+}
