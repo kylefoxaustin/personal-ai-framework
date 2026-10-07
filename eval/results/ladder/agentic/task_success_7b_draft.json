@@ -1,0 +1,56 @@
+{
+  "ts": "2026-10-07",
+  "model": "qwen2.5-7b-instruct-q4_k_m (base)",
+  "board": "rtx5090",
+  "judge": "SINGLE-JUDGE DRAFT (Opus, in-context) \u2014 FORMAL two-judge (Sonnet+GPT-4o) PENDING API KEYS; required before deck ship",
+  "ground_truth": "i.MX95: 6xA55, M33+M7, Neutron NPU 2.0 TOPS (1024 MAC@1GHz x2), Mali, ISP, LPDDR5X, PCIe Gen3, GbE-TSN",
+  "grades": {
+    "email": [
+      "PASS",
+      "coherent email; six A55/M33+M7/Energy Flex/Neutron correct"
+    ],
+    "spec_rag": [
+      "PASS",
+      "2.0 TOP/s,1024 MACs@1GHz,2 OPS/MAC exact; NN support listed"
+    ],
+    "file_ops": [
+      "PASS",
+      "read->summarize->write chain ok; specs correct"
+    ],
+    "transcribe": [
+      "PASS",
+      "transcript correct"
+    ],
+    "ocr": [
+      "PASS",
+      "clean datasheet OCR (was FAIL pre-image-swap)"
+    ],
+    "run_script": [
+      "PASS",
+      "2.0 TOPS computed; 6xA55/LPDDR5X/Gen3 correct"
+    ],
+    "doc_brief": [
+      "PASS",
+      "coherent brief; Neutron N3-1024S correct; no 256-MAC error this run"
+    ],
+    "web_summarize": [
+      "PARTIAL",
+      "coherent but generic; no i.MX95-specific facts (weak web results)"
+    ],
+    "meeting_summarize": [
+      "PARTIAL",
+      "correct summary but fabricated action-items+names (John/Sarah) from non-meeting clip"
+    ],
+    "multi_tool_chain": [
+      "FAIL",
+      "narrates vs invokes tools; fabricates Neutrino NPU/dual A55+2xM7/LPDDR4X"
+    ]
+  },
+  "tally": {
+    "PASS": 7,
+    "PARTIAL": 2,
+    "FAIL": 1,
+    "prior_prefix": "5 PASS"
+  },
+  "size_note": "14B base FIXES the FAIL (multi_tool_chain: 14B invokes write_file). more model -> more tasks pass."
+}
