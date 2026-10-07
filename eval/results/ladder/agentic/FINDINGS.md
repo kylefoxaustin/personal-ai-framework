@@ -196,3 +196,14 @@ under-triggers tools. Report the orchestration profile with that caveat, or forc
 
 **Takeaway for the deliverable:** canonical benchmark numbers = base model (reproducible + coherent);
 note the fine-tune is production Skippy and is the better *tool-caller* for the orchestration task.
+
+## MEASURED — canonical all-10 sweep on BASE model (5090, 2026-10-07, ASR fixed)
+After the transcribe subprocess fix, ALL 10 tasks run cleanly on the public base
+Qwen2.5-7B-Instruct Q4 — the definitive reproducible dataset. Representative wall/decode:
+email 3.6s (dc 1916) · web_summarize 1.3s (network, sm 8%) · spec_rag 2.3s (dc 1023) ·
+file_ops 0.8s · transcribe 1.9s (ASR, CPU subprocess, sm 3%) · ocr 0.6s (CPU, sm 2.6%) ·
+meeting_summarize 1.9s · run_script 0.05s · multi_tool_chain 4.2s (base narrates) ·
+doc_brief 5.5s (prefill-heavy, pf 1442, dc 2815). All coherent (base avoids the fine-tune
+artifacts). Perception tasks (transcribe/ocr) run with the GPU at 2-3% — pure CPU, the
+"accelerator is idle for the agent; it earns its keep on perception" point, measured.
+Raw per-task JSONs: eval/results/ladder/agentic/bench_*.json.
