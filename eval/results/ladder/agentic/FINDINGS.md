@@ -226,3 +226,31 @@ doc_brief 5.5s (prefill-heavy, pf 1442, dc 2815). All coherent (base avoids the 
 artifacts). Perception tasks (transcribe/ocr) run with the GPU at 2-3% — pure CPU, the
 "accelerator is idle for the agent; it earns its keep on perception" point, measured.
 Raw per-task JSONs: eval/results/ladder/agentic/bench_*.json.
+
+## MEASURED — task-success / accuracy (base model, 2026-10-07) — ⚠ SINGLE-JUDGE DRAFT
+Addresses the #1 VP objection ("fast — but RIGHT?"). A fable judge graded the canonical base-model
+outputs for coherence + task-completion + factual correctness vs the i.MX 95 datasheet.
+**⚠ single-judge — needs the second judge (Sonnet/GPT-4o) to confirm per Fleet Law before it ships.**
+
+| task | success | note |
+|---|---|---|
+| email | PASS | coherent, facts correct (truncated mid-sign-off — token cap) |
+| spec_rag | PASS | 2.0 TOP/s, 1024 MACs, 2 OPS/MAC all correct |
+| file_ops | PASS | chained read→summarize→write (write_result confirms); minor LPDDR label nit |
+| transcribe | PASS | transcript exact ("Thunderstorms could produce large hail...") |
+| run_script | PASS | correct compute (2.0 TOPS), rc=0 |
+| web_summarize | PARTIAL | coherent but content-free ("details not in snippets") — didn't summarize the subject |
+| meeting_summarize | PARTIAL | transcript correct but **summary=null — the summarize step never ran** (real bug) |
+| doc_brief | PARTIAL | well-structured but **"256 MACs" (should be 1024)** + invented "PCIe x12 / 2×10GbE" |
+| ocr | FAIL | tesseract returned ~90% gibberish from the UI screenshot (low-contrast source) |
+| multi_tool_chain | FAIL | base narrated instead of invoking tools; + TRDC/VFCCU expansions wrong, "1 A55" vs 6 |
+
+**5/10 PASS → the honest metric is cost-per-SUCCESSFUL-task, not cost-per-task.** Most failures are
+FIXABLE deployment issues, not fundamental: (a) OCR demo image is a low-contrast UI screenshot — swap
+for a datasheet page; (b) **meeting_summarize summary=null is a real bug** — the summarize=true path
+returns the transcript without invoking the summarizer; (c) **doc_brief/multi_tool_chain hallucinate
+specifics** (256 vs 1024 MACs, invented interfaces, wrong acronym expansions) — the over-grounding /
+small-model-knowledge gap, worse on long-form; (d) 4 tasks truncate mid-sentence — a harness
+max_tokens cap, not model quality. Arbitration needed (2nd judge): ocr (legibility vs pipeline-ran),
+meeting_summarize (transcript-correct vs summary-missing), email (truncation cost).
+**Deck must show this column** — cost numbers on tasks the agent fails are not sellable without it.
