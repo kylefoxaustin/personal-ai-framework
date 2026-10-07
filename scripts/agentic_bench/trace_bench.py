@@ -14,7 +14,7 @@ import requests
 
 BASE = "http://localhost:8080"; USER, PASSWORD = "kyle", "123456"
 REPO = "/home/kyle/Documents/GitHub/personal-ai-framework"
-OUT = os.path.join(REPO, "eval/results/ladder/agentic")
+OUT = os.environ.get("AGENTIC_OUT") or os.path.join(REPO, "eval/results/ladder/agentic")
 AUDIO = os.path.join(REPO, "knowledge/recordings/resources_sample1.wav")
 IMAGE = None  # picked at runtime (newest screenshot)
 
@@ -44,6 +44,7 @@ def sampler_summ(path):
 
 # ---- task runners (return dict: text, telemetry, extra) ----
 H = {}
+MODEL = "?"
 def gen(prompt, rag=False, rag_k=3, mt=256, skip_loop=False):
     body = {"prompt": prompt, "use_rag": rag, "rag_k": rag_k, "max_tokens": mt,
             "include_telemetry": True, "skip_agent_loop": skip_loop}
@@ -124,6 +125,9 @@ def main():
     imgs = ds or sorted(glob.glob(os.path.join(REPO, "knowledge/images/*.png")), key=os.path.getsize, reverse=True)
     IMAGE = imgs[0] if imgs else None
     H = {"Authorization": f"Bearer {tok()}"}
+    global MODEL
+    try: MODEL = requests.get(f"{BASE}/health", timeout=10).json().get("model") or "?"
+    except Exception: MODEL = "?"
     which = sys.argv[1:] or list(TASKS)
     os.makedirs(OUT, exist_ok=True)
     for name in which:
@@ -137,7 +141,7 @@ def main():
         wall = time.time() - t0
         time.sleep(0.3); samp.terminate(); f.close()
         te = r.get("telemetry", {})
-        rec = {"task": name, "ts": datetime.now().isoformat(timespec="seconds"), "board": "rtx5090",
+        rec = {"task": name, "ts": datetime.now().isoformat(timespec="seconds"), "board": "rtx5090", "model": MODEL,
                "wall_s": round(wall, 3),
                "telemetry": {k: te.get(k) for k in ("prefill_ms","decode_ms","prefill_tok_per_s","decode_tok_per_s","rag_docs_used") if k in te},
                "gpu": sampler_summ(tp), "extra": r.get("extra", {}), "output": (r.get("text") or "")[:1600]}

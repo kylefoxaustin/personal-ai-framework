@@ -113,3 +113,9 @@ it closes the resource-profile story. Assets: GR00T runs on qualcomm (VLA), flee
 **splat-vla's real 24/7 skunk detector on a Ubiquiti camera** — CHECK with splat-vla whether that
 detector is an actual VLA workload or a CNN detector + NL command front-end (that is the a/b frame
 applied to vision; it decides whether it's "agentic" or "today's tech"). Scope after the Friday deck.
+
+Follow-ups (Kyle, same day): if the skunk detector IS a VLA, use its **actual camera captures** as
+the benchmark demo (real workload, real pictures). If it's NOT, the fun path is to get splat-vla
+onto a real VLA model **small enough to run on an iq9** — which folds directly into our iq9 rung
+(a genuine on-edge VLA datapoint, not just LLM decode). "cat in my yard → find it → show the picture"
+becomes a live, reproducible edge-VLA task.

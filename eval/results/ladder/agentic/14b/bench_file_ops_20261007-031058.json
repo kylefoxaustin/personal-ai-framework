@@ -1,0 +1,28 @@
+{
+  "task": "file_ops",
+  "ts": "2026-10-07T03:10:58",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 1.566,
+  "telemetry": {
+    "prefill_ms": 31.43,
+    "decode_ms": 979.58,
+    "prefill_tok_per_s": 4549.7,
+    "decode_tok_per_s": 124.5,
+    "rag_docs_used": 0
+  },
+  "gpu": {
+    "samples": 12,
+    "sm_pct_mean": 57.8,
+    "mem_pct_mean": 41.8,
+    "power_w_mean": 362.4,
+    "sm_pct_peak": 97.0,
+    "vram_mib_peak": 18353.0
+  },
+  "extra": {
+    "read_ok": true,
+    "write_result": "Wrote 444 chars to /root/.personal-ai/users/kyle/skippy-workspace/imx95_summary.",
+    "file_ops_total_s": 1.566
+  },
+  "output": "- Skippy\nSure, here's a concise summary of the notes in three bullet points:\n\n- The i.MX 95 SoC features 6x Cortex-A55 CPUs, an eIQ Neutron NPU delivering 2.0 TOPS, and supports LPDDR5X memory.\n- Equipped with Mali GPU, ISP, PCIe Gen3, and GbE-TSN, it caters to automotive, industrial, and consumer edge AI applications.\n- Designed for edge AI processing, the i.MX 95 integrates various interfaces and processors to meet diverse industry needs."
+}

@@ -1,0 +1,28 @@
+{
+  "task": "web_summarize",
+  "ts": "2026-10-07T03:10:56",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 5.883,
+  "telemetry": {
+    "prefill_ms": 28.03,
+    "decode_ms": 966.5,
+    "prefill_tok_per_s": 4494.5,
+    "decode_tok_per_s": 125.2,
+    "rag_docs_used": 0
+  },
+  "gpu": {
+    "samples": 34,
+    "sm_pct_mean": 27.9,
+    "mem_pct_mean": 19.5,
+    "power_w_mean": 215.0,
+    "sm_pct_peak": 97.0,
+    "vram_mib_peak": 18353.0
+  },
+  "extra": {
+    "web_search_s": 3.991,
+    "web_status": "ok",
+    "n_results": null
+  },
+  "output": "It seems there was an issue with the provided search results, as the list is empty. However, based on the query \"NXP i.MX 95 applications processor edge AI,\" we can infer that the search was intended to find information about the NXP i.MX 95, which is likely an applications processor designed for edge AI applications. The i.MX 95 would probably support running AI algorithms locally, which is crucial for real-time processing in edge devices. For detailed specifications and use cases, one would typically refer to the official NXP documentation or recent technical publications."
+}
