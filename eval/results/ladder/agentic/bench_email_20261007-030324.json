@@ -1,0 +1,23 @@
+{
+  "task": "email",
+  "ts": "2026-10-07T03:03:24",
+  "board": "rtx5090",
+  "wall_s": 4.432,
+  "telemetry": {
+    "prefill_ms": 467.02,
+    "decode_ms": 2749.03,
+    "prefill_tok_per_s": 9282.4,
+    "decode_tok_per_s": 209.5,
+    "rag_docs_used": 4
+  },
+  "gpu": {
+    "samples": 27,
+    "sm_pct_mean": 53.0,
+    "mem_pct_mean": 36.1,
+    "power_w_mean": 349.5,
+    "sm_pct_peak": 93.0,
+    "vram_mib_peak": 9535.0
+  },
+  "extra": {},
+  "output": "Subject: Introducing the NXP i.MX 95 for Our New Edge-AI Product\n\nHi [Colleague's Name],\n\nI hope this email finds you well! I\u2019m excited to share some details about the NXP i.MX 95 with you. This processor is a game-changer for our new edge-AI product, and I think it aligns perfectly with our goals.\n\n### About the NXP i.MX 95\n\nThe i.MX 95 is a powerful applications processor from NXP, designed for edge computing. It features up to six Arm Cortex-A55 cores, optimized for efficient CPU performance, and integrates the first Arm Cortex-M33 and Cortex-M7 cores in the i.MX series. The chip supports functional safety and includes NXP\u2019s innovative Energy Flex architecture, making it ideal for a wide range of industrial, IoT, and automotive applications.\n\n### Neutron NPU\n\nOne of the standout features of the i.MX 95 is the Neutron NPU, which stands out for its machine learning acceleration capabilities. According to the datasheet, the Neutron NPU provides an efficient processing platform for machine-learning workloads. Here are some key points:\n\n- **Performance**: The Neutron NPU can handle 256 MACs/cycle, which is a significant improvement for neural network inference.\n- **Architecture**: It includes components like the Activation Engine, Buffers, and Control, which are designed to manage various aspects of neural network computations, such as rescaling, activation, and pooling.\n- **Integration**: The Neutron NPU works in conjunction with the chip\u2019s CPU to deliver higher performance and lower power consumption for neural network inference.\n\n### Why It Suits Edge Inference\n\nThe i.MX 9"
+}

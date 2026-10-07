@@ -1,0 +1,19 @@
+{
+  "task": "transcribe",
+  "ts": "2026-10-07T03:03:49",
+  "board": "rtx5090",
+  "wall_s": 14.129,
+  "telemetry": {},
+  "gpu": {
+    "samples": 75,
+    "sm_pct_mean": 2.8,
+    "mem_pct_mean": 0.0,
+    "power_w_mean": 89.9,
+    "sm_pct_peak": 4.0,
+    "vram_mib_peak": 9055.0
+  },
+  "extra": {
+    "engine": "whisper-base"
+  },
+  "output": "Thunderstorms could produce large hail, isolated tornadoes and heavy rain."
+}

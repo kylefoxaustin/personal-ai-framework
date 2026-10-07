@@ -1,0 +1,19 @@
+{
+  "task": "meeting_summarize",
+  "ts": "2026-10-07T03:03:54",
+  "board": "rtx5090",
+  "wall_s": 2.167,
+  "telemetry": {},
+  "gpu": {
+    "samples": 15,
+    "sm_pct_mean": 9.0,
+    "mem_pct_mean": 4.5,
+    "power_w_mean": 83.4,
+    "sm_pct_peak": 94.0,
+    "vram_mib_peak": 9055.0
+  },
+  "extra": {
+    "engine": "whisper->llm"
+  },
+  "output": "{\"summary\": \"The meeting discussed potential severe weather conditions including thunderstorms, large hail, isolated tornadoes, and heavy rain.\", \"key_points\": [\"Thunderstorms expected\", \"Large hail possible\", \"Isolated tornadoes likely\", \"Heavy rain anticipated\"], \"action_items\": [\"Monitor weather updates - John\", \"Prepare emergency supplies - Sarah\"], \"decisions\": [\"No decisions made\"]}"
+}

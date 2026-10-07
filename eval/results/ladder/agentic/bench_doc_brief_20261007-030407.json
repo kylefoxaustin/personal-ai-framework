@@ -1,0 +1,23 @@
+{
+  "task": "doc_brief",
+  "ts": "2026-10-07T03:04:07",
+  "board": "rtx5090",
+  "wall_s": 5.608,
+  "telemetry": {
+    "prefill_ms": 1439.54,
+    "decode_ms": 3166.23,
+    "prefill_tok_per_s": 7109.9,
+    "decode_tok_per_s": 179.7,
+    "rag_docs_used": 8
+  },
+  "gpu": {
+    "samples": 32,
+    "sm_pct_mean": 66.6,
+    "mem_pct_mean": 42.7,
+    "power_w_mean": 436.5,
+    "sm_pct_peak": 99.0,
+    "vram_mib_peak": 9213.0
+  },
+  "extra": {},
+  "output": ":\n\n**NXP i.MX 95 Product Brief**\n\n**Overview:**\nThe NXP i.MX 95 is a high-performance, multi-core system-on-chip (SoC) designed for a wide range of industrial, automotive, and consumer applications. It is part of the i.MX family, known for its robust performance, advanced security features, and integration of various peripheral interfaces. The i.MX 95 features a Cortex-A55 CPU, Cortex-M33 CPU, and a dedicated NPU (Neutron N3-1024S) for efficient machine learning inference. It supports advanced communication protocols such as PCIe, USB, and Ethernet, and includes a rich set of connectivity options including MIPI-CSI, MIPI-DSI, and multiple high-speed interfaces.\n\n**NPU (Neutron N3-1024S):**\nThe i.MX 95\u2019s NPU is a hardware accelerator designed for neural network inference. It supports a wide range of operations including convolutional, recurrent, and activation functions, enabling efficient processing of machine learning workloads. The NPU can achieve up to 2.0 TOP/s performance with 1024 MACs operating at 1.0 GHz, making it suitable for applications requiring high computational power. It also includes error injection and self-test capabilities to enhance system reliability.\n\n**Memory and Connectivity:**\n- **Memory:** The i.MX 95 supports LPDDR5/LPDDR4X memory, with 32-bit wide memory interfaces. It offers 1492kB of OCRAM and a 512kB TCM, providing efficient memory management and data caching.\n- **Connectivity:** The i.MX 95 includes a variety of high-speed interfaces such as 2x1 GbE (with TSN), 2x PCIe Gen 3.0 x12, 10 GbE (with TSN), and USB 3.0/2.0. It also supports advance"
+}

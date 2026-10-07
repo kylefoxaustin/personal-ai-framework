@@ -51,10 +51,10 @@ def gen(prompt, rag=False, rag_k=3, mt=256, skip_loop=False):
     return {"text": d.get("text", ""), "telemetry": d.get("telemetry") or {},
             "rag_docs": (d.get("telemetry") or {}).get("rag_docs_used")}
 
-def run_email():  return gen("Write a clear, friendly email to a colleague introducing the NXP i.MX 95 for a new edge-AI product. Cover what it is, its Neutron NPU, and why it suits edge inference. Ground the specifics in the datasheets.", rag=True, rag_k=4, mt=400)
+def run_email():  return gen("Write a clear, friendly email to a colleague introducing the NXP i.MX 95 for a new edge-AI product. Cover what it is, its Neutron NPU, and why it suits edge inference. Ground the specifics in the datasheets.", rag=True, rag_k=4, mt=600)
 def run_spec_rag(): return gen("Using the datasheets, what does the i.MX 95 Neutron NPU do, and what are its key features?", rag=True, rag_k=4, mt=220)
 def run_short_chat(): return gen("In two or three sentences, what is the NXP i.MX 95?", rag=True, rag_k=3, mt=90)
-def run_doc_brief(): return gen("Using the datasheets, generate a concise one-page product brief for the NXP i.MX 95: overview, NPU, memory/connectivity, and target markets.", rag=True, rag_k=8, mt=500)
+def run_doc_brief(): return gen("Using the datasheets, generate a concise one-page product brief for the NXP i.MX 95: overview, NPU, memory/connectivity, and target markets.", rag=True, rag_k=8, mt=768)
 
 def run_web_summarize():
     t0 = time.time()
@@ -95,7 +95,7 @@ def _upload(path, endpoint, extra_data=None):
     return r.json()
 def run_transcribe():
     d = _upload(AUDIO, "/upload/transcribe", {"title": "Sample", "summarize": "false"})
-    txt = d.get("transcript") or d.get("text") or json.dumps(d)[:600]
+    txt = d.get("full_transcript") or d.get("transcript_preview") or d.get("text") or json.dumps(d)[:600]
     return {"text": txt[:1600], "telemetry": {}, "extra": {"engine": "whisper-base"}}
 def run_meeting_summarize():
     d = _upload(AUDIO, "/upload/transcribe", {"title": "Sample", "summarize": "true"})
@@ -103,12 +103,12 @@ def run_meeting_summarize():
     return {"text": (summ if isinstance(summ,str) else json.dumps(summ))[:1600], "telemetry": {}, "extra": {"engine": "whisper->llm"}}
 def run_ocr():
     d = _upload(IMAGE, "/upload/ocr", {})
-    txt = d.get("text") or d.get("extracted_text") or json.dumps(d)[:600]
+    txt = d.get("extracted_text") or d.get("full_text") or d.get("text_preview") or d.get("text") or json.dumps(d)[:600]
     return {"text": txt[:1600], "telemetry": {}, "extra": {"engine": "tesseract", "image": os.path.basename(IMAGE)}}
 def run_multi_tool_chain():
     return gen("Do these steps: (1) note the key specs of the i.MX 95 from the datasheets, "
                "(2) write them to a file called chain_notes.txt, (3) draft a short email to a "
-               "colleague summarizing them.", rag=True, rag_k=4, mt=400)
+               "colleague summarizing them.", rag=True, rag_k=4, mt=600)
 
 TASKS = {
     "email": run_email, "web_summarize": run_web_summarize, "spec_rag": run_spec_rag,
@@ -120,7 +120,8 @@ TASKS = {
 def main():
     global H, IMAGE
     import glob
-    imgs = sorted(glob.glob(os.path.join(REPO, "knowledge/images/*.png")), key=os.path.getsize, reverse=True)
+    ds = sorted(glob.glob(os.path.join(REPO, "knowledge/images/ocr_imx_datasheet*.png")))
+    imgs = ds or sorted(glob.glob(os.path.join(REPO, "knowledge/images/*.png")), key=os.path.getsize, reverse=True)
     IMAGE = imgs[0] if imgs else None
     H = {"Authorization": f"Bearer {tok()}"}
     which = sys.argv[1:] or list(TASKS)
