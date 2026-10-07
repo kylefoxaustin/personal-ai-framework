@@ -1,0 +1,35 @@
+{
+  "task": "compare",
+  "ts": "2026-10-06T22:15:07",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 2.16,
+  "tokens_used": 8213,
+  "telemetry": {
+    "prompt_tokens": 8174,
+    "completion_tokens": 39,
+    "prefill_ms": 1008.32,
+    "decode_ms": 187.84,
+    "total_ms": 2095.15,
+    "prefill_tok_per_s": 8106.6,
+    "decode_tok_per_s": 207.6,
+    "rag_docs_used": 5
+  },
+  "gpu_signature": {
+    "samples": 16,
+    "sm_pct": {
+      "mean": 25.9,
+      "peak": 99.0
+    },
+    "mem_pct": {
+      "mean": 16.2,
+      "peak": 65.0
+    },
+    "power_w": {
+      "mean": 268.2,
+      "peak": 587.9
+    },
+    "vram_mib_peak": 9125.0
+  },
+  "answer_preview": "I can't find information about the NXP i.MX 93 and i.MX 95 in the provided datasheets. The excerpts don't mention these specific processors."
+}

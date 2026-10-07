@@ -1,0 +1,23 @@
+{
+  "task": "spec_rag",
+  "ts": "2026-10-06T22:40:01",
+  "board": "rtx5090",
+  "wall_s": 2.518,
+  "telemetry": {
+    "prefill_ms": 474.27,
+    "decode_ms": 1071.92,
+    "prefill_tok_per_s": 9072.9,
+    "decode_tok_per_s": 206.2,
+    "rag_docs_used": 4
+  },
+  "gpu": {
+    "samples": 17,
+    "sm_pct_mean": 69.1,
+    "mem_pct_mean": 39.2,
+    "power_w_mean": 320.8,
+    "sm_pct_peak": 98.0,
+    "vram_mib_peak": 9721.0
+  },
+  "extra": {},
+  "output": "The i.MX 95 Neutron NPU is a hardware accelerator designed to efficiently process machine-learning workloads, working in conjunction with the chip's CPU to deliver higher performance and lower power consumption for neural network (NN) inference. Here are its key features:\n\n1. **Architecture**: The NPU complex contains a processor core, SRAM, neural-network acceleration hardware, and supporting infrastructure.\n2. **Performance**: Capable of 2.0 TOP/s performance with up to 2 OPS/MAC.\n3. **Memory**: Includes 1 MB local SRAM.\n4. **Activation Functions**: Supports various activation functions including ReLu, PreLu, LeakyReLu, and more.\n5. **Sampling and Reshaping**: Provides functions for resizing and reshaping data.\n6. **Element-wise Operations**: Supports basic element-wise operations.\n7. **Layer Operations**: Can manage convolutional neural networks (CNN), including Atrous Separable Convolution networks and Depthwise Separable Convolutional networks.\n8. **Pooling Functions**: Supports pooling operations.\n9."
+}

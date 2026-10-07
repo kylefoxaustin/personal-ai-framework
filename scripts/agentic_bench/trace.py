@@ -23,29 +23,35 @@ from datetime import datetime
 BASE = "http://localhost:8080"
 USER, PASSWORD = "kyle", "123456"
 
+# In-domain tasks: things Skippy is actually FOR (embedded/i.MX domain + its voice, grounded on
+# the 31.9K-chunk datasheet KB). Coherent output AND a real resource-profile spread.
 TASKS = {
-    "decode_heavy": {   # long generation, tiny prompt -> autoregressive decode dominates
-        "prompt": "Write a detailed, multi-paragraph technical explanation of why LLM decode "
-                  "is memory-bandwidth-bound while prefill is compute-bound. Be thorough.",
-        "max_tokens": 400, "use_rag": False},
-    "prefill_heavy": {  # big context, 1 token out -> prefill dominates
-        "prompt": "Reply with only the word OK.",
-        "context": [(" ".join(["The i.MX 95 integrates an eIQ Neutron NPU and Cortex-A55 cores "
-                     "with LPDDR5X memory providing high bandwidth for edge inference."] * 220))],
-        "max_tokens": 1, "use_rag": False},
-    "rag_multistep": {  # real agentic: RAG retrieval + grounded synthesis over the 31.9K-chunk KB
-        "prompt": "Using the datasheets, what NPU does the i.MX 95 have and how many TOPS? "
-                  "Cite the source.",
+    "write_email": {    # FLAGSHIP: decode-heavy long-form in Skippy's voice, grounded -> coherent
+        "prompt": "Write a clear, friendly email to a colleague introducing the NXP i.MX 95 for a "
+                  "new edge-AI product. Cover what it is, its Neutron NPU, and why it suits edge "
+                  "inference. Ground the specifics in the datasheets.",
+        "use_rag": True, "rag_k": 4, "max_tokens": 400},
+    "spec_rag": {       # RAG lookup, grounded, concise (known-good phrasing)
+        "prompt": "Using the datasheets, what does the i.MX 95 Neutron NPU do, and what are its "
+                  "key features?",
         "use_rag": True, "rag_k": 4, "max_tokens": 220},
-    "field_service": {  # industrial: clean-phrasing datasheet RAG (retrieves correctly)
-        "prompt": "What does the i.MX 95 Neutron NPU do, and list its key features and "
-                  "supported neural-network operators.",
-        "use_rag": True, "rag_k": 4, "max_tokens": 220},
-    "inbox_triage": {   # consumer: multi-step LLM, no external asset
-        "prompt": "You have 3 unread emails: (1) a vendor asking to reschedule Tuesday's call, "
-                  "(2) your manager requesting the Q3 status doc by end of day, (3) a newsletter. "
-                  "Triage them by priority and draft a one-line reply to each that needs one.",
-        "use_rag": False, "max_tokens": 320},
+    "compare": {        # decode + RAG, longer in-domain reasoning
+        "prompt": "Using the datasheets, compare the NXP i.MX 93 and i.MX 95 for an edge-AI "
+                  "gateway, focusing on the NPU and memory.",
+        "use_rag": True, "rag_k": 5, "max_tokens": 350},
+    "long_summary": {   # prefill-heavy: a real spec blob as context + a coherent summary
+        "prompt": "Summarize the key specifications from the reference text above as a short "
+                  "bulleted list.",
+        "context": [(("The NXP i.MX 95 applications processor integrates up to six Arm Cortex-A55 "
+          "cores and a Cortex-M7 real-time core. It includes the eIQ Neutron NPU rated at 2.0 TOPS "
+          "for machine-learning inference, an Arm Mali GPU, and an image signal processor. Memory "
+          "is 32-bit LPDDR4X/LPDDR5 up to high bandwidth. Connectivity includes PCIe Gen3, "
+          "Gigabit Ethernet with TSN, USB 3.0, and CAN-FD. It targets automotive, industrial, and "
+          "consumer edge applications with functional-safety support. ") * 12)],
+        "use_rag": False, "max_tokens": 220},
+    "short_chat": {     # short in-domain Q&A, grounded
+        "prompt": "In two or three sentences, what is the NXP i.MX 95?",
+        "use_rag": True, "rag_k": 3, "max_tokens": 90},
 }
 
 
@@ -141,7 +147,7 @@ def main():
                        "total_ms", "prefill_tok_per_s", "decode_tok_per_s",
                        "rag_docs_used") if k in tel},
         "gpu_signature": gpu,
-        "answer_preview": (resp.get("text") or "")[:160],
+        "answer_preview": (resp.get("text") or "")[:1600],
     }
     slug = "".join(c if c.isalnum() else "_" for c in task)[:24].strip("_") or "task"
     out = os.path.join(outdir, f"trace_{slug}_{datetime.now():%Y%m%d-%H%M%S}.json")

@@ -1,0 +1,20 @@
+{
+  "task": "ocr",
+  "ts": "2026-10-06T22:40:05",
+  "board": "rtx5090",
+  "wall_s": 0.605,
+  "telemetry": {},
+  "gpu": {
+    "samples": 7,
+    "sm_pct_mean": 4.0,
+    "mem_pct_mean": 0.0,
+    "power_w_mean": 77.7,
+    "sm_pct_peak": 4.0,
+    "vram_mib_peak": 9719.0
+  },
+  "extra": {
+    "engine": "tesseract",
+    "image": "Screenshot from 2026-04-01 13-40-17.png"
+  },
+  "output": "{\"status\": \"ok\", \"filename\": \"Screenshot from 2026-04-01 13-40-17.png\", \"title\": \"Screenshot\", \"text_length\": 263, \"chunks_added\": 1, \"text_preview\": \"& Upload to Knowledge Base a)\\n\\nSE |\\n\\nOe\\nacy\\n\\n \\n\\nCO tec nrs\\n\\nKOT\\n\\nDea MC orem ay\\nc SR\\n\\nDee Ree cer ac Rea)\\n\\nPrd\\noe eee eee end\\nCe ee eu eee rece a\\nea ent)\\nComes\\n\\neee een ae\\n\\neee eee ese oe\\n\\neee oe aes)\\n\\nNe eee eee en\\n\\npe ee ee eee ce\\n\\nSeco\\n\\nene one Ce Docs\\n\\n \\n\\n \\n\\f\", \"full_text\": \"& Upload to Knowledge Base a)\\n\\nSE |\\n\\nOe\\nacy\\n\\n \\n\\nCO tec nrs\\n\\nKOT\\n\\nDea MC orem ay\\nc SR\\n\\nDee Ree cer ac Rea)\\n\\nPr"
+}

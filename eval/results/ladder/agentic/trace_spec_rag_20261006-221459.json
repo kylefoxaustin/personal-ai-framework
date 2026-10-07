@@ -1,0 +1,35 @@
+{
+  "task": "spec_rag",
+  "ts": "2026-10-06T22:14:59",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 2.316,
+  "tokens_used": 4524,
+  "telemetry": {
+    "prompt_tokens": 4303,
+    "completion_tokens": 221,
+    "prefill_ms": 437.7,
+    "decode_ms": 997.91,
+    "total_ms": 2232.56,
+    "prefill_tok_per_s": 9831.0,
+    "decode_tok_per_s": 221.5,
+    "rag_docs_used": 4
+  },
+  "gpu_signature": {
+    "samples": 17,
+    "sm_pct": {
+      "mean": 64.2,
+      "peak": 99.0
+    },
+    "mem_pct": {
+      "mean": 42.1,
+      "peak": 68.0
+    },
+    "power_w": {
+      "mean": 278.8,
+      "peak": 549.03
+    },
+    "vram_mib_peak": 9121.0
+  },
+  "answer_preview": "The i.MX 95 Neutron NPU is a hardware-accelerator designed for efficient processing of machine-learning workloads. Here are its key features based on the excerpts:\n\n1. **Architecture**: The NPU contains a processor core, SRAM, neural-network acceleration hardware, and supporting infrastructure. It supports a wide range of neural network architectures including Convolutional Neural Networks (CNNs), Recurrent Neural Networks (RNNs), and more.\n\n2. **Performance**: The NPU is capable of 2.0 TOP/s (Tera Operations Per Second) performance, with 1024 MACs (Multiply-Accumulate units) operating at up to 1.0 GHz and 2 OPS/MAC (operations per MAC cycle).\n\n3. **Memory and SRAM**: The NPU includes 1 MB local SRAM, which is available to the system outside of the NPU complex when not in use by the NPU. This SRAM can be utilized for other purposes when the NPU is not active.\n\n4. **Activation Functions**:"
+}

@@ -1,0 +1,23 @@
+{
+  "task": "email",
+  "ts": "2026-10-06T22:39:52",
+  "board": "rtx5090",
+  "wall_s": 3.516,
+  "telemetry": {
+    "prefill_ms": 437.73,
+    "decode_ms": 1969.6,
+    "prefill_tok_per_s": 9286.5,
+    "decode_tok_per_s": 203.6,
+    "rag_docs_used": 4
+  },
+  "gpu": {
+    "samples": 22,
+    "sm_pct_mean": 45.3,
+    "mem_pct_mean": 28.7,
+    "power_w_mean": 311.8,
+    "sm_pct_peak": 96.0,
+    "vram_mib_peak": 9721.0
+  },
+  "extra": {},
+  "output": "Hi Mike,\n\nHope all is well on your side!\n\n \n\nI wanted to introduce you to the NXP i.MX 95 applications processor.  This processor is based on the Arm v8.2-A architecture, which includes the latest enhancements to the Armv8.2-A architecture with a dedicated instruction set to accelerate machine learning (ML) models. It is the first in the industry to implement ARM's Ethos-U65 microNPU with a performance of 256 MACs/cycle. The Ethos-U65 microNPU is a highly efficient, low-power, and high-performance accelerator that can be used for a wide range of AI workloads, including computer vision, speech recognition, and natural language processing.\n\n \n\nThe i.MX 95 is a powerful and flexible processor that is ideal for a wide range of applications, including smartphones, tablets, and edge devices. The processor includes four Arm Cortex-A55 cores, which can run at up to 1.8 GHz, and the Ethos-U65 microNPU can be used to accelerate ML workloads. The processor also includes a rich set of peripherals, including MIPI DSI, MIPI CSI, and USB 3.0, which makes it easy to connect to a wide range of displays and cameras.\n\n \n\nThe i.MX 95 is a great fit for edge inference because it includes the Ethos-U65 microNPU, which can be used to accelerate ML workloads. This means that you can run ML models directly on the device, without having to send data to the cloud for processing. This can help reduce latency and improve privacy, since data doesn't have to be sent to the cloud.\n\n \n\nI've attached the i.MX 95 datasheet for more information. Let me know if you have any questions.\n\n \n\nThanks!\n\n \n\nKylef\n\n \n"
+}

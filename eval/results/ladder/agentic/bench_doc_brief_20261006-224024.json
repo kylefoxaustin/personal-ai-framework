@@ -1,0 +1,23 @@
+{
+  "task": "doc_brief",
+  "ts": "2026-10-06T22:40:24",
+  "board": "rtx5090",
+  "wall_s": 4.465,
+  "telemetry": {
+    "prefill_ms": 1418.61,
+    "decode_ms": 2075.22,
+    "prefill_tok_per_s": 6905.4,
+    "decode_tok_per_s": 172.5,
+    "rag_docs_used": 8
+  },
+  "gpu": {
+    "samples": 27,
+    "sm_pct_mean": 60.9,
+    "mem_pct_mean": 38.3,
+    "power_w_mean": 409.0,
+    "sm_pct_peak": 99.0,
+    "vram_mib_peak": 9777.0
+  },
+  "extra": {},
+  "output": "**i.MX 95 Overview**\n\nThe i.MX 95 is a high-performance application processor from NXP, designed for industrial and IoT applications. It features an ARM Cortex-A55 core, a 1024S NPU, and support for LPDDR5 and LPDDR4X memory. The processor includes a wide range of interfaces such as MIPI DSI, LVDS, UART, SPI, I2C, and SDIO. It is available in a 19x19mm package and supports 10GbE, 2x PCIe Gen 3.0 x12, and 2x USB 3.0.\n\n**NPU**\n\nThe i.MX 95 includes the eIQ\u00ae Neutron N3-1024S NPU, which is a hardware accelerator for efficient processing of machine-learning workloads. The NPU provides high performance and low power consumption for neural network (NN) inference.\n\n**Memory/Connectivity**\n\nThe i.MX 95 supports LPDDR5 and LPDDR4X memory with inline ECC and encryption. It includes a wide range of interfaces such as MIPI DSI, LVDS, UART, SPI, I2C, and SDIO. The processor also supports 10GbE, 2x PCIe Gen 3.0 x12, and 2x USB 3.0.\n\n**Target Markets**\n\nThe i.MX 95 is designed for industrial and IoT applications, including energy storage and management systems, smart metering, power line communication, factory automation, industrial HMI, mobile robotics ecosystem, motion control and robotics, motor drives, and edge AI/ML anomaly detection and predictive maintenance."
+}

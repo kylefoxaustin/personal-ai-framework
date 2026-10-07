@@ -1,0 +1,19 @@
+{
+  "task": "meeting_summarize",
+  "ts": "2026-10-06T22:43:14",
+  "board": "rtx5090",
+  "wall_s": 0.1,
+  "telemetry": {},
+  "gpu": {
+    "samples": 5,
+    "sm_pct_mean": 4.0,
+    "mem_pct_mean": 0.0,
+    "power_w_mean": 83.8,
+    "sm_pct_peak": 4.0,
+    "vram_mib_peak": 9777.0
+  },
+  "extra": {
+    "engine": "whisper->llm"
+  },
+  "output": "{\"status\": \"error\", \"error\": \"Whisper not installed. Run: pip install openai-whisper\"}"
+}

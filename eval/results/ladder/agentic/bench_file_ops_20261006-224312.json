@@ -1,0 +1,27 @@
+{
+  "task": "file_ops",
+  "ts": "2026-10-06T22:43:12",
+  "board": "rtx5090",
+  "wall_s": 0.957,
+  "telemetry": {
+    "prefill_ms": 20.93,
+    "decode_ms": 563.92,
+    "prefill_tok_per_s": 6831.8,
+    "decode_tok_per_s": 228.8,
+    "rag_docs_used": 0
+  },
+  "gpu": {
+    "samples": 9,
+    "sm_pct_mean": 14.1,
+    "mem_pct_mean": 7.1,
+    "power_w_mean": 147.9,
+    "sm_pct_peak": 95.0,
+    "vram_mib_peak": 9777.0
+  },
+  "extra": {
+    "read_ok": true,
+    "write_result": "Wrote 453 chars to /root/.personal-ai/users/kyle/skippy-workspace/imx95_summary.",
+    "file_ops_total_s": 0.957
+  },
+  "output": "- i.MX 95 features 6x Cortex-A55 cores, eIQ Neutron NPU with 2.0 TOPS, Mali GPU, ISP, LPDDR5X, PCIe Gen3, GbE-TSN. Suitable for automotive, industrial, and consumer edge AI applications.\n- Key components include 6 Cortex-A55 processors, eIQ Neutron NPU, Mali GPU, ISP, LPDDR5X memory, PCIe Gen3, and GbE-TSN.\n- The processor is designed for automotive, industrial, and consumer edge AI applications, offering robust performance and connectivity options."
+}

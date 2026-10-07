@@ -101,4 +101,6 @@ Each exercises a *different* CPU/DDR/NPU signature — the point of the set.
   Friday — that's the trap. Ladder stays DERIVED; say so plainly.
 - **Risk: research late** → frame stands on reasoning; fold citations in M3 if they land in time.
 - **Dependency: GPU/boards** — 5090 for M1 (reserve), Thor for M2.2 (held soft now).
-</content>
+
+## Benchmark task set — LOCKED at 10 (2026-10-06)
+The 5-task set grew to a 10-task set grounded in OpenClaw's capability list (A/B), spanning distinct CPU/DDR/NPU profiles: email, web-search+summarize, spec-RAG, file read/write, transcribe (ASR), OCR, meeting-summarize (multi-stage), run-script (shell), multi-tool-chain, doc-brief (prefill-heavy). Measured + coherence-gated on the 5090; see eval/results/ladder/agentic/FINDINGS.md. Two real Skippy bugs found+fixed/documented (read_file workspace resolution FIXED; transcribe whisper dep-conflict documented).
