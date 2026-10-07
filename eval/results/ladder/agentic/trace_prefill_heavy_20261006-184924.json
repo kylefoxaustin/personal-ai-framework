@@ -1,0 +1,35 @@
+{
+  "task": "prefill_heavy",
+  "ts": "2026-10-06T18:49:24",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 1.26,
+  "tokens_used": 7713,
+  "telemetry": {
+    "prompt_tokens": 7711,
+    "completion_tokens": 2,
+    "prefill_ms": 996.69,
+    "decode_ms": 0.02,
+    "total_ms": 1183.25,
+    "prefill_tok_per_s": 7736.6,
+    "decode_tok_per_s": 94254.0,
+    "rag_docs_used": 1
+  },
+  "gpu_signature": {
+    "samples": 12,
+    "sm_pct": {
+      "mean": 28.2,
+      "peak": 99.0
+    },
+    "mem_pct": {
+      "mean": 15.5,
+      "peak": 62.0
+    },
+    "power_w": {
+      "mean": 235.1,
+      "peak": 528.34
+    },
+    "vram_mib_peak": 9714.0
+  },
+  "answer_preview": ""
+}

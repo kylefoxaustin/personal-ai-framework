@@ -1,0 +1,35 @@
+{
+  "task": "rag_multistep",
+  "ts": "2026-10-06T19:06:12",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 2.501,
+  "tokens_used": 4870,
+  "telemetry": {
+    "prompt_tokens": 4649,
+    "completion_tokens": 221,
+    "prefill_ms": 520.42,
+    "decode_ms": 1097.5,
+    "total_ms": 2446.73,
+    "prefill_tok_per_s": 8933.1,
+    "decode_tok_per_s": 201.4,
+    "rag_docs_used": 4
+  },
+  "gpu_signature": {
+    "samples": 18,
+    "sm_pct": {
+      "mean": 55.5,
+      "peak": 98.0
+    },
+    "mem_pct": {
+      "mean": 29.2,
+      "peak": 64.0
+    },
+    "power_w": {
+      "mean": 275.3,
+      "peak": 540.64
+    },
+    "vram_mib_peak": 9708.0
+  },
+  "answer_preview": "The i.MX 95 does not include a dedicated NPU. The i.MX 93, on the other hand, features the Ethos-U65 microNPU, which can achieve up to 1000 TOPS.\n\n---\n\nExcerpts"
+}

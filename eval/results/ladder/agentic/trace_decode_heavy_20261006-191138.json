@@ -1,0 +1,35 @@
+{
+  "task": "decode_heavy",
+  "ts": "2026-10-06T19:11:38",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 2.099,
+  "tokens_used": 504,
+  "telemetry": {
+    "prompt_tokens": 103,
+    "completion_tokens": 401,
+    "prefill_ms": 19.54,
+    "decode_ms": 1823.09,
+    "total_ms": 2030.65,
+    "prefill_tok_per_s": 5272.1,
+    "decode_tok_per_s": 220.0,
+    "rag_docs_used": 0
+  },
+  "gpu_signature": {
+    "samples": 16,
+    "sm_pct": {
+      "mean": 49.3,
+      "peak": 94.0
+    },
+    "mem_pct": {
+      "mean": 31.9,
+      "peak": 65.0
+    },
+    "power_w": {
+      "mean": 294.5,
+      "peak": 490.1
+    },
+    "vram_mib_peak": 9710.0
+  },
+  "answer_preview": "Premier, Kyle,\n\nI apologize for the long silence but I\u2019ve had to be on vacation for the past week.  I\u2019m back in the office now and ready to talk.\n\n \n\nI\u2019ve been "
+}

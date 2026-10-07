@@ -1,0 +1,35 @@
+{
+  "task": "rag_multistep",
+  "ts": "2026-10-06T19:12:02",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 2.507,
+  "tokens_used": 4870,
+  "telemetry": {
+    "prompt_tokens": 4649,
+    "completion_tokens": 221,
+    "prefill_ms": 520.47,
+    "decode_ms": 1107.6,
+    "total_ms": 2450.31,
+    "prefill_tok_per_s": 8932.2,
+    "decode_tok_per_s": 199.5,
+    "rag_docs_used": 4
+  },
+  "gpu_signature": {
+    "samples": 18,
+    "sm_pct": {
+      "mean": 54.7,
+      "peak": 99.0
+    },
+    "mem_pct": {
+      "mean": 32.6,
+      "peak": 64.0
+    },
+    "power_w": {
+      "mean": 294.6,
+      "peak": 526.45
+    },
+    "vram_mib_peak": 9710.0
+  },
+  "answer_preview": "The i.MX 95 does not have an NPU. The i.MX 93 has the Ethos-U65 microNPU, which can reach up to 1.4 TOPS. \n\nSource: NXP Semiconductors IMX95IEC i.MX 95 Applicat"
+}
