@@ -1,0 +1,23 @@
+{
+  "task": "email",
+  "ts": "2026-10-07T00:03:51",
+  "board": "rtx5090",
+  "wall_s": 3.548,
+  "telemetry": {
+    "prefill_ms": 463.02,
+    "decode_ms": 1915.47,
+    "prefill_tok_per_s": 9362.5,
+    "decode_tok_per_s": 209.3,
+    "rag_docs_used": 4
+  },
+  "gpu": {
+    "samples": 22,
+    "sm_pct_mean": 44.8,
+    "mem_pct_mean": 28.6,
+    "power_w_mean": 316.0,
+    "sm_pct_peak": 95.0,
+    "vram_mib_peak": 9118.0
+  },
+  "extra": {},
+  "output": "Subject: Introducing the NXP i.MX 95 for Our New Edge-AI Product\n\nHi [Colleague's Name],\n\nI hope this email finds you well! I wanted to share some exciting news about the NXP i.MX 95 processor that we can use for our new edge-AI product. The i.MX 95 is a powerful and versatile solution that will help us deliver robust AI capabilities at the edge.\n\n**What is the NXP i.MX 95?**\n\nThe i.MX 95 is a state-of-the-art applications processor from NXP, designed to meet the needs of industrial, IoT, and automotive markets. It features an advanced CPU core set and integrates an efficient machine learning (ML) accelerator, the Neutron NPU, which is specifically designed to handle inference tasks.\n\n**The Neutron NPU: A Game-Changer for Edge Inference**\n\nThe Neutron NPU is a hardware accelerator that provides efficient processing of ML workloads. Here are some key points from the datasheets:\n\n- **Architecture**: The Neutron NPU supports the eIQ Neutron N3-1024S NPU, which is an efficient hardware accelerator optimized for neural network (NN) inference. It works in conjunction with the CPU to deliver higher performance and lower power consumption.\n\n- **Features**:\n  - **MAC Compute Blocks**: The NPU manages Multiply-Accumulate (MAC) compute blocks, which are essential for neural network computations.\n  - **Weight Decoding and Rescaling**: It optimizes the arrangement of weights, manages memory accesses, and provides rescaling, activation, and pooling functions.\n  - **Efficient Processing**: The NPU can process ML workloads efficiently, making it suitable for real-time inference application"
+}

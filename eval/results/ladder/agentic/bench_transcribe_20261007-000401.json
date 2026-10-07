@@ -1,0 +1,19 @@
+{
+  "task": "transcribe",
+  "ts": "2026-10-07T00:04:01",
+  "board": "rtx5090",
+  "wall_s": 1.902,
+  "telemetry": {},
+  "gpu": {
+    "samples": 14,
+    "sm_pct_mean": 3.1,
+    "mem_pct_mean": 0.0,
+    "power_w_mean": 156.4,
+    "sm_pct_peak": 4.0,
+    "vram_mib_peak": 9124.0
+  },
+  "extra": {
+    "engine": "whisper-base"
+  },
+  "output": "{\"status\": \"ok\", \"filename\": \"resources_sample1.wav\", \"title\": \"Untitled Recording\", \"transcript_length\": 74, \"chunks_added\": 1, \"transcript_preview\": \"Thunderstorms could produce large hail, isolated tornadoes and heavy rain.\", \"full_transcript\": \"Thunderstorms could produce large hail, isolated tornadoes and heavy rain.\", \"summary\": null}"
+}

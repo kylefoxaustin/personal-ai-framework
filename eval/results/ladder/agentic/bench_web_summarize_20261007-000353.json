@@ -1,0 +1,27 @@
+{
+  "task": "web_summarize",
+  "ts": "2026-10-07T00:03:53",
+  "board": "rtx5090",
+  "wall_s": 1.296,
+  "telemetry": {
+    "prefill_ms": 57.68,
+    "decode_ms": 464.56,
+    "prefill_tok_per_s": 10784.4,
+    "decode_tok_per_s": 238.9,
+    "rag_docs_used": 0
+  },
+  "gpu": {
+    "samples": 11,
+    "sm_pct_mean": 8.1,
+    "mem_pct_mean": 3.8,
+    "power_w_mean": 260.9,
+    "sm_pct_peak": 59.0,
+    "vram_mib_peak": 9122.0
+  },
+  "extra": {
+    "web_search_s": 0.47,
+    "web_status": "ok",
+    "n_results": 5
+  },
+  "output": "Based on the web search results, the NXP i.MX 95 is part of NXP Semiconductors' portfolio, a global company known for its solutions in automotive, IoT, and industrial sectors. NXP offers a wide range of products including microcontrollers, processors, sensors, and analog ICs, among others. The i.MX 95 is likely one of these advanced processors designed for high-performance applications in embedded systems. However, specific details about the i.MX 95 are not available in these snippets."
+}
