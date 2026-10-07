@@ -333,3 +333,13 @@ arch-determined, base≈fine-tune). Prefill ratio 2.00× (compute-bound, also ~l
 
 **Ladder now (7B / 14B decode t/s, Q4):** 5090 220.5 / 113.0 · Thor 40.85 / 20.89 · Orin 27.8(prior)
 / build-broken · iq9 8.375(qualcomm, w4a16, 7B-class; 14B won't fit 8 MB VTCM) / i.MX95 orb_slam-ARA240(dated).
+
+### Task-success column — clean 7B-base (SINGLE-JUDGE DRAFT, 2026-10-07)
+⚠️ Single-judge (Opus, in-context) draft — the FORMAL two-judge grade (Sonnet + GPT-4o, repo rule
+for any result leaving the repo) is PENDING API keys and MUST run before this ships in the deck.
+Graded against datasheet ground truth. **7 PASS / 2 PARTIAL / 1 FAIL** (up from 5 PASS pre-apparatus-fix).
+PASS: email, spec_rag, file_ops, transcribe, ocr, run_script, doc_brief. PARTIAL: web_summarize
+(generic, weak web results), meeting_summarize (correct summary but fabricated action-items/names
+from a non-meeting clip). FAIL: multi_tool_chain (narrates instead of invoking tools + fabricates
+specs). The FAIL + PARTIALs are genuine 7B capability limits, not apparatus — and the size study
+shows 14B base FIXES the FAIL (invokes write_file). Detail: task_success_7b_draft.json.
