@@ -313,3 +313,23 @@ Attempted to confirm the 7B→14B decode ratio ON edge silicon (not just the 509
   mechanism (decode DDR-bound, not TOPS). The edge-14B rung is a *reinforcement*, not the headline;
   if not measured by Friday it ships as DERIVED (expected ~1.9× slower, matching 5090 + param ratio)
   clearly tagged, with the measured confirmation flagged as the immediate next step.
+
+### Edge 14B rung — RESOLVED on Thor (MEASURED, 2026-10-07)
+Thor (Jetson AGX, sm_110 Blackwell), llama.cpp build-sm110 (fb27a525), base GGUFs, -ngl 99,
+-p 512 -n 128 -r 3. Board reserved hard; a stale 3.2 h llama-cli job was reaped first (Kyle-
+authorized); census at run confirmed no competing compute tenant. Clocks UNPINNED (no passwordless
+sudo) — but n=3 σ < 0.1%, so the rate is solid.
+
+| model | prefill t/s | decode t/s |
+|---|--:|--:|
+| 7B base Q4_K_M | 1601 ± 18 | **40.85 ± 0.02** |
+| 14B base Q4_K_M | 799 ± 8 | **20.89 ± 0.01** |
+
+**Decode ratio 7B/14B = 1.96× on edge**, matching 5090 (1.95×) and the parameter ratio (1.94×).
+The ~2× size penalty is **architecture-invariant across the whole ladder** (datacenter GPU →
+Blackwell edge) — because decode is weight-streaming/bandwidth-bound, so time scales with params.
+7B decode 40.85 reproduces the prior Thor 40.9 rung (independent confirmation; rate is
+arch-determined, base≈fine-tune). Prefill ratio 2.00× (compute-bound, also ~linear in params here).
+
+**Ladder now (7B / 14B decode t/s, Q4):** 5090 220.5 / 113.0 · Thor 40.85 / 20.89 · Orin 27.8(prior)
+/ build-broken · iq9 8.375(qualcomm, w4a16, 7B-class; 14B won't fit 8 MB VTCM) / i.MX95 orb_slam-ARA240(dated).

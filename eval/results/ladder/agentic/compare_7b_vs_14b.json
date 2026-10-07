@@ -87,5 +87,23 @@
         "out_head": "- Skippy\nSure, here's a concise summary of the notes in three bullet points:\n\n- The i.MX 9"
       }
     }
+  },
+  "edge_measured": {
+    "thor_sm110": {
+      "source": "llama-bench build-sm110 fb27a525, -p512 -n128 -r3, clocks unpinned, n=3",
+      "7b": {
+        "prefill_tok_s": 1601.43,
+        "decode_tok_s": 40.85,
+        "sigma_decode": 0.02
+      },
+      "14b": {
+        "prefill_tok_s": 798.84,
+        "decode_tok_s": 20.89,
+        "sigma_decode": 0.01
+      },
+      "decode_ratio_7b_over_14b": 1.955,
+      "prefill_ratio": 2.005
+    },
+    "note": "edge decode ratio 1.956x == 5090 1.95x == param ratio 1.94x; size penalty arch-invariant"
   }
 }
