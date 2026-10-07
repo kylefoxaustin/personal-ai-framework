@@ -266,8 +266,8 @@ good enough agent."** Ran base Qwen2.5-**7B** vs base Qwen2.5-**14B** Instruct (
 ### Resource cost of the bigger brain (MEASURED, 5090)
 | task | 7B decode tok/s | 14B decode tok/s | slowdown | 7B VRAM | 14B VRAM |
 |---|--:|--:|--:|--:|--:|
-| spec_rag | 220.5 | 113.0 | **1.95×** | 9.1 GB | 18.2 GB |
-| doc_brief | 179.7 | 99.5 | **1.81×** | 9.2 GB | 18.4 GB |
+| spec_rag | 217.9 | 113.0 | **1.93×** | 9.1 GB | 18.2 GB |
+| doc_brief | 179.8 | 99.7 | **1.80×** | 9.2 GB | 18.4 GB |
 
 Decode slowdown (~1.9×) ≈ **parameter ratio (14/7 = 2.0×)** ≈ what bandwidth-bound decode predicts:
 2× the weights to stream per token → ~2× slower. **The model-size axis and the memory-bandwidth
@@ -294,7 +294,7 @@ sizing tradeoff is concrete: **+1 model tier ≈ 2× decode latency + 2× memory
 materially better agent (acts vs narrates, grounds vs fabricates).** Which tier an edge board can
 *hold and feed* is the real constraint — and it's a bandwidth/capacity question, still not a TOPS one.
 
-> Provenance: resource table MEASURED (5090, base GGUFs, 2026-10-07, warm, n=1 — n=3 pending).
+> Provenance: resource table MEASURED (5090, base GGUFs, 2026-10-07, warm, **n=3**, σ<0.6%).
 > Accuracy observations are single-reader; **two-judge grading pending before any deck claim** (repo rule).
 
 ### Edge 14B rung — status (2026-10-07, honest)

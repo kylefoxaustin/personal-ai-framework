@@ -105,5 +105,20 @@
       "prefill_ratio": 2.005
     },
     "note": "edge decode ratio 1.956x == 5090 1.95x == param ratio 1.94x; size penalty arch-invariant"
+  },
+  "n3_5090": {
+    "7b": {
+      "spec_rag_decode": 217.9,
+      "doc_brief_decode": 179.8
+    },
+    "14b": {
+      "spec_rag_decode": 113.0,
+      "doc_brief_decode": 99.7
+    },
+    "ratios": {
+      "spec_rag": 1.93,
+      "doc_brief": 1.8
+    },
+    "note": "n=3 warm, sigma<0.6%; supersedes n=1"
   }
 }
