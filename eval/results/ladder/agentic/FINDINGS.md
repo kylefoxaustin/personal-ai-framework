@@ -99,3 +99,28 @@ independent context.** Confirms the floor (Skippy) / ceiling (openclaw, the flee
 RAG-backed tasks carry 37–47% of wall-time in retrieval+orchestration (CPU/DDR, GPU near-idle).
 Decode rate is steady ~217–247 tok/s on the 5090 across task types. (GPU sm%/mem% remain noisy
 on the over-provisioned 5090 — time decomposition is the robust signal; see per-task JSONs.)
+
+## MEASURED — the stretch: retrieval layer on Thor ARM vs 5090 x86 (2026-10-06)
+Same `scripts/agentic_bench/retrieval_proxy.py` on both hosts (Skippy's all-MiniLM-L6-v2 embedder
++ cosine search over the real 31,939-chunk corpus size). KB copied to Thor; m6venv (torch 2.14+cu130).
+
+| retrieval component | 5090 host (x86) | Thor (ARM) | ARM / x86 |
+|---|--:|--:|--:|
+| CPU query-embed | 4.49 ms | 25.94 ms | 5.8× |
+| GPU query-embed | 1.97 ms | 5.04 ms | 2.6× |
+| cosine search (31,939×384) | 0.51 ms | 6.92 ms | 13.6× |
+| **embed + search (CPU path)** | **5.0 ms** | **32.9 ms** | **6.6×** |
+
+**Why this validates the DERIVED ladder:** the retrieval embed+search layer slows ~6.6× on Thor's
+ARM — about the same factor as decode (5.4×, 220→40.9 tok/s). Both layers scale down together, so
+the per-task phase *proportions* are ~preserved across the ladder (the assumption the derived
+projection rests on). And absolute retrieval stays negligible (33 ms) vs decode (~5 s for a
+200-token answer) ⇒ **the agentic task is decode-dominated even harder at the edge** (~99% decode
+on Thor vs ~65% on the 5090). The bandwidth-bound thesis gets *stronger* down the ladder.
+
+**Scope (honest):** this measures the SEMANTIC embed+search component on Thor ARM — NOT the full
+hybrid orchestration (BM25 + reranker + ChromaDB round-trips + agent-loop detection passes). Those
+other parts are either light Python (BM25/rerank) or are themselves LLM calls (agent-loop detection)
+that scale with decode — so the full orchestration would track the same ~5-6× band. Standing up the
+complete Skippy stack on Thor (pip+chromadb+FastAPI) remains the fuller version; this is the key
+NN component measured, reusing qualcomm's m6venv + the llama.cpp CUDA build (no llama-cpp-python compile).
