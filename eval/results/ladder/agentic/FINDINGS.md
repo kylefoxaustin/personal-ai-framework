@@ -343,3 +343,22 @@ PASS: email, spec_rag, file_ops, transcribe, ocr, run_script, doc_brief. PARTIAL
 from a non-meeting clip). FAIL: multi_tool_chain (narrates instead of invoking tools + fabricates
 specs). The FAIL + PARTIALs are genuine 7B capability limits, not apparatus — and the size study
 shows 14B base FIXES the FAIL (invokes write_file). Detail: task_success_7b_draft.json.
+
+### Edge ladder COMPLETE — three boards agree on the size penalty (MEASURED, 2026-10-07)
+Orin (Jetson AGX, sm_87) llama.cpp rebuilt (build-fix, same commit fb27a525, NCCL off) against the
+current L4T R36.4.7 runtime — the Sep-18 driver update had ABI-broken the Sep-16 build (segfault on
+load); fresh build fixed it. -ngl 99, -p512 -n128 -r3, clocks unpinned, σ<0.1%, 7B=27.92 reproduces
+prior 27.8 rung (rebuild restored correct behavior).
+
+| board | arch | 7B decode t/s | 14B decode t/s | ratio | prefill ratio |
+|---|---|--:|--:|--:|--:|
+| RTX 5090 | Blackwell dGPU | 217.9 (n=3) | 113.0 | **1.93×** | — |
+| Jetson Thor | sm_110 Blackwell | 40.85 | 20.89 | **1.96×** | 2.00× |
+| Jetson Orin | sm_87 Ampere | 27.92 | 14.62 | **1.91×** | 2.04× |
+| param ratio (14.77/7.62) | — | — | — | **1.94×** | — |
+
+**The 7B→14B decode penalty ≈ parameter ratio (~1.9×), architecture-INVARIANT** across datacenter
+Blackwell, edge Blackwell, and edge Ampere. Mechanism: decode is weight-streaming/DDR-bandwidth-bound
+→ time scales with #params, not TOPS/arch. Independently corroborated by qualcomm's iq9 Hexagon data
+("decode DDR-bound, confirmed 3 ways"). iq9 holds 7B-class (8.375 t/s w4a16) but a 14B Q4 won't fit
+its 8 MB VTCM — so on the smallest boards the penalty isn't 1.9×, it's "won't run": the sizing wall.
