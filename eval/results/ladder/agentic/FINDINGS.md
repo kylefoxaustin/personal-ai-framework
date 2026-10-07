@@ -296,3 +296,20 @@ materially better agent (acts vs narrates, grounds vs fabricates).** Which tier 
 
 > Provenance: resource table MEASURED (5090, base GGUFs, 2026-10-07, warm, n=1 — n=3 pending).
 > Accuracy observations are single-reader; **two-judge grading pending before any deck claim** (repo rule).
+
+### Edge 14B rung — status (2026-10-07, honest)
+Attempted to confirm the 7B→14B decode ratio ON edge silicon (not just the 5090):
+- **Orin (sm_87):** 14B GGUF transferred (8 GB, verified), 7B already resident. `llama-bench`
+  **SEGFAULTS on model load (exit 139), both -ngl 99 and -ngl 0**, right after CUDA init — the
+  resident build (b11009, 2026-09-16) has drifted against the current Jetson CUDA runtime. The
+  prior Orin 7B = 27.8 t/s was MEASURED on an earlier working state; **not reproducible tonight**.
+  No clean same-board 7B/14B pair from Orin without a rebuild. Clocks also unpinnable (no
+  passwordless sudo) — any Orin number would carry an "unpinned clocks" caveat regardless.
+- **Thor (sm_110):** has a WORKING build (build-sm110, a live llama-cli proves it runs) — the right
+  board for the edge pair — but is currently contended (load 5.2, a 3.2 h llama-cli job under
+  kyle's user). Measuring there now would be contention-contaminated.
+- **Headline is unaffected:** the size-vs-accuracy comparison is already MEASURED and solid on the
+  5090 (7B 220 → 14B 113 t/s, ~1.9× ≈ param ratio). qualcomm's iq9 data independently confirms the
+  mechanism (decode DDR-bound, not TOPS). The edge-14B rung is a *reinforcement*, not the headline;
+  if not measured by Friday it ships as DERIVED (expected ~1.9× slower, matching 5090 + param ratio)
+  clearly tagged, with the measured confirmation flagged as the immediate next step.
