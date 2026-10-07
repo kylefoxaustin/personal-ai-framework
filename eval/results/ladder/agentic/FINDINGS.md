@@ -332,7 +332,7 @@ Blackwell edge) — because decode is weight-streaming/bandwidth-bound, so time 
 arch-determined, base≈fine-tune). Prefill ratio 2.00× (compute-bound, also ~linear in params here).
 
 **Ladder now (7B / 14B decode t/s, Q4):** 5090 220.5 / 113.0 · Thor 40.85 / 20.89 · Orin 27.8(prior)
-/ build-broken · iq9 8.375(qualcomm, w4a16, 7B-class; 14B won't fit 8 MB VTCM) / i.MX95 orb_slam-ARA240(dated).
+/ build-broken · iq9 9.45(qualcomm, text decoder, MEASURED 2026-09-15; 14B won't fit 8 MB VTCM) / i.MX95 orb_slam-ARA240(dated).
 
 ### Task-success column — clean 7B-base (SINGLE-JUDGE DRAFT, 2026-10-07)
 ⚠️ Single-judge (Opus, in-context) draft — the FORMAL two-judge grade (Sonnet + GPT-4o, repo rule
@@ -360,5 +360,14 @@ prior 27.8 rung (rebuild restored correct behavior).
 **The 7B→14B decode penalty ≈ parameter ratio (~1.9×), architecture-INVARIANT** across datacenter
 Blackwell, edge Blackwell, and edge Ampere. Mechanism: decode is weight-streaming/DDR-bandwidth-bound
 → time scales with #params, not TOPS/arch. Independently corroborated by qualcomm's iq9 Hexagon data
-("decode DDR-bound, confirmed 3 ways"). iq9 holds 7B-class (8.375 t/s w4a16) but a 14B Q4 won't fit
-its 8 MB VTCM — so on the smallest boards the penalty isn't 1.9×, it's "won't run": the sizing wall.
+("decode DDR-bound, confirmed 3 ways"). iq9 holds 7B-class (9.45 t/s decode, 596 t/s prefill — but a HARD 256-token NPU prompt cap;
+>256 falls to CPU ~19 t/s, the binding RAG constraint) but a 14B Q4 won't fit its 8 MB VTCM — so on the smallest boards the penalty isn't 1.9×, it's "won't run": the sizing wall.
+
+### iq9 (SA8775P Hexagon v73) — corrected provenance (qualcomm, MEASURED 2026-09-15)
+Supersedes an earlier stale memory line (prefill 197.5 / decode 8.375, which was a Qwen2.5-VL-7B
+summary). Freshly enumerated on the working text bundle (genie-t2t-run --profile, Qwen2.5-7B decoder):
+decode 9.45 t/s · text-prefill 596.3 t/s · TTFT@170tok 287 ms. HARD CONSTRAINT: the deployed NPU
+Genie bundle caps a single query at ~256 input tokens — beyond that the NPU path fails and it falls
+to CPU llama.cpp (~19 t/s, 108 s TTFT @2000 tok). For RAG/long-context sizing on iq9, the 256-token
+cap is the binding wall, not the decode rate. (Credit qualcomm; caught via the prose-summary-vs-fresh
+-enumeration trap — exactly the Law-1 copy-decay hazard.)
