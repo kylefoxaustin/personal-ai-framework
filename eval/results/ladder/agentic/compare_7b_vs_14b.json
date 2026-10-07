@@ -104,7 +104,20 @@
       "decode_ratio_7b_over_14b": 1.955,
       "prefill_ratio": 2.005
     },
-    "note": "edge decode ratio 1.956x == 5090 1.95x == param ratio 1.94x; size penalty arch-invariant"
+    "note": "edge decode ratio 1.956x == 5090 1.95x == param ratio 1.94x; size penalty arch-invariant",
+    "orin_sm87": {
+      "source": "llama-bench build-fix fb27a525 (rebuilt), -p512 -n128 -r3, clocks unpinned, n=3",
+      "7b": {
+        "prefill_tok_s": 1077.32,
+        "decode_tok_s": 27.92
+      },
+      "14b": {
+        "prefill_tok_s": 529.1,
+        "decode_tok_s": 14.62
+      },
+      "decode_ratio_7b_over_14b": 1.91,
+      "prefill_ratio": 2.036
+    }
   },
   "n3_5090": {
     "7b": {
@@ -120,5 +133,12 @@
       "doc_brief": 1.8
     },
     "note": "n=3 warm, sigma<0.6%; supersedes n=1"
+  },
+  "three_board_decode_ratio": {
+    "rtx5090": 1.93,
+    "thor_sm110": 1.956,
+    "orin_sm87": 1.91,
+    "param_ratio": 1.94,
+    "finding": "size penalty ~1.9x == param ratio, architecture-invariant (decode is weight-streaming-bound)"
   }
 }
