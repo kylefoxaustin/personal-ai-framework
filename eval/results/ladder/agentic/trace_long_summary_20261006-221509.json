@@ -1,0 +1,35 @@
+{
+  "task": "long_summary",
+  "ts": "2026-10-06T22:15:09",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 0.864,
+  "tokens_used": 1825,
+  "telemetry": {
+    "prompt_tokens": 1707,
+    "completion_tokens": 118,
+    "prefill_ms": 153.38,
+    "decode_ms": 482.81,
+    "total_ms": 804.07,
+    "prefill_tok_per_s": 11128.9,
+    "decode_tok_per_s": 244.4,
+    "rag_docs_used": 1
+  },
+  "gpu_signature": {
+    "samples": 10,
+    "sm_pct": {
+      "mean": 50.0,
+      "peak": 98.0
+    },
+    "mem_pct": {
+      "mean": 19.0,
+      "peak": 38.0
+    },
+    "power_w": {
+      "mean": 235.0,
+      "peak": 408.03
+    },
+    "vram_mib_peak": 9121.0
+  },
+  "answer_preview": "- NXP i.MX 95 applications processor\n- Up to six Arm Cortex-A55 cores and a Cortex-M7 real-time core\n- eIQ Neutron NPU rated at 2.0 TOPS for machine-learning inference\n- Arm Mali GPU\n- Image signal processor\n- 32-bit LPDDR4X/LPDDR5 memory\n- PCIe Gen3, Gigabit Ethernet with TSN, USB 3.0, and CAN-FD connectivity\n- Targets automotive, industrial, and consumer edge applications\n- Functional-safety support"
+}

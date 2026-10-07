@@ -165,10 +165,18 @@ def tool_read_file(params: Dict[str, str]) -> str:
     path_str = params.get("path", "")
     if not path_str:
         return "Error: 'path' parameter is required."
-    if not _is_path_allowed(path_str):
+    # Relative paths resolve against the user's workspace — consistent with write_file.
+    # (Previously read_file used Path(path_str), i.e. CWD-relative, so write_file("x.txt")
+    # and read_file("x.txt") pointed at different files.)
+    p = Path(path_str)
+    if not p.is_absolute():
+        try:
+            p = _resolve_workspace_path(path_str)
+        except ValueError:
+            return "Error: Access denied. Path escapes the workspace sandbox."
+    if not _is_path_allowed(str(p)):
         return f"Error: Access denied. Path must be under allowed directories."
 
-    p = Path(path_str)
     if not p.exists():
         return f"Error: File not found: {path_str}"
     if not p.is_file():

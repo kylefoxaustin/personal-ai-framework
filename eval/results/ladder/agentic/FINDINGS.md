@@ -124,3 +124,44 @@ other parts are either light Python (BM25/rerank) or are themselves LLM calls (a
 that scale with decode — so the full orchestration would track the same ~5-6× band. Standing up the
 complete Skippy stack on Thor (pip+chromadb+FastAPI) remains the fuller version; this is the key
 NN component measured, reusing qualcomm's m6venv + the llama.cpp CUDA build (no llama-cpp-python compile).
+
+## MEASURED — the 10-task agentic benchmark (5090, 2026-10-06, warm, coherence-gated)
+Grounded in OpenClaw's capability set (A/B); run via `scripts/agentic_bench/trace_bench.py`.
+**Coherence gate applied: every output was read; a number only counts if the output was coherent**
+(a broken output is a cheaper, unrepresentative computation — "broken is faster").
+
+| # | task | OpenClaw cap | engine | wall | profile (sm%/mem%/W) | coherent? |
+|---|---|---|---|--:|---|---|
+| 1 | email (intro i.MX 95) | Email | LLM+RAG | 3.5 s | 45/29/312 decode-heavy | ✅ |
+| 2 | web-search + summarize | Web browse | DDG+LLM | 4.6 s | 11/5/140 **network-bound** (search 3.7 s) | ✅ |
+| 3 | spec_rag (Neutron features) | Memory | RAG+LLM | 2.5 s | 69/39/321 retrieval+decode | ✅ |
+| 4 | file read→summarize→write | File R/W | file tools+LLM | 1.0 s | 14/7/148 | ✅ (after read_file fix) |
+| 5 | transcribe meeting | *(edge-only)* | **Whisper base** | 0.97 s | **7.3× realtime** | ✅ (engine direct) |
+| 6 | OCR screenshot→text | *(edge-only)* | **Tesseract** | 0.6 s | **4/0/78 — CPU, GPU idle** | ✅ |
+| 7 | meeting→transcribe→summarize | *(edge-only)* | Whisper→LLM | ~ASR+LLM | multi-stage | ✅ (composed) |
+| 8 | run sandboxed script | **Shell** | run_script | 0.06 s | process/compute | ✅ (correct output) |
+| 9 | multi-tool chain (web→file→email) | Orchestration | agent loop | 11.4 s | **74/50/412 — heavy** | ⚠ paused at confirm-gate |
+| 10 | doc brief (rag_k=8) | Knowledge+gen | RAG+LLM | 4.5 s | 61/38/409 **prefill-heavy** (pf 1419 ms) | ✅ |
+
+**Profiles span:** decode/bandwidth (1,3,10) · network I/O (2) · filesystem (4) · ASR-compute (5,7) ·
+**CPU-only vision/OCR (6)** · shell/process (8) · multi-step orchestration (9) · prefill/long-context (10).
+The perception tasks (5,6) finally give the "NPU/accelerator earns its keep on perception, not the
+agent" claim measured legs — OCR runs with the GPU at **4%** (pure CPU), ASR hammers it.
+
+**Task 9 is a finding, not a failure:** the multi-tool chain engaged the agent loop (11.4 s, 74% SM,
+412 W — a real heavy multi-step profile) then **halted at Skippy's `write_file` confirm-gate** ("approve
+or deny"). That's the bounded agent's *safety* behavior — it will not autonomously write/act without
+human approval. The floor/ceiling contrast in one datapoint: the edge agent stops; OpenClaw-style
+autonomy would just run it.
+
+### Skippy bugs found while building this (real app bugs, not benchmark artifacts)
+- **`read_file` workspace-resolution bug — FIXED** (`pipeline/agent_tools.py`): `read_file` resolved
+  relative paths against CWD while `write_file` used the workspace, so `write_file("x")` then
+  `read_file("x")` disagreed. Now both resolve to the workspace (verified). 
+- **`/upload/transcribe` mislabels a dependency conflict as "Whisper not installed"**: whisper +
+  torch+cuda ARE installed and Whisper loads/runs standalone (7.3× RT), but `import whisper` fails
+  *inside the server process* (dep conflict with already-loaded libs) and the `except ImportError`
+  prints a misleading message. ASR measured directly as the honest workaround; the endpoint fix
+  (lazy-load whisper in a subprocess, or pin the conflicting dep) is a documented TODO.
+- **OCR demo image is a UI screenshot** (text extracted fine, but low-semantic-value); swap for a
+  datasheet page for a cleaner demo.

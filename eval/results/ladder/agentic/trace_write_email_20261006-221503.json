@@ -1,0 +1,35 @@
+{
+  "task": "write_email",
+  "ts": "2026-10-06T22:15:03",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 2.411,
+  "tokens_used": 4277,
+  "telemetry": {
+    "prompt_tokens": 4065,
+    "completion_tokens": 212,
+    "prefill_ms": 401.62,
+    "decode_ms": 947.46,
+    "total_ms": 2361.79,
+    "prefill_tok_per_s": 10121.5,
+    "decode_tok_per_s": 223.8,
+    "rag_docs_used": 4
+  },
+  "gpu_signature": {
+    "samples": 17,
+    "sm_pct": {
+      "mean": 35.3,
+      "peak": 95.0
+    },
+    "mem_pct": {
+      "mean": 23.1,
+      "peak": 68.0
+    },
+    "power_w": {
+      "mean": 270.3,
+      "peak": 567.66
+    },
+    "vram_mib_peak": 9121.0
+  },
+  "answer_preview": "The i.MX 95 is a powerful and versatile applications processor from NXP, designed for the edge of the network. It features a high-performance CPU complex with six Arm Cortex-A55 cores, enabling efficient and fast processing of tasks. The processor also includes a dedicated Neutron NPU, which is an innovative hardware accelerator designed for efficient processing of machine-learning workloads. The Neutron NPU works in conjunction with the chip's CPU to deliver higher performance and lower power consumption for neural network (NN) inference. In addition to managing Multiply-Accumulate (MAC) compute blocks throughput, the NPU also optimizes arrangement of weights, manages memory accesses, and provides rescaling, activation, and pooling functions. This combination of features makes the i.MX 95 an ideal solution for edge inference applications, as it enables efficient and fast processing of tasks while maintaining low power consumption. For more detailed information, please refer to the NXP i.MX 95 Applications Processor Reference Manual (IMX95RM)."
+}

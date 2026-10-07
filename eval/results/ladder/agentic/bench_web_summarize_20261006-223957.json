@@ -1,0 +1,27 @@
+{
+  "task": "web_summarize",
+  "ts": "2026-10-06T22:39:57",
+  "board": "rtx5090",
+  "wall_s": 4.546,
+  "telemetry": {
+    "prefill_ms": 21.08,
+    "decode_ms": 545.62,
+    "prefill_tok_per_s": 5976.1,
+    "decode_tok_per_s": 230.9,
+    "rag_docs_used": 0
+  },
+  "gpu": {
+    "samples": 27,
+    "sm_pct_mean": 11.3,
+    "mem_pct_mean": 5.3,
+    "power_w_mean": 140.2,
+    "sm_pct_peak": 95.0,
+    "vram_mib_peak": 9721.0
+  },
+  "extra": {
+    "web_search_s": 3.741,
+    "web_status": "ok",
+    "n_results": null
+  },
+  "output": "The NXP i.MX 95 applications processor, featuring edge AI capabilities, is designed for advanced use cases requiring high performance and security. It supports multiple display configurations and is optimized for multimedia content creation and consumption. The processor includes features like secure memory encryption and trusted boot, making it suitable for security-sensitive applications. Its dual-core Arm Cortex-A72 and Arm Cortex-M7 architecture ensures robust performance, while the integrated AI accelerator enables efficient machine learning tasks. Ideal for smartphones, tablets, and other embedded systems, the i.MX 95 offers a powerful platform for innovation in the mobile and IoT sectors."
+}

@@ -1,0 +1,19 @@
+{
+  "task": "transcribe",
+  "ts": "2026-10-06T22:43:13",
+  "board": "rtx5090",
+  "wall_s": 0.09,
+  "telemetry": {},
+  "gpu": {
+    "samples": 5,
+    "sm_pct_mean": 76.8,
+    "mem_pct_mean": 51.2,
+    "power_w_mean": 289.1,
+    "sm_pct_peak": 95.0,
+    "vram_mib_peak": 9777.0
+  },
+  "extra": {
+    "engine": "whisper-base"
+  },
+  "output": "{\"status\": \"error\", \"error\": \"Whisper not installed. Run: pip install openai-whisper\"}"
+}

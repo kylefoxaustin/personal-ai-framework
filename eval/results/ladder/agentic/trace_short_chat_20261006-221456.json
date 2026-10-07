@@ -1,0 +1,35 @@
+{
+  "task": "short_chat",
+  "ts": "2026-10-06T22:14:56",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 2.099,
+  "tokens_used": 5465,
+  "telemetry": {
+    "prompt_tokens": 5394,
+    "completion_tokens": 71,
+    "prefill_ms": 603.14,
+    "decode_ms": 331.61,
+    "total_ms": 2007.1,
+    "prefill_tok_per_s": 8943.3,
+    "decode_tok_per_s": 214.1,
+    "rag_docs_used": 3
+  },
+  "gpu_signature": {
+    "samples": 16,
+    "sm_pct": {
+      "mean": 26.5,
+      "peak": 99.0
+    },
+    "mem_pct": {
+      "mean": 15.0,
+      "peak": 60.0
+    },
+    "power_w": {
+      "mean": 227.4,
+      "peak": 528.91
+    },
+    "vram_mib_peak": 9121.0
+  },
+  "answer_preview": "The NXP i.MX 95 is an advanced applications processor offering powerful graphics and video cores, robust vision and machine learning acceleration, and efficient CPU performance. It is designed for industrial, IoT, and automotive devices, incorporating up to six Arm Cortex-A55 cores and supporting functional safety with a built-in Arm Cortex-M33."
+}
