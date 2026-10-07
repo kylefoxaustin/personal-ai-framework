@@ -1,0 +1,35 @@
+{
+  "task": "decode_heavy",
+  "ts": "2026-10-06T20:26:02",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 1.369,
+  "tokens_used": 362,
+  "telemetry": {
+    "prompt_tokens": 103,
+    "completion_tokens": 259,
+    "prefill_ms": 17.88,
+    "decode_ms": 1107.56,
+    "total_ms": 1297.66,
+    "prefill_tok_per_s": 5760.5,
+    "decode_tok_per_s": 233.8,
+    "rag_docs_used": 0
+  },
+  "gpu_signature": {
+    "samples": 12,
+    "sm_pct": {
+      "mean": 44.8,
+      "peak": 94.0
+    },
+    "mem_pct": {
+      "mean": 31.0,
+      "peak": 68.0
+    },
+    "power_w": {
+      "mean": 251.8,
+      "peak": 517.63
+    },
+    "vram_mib_peak": 9141.0
+  },
+  "answer_preview": "Linh,\nI need to add a section to the whitepaper explaining why we must do the LLM decode in the main memory bandwidth path and why we must do the prefill\nin the"
+}

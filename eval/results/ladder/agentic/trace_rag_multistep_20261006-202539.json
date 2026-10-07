@@ -1,0 +1,35 @@
+{
+  "task": "rag_multistep",
+  "ts": "2026-10-06T20:25:39",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 2.413,
+  "tokens_used": 4870,
+  "telemetry": {
+    "prompt_tokens": 4649,
+    "completion_tokens": 221,
+    "prefill_ms": 488.07,
+    "decode_ms": 1019.37,
+    "total_ms": 2338.5,
+    "prefill_tok_per_s": 9525.2,
+    "decode_tok_per_s": 216.8,
+    "rag_docs_used": 4
+  },
+  "gpu_signature": {
+    "samples": 17,
+    "sm_pct": {
+      "mean": 40.5,
+      "peak": 95.0
+    },
+    "mem_pct": {
+      "mean": 27.1,
+      "peak": 68.0
+    },
+    "power_w": {
+      "mean": 270.2,
+      "peak": 552.05
+    },
+    "vram_mib_peak": 9131.0
+  },
+  "answer_preview": "The i.MX 95 does not include an NPU. There is no mention of NPU in the provided excerpts. The i.MX 95 is focused on CPU cores, memory, and various peripherals, "
+}

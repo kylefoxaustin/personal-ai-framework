@@ -1,0 +1,35 @@
+{
+  "task": "inbox_triage",
+  "ts": "2026-10-06T20:25:59",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 1.022,
+  "tokens_used": 311,
+  "telemetry": {
+    "prompt_tokens": 133,
+    "completion_tokens": 178,
+    "prefill_ms": 21.11,
+    "decode_ms": 748.78,
+    "total_ms": 945.53,
+    "prefill_tok_per_s": 6299.6,
+    "decode_tok_per_s": 237.7,
+    "rag_docs_used": 0
+  },
+  "gpu_signature": {
+    "samples": 11,
+    "sm_pct": {
+      "mean": 12.3,
+      "peak": 24.0
+    },
+    "mem_pct": {
+      "mean": 5.2,
+      "peak": 16.0
+    },
+    "power_w": {
+      "mean": 239.4,
+      "peak": 492.39
+    },
+    "vram_mib_peak": 9137.0
+  },
+  "answer_preview": "Sure, I can help with that. Here's my triage on the emails:\n\n1. **Manager requesting Q3 status doc**: High priority. I need to provide an update on our progress"
+}

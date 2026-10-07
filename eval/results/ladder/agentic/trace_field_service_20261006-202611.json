@@ -1,0 +1,35 @@
+{
+  "task": "field_service",
+  "ts": "2026-10-06T20:26:11",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 2.317,
+  "tokens_used": 4411,
+  "telemetry": {
+    "prompt_tokens": 4190,
+    "completion_tokens": 221,
+    "prefill_ms": 439.54,
+    "decode_ms": 1005.91,
+    "total_ms": 2253.65,
+    "prefill_tok_per_s": 9532.7,
+    "decode_tok_per_s": 219.7,
+    "rag_docs_used": 4
+  },
+  "gpu_signature": {
+    "samples": 17,
+    "sm_pct": {
+      "mean": 40.6,
+      "peak": 95.0
+    },
+    "mem_pct": {
+      "mean": 27.9,
+      "peak": 68.0
+    },
+    "power_w": {
+      "mean": 288.1,
+      "peak": 556.2
+    },
+    "vram_mib_peak": 9137.0
+  },
+  "answer_preview": "The i.MX 95 Neutron NPU provides efficient processing of machine-learning workloads. It works in conjunction with the chip's CPU to deliver higher performance a"
+}

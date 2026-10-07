@@ -1,0 +1,35 @@
+{
+  "task": "decode_heavy",
+  "ts": "2026-10-06T20:25:47",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 2.015,
+  "tokens_used": 504,
+  "telemetry": {
+    "prompt_tokens": 103,
+    "completion_tokens": 401,
+    "prefill_ms": 18.21,
+    "decode_ms": 1743.35,
+    "total_ms": 1934.42,
+    "prefill_tok_per_s": 5657.7,
+    "decode_tok_per_s": 230.0,
+    "rag_docs_used": 0
+  },
+  "gpu_signature": {
+    "samples": 15,
+    "sm_pct": {
+      "mean": 63.7,
+      "peak": 95.0
+    },
+    "mem_pct": {
+      "mean": 42.7,
+      "peak": 69.0
+    },
+    "power_w": {
+      "mean": 305.7,
+      "peak": 503.72
+    },
+    "vram_mib_peak": 9137.0
+  },
+  "answer_preview": "The memory bandwidth in the LLM decode path is highly constrained by the speed of the DRAM.  The LLM\nonly needs to read the instructions into the L1 cache.  The"
+}
