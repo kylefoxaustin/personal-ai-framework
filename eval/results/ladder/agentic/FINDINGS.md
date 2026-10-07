@@ -1,5 +1,11 @@
 # Agentic-at-the-Edge — Measured Findings (deck source of truth)
 
+> ⚠ **UNDER REVISION after adversarial review (fable protocol, 2026-10-07) — see
+> `docs/agentic-edge-review-2026-10-07.md`.** The clearly-correct overclaim fixes are applied
+> below; items needing a measurement or Kyle's call (two-judge accuracy grading, a same-instrument
+> 5090 llama-bench point, the deck rewrite, a closing ask) are flagged ⏳ in the review doc. Do NOT
+> quote the old "98.9% decode" single number — it is replaced by the measured band (see Headline).
+
 *2026-10-06, 5090 source-of-truth measurements + deep-research grounding. Provenance tags per
 Fleet Law: MEASURED (ran it) / DERIVED (computed) / SOURCED (literature). Harness:
 `scripts/agentic_bench/trace.py`. Research: `docs/research/agentic-edge-deep-research-20261006.json`.*
@@ -7,20 +13,28 @@ Fleet Law: MEASURED (ran it) / DERIVED (computed) / SOURCED (literature). Harnes
 ## The frame (what "agentic at the edge" means)
 - **(a) bounded skill-orchestrator** — fixed, pre-tested skills; intent→plan→execute→synthesize;
   no code-gen. **Shippable on edge. = Skippy.** SOURCED: *every* shipping on-device agent today is
-  this model (Gemini Nano = 4 fixed LoRA skills; Apple 3B, "not a general chatbot," constrained
+  this model — VERIFIED for Google + Apple (Qualcomm/Samsung specifics unconfirmed at primary-source level) (Gemini Nano = 4 fixed LoRA skills; Apple 3B, "not a general chatbot," constrained
   tool-calling that can't hallucinate tool names). **No shipped product runs on-device code-gen.**
 - **(b) autonomous code-gen agent** — writes/runs novel code; wants a frontier brain. = openclaw /
   the fleet. The CEILING; cloud or biggest-chip territory.
 
-## ★ Headline (the VP's premise, corrected — SOURCED + MEASURED)
-**Agentic-edge is memory-BANDWIDTH-bound, not TOPS-bound.** A big NPU (e.g. 500 eTOPS) is largely
-idle during agentic work; the binding resource is LPDDR5X bandwidth.
-- SOURCED: real agentic traces are decode-dominated (decode = 91–98.6% of LLM time, because high
-  cross-turn context reuse means little re-prefill); decode is bandwidth-bound, prefill is
-  compute-bound. No existing agentic benchmark (AgentBench/τ-bench/WebArena/AndroidWorld) measures
-  on-device resource cost — only task success. That gap is the whitespace.
-- MEASURED (ours, 5090, `trace.py decode_heavy`): on a generation task **decode = 1826 ms vs
-  prefill 21 ms → decode is 98.8% of LLM time.** Matches the literature on our own stack.
+## ★ Headline (the VP's premise, refined — SOURCED + MEASURED)
+**For the agent's token generation, TOPS do not set the rate — memory bandwidth and CPU do.** A big
+NPU (e.g. 500 eTOPS) does little for batch-1 decode; it earns its area on *perception* (vision/ASR)
+and on *prefill/TTFT*, not on the agent's generation loop. (Reframed from the earlier absolute "NPU
+is idle" per VP review — the NPU is not idle, it's doing a different job; same sizing conclusion.)
+- SOURCED: agentic LLM work is decode-heavy, and batch-1 decode is memory-bandwidth-bound while
+  prefill is compute-bound (roofline; the research cites decode = 91–98.6% of LLM *compute* time in
+  long high-reuse sessions). Mainstream agent benchmarks (AgentBench/τ-bench/WebArena/AndroidWorld)
+  score only task SUCCESS, not on-device resource cost; a 2025–26 cluster (AgentSLABench, AgBench,
+  AgentPerfBench, RooflineBench) is just starting on resources. The specific whitespace: an
+  **edge-silicon per-phase CPU/BW/NPU/energy** decomposition.
+- MEASURED (ours, 5090) — report the BAND, not one number: the decode *share of LLM time* runs
+  **~85–90% on pure-generation tasks** (decode/total_ms; prefill ~1%, ~10–15% is CPU-side
+  tokenize/sample) down to **~51–70% on RAG-grounded tasks**, which additionally spend **37–47% of
+  wall-time in retrieval+orchestration (CPU/DDR)**. Every component lands on bandwidth or CPU; none
+  on TOPS. (The earlier "98.9%" was decode/(prefill+decode) on a long-generation microbenchmark —
+  denominator-inflated and not representative of agentic mixes; superseded by this band.)
 
 ## MEASURED — 5090 (source of truth)
 | workload | wall | prefill | decode | decode % of LLM | note |
@@ -30,7 +44,7 @@ idle during agentic work; the binding resource is LPDDR5X bandwidth.
 | rag_multistep (WARM) | **2.5 s** | 520 ms | ~1100 ms | — | agentic task: ~**65% LLM / ~35% retrieval+orchestration** |
 | rag_multistep (COLD, 1st call) | **89 s** | 519 ms | 312 ms | — | **cold-cache: ~88 s loading embed model + BM25 index + ChromaDB** |
 
-- **Cold-start is a first-class edge metric.** 89 s cold → ~1.7–2.5 s warm (50×). A device that
+- **Cold-start is a first-class edge metric.** 89 s cold → ~1.7–2.5 s warm (~35–50×, n=1, 5090-host). A device that
   sleeps/wakes pays the cold cost every cold path — must be designed for (keep models resident).
 - **The agentic task's cost is not just the LLM.** Warm, retrieval+orchestration is ~1/3 of
   wall-time (and ~all of it when cold). The 500-eTOPS NPU is idle twice over: decode is BW-bound,
@@ -42,7 +56,7 @@ idle during agentic work; the binding resource is LPDDR5X bandwidth.
   rate **~220 tok/s** consistent across decode_heavy (220.0) and rag_multistep (202.8). The
   decode-dominance headline is stable, not a single-sample fluke.
 
-## MEASURED — the decode ladder (same llama-bench instrument, 7B v4 Q4_K_M)
+## MEASURED — the decode ladder (⚠ MIXED instruments — see per-row tags; 7B v4 Q4_K_M)
 | board | mem bandwidth | decode tok/s | prefill tok/s |
 |---|--:|--:|--:|
 | RTX 5090 (Blackwell, desktop) | ~1792 GB/s | ~220 (full-stack chat) | 4846 (telemetry) |
@@ -54,9 +68,12 @@ idle during agentic work; the binding resource is LPDDR5X bandwidth.
 
 ## Multi-agent vs single agent (SOURCED)
 Adding concurrent agents is expensive: prefix-cache hit rate collapses ~98% → 16–26%, throughput
-drops up to 66% under concurrent agent load. → **A single well-scoped bounded agent (Skippy model)
-is the edge answer; multi-agent is justified only when the mission needs genuinely parallel
-independent context.** Confirms the floor (Skippy) / ceiling (openclaw, the fleet) split.
+drops up to 66% under concurrent agent load. ⚠ **These magnitudes are from a 2×H100-NVL / vLLM
+datacenter measurement — the MECHANISM transfers to edge, the NUMBERS do NOT; edge magnitudes must
+be re-measured on LPDDR5X silicon** (per the research caveat). Direction stands: **a single
+well-scoped bounded agent (Skippy model) is the edge answer; multi-agent is justified only when the
+mission needs genuinely parallel independent context.** Confirms the floor (Skippy) / ceiling
+(openclaw, the fleet) split.
 
 ## Open / honest caveats (do not hide in the deck)
 - Ladder agentic-task numbers are DERIVED (full Skippy on ARM is the early-finish stretch, not done).
@@ -111,19 +128,21 @@ Same `scripts/agentic_bench/retrieval_proxy.py` on both hosts (Skippy's all-Mini
 | cosine search (31,939×384) | 0.51 ms | 6.92 ms | 13.6× |
 | **embed + search (CPU path)** | **5.0 ms** | **32.9 ms** | **6.6×** |
 
-**Why this validates the DERIVED ladder:** the retrieval embed+search layer slows ~6.6× on Thor's
-ARM — about the same factor as decode (5.4×, 220→40.9 tok/s). Both layers scale down together, so
-the per-task phase *proportions* are ~preserved across the ladder (the assumption the derived
-projection rests on). And absolute retrieval stays negligible (33 ms) vs decode (~5 s for a
-200-token answer) ⇒ **the agentic task is decode-dominated even harder at the edge** (~99% decode
-on Thor vs ~65% on the 5090). The bandwidth-bound thesis gets *stronger* down the ladder.
-
-**Scope (honest):** this measures the SEMANTIC embed+search component on Thor ARM — NOT the full
-hybrid orchestration (BM25 + reranker + ChromaDB round-trips + agent-loop detection passes). Those
-other parts are either light Python (BM25/rerank) or are themselves LLM calls (agent-loop detection)
-that scale with decode — so the full orchestration would track the same ~5-6× band. Standing up the
-complete Skippy stack on Thor (pip+chromadb+FastAPI) remains the fuller version; this is the key
-NN component measured, reusing qualcomm's m6venv + the llama.cpp CUDA build (no llama-cpp-python compile).
+**What this is (scoped — corrected after review, does NOT "validate the ladder"):** one NN
+component of retrieval — the all-MiniLM query-embed + a cosine search — measured on Thor ARM at
+**6.6× the 5090 (CPU path)**. That is a real, useful datapoint: the embedding layer is modestly
+slower on ARM, not catastrophically.
+⚠ **It does NOT validate the full derived ladder, and the earlier "~99% decode on Thor" was wrong.**
+This proxy is ~0.6% of the real orchestration layer (the 5090's warm RAG task spends ~875 ms in
+retrieval+orchestration — ChromaDB/BM25/rerank/agent-loop — of which embed+search is ~5 ms). Doing
+the honest projection: scale the *full* ~875 ms layer by 6.6× → ~5.8 s on Thor, vs ~5 s decode (200
+tok ÷ 40.9 tok/s) ⇒ **~50% decode on Thor, not ~99%** [DERIVED]. So the phase mix does NOT shift
+dramatically toward decode at the edge; both layers scale ~together. The components also ranged
+2.6×–13.6× (cosine search alone 13.6×), so "~6.6× ≈ decode's 5.4×" is one point in a wide band.
+**The ladder stays DERIVED** with stated assumptions; the real validation is running the actual
+ChromaDB+hybrid retrieval path on Thor (TODO). Also note the cosine search here is a brute-force
+numpy GEMV on a random matrix, not ChromaDB's HNSW — a different algorithm; treat the search ratio
+as indicative only.
 
 ## MEASURED — the 10-task agentic benchmark (5090, 2026-10-06, warm, coherence-gated)
 Grounded in OpenClaw's capability set (A/B); run via `scripts/agentic_bench/trace_bench.py`.
