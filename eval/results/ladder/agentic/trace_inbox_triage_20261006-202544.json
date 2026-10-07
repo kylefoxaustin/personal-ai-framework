@@ -1,0 +1,35 @@
+{
+  "task": "inbox_triage",
+  "ts": "2026-10-06T20:25:44",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 0.472,
+  "tokens_used": 182,
+  "telemetry": {
+    "prompt_tokens": 133,
+    "completion_tokens": 49,
+    "prefill_ms": 20.24,
+    "decode_ms": 195.98,
+    "total_ms": 388.53,
+    "prefill_tok_per_s": 6570.6,
+    "decode_tok_per_s": 250.0,
+    "rag_docs_used": 0
+  },
+  "gpu_signature": {
+    "samples": 8,
+    "sm_pct": {
+      "mean": 36.1,
+      "peak": 93.0
+    },
+    "mem_pct": {
+      "mean": 16.5,
+      "peak": 44.0
+    },
+    "power_w": {
+      "mean": 170.4,
+      "peak": 226.76
+    },
+    "vram_mib_peak": 9137.0
+  },
+  "answer_preview": "1. Vendor: \n- **Reply**: No problem. Can we do Wednesday instead?\n\n2. Manager: \n- **Reply**: Will send by end of day.\n\n3. Newsletter: \n- **Reply**: Will read la"
+}

@@ -1,0 +1,35 @@
+{
+  "task": "decode_heavy",
+  "ts": "2026-10-06T20:25:32",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 1.754,
+  "tokens_used": 440,
+  "telemetry": {
+    "prompt_tokens": 103,
+    "completion_tokens": 337,
+    "prefill_ms": 18.25,
+    "decode_ms": 1474.3,
+    "total_ms": 1670.78,
+    "prefill_tok_per_s": 5644.4,
+    "decode_tok_per_s": 228.6,
+    "rag_docs_used": 0
+  },
+  "gpu_signature": {
+    "samples": 14,
+    "sm_pct": {
+      "mean": 54.7,
+      "peak": 94.0
+    },
+    "mem_pct": {
+      "mean": 37.1,
+      "peak": 66.0
+    },
+    "power_w": {
+      "mean": 257.6,
+      "peak": 499.96
+    },
+    "vram_mib_peak": 8963.0
+  },
+  "answer_preview": "The performance of an LLM on the processor is heavily influenced by the memory bandwidth available and the computational load of the model. In the case of LLM, "
+}

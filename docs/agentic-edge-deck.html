@@ -148,8 +148,9 @@
       <div class="bar"><span class="lab">RTX 5090</span><div class="track"><div class="fill" style="width:100%"></div></div><span class="val">~220 t/s</span></div>
       <div class="bar"><span class="lab">Jetson Thor</span><div class="track"><div class="fill" style="width:18.6%"></div></div><span class="val">40.9 t/s</span></div>
       <div class="bar"><span class="lab">Jetson Orin</span><div class="track"><div class="fill" style="width:12.6%"></div></div><span class="val">27.8 t/s</span></div>
+      <div class="bar"><span class="lab">i.MX95 · ARA240</span><div class="track"><div class="fill" style="width:2.9%"></div></div><span class="val">6.3 t/s</span></div>
     </div>
-    <div class="cap">7B v4 Q4_K_M · decode throughput falls with memory bandwidth <span class="tag m">Measured</span></div>
+    <div class="cap">7B v4 Q4_K_M · decode throughput falls with memory bandwidth, desktop → the NXP edge part <span class="tag m">Measured</span></div>
   </div>
 
   <ul class="clean takeaways" style="margin-top:20px">
@@ -224,6 +225,7 @@
     <div class="bar"><span class="lab">RTX 5090 · ~1.8 TB/s</span><div class="track"><div class="fill" style="width:100%"></div></div><span class="val">~220 t/s</span></div>
     <div class="bar"><span class="lab">Jetson Thor</span><div class="track"><div class="fill" style="width:18.6%"></div></div><span class="val">40.9 t/s</span></div>
     <div class="bar"><span class="lab">Jetson Orin · 205 GB/s</span><div class="track"><div class="fill" style="width:12.6%"></div></div><span class="val">27.8 t/s</span></div>
+    <div class="bar"><span class="lab">i.MX95 ARA240 · 7B</span><div class="track"><div class="fill" style="width:2.9%"></div></div><span class="val">6.3 t/s</span></div>
   </div>
   <p style="margin-top:14px"><strong>The 500-eTOPS NPU does nothing for decode.</strong> It accelerates convolution-shaped perception; autoregressive decode is a bandwidth problem the NPU can't touch. Spending die area on TOPS to make an agent faster is spending it in the wrong place.</p>
   <p class="cap">5090 decode via llama-cpp telemetry; Thor/Orin via llama-bench, same 7B v4 Q4 <span class="tag m">Measured</span> · <span class="tag d">Derived</span> bandwidth-scaling law</p>
@@ -252,11 +254,12 @@
     <tr class="hi"><td><strong>RTX 5090</strong></td><td>Blackwell desktop · source of truth</td><td class="num">~220</td><td class="num">32 GB</td><td><span class="tag m">Measured</span></td></tr>
     <tr><td><strong>Jetson Thor</strong></td><td>Blackwell edge · sm_110</td><td class="num">40.9</td><td class="num">123 GB</td><td><span class="tag m">Measured</span></td></tr>
     <tr><td><strong>Jetson Orin</strong></td><td>Ampere edge</td><td class="num">27.8</td><td class="num">64 GB</td><td><span class="tag m">Measured</span></td></tr>
-    <tr><td><strong>i.MX95 + ARA240</strong></td><td>NXP · Neutron NPU + Kinara M.2</td><td class="num">—</td><td class="num">—</td><td><span class="tag s">Sourced</span> runs a 7B</td></tr>
+    <tr><td><strong>i.MX95 + ARA240</strong></td><td>NXP · Kinara M.2 LLM accel</td><td class="num">6.3&nbsp;/&nbsp;12.9</td><td class="num">—</td><td><span class="tag m">Measured</span> 7B / 3B</td></tr>
   </table>
   </div>
-  <p>Thor "just runs" wasn't free — its toolchain needed rebuilding for Blackwell <span class="tag m">Measured</span>. Its <strong>123 GB unified pool</strong> holds models the 5090's 32 GB can't. The i.MX95's Kinara ARA240 runs a 7B today; measuring that rung is next.</p>
-  <p class="cap">Per-task agentic cost on Thor/Orin is currently <span class="tag d">Derived</span> from the 5090 phase-mix × measured decode; full on-board runs are the next step.</p>
+  <p>Thor "just runs" wasn't free — its toolchain needed rebuilding for Blackwell <span class="tag m">Measured</span>. Its <strong>123 GB unified pool</strong> holds models the 5090's 32 GB can't.</p>
+  <p><strong>The ladder reaches the real NXP part — measured.</strong> On the i.MX95's Kinara ARA240, Qwen2.5-<strong>7B</strong> decodes at <strong>6.3 tok/s</strong> (TTFT 2.0 s) — <em>within 3% of NXP's published 6.51 spec</em> — and <strong>3B</strong> at <strong>12.9 tok/s</strong> (TTFT 0.88 s) <span class="tag m">Measured</span>. Decode throughput falls monotonically with memory bandwidth from desktop to edge: <strong>220 → 41 → 28 → 6.3 tok/s</strong>. The bandwidth-bound law holds the whole way down.</p>
+  <p class="cap">i.MX95 also has a MEASURED <em>perception</em> rung — single-frame vision e2e is ~71% host+PCIe handoff / ~15% accelerator (off-SoC M.2). That's the detection story, separate from decode. Thor/Orin per-<em>task</em> agentic cost is still <span class="tag d">Derived</span>.</p>
 </section>
 
 <!-- ============ SLIDE 8 — one agent not a swarm ============ -->
@@ -286,6 +289,7 @@
   </table>
   </div>
   <p>The set is chosen so each exercises a <strong>different</strong> CPU / bandwidth / NPU balance — that spread is the point. Note where the NPU actually earns its area: the <em>perception</em> front-ends (vision, ASR), not the agent reasoning.</p>
+  <p class="cap">Measured so far (5090, n=3): pure-LLM tasks are <strong>94–99%</strong> decode; RAG-backed tasks carry <strong>37–47%</strong> of wall-time in retrieval+orchestration (CPU/DDR). <span class="tag m">Measured</span> — the vision/ASR front-ends are projected pending on-board perception runs.</p>
 </section>
 
 <!-- ============ SLIDE 10 — benchmark gap ============ -->

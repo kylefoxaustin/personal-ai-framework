@@ -60,8 +60,42 @@ independent context.** Confirms the floor (Skippy) / ceiling (openclaw, the flee
 
 ## Open / honest caveats (do not hide in the deck)
 - Ladder agentic-task numbers are DERIVED (full Skippy on ARM is the early-finish stretch, not done).
-- i.MX95 = SOURCED/feasibility (ARA240 runs a 7B; Neutron feasibility gate exists). Not measured.
+- **i.MX95 ARA240 — now MEASURED (fleet, 2026-10-06; corrected after qualcomm + agentic-skills-imx review):**
+  - **LLM decode, Qwen2.5-7B on ARA240: 6.3 tok/s decode · TTFT 2.0 s** [MEASURED 2026-07-16,
+    agentic-skills-imx `IMX95_BOARD_DOSSIER.md` §5] — load 29.6 s / 8.19 GB, coherent output; **within
+    3% of NXP's published 6.51 tok/s spec** [SOURCED]. ⚠ dated: the staged `.dvm` has since been
+    deleted, so this is MEASURED-*then*, not re-confirmable today — cite with the date. (e2e short-prompt
+    5.36 tok/s is [UNVERIFIED] user-rate; the gap vs 6.3 is prefill folded into e2e, not a slower engine.)
+  - **LLM decode, Qwen2.5-3B on ARA240: 12.9 tok/s decode · 46.6 prefill · TTFT 0.88 s · die 52 °C**
+    [MEASURED ~2026-09, qualcomm via optimum-ara, INT4 Genie .dvm] — fresh, re-confirmable. 3B not 7B,
+    but a clean scoped architectural number.
+  - ⚠ **The 71% host / 15% accelerator split is a VISION number, NOT LLM** (yolov8n single-frame CNN
+    e2e 42.8 ms / ORB-SLAM3) — it's the right "off-SoC M.2 handoff dominates" story for **perception**,
+    but must NOT sit on an LLM-decode slide (decode is bandwidth/dequant-bound; that frame is
+    host-pre/post-bound). Pair the two as separate rungs: i.MX95 has a MEASURED generative rung (3B/7B
+    decode) AND a MEASURED perception rung (handoff-dominated detection).
+  - **Neutron is a prefill/TTFT story, never a decode one:** prefill offloads 8.43× @L=512 (→~2.15×
+    @16k) but decode is a WASH (1.08×, explicitly do-not-offload). So "LLM decode on i.MX95" = the
+    ARA240, full stop. [agentic-skills-imx]
+  - **Toolchain status corrected (qualcomm's finding, not agentic-skills-imx's):** the r1.3 "Qwen3
+    can't compile / paused pending v3.0" gate is now STALE — v3.0/r3.0 is downloaded, qualcomm compiled
+    Qwen3-VL-4B to an ARA240 `.dvm` (0 errors, ~2 h), and r3.0 supports a Qwen2.5-7B GGUF path, so a
+    fresh Skippy-7B ARA240 number is reachable (multi-hour compile; board-side VLM runtime still pending).
 - Retrieval ANSWER-quality is a separate axis from resource cost: warm+skip_agent_loop IDs the
   right chip, but TOPS is sometimes wrong (said 0.5, truth is 2.0 TOP/s) and the agent-loop path
   degraded one answer to "no NPU"; plus residual i.MX93 leakage. Known over-grounding headroom —
   flagged, not fixed here. Pick clean demo phrasings; do not showcase a wrong-answer trace.
+
+## MEASURED — 5-task matrix (5090, n=3, 2026-10-06, warm)
+| task | type | wall | decode % of LLM | orchestration % of task | decode tok/s |
+|---|---|--:|--:|--:|--:|
+| decode_heavy | long generation | 1.7 s | 98.8% | 14% | 230.8 |
+| inbox_triage | multi-step LLM, no RAG | 0.6 s | 94.5% | 36% | 246.5 |
+| field_service | RAG + synthesis | 2.3 s | 70.1% | 37% | 217.1 |
+| rag_multistep | RAG + synthesis | 1.9 s | 51.3% | 47% | 221.4 |
+| prefill_heavy | big-context control | 1.2 s | 0% | 20% | — |
+
+**Two-layer confirmation:** pure-LLM agentic tasks are decode-dominated (94–99% of LLM time);
+RAG-backed tasks carry 37–47% of wall-time in retrieval+orchestration (CPU/DDR, GPU near-idle).
+Decode rate is steady ~217–247 tok/s on the 5090 across task types. (GPU sm%/mem% remain noisy
+on the over-provisioned 5090 — time decomposition is the robust signal; see per-task JSONs.)

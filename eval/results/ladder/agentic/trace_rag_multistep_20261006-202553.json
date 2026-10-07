@@ -1,0 +1,35 @@
+{
+  "task": "rag_multistep",
+  "ts": "2026-10-06T20:25:53",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 1.755,
+  "tokens_used": 4735,
+  "telemetry": {
+    "prompt_tokens": 4649,
+    "completion_tokens": 86,
+    "prefill_ms": 489.0,
+    "decode_ms": 391.52,
+    "total_ms": 1684.68,
+    "prefill_tok_per_s": 9507.1,
+    "decode_tok_per_s": 219.7,
+    "rag_docs_used": 4
+  },
+  "gpu_signature": {
+    "samples": 14,
+    "sm_pct": {
+      "mean": 32.7,
+      "peak": 99.0
+    },
+    "mem_pct": {
+      "mean": 20.7,
+      "peak": 68.0
+    },
+    "power_w": {
+      "mean": 233.8,
+      "peak": 569.38
+    },
+    "vram_mib_peak": 9137.0
+  },
+  "answer_preview": "I can't find the NPU details for the i.MX 95 in the provided excerpts. The i.MX 93 has the Ethos-U65 microNPU, but there's no mention of it in the i.MX 95 data "
+}

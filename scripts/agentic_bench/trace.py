@@ -37,6 +37,15 @@ TASKS = {
         "prompt": "Using the datasheets, what NPU does the i.MX 95 have and how many TOPS? "
                   "Cite the source.",
         "use_rag": True, "rag_k": 4, "max_tokens": 220},
+    "field_service": {  # industrial: clean-phrasing datasheet RAG (retrieves correctly)
+        "prompt": "What does the i.MX 95 Neutron NPU do, and list its key features and "
+                  "supported neural-network operators.",
+        "use_rag": True, "rag_k": 4, "max_tokens": 220},
+    "inbox_triage": {   # consumer: multi-step LLM, no external asset
+        "prompt": "You have 3 unread emails: (1) a vendor asking to reschedule Tuesday's call, "
+                  "(2) your manager requesting the Q3 status doc by end of day, (3) a newsletter. "
+                  "Triage them by priority and draft a one-line reply to each that needs one.",
+        "use_rag": False, "max_tokens": 320},
 }
 
 

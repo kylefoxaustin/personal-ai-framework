@@ -1,0 +1,35 @@
+{
+  "task": "inbox_triage",
+  "ts": "2026-10-06T20:26:12",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 0.417,
+  "tokens_used": 170,
+  "telemetry": {
+    "prompt_tokens": 133,
+    "completion_tokens": 37,
+    "prefill_ms": 21.82,
+    "decode_ms": 146.99,
+    "total_ms": 343.92,
+    "prefill_tok_per_s": 6096.3,
+    "decode_tok_per_s": 251.7,
+    "rag_docs_used": 0
+  },
+  "gpu_signature": {
+    "samples": 8,
+    "sm_pct": {
+      "mean": 2.0,
+      "peak": 2.0
+    },
+    "mem_pct": {
+      "mean": 0.0,
+      "peak": 0.0
+    },
+    "power_w": {
+      "mean": 150.2,
+      "peak": 231.85
+    },
+    "vram_mib_peak": 9129.0
+  },
+  "answer_preview": "Hi John!\n\nSorry I missed you today, had a last minute customer meeting come up.  Can we reschedule for later today or tomorrow?\n\n \n\nThanks!\n\n \n\nKylef"
+}

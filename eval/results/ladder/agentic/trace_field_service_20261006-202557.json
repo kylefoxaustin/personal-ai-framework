@@ -1,0 +1,35 @@
+{
+  "task": "field_service",
+  "ts": "2026-10-06T20:25:57",
+  "board": "rtx5090",
+  "model": "kyle-qwen25-7b-v4-q4_k_m",
+  "wall_s": 2.286,
+  "tokens_used": 4411,
+  "telemetry": {
+    "prompt_tokens": 4190,
+    "completion_tokens": 221,
+    "prefill_ms": 431.64,
+    "decode_ms": 1012.51,
+    "total_ms": 2232.74,
+    "prefill_tok_per_s": 9707.2,
+    "decode_tok_per_s": 218.3,
+    "rag_docs_used": 4
+  },
+  "gpu_signature": {
+    "samples": 17,
+    "sm_pct": {
+      "mean": 40.9,
+      "peak": 95.0
+    },
+    "mem_pct": {
+      "mean": 28.0,
+      "peak": 68.0
+    },
+    "power_w": {
+      "mean": 288.4,
+      "peak": 543.2
+    },
+    "vram_mib_peak": 9137.0
+  },
+  "answer_preview": "The i.MX 95 Neutron NPU is an on-chip hardware accelerator designed to efficiently process machine-learning workloads in conjunction with the main CPU. Here are"
+}
