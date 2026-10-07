@@ -133,7 +133,29 @@ class MeetingSummarizer:
                     "Whisper not installed. Run: pip install openai-whisper"
                 )
         return self._whisper
-    
+
+    def _transcribe_subprocess(self, wav_path: str) -> dict:
+        """Transcribe via a FRESH subprocess so Whisper's imports don't collide with
+        the server's already-loaded libraries (llama_cpp/chromadb) — the collision that
+        otherwise makes `import whisper` fail in-process and reports a misleading
+        'Whisper not installed'. Returns the parsed {text, segments} dict."""
+        import sys, json as _json
+        worker = str(Path(__file__).parent / "whisper_worker.py")
+        proc = subprocess.run(
+            [sys.executable, worker, wav_path, self.whisper_model, self.device],
+            capture_output=True, text=True, timeout=1800,
+        )
+        for line in (proc.stdout or "").splitlines():
+            if line.startswith("WHISPER_JSON "):
+                data = _json.loads(line[len("WHISPER_JSON "):])
+                if "error" in data:
+                    raise RuntimeError(f"Whisper subprocess failed: {data['error']}")
+                return data
+        raise RuntimeError(
+            f"Whisper subprocess produced no result (rc={proc.returncode}). "
+            f"stderr tail: {(proc.stderr or '')[-300:]}"
+        )
+
     def _check_ffmpeg(self) -> bool:
         """Check if FFmpeg is installed."""
         try:
@@ -226,32 +248,25 @@ class MeetingSummarizer:
                 "FFmpeg not installed. Run: sudo apt install ffmpeg"
             )
         
-        # Load Whisper
-        whisper_model = self._load_whisper()
-        
         # Convert to WAV if needed
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
             tmp_path = tmp.name
-        
+
         try:
             print(f"🔄 Converting to WAV: {file_path.name}")
             if not self._extract_audio(str(file_path), tmp_path):
                 raise RuntimeError("Failed to extract audio with FFmpeg")
-            
-            print(f"🎤 Transcribing with Whisper ({self.whisper_model})...")
-            result = whisper_model.transcribe(
-                tmp_path,
-                language="en",
-                verbose=False
-            )
-            
+
+            print(f"🎤 Transcribing with Whisper ({self.whisper_model}) in an isolated subprocess...")
+            result = self._transcribe_subprocess(tmp_path)
+
             # Extract segments
             segments = []
             for seg in result.get("segments", []):
                 segments.append(TranscriptSegment(
                     start=seg["start"],
                     end=seg["end"],
-                    text=seg["text"].strip()
+                    text=(seg.get("text") or "").strip()
                 ))
             
             full_text = result.get("text", "").strip()
