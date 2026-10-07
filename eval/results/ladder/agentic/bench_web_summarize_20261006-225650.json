@@ -1,0 +1,27 @@
+{
+  "task": "web_summarize",
+  "ts": "2026-10-06T22:56:50",
+  "board": "rtx5090",
+  "wall_s": 1.139,
+  "telemetry": {
+    "prefill_ms": 58.41,
+    "decode_ms": 469.24,
+    "prefill_tok_per_s": 10614.2,
+    "decode_tok_per_s": 228.0,
+    "rag_docs_used": 0
+  },
+  "gpu": {
+    "samples": 10,
+    "sm_pct_mean": 48.9,
+    "mem_pct_mean": 32.5,
+    "power_w_mean": 256.8,
+    "sm_pct_peak": 95.0,
+    "vram_mib_peak": 9624.0
+  },
+  "extra": {
+    "web_search_s": 0.287,
+    "web_status": "ok",
+    "n_results": 5
+  },
+  "output": "Sure, here's a summary:\n\nThe NXP i.MX 95 is part of NXP Semiconductors' product lineup, which includes a wide range of solutions such as microcontrollers, processors, sensors, and analog ICs. NXP is a global semiconductor company known for creating secure and connected solutions for various applications including automotive, IoT, and industrial sectors. As a Dutch company headquartered in Eindhoven, NXP is a leader in semiconductor manufacturing and design, contributing to a smarter world through its innovative technology."
+}

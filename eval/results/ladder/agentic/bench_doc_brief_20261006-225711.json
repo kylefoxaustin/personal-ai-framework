@@ -1,0 +1,23 @@
+{
+  "task": "doc_brief",
+  "ts": "2026-10-06T22:57:11",
+  "board": "rtx5090",
+  "wall_s": 5.591,
+  "telemetry": {
+    "prefill_ms": 1492.84,
+    "decode_ms": 2947.41,
+    "prefill_tok_per_s": 6788.4,
+    "decode_tok_per_s": 170.0,
+    "rag_docs_used": 8
+  },
+  "gpu": {
+    "samples": 32,
+    "sm_pct_mean": 88.5,
+    "mem_pct_mean": 53.4,
+    "power_w_mean": 415.4,
+    "sm_pct_peak": 99.0,
+    "vram_mib_peak": 9780.0
+  },
+  "extra": {},
+  "output": ":\n**NXP i.MX 95 Product Brief**\n\n**Overview:**\nThe NXP i.MX 95 is a high-performance, multi-core system-on-chip (SoC) designed for a wide range of industrial, automotive, and smart home applications. It features a Cortex-A55 CPU with a maximum clock speed of 1.7 GHz, supporting up to 2.0 TOP/s of machine learning (ML) performance through its integrated NPU. The i.MX 95 supports LPDDR5/LPDDR4X memory and offers various connectivity options including Ethernet (1 GbE, 10 GbE with TSN), PCIe Gen 3.0 (x12), USB 3.0, and multiple I/O interfaces such as CAN-FD, MIPI-CSI, and MIPI-DSI. The SoC includes a secure enclave, tamper detection, and a range of sensor interfaces, making it suitable for security-critical and high-reliability applications.\n\n**NPU:**\nThe i.MX 95's NPU complex, based on the eIQ Neutron N3-1024S, provides dedicated hardware acceleration for ML workloads. It supports convolutional neural networks (CNNs), recurrent neural networks (RNNs), and a variety of activation functions, enabling efficient inference. The NPU can process up to 1.0 GHz with 2 OPS/MAC and includes 1 MB of local SRAM. Key features of the NPU include:\n- 256 MACs per cycle\n- Support for various CNN and RNN operations\n- Activation functions such as ReLU, PReLU, and Leaky ReLU\n- Resampling and normalization functions\n- Efficient data movement and memory management\n\n**Memory and Connectivity:**\n- Memory: Supports LPDDR5/LPDDR4X with ECC and encryption capabilities.\n- Connectivity: Equipped with 2x 1 GbE (with TSN), 2x PCIe Gen 3.0 (x12), 2x 10 GbE (with TSN), USB 3.0, and various I/O interfaces inclu"
+}

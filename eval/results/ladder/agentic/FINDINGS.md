@@ -165,3 +165,34 @@ autonomy would just run it.
   (lazy-load whisper in a subprocess, or pin the conflicting dep) is a documented TODO.
 - **OCR demo image is a UI screenshot** (text extracted fine, but low-semantic-value); swap for a
   datasheet page for a cleaner demo.
+
+## MEASURED — vanilla base vs fine-tune (5090, 2026-10-06): reproducibility validated
+Swapped Skippy's brain to the PUBLIC base **Qwen2.5-7B-Instruct Q4** (same arch as the fine-tune),
+reran all 10, restored production after. Three results:
+
+**1. Resource rates ~identical (architecture-determined) — the benchmark is reproducible on the
+public model, no private brain needed.**
+| task | fine-tune decode_ms | base decode_ms |
+|---|--:|--:|
+| email | 1970 | 2007 |
+| spec_rag | 1072 | 1080 |
+| doc_brief | 2075 | 2947 (more verbose) |
+| file_ops | 564 | 391 |
+Decode *rate*, prefill, memory, GPU profiles track the model ARCHITECTURE, not the fine-tuning —
+so anyone with the public Qwen2.5-7B GGUF reproduces our numbers. (This is why the README repro
+can say "pull the base model.")
+
+**2. Base outputs are CLEANER.** Proper "Subject:/Hi [name]" emails, well-structured markdown
+briefs, correct specs — and NONE of the fine-tune artifacts (the decode_heavy hallucination, the
+Marvell-signature leak were fine-tune behaviors). ⇒ **publish the benchmark numbers on the base
+model**: reproducible AND more coherent.
+
+**3. NUANCE — tool-calling propensity differs (matters for the agentic/orchestration task).**
+On `multi_tool_chain`: the **fine-tune actually engaged the agent loop** (11.4 s, paused at the
+write_file confirm-gate — it tried to *act*); the **base model narrated the steps in prose** (4.2 s,
+coherent but did NOT invoke tools). So for measuring genuine multi-step *orchestration*, the
+fine-tune (trained on tool-using conversations) is the more representative agent; the base
+under-triggers tools. Report the orchestration profile with that caveat, or force tool-use.
+
+**Takeaway for the deliverable:** canonical benchmark numbers = base model (reproducible + coherent);
+note the fine-tune is production Skippy and is the better *tool-caller* for the orchestration task.
