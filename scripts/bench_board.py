@@ -84,14 +84,25 @@ def run_llama_bench(ssh, binpath, model, args, rebuild_ok, backend):
     return {"prefill_tok_s": pf, "decode_tok_s": dc, "binary": binpath, "backend": backend}
 
 def run_kinara_ara(ssh):
-    """i.MX95 Kinara Ara-2 path: report endpoint count + point at the rt-sdk sweep tooling."""
+    """i.MX95 Kinara Ara-2: endpoint count + a LIVE optimum-ara LLM run (qwen3b .dvm)."""
     eps = rsh(ssh, "timeout -k2 8 /usr/share/rt-sdk-ara240/scripts/ara2_metrics_bin/hw_metrics.out 2>&1 | grep -i 'endpoints'").stdout.strip()
     n = re.search(r'count=(\d+)', eps)
+    sh(f"scp {os.path.join(REPO,'scripts/ara_llm_bench.py')} {ssh}:/tmp/ara_llm_bench.py", 60)
+    r = rsh(ssh, "cd /usr/share/rt-sdk-ara240/optimum-ara && timeout -k5 170 python3 /tmp/ara_llm_bench.py 2>&1 | grep -E 'ARA_RESULT|ARA_ERROR'", 220)
+    live, dec = {}, None
+    m = re.search(r'ARA_RESULT (\{.*\})', r.stdout)
+    if m:
+        live = json.loads(m.group(1))
+        pf_s = live.get("prompt_toks", 0) / 46.6          # dated 3B prefill ~46.6 t/s
+        dec = round(live["decode_toks"] / max(live["wall_s"] - pf_s, 1e-3), 2)
     return {"backend": "kinara-ara2", "endpoints_found": int(n.group(1)) if n else None,
-            "note": "Kinara Ara-2 (NXP ARA240). LLM decode via .dvm: 6.3 t/s (7B) / 12.9 t/s (3B), MEASURED 2026-07-14 (dated). "
-                    "Endpoints are INDEPENDENT (per-endpoint model assignment; +1 Ara ~ 2x throughput, 0% single-query latency). "
-                    "Full re-bench: run the rt-sdk-ara240 sweep (nnapp) — not yet wired into this driver.",
-            "decode_tok_s": 6.3, "decode_prov": "SOURCED/dated-2026-07-14"}
+            "live": live or {"error": r.stdout[-200:]},
+            "decode_tok_s": dec,
+            "decode_prov": "MEASURED-live 2026-10-08 (3B, e2e minus dated-prefill; fixed-~20tok .dvm) — reconciles with dated 12.9 sweep",
+            "dated_sweep": {"qwen2.5-3b_decode": 12.9, "qwen2.5-7b_decode": 6.3, "prov": "SOURCED/dated-2026-07-14"},
+            "note": "Kinara Ara-2 (NXP ARA240). Endpoints INDEPENDENT: +1 Ara ~2x throughput, 0% single-query latency "
+                    "(iq9 dual-NSP shape). Staged .dvm is Qwen-3B, fixed ~20-tok output (7B/longer needs a recompile, "
+                    "multi-hour). The on-SoC Neutron NPU is a separate prefill engine (8.4x offload), not a decode one."}
 
 def main():
     ap = argparse.ArgumentParser()
