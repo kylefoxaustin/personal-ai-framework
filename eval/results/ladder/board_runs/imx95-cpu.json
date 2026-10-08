@@ -1,0 +1,17 @@
+{
+  "board": "imx95-cpu",
+  "res": "imx95",
+  "backend": "cpu",
+  "census": {
+    "heavy_procs": [],
+    "loadavg": "0.04 0.06 0.02",
+    "note": "busy = a name-matched process using >15% CPU (idle daemons ignored)"
+  },
+  "model_staged": "already staged",
+  "result": {
+    "prefill_tok_s": 3.21,
+    "decode_tok_s": 1.88,
+    "binary": "/root/llama.cpp/build/bin/llama-bench",
+    "backend": "cpu"
+  }
+}
