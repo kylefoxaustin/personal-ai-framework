@@ -218,18 +218,19 @@
   <span class="snum">07 / 09</span>
   <div class="wrap">
     <p class="kicker">does the smaller brain actually work?</p>
-    <h2>More model → more tasks pass.</h2>
-    <div class="draftbanner">⚠ task-success column = single-judge draft; formal two-judge grade (two model families) pending — headline resource numbers are fully measured.</div>
+    <h2>More model → fewer fabrications.</h2>
+    <p class="note" style="margin:0 0 16px"><b>Two independent cross-family judges</b> (Claude Sonnet + GPT-4o), per our two-judges rule. They agree on 7 of 10; the 3 disagreements are a <em>severity</em> split (PARTIAL vs FAIL), flagged — never averaged. <span class="chip m">two-judge</span></p>
     <div class="two">
       <div>
-        <p style="font-size:34px;font-family:var(--mono);font-weight:800;margin:0;color:var(--accent-ink)">7 · 2 · 1</p>
-        <p class="tag" style="margin:4px 0 14px">PASS · PARTIAL · FAIL &nbsp;—&nbsp; 7B base, 10 tasks</p>
-        <p style="font-size:15px">The one hard FAIL is the <b>multi-tool chain</b>: the 7B <em>narrates</em> the steps and invents interfaces ("Neutrino NPU", wrong core count) instead of calling tools.</p>
+        <p style="font-size:30px;font-family:var(--mono);font-weight:800;margin:0;color:var(--accent-ink)">4 clean PASS · 1 clean FAIL</p>
+        <p class="tag" style="margin:4px 0 14px">both judges agree — 7B base, 10 tasks</p>
+        <p style="font-size:15px"><b>Clean passes:</b> the grounded, perception &amp; tool tasks — file I/O, transcribe, OCR, run-script. <b>Clean fail:</b> the multi-tool chain — the 7B <em>narrates</em> the steps instead of calling tools.</p>
+        <p style="font-size:15px;margin-top:10px">On the open-ended writing tasks, <b>both judges caught the same thing:</b> the 7B fabricates specs even when fluent — <span style="font-family:var(--mono);font-size:13px">"256 MACs"</span> (it's 1024), <span style="font-family:var(--mono);font-size:13px">"LPDDR4X"</span> (it's LPDDR5X). They split only on whether that's PARTIAL or FAIL.</p>
       </div>
-      <div class="box">
+      <div class="box on">
         <div class="tag">the size fix</div>
-        <p style="margin:10px 0 0;font-size:15.5px">The same task on <b>14B</b>: it stops narrating and <b>actually invokes the tool</b> (<span style="font-family:var(--mono);font-size:13px">write_file(...)</span>), and flags bad input instead of confabulating.</p>
-        <p style="margin:12px 0 0;font-size:14.5px;color:var(--muted)">The "invents interfaces" failures are a <b>7B capacity limit</b>, not a product bug — a datapoint on where the accuracy/size line sits for a given product.</p>
+        <p style="margin:10px 0 0;font-size:15.5px">On <b>14B</b> the same tasks: it <b>invokes the tool</b> (<span style="font-family:var(--mono);font-size:13px">write_file(...)</span>) instead of narrating, stays closer to the source, and flags bad input instead of confabulating.</p>
+        <p style="margin:12px 0 0;font-size:14.5px;color:var(--muted)">Spec-fabrication is a <b>7B capacity limit</b>, not a product bug — and it's exactly where the accuracy/size line gets drawn for a given edge product. An accuracy gate, not just a latency budget.</p>
       </div>
     </div>
   </div>
