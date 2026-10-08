@@ -85,8 +85,12 @@ def main():
         for t in tasks:
             r = latest(t); print(f"\n===== {t} =====\n{build_user_prompt(t, (r or {}).get('output',''))[:600]}")
         return
-    for k in ("ANTHROPIC_API_KEY","OPENAI_API_KEY"):
-        if k not in os.environ: sys.exit(f"ERROR: {k} not set (run from an interactive shell).")
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from _keys import ensure_keys
+    missing = ensure_keys(("ANTHROPIC_API_KEY", "OPENAI_API_KEY"))
+    if missing:
+        sys.exit(f"ERROR: {', '.join(missing)} not set. Add them to ~/.personal-ai/keys.env "
+                 f"(copy ~/.personal-ai/keys.env.example and fill in values; see docs/api-keys-setup.md).")
     results, tally = {}, {"agree":0,"split":0}
     for t in tasks:
         r = latest(t)
