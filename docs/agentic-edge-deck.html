@@ -87,10 +87,10 @@
     <h1>The agent's brain is <span style="color:var(--accent)">bandwidth-bound</span>, not TOPS-bound.</h1>
     <p class="lede">Measured on five devices from an RTX&nbsp;5090 down to an NXP i.MX95 edge SoC: an on-device agent's cost is set by memory bandwidth, CPU, and model size — <em>not</em> by the TOPS number on the box. That changes how you size an edge-AI product.</p>
     <div class="bluf">
-      <div class="card"><div class="n">01</div><h3>Generation rides on bandwidth</h3><p>Token decode is memory-bandwidth-bound. Across all five devices, decode&nbsp;tok/s tracks DDR bandwidth, not TOPS. Confirmed independently on a Hexagon NPU, three ways. <span class="chip m">measured</span></p></div>
-      <div class="card"><div class="n">02</div><h3>The NPU earns its area on perception</h3><p>The accelerator pays off on vision/ASR and prefill (TTFT) — the <em>perception front-end</em>. The generation loop itself leaves the NPU largely idle. <span class="chip m">measured</span></p></div>
-      <div class="card"><div class="n">03</div><h3>Model size ≈ a 2× wall</h3><p>+1 model tier = ~1.9× decode latency + ~2× memory, and it's <em>architecture-invariant</em>. On the smallest boards the bigger brain doesn't slow down — it doesn't fit. <span class="chip m">measured</span></p></div>
-      <div class="card"><div class="n">04</div><h3>So the sizing question flips</h3><p>"Which model tier can this board <em>hold and feed</em>?" — a bandwidth + capacity question. The TOPS headline is the wrong number to size against. <span class="chip d">derived</span></p></div>
+      <div class="card"><div class="n">01</div><h3>Generation rides on bandwidth</h3><p>Decode re-streams the weights per token, so it's memory-bound: achieved bandwidth holds at 55–70% of each chip's rated peak while rated TOPS varies many-fold. The headline, armored: <b>~1.9× decode cost per model tier</b>, three boards. <span class="chip m">measured</span> <span class="chip d">derived</span></p></div>
+      <div class="card"><div class="n">02</div><h3>The NPU's job is the front-end</h3><p>The NPU doesn't speed decode — decode is bandwidth-bound on CPU, GPU <em>and</em> NPU alike. It earns its area on <em>prefill/perception</em>: on i.MX95 the Neutron NPU offloads prefill 8.4×. <span class="chip s">sourced</span></p></div>
+      <div class="card"><div class="n">03</div><h3>Model size ≈ a 2× cost</h3><p>+1 tier = ~1.9× decode + ~2× memory, invariant across three NVIDIA tiers (consistent with weight-streaming). And the biggest brains stop fitting the smallest boards. <span class="chip m">measured</span> <span class="chip d">derived</span></p></div>
+      <div class="card"><div class="n">04</div><h3>So the sizing question flips</h3><p>Not "how many TOPS" but "which tier can this board <em>hold and feed</em>" — then budget DDR + CPU for the generation loop and aim NPU TOPS at perception &amp; first-token latency. <span class="chip d">derived</span></p></div>
     </div>
   </div>
 </section>
@@ -106,7 +106,7 @@
       <div class="box on">
         <div class="tag">(a) ships on-device today</div>
         <h3>Bounded skill-orchestrator</h3>
-        <p style="color:var(--muted);font-size:15px">A fixed menu of tools — retrieve, transcribe, summarize, read/write files, call an API. A small on-device LLM (7B-class) is a capable enough brain. This is what Google Gemini Nano and Apple Intelligence actually ship.</p>
+        <p style="color:var(--muted);font-size:15px">A fixed menu of tools — retrieve, transcribe, summarize, read/write files, call an API. A small on-device LLM (7B-class) is a capable enough brain. This is what Google Gemini Nano and Apple Intelligence ship. <span class="chip s">sourced</span></p>
       </div>
       <div class="box">
         <div class="tag">(b) wants a frontier brain</div>
@@ -114,7 +114,7 @@
         <p style="color:var(--muted);font-size:15px">Writes and runs novel code, plans open-endedly. Local-first in principle, but needs a large model to be good — today that's a cloud-scale brain, not an edge part.</p>
       </div>
     </div>
-    <p class="note">This deck benchmarks <b>(a)</b> — the shippable case — using a local skill-orchestrator agent ("Skippy", Qwen&nbsp;2.5&nbsp;7B) as the reference, grounded in a general agent framework's capability set so the task list isn't cherry-picked.</p>
+    <p class="note">This deck benchmarks <b>(a)</b> — the shippable case — using a local skill-orchestrator agent ("Skippy", Qwen&nbsp;2.5&nbsp;7B) as the reference. 7 of the 10 tasks are drawn from a general agent framework's capability set; 3 edge-perception tasks (transcribe, OCR, meeting→summary) were added.</p>
   </div>
 </section>
 
@@ -152,14 +152,14 @@
         <ul>
           <li>Generation-heavy tasks: ~<b>85–90%</b> of time in decode. <span class="chip m">measured</span></li>
           <li>RAG/tool tasks: 51–70% decode, +37–47% in CPU/DDR orchestration. <span class="chip m">measured</span></li>
-          <li>Cross-board, decode tok/s tracks DDR bandwidth — not TOPS. <span class="chip m">measured</span></li>
+          <li>Achieved bandwidth (decode × weights) = 55–70% of each chip's rated peak — the memory-bound signature; tok/s does not track TOPS. <span class="chip d">derived</span></li>
         </ul>
       </div>
       <div class="box">
-        <div class="tag">independent corroboration — Hexagon NPU</div>
-        <p style="margin:10px 0 0;font-size:15.5px">A separate team, measuring Qwen on a Qualcomm Hexagon NPU on completely different instruments, found the same thing:</p>
-        <p style="margin:12px 0 0;font-size:16px;border-left:3px solid var(--accent);padding-left:14px;color:var(--ink)">"Decode is DDR-bandwidth-bound, confirmed three ways. The scarce resource for LLM/VLA decode is DDR bandwidth, <b>not TOPS</b>."</p>
-        <p class="tag" style="margin-top:12px">measured · SA8775P · 2026-09-15 <span class="chip m">measured</span></p>
+        <div class="tag">cross-instrument corroboration — Hexagon NPU</div>
+        <p style="margin:10px 0 0;font-size:15.5px">Measured independently in our own program on a Qualcomm Hexagon NPU (a different runtime and silicon, by the qualcomm session):</p>
+        <p style="margin:12px 0 0;font-size:16px;border-left:3px solid var(--accent);padding-left:14px;color:var(--ink)">"Decode is DDR-bandwidth-bound. The scarce resource for LLM/VLA decode is DDR bandwidth, <b>not TOPS</b>."</p>
+        <p class="tag" style="margin-top:12px">sourced · qualcomm · SA8775P · 2026-09-15 <span class="chip s">sourced</span></p>
       </div>
     </div>
   </div>
@@ -169,19 +169,20 @@
 <section class="slide">
   <span class="snum">05 / 09</span>
   <div class="wrap">
-    <p class="kicker">the hardware ladder · 7B Q4, decode tok/s</p>
-    <h2>One model, four tiers of silicon.</h2>
+    <p class="kicker">the hardware ladder · 7B-class Q4, decode tok/s</p>
+    <h2>Five silicon tiers — and decode tracks bandwidth, not TOPS.</h2>
     <div class="tscroll"><table>
-      <thead><tr><th>device</th><th>class</th><th class="num">decode tok/s</th><th>instrument</th><th>prov.</th></tr></thead>
+      <thead><tr><th>device</th><th>class</th><th class="num">decode tok/s</th><th class="num">peak BW</th><th>instrument</th><th>prov.</th></tr></thead>
       <tbody>
-        <tr><td>RTX 5090</td><td>Blackwell dGPU</td><td class="num hl">217.9</td><td>full-stack, n=3</td><td><span class="chip m">meas</span></td></tr>
-        <tr><td>Jetson AGX Thor</td><td>sm_110 Blackwell edge</td><td class="num hl">40.9</td><td>llama-bench</td><td><span class="chip m">meas</span></td></tr>
-        <tr><td>Jetson AGX Orin</td><td>sm_87 Ampere edge</td><td class="num hl">27.9</td><td>llama-bench</td><td><span class="chip m">meas</span></td></tr>
-        <tr><td>IQ-9075 (SA8775P)</td><td>Hexagon v73 NPU</td><td class="num hl">9.45</td><td>Genie profile</td><td><span class="chip m">meas</span></td></tr>
-        <tr><td>i.MX95 FRDM</td><td>Cortex-A55 CPU · NPU can't run a 7B</td><td class="num hl">1.85</td><td>llama-bench (CPU)</td><td><span class="chip m">meas</span></td></tr>
+        <tr><td>RTX 5090</td><td>Blackwell dGPU</td><td class="num hl">217.9</td><td class="num">1792</td><td>full-stack, n=3</td><td><span class="chip m">meas</span></td></tr>
+        <tr><td>Jetson AGX Thor</td><td>sm_110 Blackwell</td><td class="num hl">40.9</td><td class="num">273</td><td>llama-bench</td><td><span class="chip m">meas</span></td></tr>
+        <tr><td>Jetson AGX Orin</td><td>sm_87 Ampere</td><td class="num hl">27.9</td><td class="num">204.8</td><td>llama-bench</td><td><span class="chip m">meas</span></td></tr>
+        <tr><td>IQ-9075 (SA8775P)</td><td>Hexagon v73 NPU</td><td class="num hl">9.45</td><td class="num">—</td><td>Genie · diff quant+runtime</td><td><span class="chip s">src</span></td></tr>
+        <tr><td>i.MX95 · A55 CPU</td><td>Cortex-A55, no accel</td><td class="num hl">1.85</td><td class="num">—</td><td>llama-bench (CPU)</td><td><span class="chip m">meas</span></td></tr>
+        <tr><td>i.MX95 · +ARA240</td><td>+ M.2 accelerator</td><td class="num hl">6.3</td><td class="num">—</td><td>vendor path · 2026-07</td><td><span class="chip m">meas</span></td></tr>
       </tbody>
     </table></div>
-    <p class="note">~118× end-to-end, monotonic in <b>memory-subsystem-achievable bandwidth</b> — not in TOPS. Instruments are labeled by tier (full-stack telemetry on the 5090, llama-bench on the edge SoCs, Genie on the Hexagon NPU); ratios within a board are apples-to-apples. The i.MX95 rung is fresh silicon (NXP FRDM-IMX95-PRO, same base-7B + llama-bench as the Jetsons) — its A55 cluster can't saturate its own LPDDR5X, so a 7B LLM loop runs at ~1.85 t/s: the smallest board is a perception/NPU part, not an LLM-decode part.</p>
+    <p class="note">BW = GB/s rated peak <span class="chip s">sourced</span>. <b>The discriminator:</b> Thor's rated AI throughput is many× Orin's, yet its decode is only ~1.5× faster — tracking the 1.3× <em>bandwidth</em> gap (273 vs 205), not TOPS; achieved BW holds at 55–70% of rated peak across the GPU/Jetson rungs <span class="chip d">derived</span>. The ~118× top-to-bottom span is <b>cross-instrument</b> (5090 full-stack vs llama-bench vs iq9's different quant+runtime) — order-of-magnitude placement; the clean apples-to-apples test is the within-board size ratio (next slide). <b>i.MX95, honestly:</b> bare A55 CPU 1.85 t/s (can't saturate its LPDDR5X); <b>with the ARA240 accelerator 6.3 t/s, ≈ NXP's published 6.51 spec</b> — the accelerator is what makes a 7B interactive there.</p>
   </div>
 </section>
 
@@ -199,16 +200,16 @@
             <tr><td>RTX 5090</td><td class="num">217.9</td><td class="num">113.0</td><td class="num hl">1.93×</td></tr>
             <tr><td>Thor</td><td class="num">40.9</td><td class="num">20.9</td><td class="num hl">1.96×</td></tr>
             <tr><td>Orin</td><td class="num">27.9</td><td class="num">14.6</td><td class="num hl">1.91×</td></tr>
-            <tr><td style="color:var(--muted)">param ratio</td><td class="num"></td><td class="num"></td><td class="num" style="color:var(--muted)">1.94×</td></tr>
+            <tr><td style="color:var(--muted)">param ratio (arithmetic ref)</td><td class="num"></td><td class="num"></td><td class="num" style="color:var(--muted)">1.94×</td></tr>
           </tbody>
         </table></div>
-        <p class="note">The decode penalty ≈ the parameter ratio, <b>architecture-invariant</b> from datacenter Blackwell to edge Ampere — because decode streams weights, so cost scales with parameter count. <span class="chip m">measured</span></p>
+        <p class="note">The decode penalty ≈ the parameter ratio, invariant across <b>three NVIDIA tiers</b> (Blackwell dGPU → Ampere edge, one runtime) — consistent with weight-streaming. Decode rates <span class="chip m">measured</span>; the ratios and "≈ param ratio" <span class="chip d">derived</span>.</p>
       </div>
       <div class="box on">
-        <div class="tag">and on small boards it isn't a slowdown</div>
-        <h3 style="margin-top:8px">It's a wall.</h3>
-        <p style="color:var(--muted);font-size:15px">A 14B Q4 (~9&nbsp;GB) will not fit the NPU's 8&nbsp;MB VTCM working set — it simply doesn't run. And the deployed NPU bundle caps a single prompt at <b>256 tokens</b>; longer RAG context falls back to CPU at ~19&nbsp;tok/s. <span class="chip m">measured</span></p>
-        <p style="font-size:14px;color:var(--ink);margin-top:12px">Sizing an edge agent is first a <b>fit</b> question, then a <b>feed</b> question — capacity and bandwidth, not TOPS.</p>
+        <div class="tag">and the real limit is fit, not speed</div>
+        <h3 style="margin-top:8px">Capacity + context, not TOPS.</h3>
+        <p style="color:var(--muted);font-size:15px">On the iq9 the deployed NPU bundle caps a single prompt at <b>256 tokens</b> — longer RAG context spikes TTFT to ~108&nbsp;s on the CPU fallback. <span class="chip s">sourced</span> A 14B on i.MX95 is untested and impractical (~1&nbsp;tok/s projected). <span class="chip d">derived</span></p>
+        <p style="font-size:14px;color:var(--ink);margin-top:12px">Sizing an edge agent is <b>fit-then-feed</b> — capacity + context window + bandwidth, not the TOPS rating.</p>
       </div>
     </div>
   </div>
@@ -220,18 +221,18 @@
   <div class="wrap">
     <p class="kicker">does the smaller brain actually work?</p>
     <h2>More model → fewer fabrications.</h2>
-    <p class="note" style="margin:0 0 16px"><b>Two independent cross-family judges</b> (Claude Sonnet + GPT-4o), per our two-judges rule. They agree on 7 of 10; the 3 disagreements are a <em>severity</em> split (PARTIAL vs FAIL), flagged — never averaged. <span class="chip m">two-judge</span></p>
+    <p class="note" style="margin:0 0 16px"><b>Two independent cross-family judges</b> (Claude Sonnet + GPT-4o), per our two-judges rule. Agreed: 4 PASS, 2 PARTIAL, 1 FAIL; the 3 disagreements are flagged, never averaged. Per-judge tallies bracket it — Sonnet 5/4/1, GPT-4o 4/3/3 (GPT-4o is the stricter grader). <span class="chip m">measured</span> (two-judge)</p>
     <div class="two">
       <div>
-        <p style="font-size:30px;font-family:var(--mono);font-weight:800;margin:0;color:var(--accent-ink)">4 clean PASS · 1 clean FAIL</p>
-        <p class="tag" style="margin:4px 0 14px">both judges agree — 7B base, 10 tasks</p>
-        <p style="font-size:15px"><b>Clean passes:</b> the grounded, perception &amp; tool tasks — file I/O, transcribe, OCR, run-script. <b>Clean fail:</b> the multi-tool chain — the 7B <em>narrates</em> the steps instead of calling tools.</p>
-        <p style="font-size:15px;margin-top:10px">On the open-ended writing tasks, <b>both judges caught the same thing:</b> the 7B fabricates specs even when fluent — <span style="font-family:var(--mono);font-size:13px">"256 MACs"</span> (it's 1024), <span style="font-family:var(--mono);font-size:13px">"LPDDR4X"</span> (it's LPDDR5X). They split only on whether that's PARTIAL or FAIL.</p>
+        <p style="font-size:26px;font-family:var(--mono);font-weight:800;margin:0;color:var(--accent-ink)">4 PASS · 2 PARTIAL · 1 FAIL · 3 split</p>
+        <p class="tag" style="margin:4px 0 14px">7B base, 10 tasks</p>
+        <p style="font-size:15px"><b>Clean passes:</b> the grounded, perception &amp; tool tasks — file I/O, transcribe, OCR, run-script. <b>Clean fail:</b> the multi-tool chain (the 7B <em>narrates</em> instead of calling tools). <b>Partials:</b> web-summarize (generic), meeting-summarize (fabricated attendees).</p>
+        <p style="font-size:15px;margin-top:10px">On the writing tasks, <b>both judges caught spec fabrication</b> — <span style="font-family:var(--mono);font-size:13px">"256 MACs"</span> (it's 1024), <span style="font-family:var(--mono);font-size:13px">"LPDDR4X"</span> (it's LPDDR5X). Two splits are PARTIAL-vs-FAIL (email, doc_brief); one is PASS-vs-PARTIAL (spec_rag).</p>
       </div>
       <div class="box on">
-        <div class="tag">the size fix</div>
-        <p style="margin:10px 0 0;font-size:15.5px">On <b>14B</b> the same tasks: it <b>invokes the tool</b> (<span style="font-family:var(--mono);font-size:13px">write_file(...)</span>) instead of narrating, stays closer to the source, and flags bad input instead of confabulating.</p>
-        <p style="margin:12px 0 0;font-size:14.5px;color:var(--muted)">Spec-fabrication is a <b>7B capacity limit</b>, not a product bug — and it's exactly where the accuracy/size line gets drawn for a given edge product. An accuracy gate, not just a latency budget.</p>
+        <div class="tag">the size fix · single-reader, two-judge pending</div>
+        <p style="margin:10px 0 0;font-size:15.5px">On <b>14B</b> the same tasks (single-reader observation, not yet two-judge graded): it <b>invokes the tool</b> (<span style="font-family:var(--mono);font-size:13px">write_file(...)</span>) instead of narrating, and flags bad input instead of confabulating. <span class="chip d">pending</span></p>
+        <p style="margin:12px 0 0;font-size:14.5px;color:var(--muted)">Neither is perfect — 14B still over-reads ("four Neutron NPUs"); size <em>reduces</em>, doesn't eliminate, fabrication. The point: it's an <b>accuracy gate</b>, not just a latency budget.</p>
       </div>
     </div>
   </div>
@@ -245,17 +246,18 @@
     <h2>The accelerator's job is perception, not generation.</h2>
     <div class="two">
       <div>
-        <p>The LLM generation loop is bandwidth-bound and leaves the NPU idle. The workloads that are genuinely <b>compute/TOPS-bound</b> — and where a big NPU earns its area — are the <em>perception front-end</em>:</p>
+        <p>The NPU doesn't <em>speed the generation loop</em> — decode is bandwidth-bound on CPU, GPU and NPU alike. Where the accelerator genuinely earns its area is the <b>compute-bound perception front-end</b>:</p>
         <ul>
+          <li><b>Prefill / TTFT</b> — on i.MX95 the <b>Neutron NPU offloads prefill 8.4×</b> (@L=512) while decode stays a CPU wash. The measured NXP proof-point. <span class="chip s">sourced</span></li>
           <li><b>Vision / VLM / VLA</b> — image prefill dominates, decode is tiny (the mirror image of the LLM tasks).</li>
-          <li><b>ASR</b>, and <b>prefill / TTFT</b> generally — parallel, compute-bound.</li>
+          <li><b>ASR</b> and other parallel, compute-bound perception.</li>
         </ul>
-        <p style="font-size:15px;color:var(--muted)">So an agentic edge SoC wants: enough DDR bandwidth + CPU for the generation loop, and NPU TOPS aimed at perception and first-token latency — two different budgets.</p>
+        <p style="font-size:15px;color:var(--muted)">So an agentic edge SoC wants <b>two separate budgets</b>: DDR bandwidth + CPU for the generation loop, and NPU TOPS aimed at perception + first-token latency.</p>
       </div>
       <div class="box">
-        <div class="tag">next: an on-edge VLA task</div>
+        <div class="tag">next (post-Friday): an on-edge VLA task</div>
         <h3 style="margin-top:8px">"A cat's in the yard — find it, show me a picture."</h3>
-        <p style="color:var(--muted);font-size:14.5px">A perception→reason→act benchmark on a real 24/7 camera corpus (377 clips, free classical-CV baseline). The one task that stresses the NPU the way the LLM tasks never do. Qwen2.5-VL-7B already measured on the Hexagon NPU (prefill 197.5 / decode 8.4 tok/s). <span class="chip s">sourced</span> <span class="chip m">meas</span></p>
+        <p style="color:var(--muted);font-size:14.5px">A perception→reason→act benchmark on a real 24/7 camera corpus (377 clips, free classical-CV baseline) — the workload that stresses the NPU the LLM tasks never do. Early result: a 7B VLA structurally beats the motion baseline on <em>still</em> animals it physically can't see. Qwen2.5-VL-7B runs on the Hexagon NPU (qualcomm — VL path, distinct from the 9.45 text decoder; throughput being re-enumerated). <span class="chip s">sourced</span></p>
       </div>
     </div>
   </div>
@@ -267,12 +269,12 @@
   <div class="wrap">
     <p class="kicker">the decision</p>
     <h1>Size the <span style="color:var(--accent)">subsystem</span>, not the TOPS.</h1>
-    <p class="lede">The deliverable isn't a benchmark — it's a sizing framework the product team can run: for any agentic feature, decide the model tier, confirm it <em>fits</em> the board's working set, then check the board can <em>feed</em> it at target latency.</p>
+    <p class="lede">Not a benchmark — a <em>design input</em> for the next i.MX agentic part: size the subsystem (bandwidth, capacity, accelerator) to the model tier the product needs, and aim Neutron TOPS at perception, not the generation loop.</p>
     <div class="bluf">
-      <div class="card"><div class="n">done ✓</div><h3>Measured on i.MX95 silicon</h3><p>Last gap closed: base 7B on the real FRDM-IMX95-PRO = <b>1.85 t/s</b> CPU decode (3.4× below the old proxy — it was optimistic). Confirms the call: on the smallest board the NPU is for perception; the LLM loop wants a smaller model or a bigger board.</p></div>
-      <div class="card"><div class="n">design input</div><h3>Budget DDR + CPU for the loop</h3><p>Agentic throughput is set here. Point NPU TOPS at perception + TTFT — a separate budget. Don't size the generation loop against the NPU spec.</p></div>
-      <div class="card"><div class="n">product rule</div><h3>Fit-then-feed, per feature</h3><p>Small boards: a 7B-class orchestrator is shippable and passes most tasks. Bigger brains are a Thor-and-up part — and a hard "won't fit" below.</p></div>
-      <div class="card"><div class="n">watch</div><h3>Context length is the hidden cap</h3><p>The 256-token NPU prompt cap is the binding constraint for RAG on the smallest board — long context silently falls to CPU. Size RAG against it.</p></div>
+      <div class="card"><div class="n">measured on NXP silicon</div><h3>i.MX95 does a 7B — with its accelerator</h3><p>Real FRDM board: bare A55 CPU <b>1.85 t/s</b>; <b>+ARA240 accelerator 6.3 t/s</b> (≈ NXP's 6.51 spec), and Neutron offloads prefill 8.4×. The accelerator is what makes a 7B interactive — size it in, not out.</p></div>
+      <div class="card"><div class="n">design floors · 7B tier</div><h3>Feed the loop, don't starve it</h3><p>A decode path delivering <b>≥~100 GB/s</b> to the engine that runs it (CPU alone on i.MX95 reaches ~9), <b>≥~10 GB</b> DRAM for weights + KV, and an accelerator for prefill/TTFT. TOPS sized to perception.</p></div>
+      <div class="card"><div class="n">product rule</div><h3>Fit-then-feed, per feature</h3><p>A 7B orchestrator ships on small boards — it passes the grounded/perception/tool tasks cleanly; open-ended synthesis wants the next tier. 14B is a Thor-and-up part; untested + impractical below.</p></div>
+      <div class="card"><div class="n">watch</div><h3>Context length is the hidden cap</h3><p>The iq9's 256-token NPU prompt cap is the binding constraint for RAG on the smallest parts — longer context silently falls to CPU (~108 s TTFT). Size the context window deliberately.</p></div>
     </div>
   </div>
 </section>
