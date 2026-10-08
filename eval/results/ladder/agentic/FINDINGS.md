@@ -332,7 +332,7 @@ Blackwell edge) — because decode is weight-streaming/bandwidth-bound, so time 
 arch-determined, base≈fine-tune). Prefill ratio 2.00× (compute-bound, also ~linear in params here).
 
 **Ladder now (7B / 14B decode t/s, Q4):** 5090 220.5 / 113.0 · Thor 40.85 / 20.89 · Orin 27.8(prior)
-/ build-broken · iq9 9.45(qualcomm, text decoder, MEASURED 2026-09-15; 14B won't fit 8 MB VTCM) / i.MX95 1.85 (FRDM A55 CPU, MEASURED 2026-10-08, supersedes dated ARA240 proxy).
+/ build-broken · iq9 9.45(qualcomm, text decoder, MEASURED 2026-09-15; 14B won't fit 8 MB VTCM) / i.MX95 1.85 (FRDM bare A55 CPU, MEASURED 2026-10-08) · +ARA240 accelerator 6.3 (MEASURED 2026-07, dated, ≈NXP 6.51 spec) — DIFFERENT CONFIGS, not supersede.
 
 ### Task-success column — clean 7B-base (SINGLE-JUDGE DRAFT, 2026-10-07)
 ⚠️ Single-judge (Opus, in-context) draft — the FORMAL two-judge grade (Sonnet + GPT-4o, repo rule
@@ -403,8 +403,10 @@ ondemand, verified at max 1.8 GHz under load (not throttled); -p256 -n128 -r2 -t
 | decode (tg128) | **1.85 ± 0.01 t/s** |
 | prefill (pp256) | 3.25 t/s |
 
-**This supersedes the dated "6.3 ARA240" fleet proxy — the fresh same-model/same-instrument number
-is ~3.4× slower.** The proxy was optimistic (different board/precision/runtime, undated method).
+**The 1.85 (bare A55 CPU) and the 6.3 (board + ARA240 M.2 accelerator, MEASURED 2026-07-16, within
+3% of NXP's published 6.51 spec) are DIFFERENT CONFIGURATIONS — the CPU number does not "supersede"
+the accelerated one; it adds the no-accelerator rung. Reporting only 1.85 would understate NXP's
+measured best by 3.4×. Both configs ship on the deck.**
 The honest picture: a 7B LLM decode on the i.MX95 A55 cluster is ~1.85 t/s because the little cores
 can't saturate the LPDDR5X — bandwidth-bound, consistent with the whole ladder. **Reinforces the
 thesis:** the smallest board is a perception/NPU part, not an LLM-decode part; its 2.0-TOPS Neutron
