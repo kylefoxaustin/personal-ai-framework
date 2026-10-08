@@ -371,3 +371,22 @@ Genie bundle caps a single query at ~256 input tokens — beyond that the NPU pa
 to CPU llama.cpp (~19 t/s, 108 s TTFT @2000 tok). For RAG/long-context sizing on iq9, the 256-token
 cap is the binding wall, not the decode rate. (Credit qualcomm; caught via the prose-summary-vs-fresh
 -enumeration trap — exactly the Law-1 copy-decay hazard.)
+
+### Task-success — TWO-JUDGE (Sonnet + GPT-4o), supersedes the single-judge draft (2026-10-07)
+Ran the cross-family two-judge grade (`eval/judge_agentic_tasks.py`). It is **harsher than my
+in-context draft, which is the point** — my draft called email/spec_rag/doc_brief PASS; both
+external judges caught spec fabrications I missed.
+
+- **Agreed PASS (4):** file_ops, transcribe, ocr, run_script — grounded / perception / mechanical.
+- **Agreed PARTIAL (2):** web_summarize (generic), meeting_summarize (fabricated attendees).
+- **Agreed FAIL (1):** multi_tool_chain (narrates instead of calling tools + fabricates).
+- **SPLIT on severity (3), flagged not averaged:** email (S=PARTIAL/G=FAIL), doc_brief
+  (S=PARTIAL/G=FAIL), spec_rag (S=PASS/G=PARTIAL). Per-judge tallies bracket it: Sonnet 5/4/1,
+  GPT-4o 4/3/3 — GPT-4o treats any fabrication as FAIL, Sonnet as PARTIAL.
+
+**The through-line both judges agree on:** the 7B fabricates hardware specs ("256 MACs" vs the
+real 1024; "LPDDR4X" vs LPDDR5X) even when the prose is fluent. That is the capacity limit — the
+same "invents interfaces" failure — and it is exactly what the 14B study improves. Honest headline:
+**4 clean passes (grounded/perception/tool tasks); pervasive spec-fabrication on open-ended
+generation.** Detail: task_success_twojudge.json. (Also: the durable key fix — ~/.personal-ai/
+keys.env via eval/_keys.py — is what let this run from the Bash tool; see docs/api-keys-setup.md.)
