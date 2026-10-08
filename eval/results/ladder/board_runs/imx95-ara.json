@@ -1,0 +1,16 @@
+{
+  "board": "imx95-ara",
+  "res": "imx95",
+  "backend": "kinara-ara2",
+  "census": {
+    "heavy_procs": [],
+    "loadavg": "0.01 0.05 0.02"
+  },
+  "result": {
+    "backend": "kinara-ara2",
+    "endpoints_found": 1,
+    "note": "Kinara Ara-2 (NXP ARA240). LLM decode via .dvm: 6.3 t/s (7B) / 12.9 t/s (3B), MEASURED 2026-07-14 (dated). Endpoints are INDEPENDENT (per-endpoint model assignment; +1 Ara ~ 2x throughput, 0% single-query latency). Full re-bench: run the rt-sdk-ara240 sweep (nnapp) \u2014 not yet wired into this driver.",
+    "decode_tok_s": 6.3,
+    "decode_prov": "SOURCED/dated-2026-07-14"
+  }
+}
