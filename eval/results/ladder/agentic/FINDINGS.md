@@ -413,3 +413,22 @@ NPU earns its area on vision/ASR, while the generation loop on CPU is barely int
 **Decode ladder, now COMPLETE and all MEASURED (base 7B Q4, llama-bench where noted):**
 5090 217.9 (n=3) · Thor 40.85 · Orin 27.92 · iq9 9.45 (qualcomm, text decoder) · **i.MX95 1.85 (A55 CPU)**.
 Monotonic in memory-subsystem-achievable bandwidth — not in TOPS.
+
+### Bandwidth correlation — turning "tracks bandwidth" from assertion into demonstration (2026-10-08)
+Decode streams the model's weights once per token, so achieved memory bandwidth ≈ decode_tok/s ×
+weight_bytes. For the base 7B Q4_K_M (weights 4.36 GiB ≈ 4.68 GB):
+
+| board | decode t/s [MEASURED] | achieved GB/s [DERIVED] | spec peak GB/s [SOURCED] | % of peak [DERIVED] |
+|---|--:|--:|--:|--:|
+| RTX 5090 | 217.9 | 1020 | 1792 (GDDR7) | 57% |
+| Jetson Thor | 40.85 | 191 | 273 (LPDDR5X) | 70% |
+| Jetson Orin | 27.92 | 131 | 204.8 (LPDDR5) | 64% |
+| i.MX95 (A55 CPU) | 1.85 | ~9 | LPDDR5X (peak n/a; A55-limited) | — |
+
+Achieved BW is a **stable 57–70% of each chip's rated peak** on the GPU/Jetson tiers — the signature
+of a memory-bound workload; decode tok/s = achieved-BW / model-size, independent of TOPS. The i.MX95
+A55 cluster reaches only ~9 GB/s (it cannot saturate its own LPDDR5X), which is exactly why its
+decode is 1.85 t/s. Provenance: decode MEASURED (5090 full-stack telemetry — so its % is a slight
+UNDER-estimate of raw-decode efficiency; Jetsons llama-bench); spec peaks SOURCED (vendor);
+achieved-BW + %-of-peak DERIVED (decode × 4.68 GB). Do not present the DERIVED achieved-BW as a
+measured bandwidth — it is a computation that *demonstrates* the bound, cleanly labeled.
