@@ -85,7 +85,7 @@
   <div class="wrap">
     <p class="kicker">BLUF · agentic workloads on edge silicon</p>
     <h1>The agent's brain is <span style="color:var(--accent)">bandwidth-bound</span>, not TOPS-bound.</h1>
-    <p class="lede">Measured on four devices from an RTX&nbsp;5090 to a Neutron-class NPU: an on-device agent's cost is set by memory bandwidth, CPU, and model size — <em>not</em> by the TOPS number on the box. That changes how you size an edge-AI product.</p>
+    <p class="lede">Measured on five devices from an RTX&nbsp;5090 down to an NXP i.MX95 edge SoC: an on-device agent's cost is set by memory bandwidth, CPU, and model size — <em>not</em> by the TOPS number on the box. That changes how you size an edge-AI product.</p>
     <div class="bluf">
       <div class="card"><div class="n">01</div><h3>Generation rides on bandwidth</h3><p>Token decode is memory-bandwidth-bound. Across 4 boards, decode&nbsp;tok/s tracks DDR bandwidth, not TOPS. Confirmed independently on a Hexagon NPU, three ways. <span class="chip m">measured</span></p></div>
       <div class="card"><div class="n">02</div><h3>The NPU earns its area on perception</h3><p>The accelerator pays off on vision/ASR and prefill (TTFT) — the <em>perception front-end</em>. The generation loop itself leaves the NPU largely idle. <span class="chip m">measured</span></p></div>
@@ -178,9 +178,10 @@
         <tr><td>Jetson AGX Thor</td><td>sm_110 Blackwell edge</td><td class="num hl">40.9</td><td>llama-bench</td><td><span class="chip m">meas</span></td></tr>
         <tr><td>Jetson AGX Orin</td><td>sm_87 Ampere edge</td><td class="num hl">27.9</td><td>llama-bench</td><td><span class="chip m">meas</span></td></tr>
         <tr><td>IQ-9075 (SA8775P)</td><td>Hexagon v73 NPU</td><td class="num hl">9.45</td><td>Genie profile</td><td><span class="chip m">meas</span></td></tr>
+        <tr><td>i.MX95 FRDM</td><td>Cortex-A55 CPU · NPU can't run a 7B</td><td class="num hl">1.85</td><td>llama-bench (CPU)</td><td><span class="chip m">meas</span></td></tr>
       </tbody>
     </table></div>
-    <p class="note">The spread is ~23× end-to-end and tracks memory subsystem, not the TOPS rating. Instruments differ by tier (labeled honestly — full-stack telemetry on the 5090, llama-bench on the Jetsons, Genie on the NPU); the <em>ratios within each board</em> are apples-to-apples. i.MX95 ARA240 is a separate, dated fleet number — not shown here to avoid mixing a stale rung into a fresh ladder.</p>
+    <p class="note">~118× end-to-end, monotonic in <b>memory-subsystem-achievable bandwidth</b> — not in TOPS. Instruments are labeled by tier (full-stack telemetry on the 5090, llama-bench on the edge SoCs, Genie on the Hexagon NPU); ratios within a board are apples-to-apples. The i.MX95 rung is fresh silicon (NXP FRDM-IMX95-PRO, same base-7B + llama-bench as the Jetsons) — its A55 cluster can't saturate its own LPDDR5X, so a 7B LLM loop runs at ~1.85 t/s: the smallest board is a perception/NPU part, not an LLM-decode part.</p>
   </div>
 </section>
 
@@ -268,7 +269,7 @@
     <h1>Size the <span style="color:var(--accent)">subsystem</span>, not the TOPS.</h1>
     <p class="lede">The deliverable isn't a benchmark — it's a sizing framework the product team can run: for any agentic feature, decide the model tier, confirm it <em>fits</em> the board's working set, then check the board can <em>feed</em> it at target latency.</p>
     <div class="bluf">
-      <div class="card"><div class="n">recommend</div><h3>Stand this up on i.MX95 silicon</h3><p>Move the ladder from emulation + fleet proxies onto real ARA240 silicon, with an accuracy gate (the two-judge pass) wired in. Closes the one remaining measured gap.</p></div>
+      <div class="card"><div class="n">done ✓</div><h3>Measured on i.MX95 silicon</h3><p>Last gap closed: base 7B on the real FRDM-IMX95-PRO = <b>1.85 t/s</b> CPU decode (3.4× below the old proxy — it was optimistic). Confirms the call: on the smallest board the NPU is for perception; the LLM loop wants a smaller model or a bigger board.</p></div>
       <div class="card"><div class="n">design input</div><h3>Budget DDR + CPU for the loop</h3><p>Agentic throughput is set here. Point NPU TOPS at perception + TTFT — a separate budget. Don't size the generation loop against the NPU spec.</p></div>
       <div class="card"><div class="n">product rule</div><h3>Fit-then-feed, per feature</h3><p>Small boards: a 7B-class orchestrator is shippable and passes most tasks. Bigger brains are a Thor-and-up part — and a hard "won't fit" below.</p></div>
       <div class="card"><div class="n">watch</div><h3>Context length is the hidden cap</h3><p>The 256-token NPU prompt cap is the binding constraint for RAG on the smallest board — long context silently falls to CPU. Size RAG against it.</p></div>
