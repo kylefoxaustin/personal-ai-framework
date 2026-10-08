@@ -2,6 +2,7 @@
   "ladder": [
     {
       "board": "thor",
+      "model": "7B",
       "decode_tok_s": 40.68,
       "prefill_tok_s": 1601.47,
       "backend": "cuda",
@@ -9,6 +10,7 @@
     },
     {
       "board": "orin",
+      "model": "7B",
       "decode_tok_s": 27.76,
       "prefill_tok_s": 1074.38,
       "backend": "cuda",
@@ -16,6 +18,7 @@
     },
     {
       "board": "iq9",
+      "model": "7B",
       "decode_tok_s": 9.45,
       "prefill_tok_s": 596.3,
       "backend": "genie",
@@ -23,6 +26,7 @@
     },
     {
       "board": "imx95-cpu",
+      "model": "7B",
       "decode_tok_s": 1.88,
       "prefill_tok_s": 3.21,
       "backend": "cpu",
@@ -30,10 +34,11 @@
     },
     {
       "board": "imx95-ara",
-      "decode_tok_s": 6.3,
+      "model": "3B",
+      "decode_tok_s": 13.03,
       "prefill_tok_s": null,
       "backend": "kinara-ara2",
-      "prov": "SOURCED/dated-2026-07-14"
+      "prov": "MEASURED-live 2026-10-08 (3B, e2e minus dated-prefill; fixed-~20tok .dvm) \u2014 reconciles with dated 12.9 sweep"
     }
   ],
   "reference": {

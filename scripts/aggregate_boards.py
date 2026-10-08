@@ -25,16 +25,20 @@ def main():
         r = runs.get(b)
         if not r: continue
         res = r.get("result", {})
-        rows.append((b, res.get("decode_tok_s"), res.get("prefill_tok_s"),
+        model = (res.get("live") or {}).get("model", "7B")        # imx95-ara live run is 3B
+        model = "3B" if "3b" in str(model).lower() else "7B"
+        rows.append((b, model, res.get("decode_tok_s"), res.get("prefill_tok_s"),
                      res.get("backend", r.get("backend")),
                      res.get("decode_prov", "MEASURED" if r.get("backend","").startswith(("cuda","cpu")) else "")))
-    print(f"\n{'board':12s} {'decode t/s':>10s} {'prefill t/s':>11s}  {'backend':14s} provenance")
-    print("-"*72)
-    print(f"{'RTX 5090':12s} {217.9:>10} {'(full-stack)':>11s}  {'cuda':14s} MEASURED (reference, n=3)")
-    for b, dc, pf, be, prov in rows:
-        print(f"{b:12s} {str(dc):>10s} {str(pf):>11s}  {be:14s} {prov or 'MEASURED'}")
-    comb = {"ladder": [{"board": b, "decode_tok_s": dc, "prefill_tok_s": pf, "backend": be, "prov": prov}
-                       for b, dc, pf, be, prov in rows],
+    print(f"\n{'board':12s} {'model':5s} {'decode t/s':>10s} {'prefill t/s':>11s}  {'backend':14s} provenance")
+    print("-"*80)
+    print(f"{'RTX 5090':12s} {'7B':5s} {217.9:>10} {'(full-stack)':>11s}  {'cuda':14s} MEASURED (reference, n=3)")
+    for b, model, dc, pf, be, prov in rows:
+        print(f"{b:12s} {model:5s} {str(dc):>10s} {str(pf):>11s}  {be:14s} {prov or 'MEASURED'}")
+    print("\nNote: imx95-ara is a 3B live run (staged .dvm); the 7B-on-Ara rung is the dated 6.3 t/s. "
+          "imx95-cpu is 7B. Keep model size in view — the ladder is 7B except where marked 3B.")
+    comb = {"ladder": [{"board": b, "model": model, "decode_tok_s": dc, "prefill_tok_s": pf, "backend": be, "prov": prov}
+                       for b, model, dc, pf, be, prov in rows],
             "reference": {"board": "rtx5090", "decode_tok_s": 217.9, "prov": "MEASURED n=3"},
             "note": "7B-class Q4 decode. Cross-instrument (5090 full-stack telemetry; Jetsons+i.MX95 llama-bench; "
                     "iq9 Genie [qualcomm]; imx95-ara Kinara .dvm dated). Within-board size ratios are the clean comparison."}

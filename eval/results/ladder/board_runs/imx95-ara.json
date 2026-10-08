@@ -4,13 +4,28 @@
   "backend": "kinara-ara2",
   "census": {
     "heavy_procs": [],
-    "loadavg": "0.01 0.05 0.02"
+    "loadavg": "0.21 1.12 2.08",
+    "note": "busy = a name-matched process using >15% CPU (idle daemons ignored)"
   },
   "result": {
     "backend": "kinara-ara2",
     "endpoints_found": 1,
-    "note": "Kinara Ara-2 (NXP ARA240). LLM decode via .dvm: 6.3 t/s (7B) / 12.9 t/s (3B), MEASURED 2026-07-14 (dated). Endpoints are INDEPENDENT (per-endpoint model assignment; +1 Ara ~ 2x throughput, 0% single-query latency). Full re-bench: run the rt-sdk-ara240 sweep (nnapp) \u2014 not yet wired into this driver.",
-    "decode_tok_s": 6.3,
-    "decode_prov": "SOURCED/dated-2026-07-14"
+    "live": {
+      "decode_toks": 20,
+      "wall_s": 2.393,
+      "tok_s_e2e": 8.36,
+      "prompt_toks": 40,
+      "model": "qwen2.5-3b",
+      "device": "ARA2",
+      "coherent_tail": "ed paragraph about edge AI for industrial devices.<|im_end|> <|im_start|>assistant Edge AI, a critical and transformative technology, revolutionizes the landscape of industrial devices. The concept of"
+    },
+    "decode_tok_s": 13.03,
+    "decode_prov": "MEASURED-live 2026-10-08 (3B, e2e minus dated-prefill; fixed-~20tok .dvm) \u2014 reconciles with dated 12.9 sweep",
+    "dated_sweep": {
+      "qwen2.5-3b_decode": 12.9,
+      "qwen2.5-7b_decode": 6.3,
+      "prov": "SOURCED/dated-2026-07-14"
+    },
+    "note": "Kinara Ara-2 (NXP ARA240). Endpoints INDEPENDENT: +1 Ara ~2x throughput, 0% single-query latency (iq9 dual-NSP shape). Staged .dvm is Qwen-3B, fixed ~20-tok output (7B/longer needs a recompile, multi-hour). The on-SoC Neutron NPU is a separate prefill engine (8.4x offload), not a decode one."
   }
 }
