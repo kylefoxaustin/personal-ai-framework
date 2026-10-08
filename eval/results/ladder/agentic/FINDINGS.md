@@ -332,7 +332,7 @@ Blackwell edge) — because decode is weight-streaming/bandwidth-bound, so time 
 arch-determined, base≈fine-tune). Prefill ratio 2.00× (compute-bound, also ~linear in params here).
 
 **Ladder now (7B / 14B decode t/s, Q4):** 5090 220.5 / 113.0 · Thor 40.85 / 20.89 · Orin 27.8(prior)
-/ build-broken · iq9 9.45(qualcomm, text decoder, MEASURED 2026-09-15; 14B won't fit 8 MB VTCM) / i.MX95 orb_slam-ARA240(dated).
+/ build-broken · iq9 9.45(qualcomm, text decoder, MEASURED 2026-09-15; 14B won't fit 8 MB VTCM) / i.MX95 1.85 (FRDM A55 CPU, MEASURED 2026-10-08, supersedes dated ARA240 proxy).
 
 ### Task-success column — clean 7B-base (SINGLE-JUDGE DRAFT, 2026-10-07)
 ⚠️ Single-judge (Opus, in-context) draft — the FORMAL two-judge grade (Sonnet + GPT-4o, repo rule
@@ -390,3 +390,26 @@ same "invents interfaces" failure — and it is exactly what the 14B study impro
 **4 clean passes (grounded/perception/tool tasks); pervasive spec-fabrication on open-ended
 generation.** Detail: task_success_twojudge.json. (Also: the durable key fix — ~/.personal-ai/
 keys.env via eval/_keys.py — is what let this run from the Bash tool; see docs/api-keys-setup.md.)
+
+### i.MX95 rung — MEASURED on real silicon (2026-10-08), the last gap filled
+Ran the SAME base Qwen2.5-7B-Instruct Q4_K_M and SAME instrument (llama-bench) as the Thor/Orin
+rungs, now on the real **NXP FRDM-IMX95-PRO** board (hostname imx95evk, 6× Cortex-A55, 15.7 GB
+LPDDR5X). CPU backend (no GPU; the eIQ Neutron NPU cannot run a 7B LLM). Board reserved hard;
+census clean (an earlier timeout-orphaned llama-bench of mine was reaped first — Law 2); governor
+ondemand, verified at max 1.8 GHz under load (not throttled); -p256 -n128 -r2 -t6.
+
+| metric | i.MX95 FRDM (A55 CPU) |
+|---|--:|
+| decode (tg128) | **1.85 ± 0.01 t/s** |
+| prefill (pp256) | 3.25 t/s |
+
+**This supersedes the dated "6.3 ARA240" fleet proxy — the fresh same-model/same-instrument number
+is ~3.4× slower.** The proxy was optimistic (different board/precision/runtime, undated method).
+The honest picture: a 7B LLM decode on the i.MX95 A55 cluster is ~1.85 t/s because the little cores
+can't saturate the LPDDR5X — bandwidth-bound, consistent with the whole ladder. **Reinforces the
+thesis:** the smallest board is a perception/NPU part, not an LLM-decode part; its 2.0-TOPS Neutron
+NPU earns its area on vision/ASR, while the generation loop on CPU is barely interactive.
+
+**Decode ladder, now COMPLETE and all MEASURED (base 7B Q4, llama-bench where noted):**
+5090 217.9 (n=3) · Thor 40.85 · Orin 27.92 · iq9 9.45 (qualcomm, text decoder) · **i.MX95 1.85 (A55 CPU)**.
+Monotonic in memory-subsystem-achievable bandwidth — not in TOPS.
