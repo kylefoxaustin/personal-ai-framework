@@ -1,0 +1,12 @@
+{
+  "board": "iq9",
+  "res": "iq9",
+  "backend": "genie-stub",
+  "result": {
+    "backend": "genie",
+    "decode_tok_s": 9.45,
+    "prefill_tok_s": 596.3,
+    "decode_prov": "SOURCED (qualcomm, genie-t2t-run, MEASURED 2026-09-15)",
+    "note": "iq9 = Qualcomm Hexagon via Genie runtime (QNN .bin, 256-tok prompt cap). This driver does not own that toolchain \u2014 coordinate with the qualcomm session to re-bench."
+  }
+}

@@ -88,6 +88,31 @@ python3 scripts/agentic_bench/trace_bench.py email spec_rag transcribe ocr
 ~/llama.cpp/build/bin/llama-bench -m <model.gguf> -p 512 -n 128 -r 3 -ngl 99
 ```
 
+### Turnkey per-board runs (`scripts/bench_board.py`)
+
+One command per board — reserves it HARD, censuses (flags only processes actually using >15% CPU,
+not idle name-matches), stages the base 7B if missing, verifies the runtime loads (rebuilds a
+drifted Jetson `llama.cpp` with `--rebuild`), runs the decode/prefill bench, writes a standardized
+JSON to `eval/results/ladder/board_runs/<board>.json`, releases the board and prints any process it
+started:
+
+```bash
+python3 scripts/bench_board.py thor        # NVIDIA Jetson AGX Thor  (CUDA llama-bench)
+python3 scripts/bench_board.py orin        # NVIDIA Jetson AGX Orin  (CUDA llama-bench; --rebuild if it segfaults)
+python3 scripts/bench_board.py imx95-cpu   # NXP i.MX95 FRDM-PRO, A55 CPU (llama.cpp)
+python3 scripts/bench_board.py imx95-ara   # NXP i.MX95 + Kinara Ara-2 (reports endpoint count; .dvm perf is dated)
+python3 scripts/bench_board.py iq9          # Qualcomm IQ-9075 Hexagon (Genie — stub; coordinate w/ the qualcomm session)
+python3 scripts/aggregate_boards.py        # combine board_runs/*.json -> the decode ladder
+```
+
+Per-board runtimes genuinely differ (CUDA llama.cpp / CPU llama.cpp / Kinara `.dvm` / Qualcomm
+Genie), so each board has its own adapter; the driver standardizes the *invocation and the output*,
+not the engine. iq9 is a stub because that toolchain + board belong to the qualcomm session.
+**i.MX95 accelerator note:** the Kinara Ara-2 ("ARA240") exposes **independent endpoints** —
+`hw_metrics` reports `count=N`; a 2nd Ara adds ~2× aggregate throughput, not single-query speed
+(same shape as the iq9 dual-NSP). The on-SoC Neutron NPU is separate and is a prefill/TTFT engine
+(8.4× offload), not a decode one.
+
 Each task writes a JSON to `eval/results/ladder/agentic/bench_<task>_<ts>.json` with wall-time,
 telemetry, the GPU signature, and the full output. **Read the outputs** — apply the coherence gate.
 

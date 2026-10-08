@@ -1,0 +1,21 @@
+{
+  "board": "thor",
+  "res": "thor",
+  "backend": "cuda",
+  "census": {
+    "heavy_procs": [
+      "6781  0.0 python3",
+      "   6545  0.0 python3",
+      "  25240  0.0 python3",
+      "   6775  0.0 python3"
+    ],
+    "loadavg": "2.67 3.17 3.32"
+  },
+  "model_staged": "already staged",
+  "result": {
+    "prefill_tok_s": 1601.47,
+    "decode_tok_s": 40.68,
+    "binary": "~/llama.cpp/build-sm110/bin/llama-bench",
+    "backend": "cuda"
+  }
+}
