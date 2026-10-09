@@ -25,28 +25,31 @@ flat (~170 t/s) because it's the same short text generation regardless of image 
 Provenance: per-frame rates MEASURED (splat-vla, 5090, Q8_0, PTX-JIT sm_90→sm_120 so a lower bound);
 the table aggregation DERIVED here. Confirms splat-vla's reported 23%→88%.
 
-## ACCURACY (splat-vla's measurements + methodology — cite, don't re-derive)
-splat-vla designed the labeling protocol + its controls; these are their numbers, with their
-caveats. Cross-checked here for shape against the raw data (`human_confirmed.csv`, `set_a_*.jsonl`).
-> ⏳ Exact accuracy figures pending splat-vla's full-set restatement (denominator: species-only vs
-> all-verdict; `unsure` handling). Shape below is confirmed; precise % to be locked with them.
+## ACCURACY — final figures (MEASURED by splat-vla; cited verbatim with their denominators/caveats)
+splat-vla designed the labeling protocol + its controls; these are their locked numbers.
 
-- **Detection — the VLA structurally beats the CV baseline.** 127 VLA-only detections the motion
-  baseline missed, mostly **motionless perched birds a motion detector physically cannot see**. This
-  is a mechanism win, not tuning. Licensed as a **precision** figure on the VLA-flagged subset
-  (verification-with-prior labeling, anchoring-controlled: 18/20 with box = 18/20 without) — **not a
-  recall claim**, not blind ground truth.
-- **Species — report ceiling-relative.** Human intra-rater self-agreement is the ceiling (~69–75%
-  depending on subset; the human changed 30.7% of verdicts on blind re-review). Model species ≈
-  61–66% raw → ~88% *of the human ceiling*, not "33 points off perfect." Dominant error: confusing
-  small birds with raccoons/squirrels (seen directly in `human_confirmed.csv`).
-- **Direction-of-travel — a clean VLA win** (the CV baseline can't do it at all); scored only on
-  pairs passing a declared correspondence gate, `INDETERMINATE` otherwise with the fraction published
-  — no fabricated threshold.
-- **Resolution recovers 1/3 of the recall gap.** Native vs 0.25 MP (same frames/prompt) recovers 35%
-  of the missed animals at 3% new false-fires — i.e. a *third* of the failure is resolution, not
-  reasoning, and the fix costs 7.3× wall + the prefill-share jump above. On a fixed accelerator
-  budget, **buy pixels before a bigger model** is the cheaper lever.
+- **Detection is a PRECISION story, not a recall one.** On the frames the VLA flagged, precision is
+  **96.7% (117/121, excluding 6 `unsure`; 92.1% if `unsure` counts as failures)**, anchoring-controlled
+  (18/20 with the model's box = 18/20 without). It is NOT a detection rate. The VLA's *recall* is the
+  weak leg — a **4.1× loss** vs the task. What it uniquely catches is the **still-animal case**: 127
+  motionless perched birds a motion baseline physically cannot see. The value is **complementarity**
+  (precise + sees stillness), not "beats CV on recall."
+- **Species: 66.7% (78/117) against a 74.8% intra-rater ceiling (83/111)** — denominator = frames the
+  human labelled an actual animal (excludes `nothing` and `unsure`). That's ≈89% of the human ceiling,
+  not "33 points off perfect" (the human changed 30.7% of verdicts on blind re-review).
+- **Species errors — the asymmetry is in the CONSEQUENCE, not the frequency.** Of 39 errors,
+  bird→mammal 19 (49%) and bird→another-bird 18 (46%) are **tied**. But the mammal confusions are the
+  deployment-relevant ones: **6 raccoons and 1 skunk called "dove," at night in IR, on a camera whose
+  job is finding skunks.** A dove/cardinal mixup costs nothing; a skunk-called-dove is the failure.
+- **Direction-of-travel — NO accuracy figure exists.** No human direction labels were collected, so
+  any direction-*accuracy* number in a writeup is **fabricated**. Publish only the **indeterminate
+  fraction: 69.7% @0.25MP, 77.7% @native (n=3340 consecutive pairs)**, of which ~2/3 is upstream
+  detection failure, not the correspondence gate (2.9%).
+- **Resolution recovers 1/3 of the recall gap — but 2/3 survives.** Native vs 0.25MP (same frames)
+  recovers **13/37 = 35% (95% CI 20–51%)** of the missed animals at **1/43 = 2%** new false-positives
+  (n=81, all native verdicts). **Residual: 65% of the misses survive native resolution** — resolution
+  is a cheap *partial* lever (and it costs the 7.3× wall + prefill-share jump above), not a fix. Buy
+  pixels before a bigger model, but know the ceiling.
 
 ## The conclusion (splat-vla's, and it's the right shape)
 **Do not put a 7B VL model alone behind the camera.** Cheap classical CV as the recall gate; the VLA
