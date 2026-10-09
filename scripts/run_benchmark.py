@@ -169,6 +169,14 @@ def main():
     man["log"] = logs
     json.dump(man, open(man["run"]["path"], "w"), indent=2)
     json.dump(man, open(os.path.join(OUT, "latest.json"), "w"), indent=2)
+    try:
+        sys.path.insert(0, os.path.join(REPO, "scripts"))
+        from report import build_report
+        build_report(man["run"]["path"])                                   # report beside the stamped run
+        rp = build_report(os.path.join(OUT, "latest.json"), os.path.join(OUT, "report.html"))
+        log(f"  report (open in a browser): {rp}")
+    except Exception as e:
+        log(f"  ⚠ HTML report generation failed: {e}")
     print(rollup(man))
 
 if __name__ == "__main__":
