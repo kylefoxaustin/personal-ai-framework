@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+"""Agentic-edge benchmark — ONE command to run the whole system.
+
+    python3 scripts/run_benchmark.py
+
+Sequences the four layers into a single run and one unified result:
+  1. WORKLOAD   — the 10-task agentic harness on the 5090 (resource profile per task)   [needs Skippy up]
+  2. LADDER     — decode/prefill across boards (5090 from harness telemetry; Thor/Orin via llama-bench)
+  3. GRADE      — two-judge (Sonnet+GPT-4o) task-success                                  [needs API keys]
+  4. AGGREGATE  — unify into eval/results/system/run_<ts>.json + a printed rollup
+
+Graceful: if Skippy is down / a board is unreachable / keys are missing, that phase is SKIPPED with a
+clear note — the rest still runs. Scope today: 5090, Thor, Orin (iq9 + i.MX95 come in the port phase).
+
+Flags:  --boards 5090,thor,orin   --skip-grade   --skip-ladder   --only harness|ladder|grade|aggregate
+"""
+import argparse, glob, json, os, subprocess, sys, time
+from datetime import datetime
+
+REPO = "/home/kyle/Documents/GitHub/personal-ai-framework"
+AG   = os.path.join(REPO, "eval/results/ladder/agentic")
+BR   = os.path.join(REPO, "eval/results/ladder/board_runs")
+OUT  = os.path.join(REPO, "eval/results/system")
+BASE = "http://localhost:8080"
+LADDER_BOARDS = ["thor", "orin"]          # 5090 decode comes from the harness telemetry
+def ts(): return datetime.now().strftime("%Y%m%d-%H%M%S")
+def run(cmd, timeout=1200): return subprocess.run(cmd, shell=True, cwd=REPO, capture_output=True, text=True, timeout=timeout)
+
+def skippy_up():
+    try:
+        import requests
+        h = requests.get(f"{BASE}/health", timeout=5).json()
+        return bool(h.get("model_loaded")), h.get("model", "?")
+    except Exception:
+        return False, None
+
+def phase_harness(log):
+    up, model = skippy_up()
+    if not up:
+        log("  ⏭  WORKLOAD skipped — Skippy not up on :8080 (start it: ./run.sh start)"); return None
+    log(f"  ▶ WORKLOAD — 10-task harness on the 5090 (model: {model})")
+    r = run(f"python3 scripts/agentic_bench/trace_bench.py", timeout=1800)
+    if r.returncode != 0:
+        log(f"  ⚠ harness exited {r.returncode}: {r.stderr[-200:]}");
+    tasks = {}
+    for f in glob.glob(f"{AG}/bench_*.json"):
+        d = json.load(open(f)); t = d["task"]
+        # keep the most recent per task
+        if t not in tasks or d["ts"] > tasks[t]["ts"]:
+            te = d.get("telemetry", {})
+            tasks[t] = {"ts": d["ts"], "wall_s": d.get("wall_s"),
+                        "decode_tok_s": te.get("decode_tok_per_s"), "prefill_tok_s": te.get("prefill_tok_per_s"),
+                        "gpu": d.get("gpu", {}), "output_head": (d.get("output") or "")[:120]}
+    log(f"    captured {len(tasks)} tasks")
+    return {"model": model, "tasks": tasks}
+
+def phase_ladder(boards, log):
+    out = {}
+    # 5090 decode from harness telemetry (spec_rag is the clean short-gen rate), if available
+    for board in boards:
+        if board in ("5090", "rtx5090"):
+            continue
+        log(f"  ▶ LADDER — {board} (bench_board.py)")
+        r = run(f"python3 scripts/bench_board.py {board}", timeout=1800)
+        p = f"{BR}/{board}.json"
+        if os.path.exists(p):
+            d = json.load(open(p)); res = d.get("result", {})
+            out[board] = {"decode_tok_s": res.get("decode_tok_s"), "prefill_tok_s": res.get("prefill_tok_s"),
+                          "backend": res.get("backend"), "census": d.get("census", {})}
+            log(f"    {board}: decode {out[board]['decode_tok_s']} t/s")
+        else:
+            log(f"    ⚠ {board}: no result ({r.stderr[-160:] if r.returncode else 'missing json'})")
+    return out
+
+def phase_grade(log):
+    sys.path.insert(0, os.path.join(REPO, "eval"))
+    try:
+        from _keys import ensure_keys
+        if ensure_keys(("ANTHROPIC_API_KEY", "OPENAI_API_KEY")):
+            log("  ⏭  GRADE skipped — API keys not in ~/.personal-ai/keys.env (see docs/api-keys-setup.md)"); return None
+    except Exception as e:
+        log(f"  ⏭  GRADE skipped — {e}"); return None
+    log("  ▶ GRADE — two-judge (Sonnet + GPT-4o)")
+    r = run("python3 eval/judge_agentic_tasks.py", timeout=900)
+    p = f"{AG}/task_success_twojudge.json"
+    if os.path.exists(p):
+        d = json.load(open(p)); log(f"    agreement: {d.get('agreement')}"); return d
+    log(f"  ⚠ grade produced no json: {r.stderr[-160:]}"); return None
+
+def rollup(man):
+    L = []
+    L.append(f"\n{'='*64}\n AGENTIC-EDGE BENCHMARK — run {man['run']['ts']}\n{'='*64}")
+    res = man.get("resource") or {}
+    if res.get("tasks"):
+        L.append(f" model: {res.get('model')}   tasks: {len(res['tasks'])}")
+        # 5090 decode from spec_rag telemetry
+        sr = res["tasks"].get("spec_rag", {})
+        L.append(f" 5090 decode (spec_rag): {sr.get('decode_tok_s')} t/s  [MEASURED, harness telemetry]")
+    lad = man.get("ladder") or {}
+    if lad:
+        L.append(" decode ladder:")
+        for b, v in lad.items():
+            L.append(f"   {b:8s} {str(v.get('decode_tok_s')):>8s} t/s  ({v.get('backend')})")
+    acc = man.get("accuracy")
+    if acc:
+        L.append(f" task-success (two-judge): agree {acc.get('agreement',{}).get('agree')} / split {acc.get('agreement',{}).get('split')}")
+    else:
+        L.append(" task-success: (not graded this run)")
+    L.append(f" written: {man['run']['path']}\n{'='*64}")
+    return "\n".join(L)
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--boards", default="5090,thor,orin")
+    ap.add_argument("--skip-grade", action="store_true")
+    ap.add_argument("--skip-ladder", action="store_true")
+    ap.add_argument("--only", choices=["harness", "ladder", "grade", "aggregate"])
+    a = ap.parse_args()
+    boards = [b.strip() for b in a.boards.split(",") if b.strip()]
+    os.makedirs(OUT, exist_ok=True)
+    logs = []
+    def log(m): print(m); logs.append(m)
+    log(f"\n▶ agentic-edge benchmark · boards={boards} · {ts()}")
+
+    man = {"run": {"ts": ts(), "boards": boards, "scope": "5090/thor/orin (iq9+i.MX95 deferred to port phase)"},
+           "resource": None, "ladder": None, "accuracy": None,
+           "provenance": {"harness": "MEASURED (5090 full-stack telemetry)", "ladder": "MEASURED (llama-bench)",
+                          "accuracy": "MEASURED (two-judge, Sonnet+GPT-4o)"}}
+    only = a.only
+    if only in (None, "harness"):     man["resource"] = phase_harness(log)
+    if (only in (None, "ladder")) and not a.skip_ladder: man["ladder"] = phase_ladder(boards, log)
+    if (only in (None, "grade")) and not a.skip_grade:   man["accuracy"] = phase_grade(log)
+
+    man["run"]["path"] = os.path.join(OUT, f"run_{man['run']['ts']}.json")
+    man["log"] = logs
+    json.dump(man, open(man["run"]["path"], "w"), indent=2)
+    json.dump(man, open(os.path.join(OUT, "latest.json"), "w"), indent=2)
+    print(rollup(man))
+
+if __name__ == "__main__":
+    main()

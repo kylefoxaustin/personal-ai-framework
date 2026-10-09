@@ -12,6 +12,31 @@ memory-bandwidth-bound, not TOPS-bound**.
 
 ---
 
+## Quick start — the whole system, one command
+
+```bash
+python3 scripts/run_benchmark.py
+```
+
+That sequences all four layers into one run and writes a single unified result
+(`eval/results/system/latest.json`) plus a printed rollup:
+
+1. **Workload** — the 10-task agentic harness on the 5090 (per-task resource profile)
+2. **Ladder** — decode/prefill across boards (5090 from harness telemetry; Thor/Orin via llama-bench)
+3. **Grade** — two-judge (Sonnet + GPT-4o) task-success
+4. **Aggregate** — one manifest + a rollup table
+
+It is **graceful**: if Skippy isn't up, a board is unreachable, or the API keys aren't set, that
+phase is skipped with a clear note and the rest still runs. Scope today is **5090 / Thor / Orin**
+(iq9 + i.MX95 come in the port phase). Useful flags: `--boards 5090,thor` · `--skip-grade` ·
+`--skip-ladder` · `--only harness|ladder|grade|aggregate`.
+
+**Prerequisites:** Skippy up on :8080 (`./run.sh start`) for the workload phase; SSH reach to the
+Jetsons for the ladder; `~/.personal-ai/keys.env` populated for grading (see `api-keys-setup.md`).
+Everything below is the per-piece detail the orchestrator drives.
+
+---
+
 ## What it measures
 
 A 10-task benchmark grounded in the capability set of a general agent framework, spanning
