@@ -1,0 +1,182 @@
+<title>Perception at the Edge</title>
+<style>
+  :root{
+    --bg:#f4f6f8; --panel:#ffffff; --ink:#15202b; --muted:#5b6b7a; --line:#dde4ea;
+    --accent:#e8871e; --accent-ink:#9a5509;
+    --meas:#1f9d6b; --meas-bg:#e3f5ec; --deriv:#c98a12; --deriv-bg:#fbf0d8; --src:#7a8794; --src-bg:#eef2f5;
+    --hero:#0f1a24; --hero-ink:#eef3f7; --hero-muted:#9fb2c2; --hero-line:#24384a;
+    --mono:ui-monospace,"SF Mono",Menlo,"Cascadia Mono","Roboto Mono",monospace;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+    --bg:#0c141c; --panel:#121d27; --ink:#eaf1f6; --muted:#9bb0c0; --line:#243441;
+    --accent:#f5a632; --accent-ink:#f5a632;
+    --meas:#39c288; --meas-bg:#102a20; --deriv:#e0ad3e; --deriv-bg:#2c2410; --src:#8ea0ad; --src-bg:#1a2630;
+    --hero:#080f16; --hero-ink:#eef3f7; --hero-muted:#9fb2c2; --hero-line:#1d2f3e;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0c141c; --panel:#121d27; --ink:#eaf1f6; --muted:#9bb0c0; --line:#243441;
+    --accent:#f5a632; --accent-ink:#f5a632;
+    --meas:#39c288; --meas-bg:#102a20; --deriv:#e0ad3e; --deriv-bg:#2c2410; --src:#8ea0ad; --src-bg:#1a2630;
+    --hero:#080f16; --hero-ink:#eef3f7; --hero-muted:#9fb2c2; --hero-line:#1d2f3e;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
+    -webkit-font-smoothing:antialiased;scroll-snap-type:y mandatory;overflow-x:hidden}
+  .slide{min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;
+    padding:clamp(28px,5vw,80px);position:relative;border-bottom:1px solid var(--line)}
+  .wrap{width:100%;max-width:1080px;margin:0 auto}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-ink);font-weight:600;margin:0 0 18px}
+  h1{font-size:clamp(28px,4.6vw,56px);line-height:1.05;letter-spacing:-.02em;margin:0 0 20px;font-weight:800;text-wrap:balance}
+  h2{font-size:clamp(22px,3vw,34px);line-height:1.12;letter-spacing:-.015em;margin:0 0 12px;font-weight:750;text-wrap:balance}
+  .lede{font-size:clamp(16px,1.9vw,21px);color:var(--muted);max-width:60ch;margin:0 0 24px}
+  p{margin:0 0 14px}
+  .hero{background:var(--hero);color:var(--hero-ink);border-bottom:3px solid var(--accent)}
+  .hero .kicker{color:var(--accent)} .hero .lede{color:var(--hero-muted)}
+  .bluf{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:24px}
+  @media(max-width:720px){.bluf{grid-template-columns:1fr}}
+  .card{background:rgba(255,255,255,.04);border:1px solid var(--hero-line);border-radius:12px;padding:16px 18px}
+  .card .n{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:700;letter-spacing:.04em}
+  .card h3{margin:6px 0 6px;font-size:17px;font-weight:700} .card p{margin:0;color:var(--hero-muted);font-size:14px;line-height:1.45}
+  .chip{display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.08em;padding:2px 7px;border-radius:5px;vertical-align:middle;text-transform:uppercase}
+  .m{background:var(--meas-bg);color:var(--meas);border:1px solid var(--meas)}
+  .d{background:var(--deriv-bg);color:var(--deriv);border:1px solid var(--deriv)}
+  .s{background:var(--src-bg);color:var(--src);border:1px solid var(--src)}
+  .tscroll{overflow-x:auto;margin:8px 0 6px} table{border-collapse:collapse;width:100%;font-size:15px}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}
+  th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+  tr .hl{color:var(--accent-ink);font-weight:800}
+  tbody tr:hover{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+  .note{font-size:13px;color:var(--muted);margin-top:10px;max-width:72ch}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+  @media(max-width:760px){.two{grid-template-columns:1fr}}
+  ul{margin:0 0 14px;padding-left:20px}li{margin:7px 0;color:var(--ink)}
+  .snum{position:absolute;top:22px;right:26px;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em}
+  .legend{position:fixed;left:14px;bottom:12px;font-family:var(--mono);font-size:10px;color:var(--muted);background:color-mix(in srgb,var(--bg) 82%,transparent);border:1px solid var(--line);border-radius:7px;padding:5px 9px;z-index:9;backdrop-filter:blur(6px)}
+  .legend b{color:var(--ink)}
+  .box{border:1px solid var(--line);border-radius:12px;padding:18px 20px;background:var(--panel)}
+  .box.on{border-color:var(--accent)} .box h3{margin:0 0 8px;font-size:17px}
+  .tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+</style>
+
+<div class="legend">provenance: <b style="color:var(--meas)">MEASURED</b> · <b style="color:var(--deriv)">DERIVED</b> · <b style="color:var(--src)">SOURCED</b></div>
+
+<!-- 1 BLUF -->
+<section class="slide hero">
+  <span class="snum">01 / 06</span>
+  <div class="wrap">
+    <p class="kicker">BLUF · perception is the NPU's half of the agent</p>
+    <h1>Turn up the resolution and the agent becomes <span style="color:var(--accent)">the NPU's job</span>.</h1>
+    <p class="lede">The LLM loop is decode/bandwidth-bound with the NPU idle. A vision front-end at real resolution is <em>86% prefill</em> — compute-bound, exactly where the accelerator earns its area. Measured on a real 24/7 camera corpus. This is the bookend to the LLM deck.</p>
+    <div class="bluf">
+      <div class="card"><div class="n">01 the flip</div><h3>Resolution moves the budget</h3><p>Prefill share runs 21% → 86% from 0.25 MP to native; decode stays flat. Perception at real res is a prefill/TOPS workload, not a decode one. <span class="chip m">measured</span></p></div>
+      <div class="card"><div class="n">02 the value</div><h3>Complementary, not a winner</h3><p>The VLA is precise (96.7% on flagged frames) and sees the <em>still-animal</em> case a motion detector can't — but its recall is the weak leg (4.1× loss). <span class="chip s">sourced</span></p></div>
+      <div class="card"><div class="n">03 the honesty</div><h3>Judged against the human ceiling</h3><p>Species 66.7% vs a 74.8% intra-rater ceiling (≈89% of human repeatability). The costly error is a <em>skunk called a dove</em>, not a dove/cardinal mixup. <span class="chip s">sourced</span></p></div>
+      <div class="card"><div class="n">04 the design call</div><h3>Two budgets, one SoC</h3><p>Hybrid: cheap CV as the recall gate, the VLA for species/direction/stillness. Budget NPU TOPS + bandwidth for the perception front-end; the loop is light. <span class="chip d">derived</span></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 the benchmark -->
+<section class="slide">
+  <span class="snum">02 / 06</span>
+  <div class="wrap">
+    <p class="kicker">the benchmark · real corpus, free baseline</p>
+    <h2>A camera that actually has to find a skunk.</h2>
+    <div class="two">
+      <div>
+        <p>Qwen2.5-VL-7B on a real backyard camera: <b>377 clips, 8 nights</b>, day-color and night-IR, cluttered. Not a synthetic set — the hard cases (IR, occlusion, a hand in frame) are naturally distributed.</p>
+        <ul>
+          <li><b>Free baseline on identical inputs:</b> the classical-CV motion pipeline already scores every frame — so the question is "does a 7B VLA beat 200 lines of OpenCV at OpenCV's own job."</li>
+          <li><b>Human-confirmed labels</b> with an intra-rater ceiling measured, anchoring-controlled.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <div class="tag">the a/b, in vision</div>
+        <p style="margin:10px 0 0;font-size:15px"><b>CV motion detector</b> = today's tech: fires on movement, blind to a still animal, can't name a species or a direction.</p>
+        <p style="margin:12px 0 0;font-size:15px"><b>VLA</b> = the agentic candidate: perceives, classifies, localizes, reasons — at a prefill/compute cost that scales with pixels.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 RESOURCE HEADLINE -->
+<section class="slide">
+  <span class="snum">03 / 06</span>
+  <div class="wrap">
+    <p class="kicker">the headline · resolution → prefill share</p>
+    <h2>At real resolution, perception is 86% prefill.</h2>
+    <div class="tscroll"><table>
+      <thead><tr><th>input resolution</th><th class="num">image+prompt tokens</th><th class="num">prefill t/s</th><th class="num">decode t/s</th><th class="num">prefill share</th></tr></thead>
+      <tbody>
+        <tr><td>0.25 MP</td><td class="num">673</td><td class="num">5633</td><td class="num">175.6</td><td class="num hl">21.5%</td></tr>
+        <tr><td>0.50 MP</td><td class="num">1007</td><td class="num">6080</td><td class="num">173.8</td><td class="num hl">33.3%</td></tr>
+        <tr><td>1.00 MP</td><td class="num">1657</td><td class="num">5404</td><td class="num">173.5</td><td class="num hl">50.8%</td></tr>
+        <tr><td>native 4.09 MP</td><td class="num">4441</td><td class="num">3123</td><td class="num">167.8</td><td class="num hl">86.2%</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Decode is resolution-flat (~170 t/s — it's the same short text generation); <b>prefill grows with image tokens and comes to dominate</b>. So the LLM loop is bandwidth/decode (NPU idle), but perception at real resolution is a compute/prefill workload — <b>the accelerator's half of the agent</b>. Resolution is the dial between the two budgets. <span class="chip m">measured</span> (5090, Q8_0; aggregation <span class="chip d">derived</span>; contention window excluded).</p>
+  </div>
+</section>
+
+<!-- 4 ACCURACY -->
+<section class="slide">
+  <span class="snum">04 / 06</span>
+  <div class="wrap">
+    <p class="kicker">accuracy · measured against the human ceiling</p>
+    <h2>Precise, complementary, and honestly bounded.</h2>
+    <div class="tscroll"><table>
+      <thead><tr><th>axis</th><th>result</th><th>the caveat that travels with it</th></tr></thead>
+      <tbody>
+        <tr><td><b>Detection</b></td><td class="hl">precision 96.7% (117/121)</td><td>on frames the VLA <em>flagged</em> — NOT a detection rate; recall is the weak leg (4.1× loss)</td></tr>
+        <tr><td><b>Still-animal</b></td><td class="hl">127 VLA-only catches</td><td>motionless birds a motion baseline physically cannot see — the structural complement</td></tr>
+        <tr><td><b>Species</b></td><td class="hl">66.7% / 74.8% ceiling</td><td>≈89% of human repeatability (human changed 30.7% of verdicts on re-review)</td></tr>
+        <tr><td><b>Direction</b></td><td>indeterminate 70→78%</td><td><b>no accuracy figure exists</b> (no human labels) — any direction-accuracy number is fabricated</td></tr>
+        <tr><td><b>Resolution</b></td><td class="hl">recovers 35% (13/37)</td><td>+2% false-positives — but <b>65% of misses survive native res</b>; a partial lever, not a fix</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">All MEASURED by the camera-corpus run (splat-vla), cited with their denominators; anchoring-controlled, one camera / 8 nights / one labeller with stated bounds. <span class="chip s">sourced</span></p>
+  </div>
+</section>
+
+<!-- 5 the failure + hybrid -->
+<section class="slide">
+  <span class="snum">05 / 06</span>
+  <div class="wrap">
+    <p class="kicker">the failure that matters · and the shape of the answer</p>
+    <h2>A skunk called a dove is the only error that costs.</h2>
+    <div class="two">
+      <div>
+        <p>Species errors split evenly — bird→mammal (49%) ties bird→another-bird (46%). But the asymmetry is in <b>consequence, not frequency</b>:</p>
+        <ul>
+          <li>A dove/cardinal mixup costs nothing.</li>
+          <li><b>6 raccoons and 1 skunk called "dove"</b> — at night, in IR, on a camera whose whole job is finding skunks. That's the failure a product owner cares about.</li>
+        </ul>
+        <p style="font-size:14.5px;color:var(--muted)">Report both rates; weight the decision on the mammal confusions.</p>
+      </div>
+      <div class="box on">
+        <div class="tag">the answer is a hybrid</div>
+        <h3 style="margin-top:8px">CV gates, VLA judges.</h3>
+        <p style="color:var(--muted);font-size:15px">Don't put a 7B VLA alone behind the camera. Use <b>cheap classical CV as the recall gate</b> (it's fast and catches motion), and the <b>VLA for what motion structurally can't do</b> — species, direction, and the still-animal case.</p>
+        <p style="font-size:14px;color:var(--ink);margin-top:12px">More lopsided in the hybrid's favor than predicted at the start.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 the ask / next -->
+<section class="slide hero">
+  <span class="snum">06 / 06</span>
+  <div class="wrap">
+    <p class="kicker">the design input · and what's next</p>
+    <h1>Size the perception front-end, then the loop.</h1>
+    <p class="lede">The LLM deck said budget DDR + CPU for the generation loop. This adds the other half: the perception front-end is a prefill/compute workload whose cost scales with input resolution — that's where the NPU's TOPS actually go.</p>
+    <div class="bluf">
+      <div class="card"><div class="n">design input</div><h3>Resolution is a first-class axis</h3><p>Prefill cost (and the NPU budget) is set by input pixels, not model size. Pick the resolution the task needs; it moves 4× the token load and the whole prefill/decode balance.</p></div>
+      <div class="card"><div class="n">product rule</div><h3>Hybrid by default</h3><p>CV recall-gate + VLA judge. A 7B VLA alone has a recall problem; pairing it with cheap motion detection is both cheaper and better.</p></div>
+      <div class="card"><div class="n">next</div><h3>Embodied VLA</h3><p>"Find it, show me a picture" generalizes to perceive→act: GR00T robot ("pick up that object") and drone nav ("fly to the red post") — qualcomm has GR00T/smolVLA on the iq9 NPU already.</p></div>
+      <div class="card"><div class="n">to measure</div><h3>Per-phase on real silicon</h3><p>Stand the VLA ladder up on i.MX95 / iq9 with the perception-vs-policy resource split, so it joins the decode ladder as one comparable story.</p></div>
+    </div>
+  </div>
+</section>
