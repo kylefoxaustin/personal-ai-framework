@@ -26,6 +26,33 @@ LADDER_BOARDS = ["thor", "orin"]          # 5090 decode comes from the harness t
 def ts(): return datetime.now().strftime("%Y%m%d-%H%M%S")
 def run(cmd, timeout=1200): return subprocess.run(cmd, shell=True, cwd=REPO, capture_output=True, text=True, timeout=timeout)
 
+CONFIG = os.path.join(REPO, "pipeline/config.yaml")
+MODELS = {  # friendly aliases -> container path (the LLM server sees /app/models)
+  "base-7b":    "/app/models/qwen2.5-7b/qwen2.5-7b-instruct-q4_k_m.gguf",
+  "prod-7b-v4": "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+  "v4":         "/app/models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf",
+  "14b":        "/app/models/qwen2.5-14b/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+}
+def resolve_model(spec): return MODELS.get(spec, spec)   # alias or raw /app path
+def current_model():
+    import re
+    m = re.search(r'^\s*path:\s*"([^"]+)"', open(CONFIG).read(), re.M)
+    return os.path.basename(m.group(1)) if m else "?"
+def swap_model(spec, log):
+    """Point config.yaml at `spec` (alias or /app path), restart the server, wait for load."""
+    path = resolve_model(spec)
+    import re
+    s = open(CONFIG).read()
+    s2 = re.sub(r'(^\s*path:\s*")[^"]+(")', lambda m: m.group(1)+path+m.group(2), s, count=1, flags=re.M)
+    open(CONFIG, "w").write(s2)
+    log(f"  ↻ swapping model -> {os.path.basename(path)} (restarting llm-server)")
+    run("docker compose restart llm-server", timeout=120)
+    for _ in range(40):
+        up, _m = skippy_up()
+        if up: log("    model loaded"); return True
+        time.sleep(3)
+    log("  ⚠ model did not report loaded within 120s"); return False
+
 def skippy_up():
     try:
         import requests
@@ -52,7 +79,7 @@ def phase_harness(log):
                         "decode_tok_s": te.get("decode_tok_per_s"), "prefill_tok_s": te.get("prefill_tok_per_s"),
                         "gpu": d.get("gpu", {}), "output_head": (d.get("output") or "")[:120]}
     log(f"    captured {len(tasks)} tasks")
-    return {"model": model, "tasks": tasks}
+    return {"model": current_model(), "tasks": tasks}
 
 def phase_ladder(boards, log):
     out = {}
@@ -115,12 +142,15 @@ def main():
     ap.add_argument("--skip-grade", action="store_true")
     ap.add_argument("--skip-ladder", action="store_true")
     ap.add_argument("--only", choices=["harness", "ladder", "grade", "aggregate"])
+    ap.add_argument("--model", help="swap+restart before the run: alias (base-7b|prod-7b-v4|14b) or an /app/... GGUF path")
     a = ap.parse_args()
     boards = [b.strip() for b in a.boards.split(",") if b.strip()]
     os.makedirs(OUT, exist_ok=True)
     logs = []
     def log(m): print(m); logs.append(m)
     log(f"\n▶ agentic-edge benchmark · boards={boards} · {ts()}")
+    if a.model and a.only in (None, "harness"):
+        swap_model(a.model, log)
 
     man = {"run": {"ts": ts(), "boards": boards, "scope": "5090/thor/orin (iq9+i.MX95 deferred to port phase)"},
            "resource": None, "ladder": None, "accuracy": None,
