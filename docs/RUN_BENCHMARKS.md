@@ -27,9 +27,12 @@ That sequences all four layers into one run and writes a single unified result
 4. **Aggregate** — one manifest + a rollup table
 
 It is **graceful**: if Skippy isn't up, a board is unreachable, or the API keys aren't set, that
-phase is skipped with a clear note and the rest still runs. Scope today is **5090 / Thor / Orin**
-(iq9 + i.MX95 come in the port phase). Useful flags: `--boards 5090,thor` · `--skip-grade` ·
-`--skip-ladder` · `--only harness|ladder|grade|aggregate`.
+phase is skipped with a clear note and the rest still runs. Default scope is **5090 / Thor / Orin**;
+`--full` adds the small boards (iq9 + i.MX95, via their driver adapters — rungs tagged by model size
+and provenance). Useful flags:
+- `--model base-7b|prod-7b-v4|14b|<path>` — swap + restart the model as part of the run
+- `--full` — all five boards (5090/thor/orin/iq9/imx95-cpu/imx95-ara)
+- `--boards 5090,thor` · `--skip-grade` · `--skip-ladder` · `--only harness|ladder|grade|aggregate`
 
 **Prerequisites:** Skippy up on :8080 (`./run.sh start`) for the workload phase; SSH reach to the
 Jetsons for the ladder; `~/.personal-ai/keys.env` populated for grading (see `api-keys-setup.md`).

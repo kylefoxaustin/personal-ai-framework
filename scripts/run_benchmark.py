@@ -92,9 +92,12 @@ def phase_ladder(boards, log):
         p = f"{BR}/{board}.json"
         if os.path.exists(p):
             d = json.load(open(p)); res = d.get("result", {})
+            model = (res.get("live") or {}).get("model", "7B")
+            model = "3B" if "3b" in str(model).lower() else "7B"
+            prov = res.get("decode_prov", "MEASURED" if str(res.get("backend","")).startswith(("cuda","cpu")) else "SOURCED")
             out[board] = {"decode_tok_s": res.get("decode_tok_s"), "prefill_tok_s": res.get("prefill_tok_s"),
-                          "backend": res.get("backend"), "census": d.get("census", {})}
-            log(f"    {board}: decode {out[board]['decode_tok_s']} t/s")
+                          "backend": res.get("backend"), "model": model, "prov": prov, "census": d.get("census", {})}
+            log(f"    {board}: decode {out[board]['decode_tok_s']} t/s ({model}, {res.get('backend')})")
         else:
             log(f"    ⚠ {board}: no result ({r.stderr[-160:] if r.returncode else 'missing json'})")
     return out
@@ -127,7 +130,7 @@ def rollup(man):
     if lad:
         L.append(" decode ladder:")
         for b, v in lad.items():
-            L.append(f"   {b:8s} {str(v.get('decode_tok_s')):>8s} t/s  ({v.get('backend')})")
+            L.append(f"   {b:11s} {str(v.get('decode_tok_s')):>8s} t/s  {v.get('model','7B'):>3s}  {str(v.get('backend','')):14s} {v.get('prov','')[:22]}")
     acc = man.get("accuracy")
     if acc:
         L.append(f" task-success (two-judge): agree {acc.get('agreement',{}).get('agree')} / split {acc.get('agreement',{}).get('split')}")
@@ -143,8 +146,9 @@ def main():
     ap.add_argument("--skip-ladder", action="store_true")
     ap.add_argument("--only", choices=["harness", "ladder", "grade", "aggregate"])
     ap.add_argument("--model", help="swap+restart before the run: alias (base-7b|prod-7b-v4|14b) or an /app/... GGUF path")
+    ap.add_argument("--full", action="store_true", help="all boards incl the small ones: 5090/thor/orin/iq9/imx95-cpu/imx95-ara")
     a = ap.parse_args()
-    boards = [b.strip() for b in a.boards.split(",") if b.strip()]
+    boards = ["5090","thor","orin","iq9","imx95-cpu","imx95-ara"] if a.full else [b.strip() for b in a.boards.split(",") if b.strip()]
     os.makedirs(OUT, exist_ok=True)
     logs = []
     def log(m): print(m); logs.append(m)
