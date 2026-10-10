@@ -1,0 +1,12 @@
+{
+  "_comment": "Phase-A model-provisioning registry. models: where to GET each model (HF GGUF) + its size/arch for the feasibility gate. boards: capabilities the gate checks + where to stage. iq9/i.MX95 (Kinara .dvm / Genie .bin) are the Phase-B build targets, not here yet.",
+  "models": {
+    "qwen2.5-3b":  {"hf_repo": "Qwen/Qwen2.5-3B-Instruct-GGUF",  "gguf": "qwen2.5-3b-instruct-q4_k_m.gguf",            "glob": "qwen2.5-3b-instruct-q4_k_m.gguf",           "params_b": 3.1,  "weights_gb": 2.0, "arch": "qwen2", "local_dir": "models/qwen2.5-3b"},
+    "qwen2.5-7b":  {"hf_repo": "Qwen/Qwen2.5-7B-Instruct-GGUF",  "gguf": "qwen2.5-7b-instruct-q4_k_m.gguf",            "glob": "qwen2.5-7b-instruct-q4_k_m.gguf",           "params_b": 7.6,  "weights_gb": 4.7, "arch": "qwen2", "local_dir": "models/qwen2.5-7b"},
+    "qwen2.5-14b": {"hf_repo": "Qwen/Qwen2.5-14B-Instruct-GGUF", "gguf": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf", "glob": "qwen2.5-14b-instruct-q4_k_m-*.gguf",   "params_b": 14.8, "weights_gb": 9.0, "arch": "qwen2", "local_dir": "models/qwen2.5-14b"}
+  },
+  "boards": {
+    "thor": {"ssh": "thor", "ram_gb": 122, "runtime": "llama.cpp-cuda", "model_dir": "/home/kyle/models", "bin": "~/llama.cpp/build-sm110/bin/llama-bench", "supports_arch": ["qwen2"], "kv_headroom_gb": 3},
+    "orin": {"ssh": "orin", "ram_gb": 61,  "runtime": "llama.cpp-cuda", "model_dir": "/home/kyle/models", "bin": "~/llama.cpp/build-fix/bin/llama-bench",   "supports_arch": ["qwen2"], "kv_headroom_gb": 3}
+  }
+}

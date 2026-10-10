@@ -34,6 +34,24 @@ and provenance). Useful flags:
 - `--full` — all five boards (5090/thor/orin/iq9/imx95-cpu/imx95-ara)
 - `--boards 5090,thor` · `--skip-grade` · `--skip-ladder` · `--only harness|ladder|grade|aggregate`
 
+### Provisioning + the feasibility gate ("can this board run this model?")
+
+Before running a model on a board you have to answer *can it run there* and *get the artifact onto
+it*. That's `scripts/provision.py` + `eval/model_registry.json`:
+
+```bash
+python3 scripts/provision.py orin qwen2.5-14b            # gate -> download from HF if missing -> stage -> ready path
+python3 scripts/provision.py orin qwen2.5-3b --check-only # just the gate: RUNNABLE / UNRUNNABLE + why
+python3 scripts/bench_board.py orin --provision qwen2.5-7b # gate -> provision -> bench that model
+```
+
+The **feasibility gate** checks memory fit (weights + KV vs board RAM) and runtime/arch support, and
+refuses with a reason (`UNRUNNABLE — won't fit: ~12 GB > 8 GB`) instead of failing obscurely. The
+**provisioner** gets the GGUF in cost order: already-staged → download from HF (`hf download`) →
+[Phase B: build/convert]. **Scope today: NVIDIA Jetsons (GGUF).** iq9 (Qualcomm Genie `.bin`) and
+i.MX95 (Kinara `.dvm`) are the Phase-B *build* targets — the gate already refuses them here rather
+than pretend; wiring their build/convert toolchains is the next phase.
+
 **Prerequisites:** Skippy up on :8080 (`./run.sh start`) for the workload phase; SSH reach to the
 Jetsons for the ladder; `~/.personal-ai/keys.env` populated for grading (see `api-keys-setup.md`).
 Everything below is the per-piece detail the orchestrator drives.
