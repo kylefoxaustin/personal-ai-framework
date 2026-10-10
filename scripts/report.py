@@ -54,6 +54,9 @@ TEMPLATE = r"""<title>Benchmark Report</title>
 <div class="wrap"><div id="app"></div></div>
 <script>
 const M = __MANIFEST__;
+const CAT = __CATALOG__;
+function tLabel(id){const c=CAT[id]; return c?("Test "+c.n+": "+c.name):id;}
+function tLink(id){return CAT[id]?('<a href="#test-'+id+'" style="color:inherit;text-decoration:none;border-bottom:1px dotted var(--muted)">'+tLabel(id)+'</a>'):id;}
 const E=(s)=> (s==null?"":String(s));
 const num=(v)=> (v==null?"&mdash;":(typeof v==="number"?(Math.round(v*100)/100):v));
 function provChip(p){p=E(p).toUpperCase(); if(p.startsWith("MEAS"))return '<span class="chip m">measured</span>';
@@ -75,29 +78,35 @@ function vLadder(){const lad=M.ladder; if(!lad||!Object.keys(lad).length)return 
   return `<h2>Decode ladder</h2><div class="tscroll"><table><thead><tr><th>board</th><th>model</th><th class="num">decode t/s</th><th class="num">prefill t/s</th><th>backend</th><th>prov</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
 
 function vResource(){const res=M.resource; if(!res||!res.tasks)return '<h2>Workload — per-task resource</h2><div class="skip">not run this pass (Skippy down?)</div>';
-  let rows=Object.entries(res.tasks).map(([t,v])=>{const g=v.gpu||{};return `<tr><td>${t}</td><td class="num">${num(v.wall_s)}</td><td class="num">${num(v.decode_tok_s)}</td><td class="num">${num(v.prefill_tok_s)}</td><td class="num">${num(g.sm_pct_mean)}</td><td class="num">${num(g.mem_pct_mean)}</td><td class="num">${num(g.power_w_mean)}</td></tr>`;}).join('');
+  let rows=Object.entries(res.tasks).map(([t,v])=>{const g=v.gpu||{};return `<tr><td>${tLink(t)}</td><td class="num">${num(v.wall_s)}</td><td class="num">${num(v.decode_tok_s)}</td><td class="num">${num(v.prefill_tok_s)}</td><td class="num">${num(g.sm_pct_mean)}</td><td class="num">${num(g.mem_pct_mean)}</td><td class="num">${num(g.power_w_mean)}</td></tr>`;}).join('');
   return `<h2>Workload — per-task resource <span class="chip m">measured</span></h2><div class="tscroll"><table><thead><tr><th>task</th><th class="num">wall s</th><th class="num">decode t/s</th><th class="num">prefill t/s</th><th class="num">sm%</th><th class="num">mem%</th><th class="num">power W</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
 
 function vAccuracy(){const acc=M.accuracy; if(!acc||!acc.results)return '<h2>Task-success — two-judge</h2><div class="skip">not graded this pass (no API keys?)</div>';
-  let rows=Object.entries(acc.results).map(([t,v])=>{const s=(v.sonnet||{}).verdict,g=(v.gpt4o||{}).verdict;return `<tr><td>${t}</td><td>${E(s)}</td><td>${E(g)}</td><td>${v.agree?'&check;':'<b style="color:var(--accent-ink)">split</b>'}</td></tr>`;}).join('');
+  let rows=Object.entries(acc.results).map(([t,v])=>{const s=(v.sonnet||{}).verdict,g=(v.gpt4o||{}).verdict;return `<tr><td>${tLink(t)}</td><td>${E(s)}</td><td>${E(g)}</td><td>${v.agree?'&check;':'<b style="color:var(--accent-ink)">split</b>'}</td></tr>`;}).join('');
   const ag=acc.agreement||{};
   return `<h2>Task-success — two-judge (Sonnet + GPT-4o) <span class="chip m">measured</span></h2><div class="mut">agree ${ag.agree} / split ${ag.split} &nbsp;·&nbsp; splits flagged, never averaged</div><div class="tscroll" style="margin-top:8px"><table><thead><tr><th>task</th><th>sonnet</th><th>gpt-4o</th><th>agree?</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
 
 function vProvenance(){const p=M.provenance||{};return `<h2>Provenance</h2><div class="legend"><span class="chip m">measured</span> ran it on a censused box &nbsp; <span class="chip d">derived</span> computed from measurements &nbsp; <span class="chip s">sourced</span> another team / vendor</div>`+
   `<div class="tscroll"><table><tbody>`+Object.entries(p).map(([k,v])=>`<tr><td>${k}</td><td class="mut">${E(v)}</td></tr>`).join('')+`</tbody></table></div>`;}
 
+function vCatalog(){const ids=Object.keys(CAT).sort((a,b)=>CAT[a].n-CAT[b].n); if(!ids.length)return '';
+  return `<h2>Test descriptions</h2><div class="mut" style="margin-bottom:8px">What each test actually does (the task names above link here).</div><div class="tscroll"><table><thead><tr><th class="num">#</th><th>test</th><th>what it does</th><th>stresses</th></tr></thead><tbody>`+
+    ids.map(id=>`<tr id="test-${id}"><td class="num">${CAT[id].n}</td><td><b>${E(CAT[id].name)}</b></td><td class="mut">${E(CAT[id].desc)}</td><td class="mut">${E(CAT[id].stresses)}</td></tr>`).join('')+`</tbody></table></div>`;}
+
 function vLog(){if(!M.log)return '';return `<details><summary>run log (${M.log.length} lines)</summary><pre>${M.log.map(E).join("\n").replace(/</g,"&lt;")}</pre></details>`;}
 
-document.getElementById('app').innerHTML = [vHeader(),vHeadline(),vLadder(),vResource(),vAccuracy(),vProvenance(),vLog()].join('');
+document.getElementById('app').innerHTML = [vHeader(),vHeadline(),vLadder(),vResource(),vAccuracy(),vProvenance(),vCatalog(),vLog()].join('');
 </script>
 """
 
 def build_report(manifest_path=DEFAULT, out_html=None):
     man = json.load(open(manifest_path))
-    html = TEMPLATE.replace("__MANIFEST__", json.dumps(man))
+    cat_path = os.path.join(REPO, "eval/test_catalog.json")
+    cat = json.load(open(cat_path)) if os.path.exists(cat_path) else {}
+    cat = {k: v for k, v in cat.items() if not k.startswith("_")}
+    html = TEMPLATE.replace("__MANIFEST__", json.dumps(man)).replace("__CATALOG__", json.dumps(cat))
     out = out_html or os.path.join(os.path.dirname(manifest_path), "report.html")
     open(out, "w").write(html)
-    # also drop a run-stamped copy next to the timestamped manifest
     return out
 
 if __name__ == "__main__":
