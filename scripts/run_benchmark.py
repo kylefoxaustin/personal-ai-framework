@@ -38,20 +38,37 @@ def current_model():
     import re
     m = re.search(r'^\s*path:\s*"([^"]+)"', open(CONFIG).read(), re.M)
     return os.path.basename(m.group(1)) if m else "?"
+def _gpu_free_mib():
+    r = run("nvidia-smi --query-gpu=memory.free,memory.total --format=csv,noheader,nounits")
+    try:
+        free, tot = [int(x.strip()) for x in r.stdout.strip().split(",")[:2]]
+        return free, tot
+    except Exception:
+        return None, None
+
 def swap_model(spec, log):
-    """Point config.yaml at `spec` (alias or /app path), restart the server, wait for load."""
+    """Point config.yaml at `spec`, restart the server, wait for load — but NEVER tear down a
+    running Skippy to load a model that won't fit the free GPU (that orphaned production once)."""
     path = resolve_model(spec)
+    need_mib = {"14b": 9500, "qwen2.5-14b": 9500}.get(spec, 5500)   # rough weights+KV footprint
+    free, tot = _gpu_free_mib()
+    up_before, _ = skippy_up()
+    if free is not None and free < need_mib and free < 0.4 * tot:
+        # the card is heavily used by someone else; a restart would evict Skippy and still not fit
+        log(f"  ⚠ GPU too full for {os.path.basename(path)}: free {free} MiB < need ~{need_mib} MiB "
+            f"({tot} total). NOT restarting — leaving the current Skippy up. Free the GPU and retry.")
+        return False
     import re
     s = open(CONFIG).read()
     s2 = re.sub(r'(^\s*path:\s*")[^"]+(")', lambda m: m.group(1)+path+m.group(2), s, count=1, flags=re.M)
     open(CONFIG, "w").write(s2)
-    log(f"  ↻ swapping model -> {os.path.basename(path)} (restarting llm-server)")
-    run("docker compose restart llm-server", timeout=120)
-    for _ in range(40):
+    log(f"  ↻ swapping model -> {os.path.basename(path)} (restarting llm-server; GPU free {free} MiB)")
+    run("docker compose restart llm-server", timeout=180)
+    for _ in range(100):            # up to ~300s — big GGUFs load slowly
         up, _m = skippy_up()
         if up: log("    model loaded"); return True
         time.sleep(3)
-    log("  ⚠ model did not report loaded within 120s"); return False
+    log("  ⚠ model did not report loaded within 300s"); return False
 
 def skippy_up():
     try:
@@ -81,19 +98,23 @@ def phase_harness(log):
     log(f"    captured {len(tasks)} tasks")
     return {"model": current_model(), "tasks": tasks}
 
-def phase_ladder(boards, log):
+# run_benchmark --model alias -> provision registry alias, so the LADDER benches the same model as the harness
+RLADDER = {"14b": "qwen2.5-14b", "base-7b": "qwen2.5-7b", "qwen2.5-14b": "qwen2.5-14b",
+           "qwen2.5-7b": "qwen2.5-7b", "3b": "qwen2.5-3b", "qwen2.5-3b": "qwen2.5-3b"}
+
+def phase_ladder(boards, log, provision_alias=None):
     out = {}
-    # 5090 decode from harness telemetry (spec_rag is the clean short-gen rate), if available
     for board in boards:
         if board in ("5090", "rtx5090"):
             continue
-        log(f"  ▶ LADDER — {board} (bench_board.py)")
-        r = run(f"python3 scripts/bench_board.py {board}", timeout=1800)
+        prov = f" --provision {provision_alias}" if provision_alias else ""
+        log(f"  ▶ LADDER — {board}{(' @ ' + provision_alias) if provision_alias else ''}")
+        r = run(f"python3 scripts/bench_board.py {board}{prov}", timeout=3600)
         p = f"{BR}/{board}.json"
         if os.path.exists(p):
             d = json.load(open(p)); res = d.get("result", {})
-            model = (res.get("live") or {}).get("model", "7B")
-            model = "3B" if "3b" in str(model).lower() else "7B"
+            ml = provision_alias or (res.get("live") or {}).get("model", "7B")
+            model = "14B" if "14b" in str(ml).lower() else ("3B" if "3b" in str(ml).lower() else "7B")
             prov = res.get("decode_prov", "MEASURED" if str(res.get("backend","")).startswith(("cuda","cpu")) else "SOURCED")
             out[board] = {"decode_tok_s": res.get("decode_tok_s"), "prefill_tok_s": res.get("prefill_tok_s"),
                           "backend": res.get("backend"), "model": model, "prov": prov, "census": d.get("census", {})}
@@ -162,7 +183,7 @@ def main():
                           "accuracy": "MEASURED (two-judge, Sonnet+GPT-4o)"}}
     only = a.only
     if only in (None, "harness"):     man["resource"] = phase_harness(log)
-    if (only in (None, "ladder")) and not a.skip_ladder: man["ladder"] = phase_ladder(boards, log)
+    if (only in (None, "ladder")) and not a.skip_ladder: man["ladder"] = phase_ladder(boards, log, RLADDER.get(a.model))
     if (only in (None, "grade")) and not a.skip_grade:   man["accuracy"] = phase_grade(log)
 
     man["run"]["path"] = os.path.join(OUT, f"run_{man['run']['ts']}.json")
