@@ -1,0 +1,13 @@
+{
+  "_comment": "Canonical catalog for the 10 agentic-edge benchmark tasks. Single source of truth for display name + description; consumed by scripts/report.py (and available to the harness/decks). n = stable test number.",
+  "file_ops":        {"n": 1,  "name": "File operations",        "desc": "The agent reads a notes file from disk, summarizes it, and writes a new file back — exercises the file read/write tools plus a short LLM summary.", "stresses": "filesystem + decode"},
+  "spec_rag":        {"n": 2,  "name": "Spec Q&A (RAG)",         "desc": "Answers a hardware question about the i.MX 95 Neutron NPU, grounded in the datasheet corpus via retrieval.", "stresses": "retrieval + decode"},
+  "doc_brief":       {"n": 3,  "name": "Doc brief (long-context)","desc": "Generates a one-page product brief for the i.MX 95 from the datasheets — a longer retrieval context and a longer generation (prefill-heavier).", "stresses": "prefill + decode"},
+  "email":           {"n": 4,  "name": "Email drafting",         "desc": "Drafts a clear, friendly intro email about the i.MX 95 for an edge-AI product, with the specifics grounded in the datasheets.", "stresses": "retrieval + decode"},
+  "web_summarize":   {"n": 5,  "name": "Web search + summarize", "desc": "Runs a live web search for the i.MX 95 and summarizes the results in a few sentences — network I/O followed by a short generation.", "stresses": "network I/O + decode"},
+  "transcribe":      {"n": 6,  "name": "Audio transcription (ASR)","desc": "Transcribes a short audio clip with Whisper — CPU/accelerator audio compute, no LLM generation.", "stresses": "audio compute"},
+  "meeting_summarize":{"n": 7, "name": "Meeting summary",        "desc": "Transcribes a recording with Whisper and then summarizes it with the LLM — a two-stage ASR→LLM pipeline.", "stresses": "multi-stage: ASR + decode"},
+  "ocr":             {"n": 8,  "name": "Image OCR",              "desc": "Extracts text from a datasheet-page image with Tesseract — a CPU task where the GPU/NPU is idle (~3%).", "stresses": "CPU (GPU idle)"},
+  "run_script":      {"n": 9,  "name": "Sandboxed script",       "desc": "Executes a sandboxed helper script via the agent's run-script tool and returns its output.", "stresses": "process / compute"},
+  "multi_tool_chain":{"n": 10, "name": "Multi-tool chain",       "desc": "A multi-step agent task: note the key specs, write them to a file, then draft a short email — tests whether the model actually invokes tools in sequence vs. narrating the steps.", "stresses": "orchestration (agent loop)"}
+}
