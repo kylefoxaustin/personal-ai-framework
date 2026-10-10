@@ -109,9 +109,17 @@ def main():
     ap.add_argument("board", choices=list(BOARDS))
     ap.add_argument("--rebuild", action="store_true", help="rebuild llama.cpp if it segfaults (Jetson)")
     ap.add_argument("--keep", action="store_true", help="do not release the reservation at the end")
+    ap.add_argument("--provision", help="model alias to feasibility-gate + download/stage before benching (Phase A: thor/orin)")
     a = ap.parse_args()
-    cfg = BOARDS[a.board]; ssh = cfg["ssh"]; os.makedirs(OUT, exist_ok=True)
+    cfg = dict(BOARDS[a.board]); ssh = cfg["ssh"]; os.makedirs(OUT, exist_ok=True)
     rec = {"board": a.board, "res": cfg["res"], "backend": cfg["backend"]}
+    P = None
+    if a.provision:
+        sys.path.insert(0, os.path.join(REPO, "scripts")); import provision as P
+        ok, why = P.feasible(a.board, a.provision)
+        print(f"[gate] {a.board} × {a.provision}: {'RUNNABLE' if ok else 'UNRUNNABLE'} — {why}")
+        if not ok: sys.exit(2)
+        rec["provision"] = {"model": a.provision, "gate": why}
 
     if cfg["backend"] == "genie-stub":
         rec["result"] = {"backend": "genie", "decode_tok_s": 9.45, "prefill_tok_s": 596.3,
@@ -131,7 +139,10 @@ def main():
         if cfg["backend"] == "kinara-ara2":
             rec["result"] = run_kinara_ara(ssh)
         else:
-            stat = stage_model(ssh, cfg["model"]); rec["model_staged"] = stat
+            if a.provision:
+                cfg["model"] = P.ensure_on_board(a.board, a.provision); rec["model_staged"] = "provisioned:" + a.provision
+            else:
+                rec["model_staged"] = stage_model(ssh, cfg["model"])
             rec["result"] = run_llama_bench(ssh, cfg["bin"], cfg["model"], cfg["args"], a.rebuild, cfg["backend"])
         print("  result: "+json.dumps({k: rec["result"].get(k) for k in ("decode_tok_s","prefill_tok_s")}))
     finally:
