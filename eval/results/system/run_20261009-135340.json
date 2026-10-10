@@ -1,0 +1,374 @@
+{
+  "run": {
+    "ts": "20261009-135340",
+    "boards": [
+      "5090",
+      "thor",
+      "orin",
+      "iq9",
+      "imx95-cpu",
+      "imx95-ara"
+    ],
+    "scope": "5090/thor/orin (iq9+i.MX95 deferred to port phase)",
+    "path": "/home/kyle/Documents/GitHub/personal-ai-framework/eval/results/system/run_20261009-135340.json"
+  },
+  "resource": {
+    "model": "kyle-qwen25-7b-v4-q4_k_m.gguf",
+    "tasks": {
+      "file_ops": {
+        "ts": "2026-10-09T13:53:57",
+        "wall_s": 1.377,
+        "decode_tok_s": 225.0,
+        "prefill_tok_s": 6230.9,
+        "gpu": {
+          "samples": 11,
+          "sm_pct_mean": 53.6,
+          "mem_pct_mean": 36.2,
+          "power_w_mean": 297.8,
+          "sm_pct_peak": 95.0,
+          "vram_mib_peak": 9681.0
+        },
+        "output_head": "- **i.MX 95 Specifications:**\n  - **CPU:** 6x Cortex-A55 cores\n  - **NPU:** eIQ Neutron NPU 2.0 TOPS\n  - **GPU:** Mali G"
+      },
+      "ocr": {
+        "ts": "2026-10-09T13:54:02",
+        "wall_s": 0.739,
+        "decode_tok_s": null,
+        "prefill_tok_s": null,
+        "gpu": {
+          "samples": 8,
+          "sm_pct_mean": 4.4,
+          "mem_pct_mean": 0.0,
+          "power_w_mean": 79.0,
+          "sm_pct_peak": 5.0,
+          "vram_mib_peak": 9681.0
+        },
+        "output_head": "AN14721\n\nHow to Understand and Use TRDC in i.MX Devices\n\nRev. 1.0 \u2014 30 June 2025 Application note\n\nDocument information\n"
+      },
+      "doc_brief": {
+        "ts": "2026-10-09T13:54:25",
+        "wall_s": 6.686,
+        "decode_tok_s": 172.9,
+        "prefill_tok_s": 7171.8,
+        "gpu": {
+          "samples": 38,
+          "sm_pct_mean": 88.8,
+          "mem_pct_mean": 54.5,
+          "power_w_mean": 436.2,
+          "sm_pct_peak": 99.0,
+          "vram_mib_peak": 9807.0
+        },
+        "output_head": "NXP i.MX 95 Overview\n\n- ARMv8.2-A architecture with Cortex-A55, Cortex-M7, and Cortex-M33 cores\n- Supports up to 10Gbps "
+      },
+      "spec_rag": {
+        "ts": "2026-10-09T13:53:55",
+        "wall_s": 2.464,
+        "decode_tok_s": 206.6,
+        "prefill_tok_s": 9062.1,
+        "gpu": {
+          "samples": 17,
+          "sm_pct_mean": 69.9,
+          "mem_pct_mean": 38.6,
+          "power_w_mean": 331.6,
+          "sm_pct_peak": 99.0,
+          "vram_mib_peak": 9681.0
+        },
+        "output_head": "The i.MX 95 Neutron NPU is a hardware accelerator designed to efficiently process machine-learning workloads. Here's a s"
+      },
+      "transcribe": {
+        "ts": "2026-10-09T13:54:00",
+        "wall_s": 2.044,
+        "decode_tok_s": null,
+        "prefill_tok_s": null,
+        "gpu": {
+          "samples": 15,
+          "sm_pct_mean": 11.7,
+          "mem_pct_mean": 4.5,
+          "power_w_mean": 147.8,
+          "sm_pct_peak": 95.0,
+          "vram_mib_peak": 9681.0
+        },
+        "output_head": "Thunderstorms could produce large hail, isolated tornadoes and heavy rain."
+      },
+      "web_summarize": {
+        "ts": "2026-10-09T13:53:52",
+        "wall_s": 1.358,
+        "decode_tok_s": 223.2,
+        "prefill_tok_s": 10666.6,
+        "gpu": {
+          "samples": 11,
+          "sm_pct_mean": 45.8,
+          "mem_pct_mean": 29.5,
+          "power_w_mean": 249.3,
+          "sm_pct_peak": 96.0,
+          "vram_mib_peak": 9667.0
+        },
+        "output_head": "NXP Semiconductors is a global semiconductor company that specializes in creating solutions for secure connections in a "
+      },
+      "email": {
+        "ts": "2026-10-09T13:53:50",
+        "wall_s": 8.302,
+        "decode_tok_s": 203.5,
+        "prefill_tok_s": 9371.9,
+        "gpu": {
+          "samples": 46,
+          "sm_pct_mean": 23.4,
+          "mem_pct_mean": 13.2,
+          "power_w_mean": 155.4,
+          "sm_pct_peak": 94.0,
+          "vram_mib_peak": 9667.0
+        },
+        "output_head": "Hi Rajeev!\n\nHope your new year is off to a great start.  I had a quick question for you:  I\u2019m working on a new edge-AI p"
+      },
+      "multi_tool_chain": {
+        "ts": "2026-10-09T13:54:18",
+        "wall_s": 11.516,
+        "decode_tok_s": null,
+        "prefill_tok_s": null,
+        "gpu": {
+          "samples": 62,
+          "sm_pct_mean": 72.6,
+          "mem_pct_mean": 50.5,
+          "power_w_mean": 411.8,
+          "sm_pct_peak": 95.0,
+          "vram_mib_peak": 9681.0
+        },
+        "output_head": "I'd like to run `write_file()`. Please approve or deny below."
+      },
+      "run_script": {
+        "ts": "2026-10-09T13:54:05",
+        "wall_s": 0.091,
+        "decode_tok_s": null,
+        "prefill_tok_s": null,
+        "gpu": {
+          "samples": 5,
+          "sm_pct_mean": 4.0,
+          "mem_pct_mean": 0.0,
+          "power_w_mean": 177.8,
+          "sm_pct_peak": 4.0,
+          "vram_mib_peak": 9681.0
+        },
+        "output_head": "stdout:\nNeutron: 1024 MACs x 1.0 GHz x 2 OPS/MAC = 2.0 TOPS (spec 2.0)\ncores=6xA55; mem=LPDDR5X; pcie=Gen3\n\nexit code: 0"
+      },
+      "meeting_summarize": {
+        "ts": "2026-10-09T13:54:05",
+        "wall_s": 2.074,
+        "decode_tok_s": null,
+        "prefill_tok_s": null,
+        "gpu": {
+          "samples": 15,
+          "sm_pct_mean": 4.9,
+          "mem_pct_mean": 0.0,
+          "power_w_mean": 86.0,
+          "sm_pct_peak": 6.0,
+          "vram_mib_peak": 9681.0
+        },
+        "output_head": "{\"summary\": \"The meeting discusses a thunderstorm event that could produce large hail, isolated tornadoes and heavy rain"
+      }
+    }
+  },
+  "ladder": {
+    "thor": {
+      "decode_tok_s": 40.64,
+      "prefill_tok_s": 1600.15,
+      "backend": "cuda",
+      "model": "7B",
+      "prov": "MEASURED",
+      "census": {
+        "heavy_procs": [],
+        "loadavg": "3.51 3.40 3.40",
+        "note": "busy = a name-matched process using >15% CPU (idle daemons ignored)"
+      }
+    },
+    "orin": {
+      "decode_tok_s": 27.79,
+      "prefill_tok_s": 1074.84,
+      "backend": "cuda",
+      "model": "7B",
+      "prov": "MEASURED",
+      "census": {
+        "heavy_procs": [],
+        "loadavg": "0.00 0.00 0.00",
+        "note": "busy = a name-matched process using >15% CPU (idle daemons ignored)"
+      }
+    },
+    "iq9": {
+      "decode_tok_s": 9.45,
+      "prefill_tok_s": 596.3,
+      "backend": "genie",
+      "model": "7B",
+      "prov": "SOURCED (qualcomm, genie-t2t-run, MEASURED 2026-09-15)",
+      "census": {}
+    },
+    "imx95-cpu": {
+      "decode_tok_s": 1.92,
+      "prefill_tok_s": 3.21,
+      "backend": "cpu",
+      "model": "7B",
+      "prov": "MEASURED",
+      "census": {
+        "heavy_procs": [],
+        "loadavg": "0.00 0.00 0.00",
+        "note": "busy = a name-matched process using >15% CPU (idle daemons ignored)"
+      }
+    },
+    "imx95-ara": {
+      "decode_tok_s": 13.07,
+      "prefill_tok_s": null,
+      "backend": "kinara-ara2",
+      "model": "3B",
+      "prov": "MEASURED-live 2026-10-08 (3B, e2e minus dated-prefill; fixed-~20tok .dvm) \u2014 reconciles with dated 12.9 sweep",
+      "census": {
+        "heavy_procs": [],
+        "loadavg": "5.61 5.62 3.60",
+        "note": "busy = a name-matched process using >15% CPU (idle daemons ignored)"
+      }
+    }
+  },
+  "accuracy": {
+    "ts": "2026-10-07",
+    "judges": {
+      "anthropic": "claude-sonnet-4-6",
+      "openai": "gpt-4o"
+    },
+    "rule": "two judges, different families; both must be read; splits are flagged not averaged",
+    "agreement": {
+      "agree": 7,
+      "split": 3
+    },
+    "results": {
+      "email": {
+        "sonnet": {
+          "verdict": "FAIL",
+          "reason": "The email does not introduce the i.MX 95 to a customer/partner\u2014it instead asks a third party to write the description, contains no actual facts about the processor (no NPU specs, no core configuration, no edge-AI capabilities), and attributes the product to Marvell rather than NXP."
+        },
+        "gpt4o": {
+          "verdict": "FAIL",
+          "reason": "The task was to draft an email introducing the i.MX 95 for an edge-AI product, but the provided output is a request for assistance, not an introduction, and lacks required factual content about the i.MX 95."
+        },
+        "agree": true
+      },
+      "spec_rag": {
+        "sonnet": {
+          "verdict": "PASS",
+          "reason": "The answer accurately states 2.0 TOPS, 1024 MACs at 1.0 GHz, and 2 OPS/MAC, matching the ground truth with no fabricated or contradictory claims."
+        },
+        "gpt4o": {
+          "verdict": "PARTIAL",
+          "reason": "Provided accurate 2.0 TOPS with 1024 MAC@1GHz, but fabricated features like 1 MB local SRAM and detailed ML model support."
+        },
+        "agree": false
+      },
+      "file_ops": {
+        "sonnet": {
+          "verdict": "PASS",
+          "reason": "The summary accurately covers key i.MX 95 specs (6x Cortex-A55, eIQ Neutron NPU 2.0 TOPS, Mali GPU, LPDDR5X, PCIe Gen3, GbE-TSN, automotive/industrial/edge AI targets) without fabricating false details."
+        },
+        "gpt4o": {
+          "verdict": "PASS",
+          "reason": "The summary accurately presents the i.MX 95 specifications without fabrication."
+        },
+        "agree": true
+      },
+      "transcribe": {
+        "sonnet": {
+          "verdict": "PASS",
+          "reason": "The transcript matches the required weather-forecast content about thunderstorms, large hail, isolated tornadoes, and heavy rain."
+        },
+        "gpt4o": {
+          "verdict": "PASS",
+          "reason": "The transcript matches the required weather-forecast content."
+        },
+        "agree": true
+      },
+      "ocr": {
+        "sonnet": {
+          "verdict": "PASS",
+          "reason": "The assistant coherently extracted text from the AN14721 application note page image, accurately capturing the document number, title, revision, date, and abstract content without fabricating information."
+        },
+        "gpt4o": {
+          "verdict": "PASS",
+          "reason": "The extracted text is coherent and accurate according to the described page content from the AN14721 TRDC application note."
+        },
+        "agree": true
+      },
+      "run_script": {
+        "sonnet": {
+          "verdict": "PASS",
+          "reason": "Correct output: 2.0 TOPS computed correctly, 6xA55, LPDDR5X, Gen3, exit code 0."
+        },
+        "gpt4o": {
+          "verdict": "PASS",
+          "reason": "The task was completed successfully with the correct output and exit code."
+        },
+        "agree": true
+      },
+      "doc_brief": {
+        "sonnet": {
+          "verdict": "FAIL",
+          "reason": "The output contains multiple fabricated specs (16MB L2 cache, 1MB L1 cache, LPDDR2/3/4/4X support instead of LPDDR5X, '1000000 IPS', 5G/4G/Wi-Fi/Bluetooth claims, 10Gbps Ethernet) and is visibly corrupted with repeated 'USB HSIC' entries, making it not a coherent or factually grounded product brief."
+        },
+        "gpt4o": {
+          "verdict": "FAIL",
+          "reason": "The overview contains fabricated specs like 10Gbps Ethernet and erroneous USB details, deviating from the ground truth."
+        },
+        "agree": true
+      },
+      "web_summarize": {
+        "sonnet": {
+          "verdict": "PARTIAL",
+          "reason": "The response is coherent but contains no i.MX 95-specific content such as the Cortex-A55 cores, NPU specs, or other distinguishing features; it is generic filler text."
+        },
+        "gpt4o": {
+          "verdict": "FAIL",
+          "reason": "The summary is generic and does not contain any specific information about the i.MX 95."
+        },
+        "agree": false
+      },
+      "meeting_summarize": {
+        "sonnet": {
+          "verdict": "PARTIAL",
+          "reason": "Correctly identifies the content as weather-related with no fabricated attendees or action items, but frames a weather forecast as a 'meeting' and provides only a minimal summary without fully capturing the forecast details."
+        },
+        "gpt4o": {
+          "verdict": "PASS",
+          "reason": "The summary accurately reflects the content of a weather forecast clip as a meeting discussion without fabricating attendees or decisions."
+        },
+        "agree": false
+      },
+      "multi_tool_chain": {
+        "sonnet": {
+          "verdict": "FAIL",
+          "reason": "The assistant did not actually perform the required tool steps (file write and email draft), only requested approval to run write_file without executing the multi-step chain."
+        },
+        "gpt4o": {
+          "verdict": "FAIL",
+          "reason": "Did not actually perform the tool steps required to write the specs to a file."
+        },
+        "agree": true
+      }
+    }
+  },
+  "provenance": {
+    "harness": "MEASURED (5090 full-stack telemetry)",
+    "ladder": "MEASURED (llama-bench)",
+    "accuracy": "MEASURED (two-judge, Sonnet+GPT-4o)"
+  },
+  "log": [
+    "\n\u25b6 agentic-edge benchmark \u00b7 boards=['5090', 'thor', 'orin', 'iq9', 'imx95-cpu', 'imx95-ara'] \u00b7 20261009-135340",
+    "  \u25b6 WORKLOAD \u2014 10-task harness on the 5090 (model: ?)",
+    "    captured 10 tasks",
+    "  \u25b6 LADDER \u2014 thor (bench_board.py)",
+    "    thor: decode 40.64 t/s (7B, cuda)",
+    "  \u25b6 LADDER \u2014 orin (bench_board.py)",
+    "    orin: decode 27.79 t/s (7B, cuda)",
+    "  \u25b6 LADDER \u2014 iq9 (bench_board.py)",
+    "    iq9: decode 9.45 t/s (7B, genie)",
+    "  \u25b6 LADDER \u2014 imx95-cpu (bench_board.py)",
+    "    imx95-cpu: decode 1.92 t/s (7B, cpu)",
+    "  \u25b6 LADDER \u2014 imx95-ara (bench_board.py)",
+    "    imx95-ara: decode 13.07 t/s (3B, kinara-ara2)",
+    "  \u25b6 GRADE \u2014 two-judge (Sonnet + GPT-4o)",
+    "    agreement: {'agree': 7, 'split': 3}"
+  ]
+}
