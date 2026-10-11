@@ -220,19 +220,21 @@
   <span class="snum">07 / 09</span>
   <div class="wrap">
     <p class="kicker">does the smaller brain actually work?</p>
-    <h2>More model → fewer fabrications.</h2>
-    <p class="note" style="margin:0 0 16px"><b>Two independent cross-family judges</b> (Claude Sonnet + GPT-4o), per our two-judges rule. Agreed: 4 PASS, 2 PARTIAL, 1 FAIL; the 3 disagreements are flagged, never averaged. Per-judge tallies bracket it — Sonnet 5/4/1, GPT-4o 4/3/3 (GPT-4o is the stricter grader). <span class="chip m">measured</span> (two-judge)</p>
+    <h2>A bigger brain isn't the accuracy fix.</h2>
+    <p class="note" style="margin:0 0 16px"><b>Two independent cross-family judges</b> (Claude Sonnet + GPT-4o), per our two-judges rule, now run at <b>temp&nbsp;0</b> — greedy decoding + greedy grading, so the whole pipeline is <b>deterministic and reproducible</b> (same input → byte-identical output → identical verdict). Splits are real cross-judge ambiguity, flagged never averaged. Base models both sides (removes the fine-tune confound). <span class="chip m">measured</span> (two-judge, temp 0)</p>
     <div class="two">
       <div>
-        <p style="font-size:26px;font-family:var(--mono);font-weight:800;margin:0;color:var(--accent-ink)">4 PASS · 2 PARTIAL · 1 FAIL · 3 split</p>
+        <p style="font-size:24px;font-family:var(--mono);font-weight:800;margin:0;color:var(--accent-ink)">4 PASS · 1 PARTIAL · 1 FAIL · 4 split</p>
         <p class="tag" style="margin:4px 0 14px">7B base, 10 tasks</p>
-        <p style="font-size:15px"><b>Clean passes:</b> the grounded, perception &amp; tool tasks — file I/O, transcribe, OCR, run-script. <b>Clean fail:</b> the multi-tool chain (the 7B <em>narrates</em> instead of calling tools). <b>Partials:</b> web-summarize (generic), meeting-summarize (fabricated attendees).</p>
-        <p style="font-size:15px;margin-top:10px">On the writing tasks, <b>both judges caught spec fabrication</b> — <span style="font-family:var(--mono);font-size:13px">"256 MACs"</span> (it's 1024), <span style="font-family:var(--mono);font-size:13px">"LPDDR4X"</span> (it's LPDDR5X). Two splits are PARTIAL-vs-FAIL (email, doc_brief); one is PASS-vs-PARTIAL (spec_rag).</p>
+        <p style="font-size:15px"><b>Clean passes:</b> the grounded, perception &amp; tool tasks — file I/O, transcribe, OCR, run-script. The 6 open-ended writing/RAG tasks are where it struggles: the judges <b>split</b> on four of them (spec-RAG, email, doc-brief, meeting) — the 7B's terse, hedged output lands <em>borderline</em> rather than clearly right.</p>
+        <p style="font-size:15px;margin-top:10px"><b>Both judges caught spec fabrication</b> — <span style="font-family:var(--mono);font-size:13px">"256 MACs"</span> (it's 1024), <span style="font-family:var(--mono);font-size:13px">"LPDDR4X"</span> (it's LPDDR5X).</p>
       </div>
       <div class="box on">
-        <div class="tag">the size fix · single-reader, two-judge pending</div>
-        <p style="margin:10px 0 0;font-size:15.5px">On <b>14B</b> the same tasks (single-reader observation, not yet two-judge graded): it <b>invokes the tool</b> (<span style="font-family:var(--mono);font-size:13px">write_file(...)</span>) instead of narrating, and flags bad input instead of confabulating. <span class="chip d">pending</span></p>
-        <p style="margin:12px 0 0;font-size:14.5px;color:var(--muted)">Neither is perfect — 14B still over-reads ("four Neutron NPUs"); size <em>reduces</em>, doesn't eliminate, fabrication. The point: it's an <b>accuracy gate</b>, not just a latency budget.</p>
+        <div class="tag">the "size fix", measured · two-judge, temp 0</div>
+        <p style="font-size:24px;font-family:var(--mono);font-weight:800;margin:0;color:var(--accent-ink)">4 PASS · 1 PARTIAL · 4 FAIL · 1 split</p>
+        <p class="tag" style="margin:4px 0 12px">14B base, same 10 tasks</p>
+        <p style="margin:0;font-size:15px"><b>Net 1 better / 2 worse — size did <em>not</em> help.</b> Both models clean-PASS the <em>same</em> 4 tasks. On the 6 writing/RAG tasks the 14B is more <b>decisive</b> (judges agree 9/10 vs the 7B's 6/10) — but it decisively <b>FAILS</b>: the 7B's borderline splits resolve to clean FAIL/FAIL.</p>
+        <p style="margin:12px 0 0;font-size:14.5px;color:var(--muted)"><b>Why: fluency ≠ grounding.</b> The 14B writes more confident, more detailed spec claims → more surface for a strict grounding-grader to catch → it fabricates <em>harder</em>. The accuracy lever is <b>grounding discipline (RAG, fabrication guards)</b>, not parameters.</p>
       </div>
     </div>
   </div>
@@ -273,7 +275,7 @@
     <div class="bluf">
       <div class="card"><div class="n">measured on NXP silicon</div><h3>i.MX95 does a 7B — with its accelerator</h3><p>Real FRDM board: bare A55 CPU <b>1.85 t/s</b>; <b>+ARA240 accelerator 6.3 t/s</b> (≈ NXP's 6.51 spec), and Neutron offloads prefill 8.4×. The accelerator is what makes a 7B interactive — size it in, not out.</p></div>
       <div class="card"><div class="n">design floors · 7B tier</div><h3>Feed the loop, don't starve it</h3><p>A decode path delivering <b>≥~100 GB/s</b> to the engine that runs it (CPU alone on i.MX95 reaches ~9), <b>≥~10 GB</b> DRAM for weights + KV, and an accelerator for prefill/TTFT. TOPS sized to perception.</p></div>
-      <div class="card"><div class="n">product rule</div><h3>Fit-then-feed, per feature</h3><p>A 7B orchestrator ships on small boards — it passes the grounded/perception/tool tasks cleanly; open-ended synthesis wants the next tier. 14B is a Thor-and-up part; untested + impractical below.</p></div>
+      <div class="card"><div class="n">product rule</div><h3>Fit-then-feed, per feature</h3><p>A 7B orchestrator ships on small boards — it passes the grounded/perception/tool tasks cleanly. The open-ended-synthesis gap is a <b>grounding</b> problem, not a size one: a 14B fails those tasks <em>harder</em> (temp-0 two-judge). Fix it with RAG discipline, not parameters.</p></div>
       <div class="card"><div class="n">watch</div><h3>Context length is the hidden cap</h3><p>The iq9's 256-token NPU prompt cap is the binding constraint for RAG on the smallest parts — longer context silently falls to CPU (~108 s TTFT). Size the context window deliberately.</p></div>
     </div>
   </div>
