@@ -1,5 +1,17 @@
 # Agentic-at-the-Edge Benchmark — VP Deliverable Roadmap
 
+> **📦 Published (2026-10-11):** the **portable core** of this benchmark is now a standalone
+> public repo — **https://github.com/kylefoxaustin/agentic-edge-bench** (`~/Documents/GitHub/
+> agentic-edge-bench`). That repo is the canonical home for the shareable pieces: the pure-CPU
+> `x86_demo.py`, the cross-board ladder (`bench_board`/`provision`/`aggregate_boards`), the
+> two-judge grader, and the measured ladder. **This repo (personal-ai-framework) remains the
+> development + research home** — it keeps the Skippy-coupled full harness (`run_benchmark.py`,
+> `report.py`, `trace_bench.py`, which import the core), the private VP deck
+> (`agentic-edge-deck.html`), and this research record. The two are intentionally NOT de-duplicated:
+> the harness here depends on the core, so the core stays in both places. If true de-dup is ever
+> wanted, make this repo consume `agentic-edge-bench` as a submodule/pip dep rather than deleting
+> the core (which would break the harness).
+
 **Goal:** answer the VP's question — *"what does agentic-on-the-edge mean, and what are its
 performance requirements?"* — with a defensible, measured-where-possible artifact.
 **Deadline:** Friday. Authored 2026-10-06 (Tue early eve, Austin). Owner: docs (Skippy session) + Kyle.
