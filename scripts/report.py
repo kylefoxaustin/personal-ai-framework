@@ -50,6 +50,13 @@ TEMPLATE = r"""<title>Benchmark Report</title>
   details{margin-top:14px;border:1px solid var(--line);border-radius:10px;background:var(--panel)} summary{cursor:pointer;padding:10px 14px;font-family:var(--mono);font-size:12px;color:var(--muted)}
   pre{margin:0;padding:0 14px 14px;font-family:var(--mono);font-size:12px;color:var(--ink);white-space:pre-wrap}
   .mut{color:var(--muted);font-size:13px}
+  tr.clk{cursor:pointer} tr.clk:hover{background:color-mix(in srgb,var(--accent) 9%,transparent)}
+  .caret{color:var(--muted);font-family:var(--mono);font-size:11px}
+  .det td{background:color-mix(in srgb,var(--accent) 4%,var(--panel));padding:14px 16px}
+  .bar{display:flex;height:24px;border-radius:6px;overflow:hidden;margin:4px 0 8px;font-family:var(--mono);font-size:10px;font-weight:700}
+  .seg{display:flex;align-items:center;justify-content:center;color:#0b0f14;white-space:nowrap;overflow:hidden}
+  .s-comp{background:#8a7fd6} .s-compose{background:var(--accent)} .s-rest{background:#39c288}
+  .ovh{font-family:var(--mono);font-weight:800;color:var(--accent-ink)}
 </style>
 <div class="wrap"><div id="app"></div></div>
 <script>
@@ -57,6 +64,24 @@ const M = __MANIFEST__;
 const CAT = __CATALOG__;
 function tLabel(id){const c=CAT[id]; return c?("Test "+c.n+": "+c.name):id;}
 function tLink(id){return CAT[id]?('<a href="#test-'+id+'" style="color:inherit;text-decoration:none;border-bottom:1px dotted var(--muted)">'+tLabel(id)+'</a>'):id;}
+function tog(id){const e=document.getElementById(id); if(e) e.style.display=(e.style.display==='none'?'table-row':'none');}
+function phases(v){
+  const wall=(v.wall_s||0)*1000, comp=v.prefill_ms||0, compose=v.decode_ms||0;
+  const rest=Math.max(0, wall-comp-compose), llm=comp+compose;
+  let tool=''; const ex=v.extra||{};
+  for(const k in ex){ if(k.endsWith('_s') && typeof ex[k]==='number') tool+=`${k.replace(/_s$/,'')} ${(ex[k]*1000).toFixed(0)}ms · `; }
+  return {wall, comp, compose, rest, pct: wall?Math.round(100*llm/wall):0, tool: tool.replace(/ · $/,'')};
+}
+function detailRow(id,v){
+  const p=phases(v), w=p.wall||1, g=v.gpu||{};
+  const seg=(c,ms,l)=> ms>0?`<div class="seg ${c}" style="width:${(100*ms/w).toFixed(1)}%">${100*ms/w>11?l:''}</div>`:'';
+  return `<tr class="det" id="det-${id}" style="display:none"><td colspan="7">`+
+    `<div class="bar">${seg('s-comp',p.comp,'comprehend')}${seg('s-compose',p.compose,'compose')}${seg('s-rest',p.rest,'work + orchestrate')}</div>`+
+    `<div class="mut">comprehend (analyze prompt+context, prefill) <b>${p.comp.toFixed(0)}ms</b> · compose (write answer, decode) <b>${p.compose.toFixed(0)}ms</b> · work + orchestrate (tool run, loop glue) <b>${p.rest.toFixed(0)}ms</b> &nbsp;—&nbsp; <span class="ovh">LLM overhead ${p.pct}%</span>${p.tool?' · measured tool time: '+p.tool:''}</div>`+
+    `<div class="mut" style="margin-top:6px">GPU footprint: sm ${num(g.sm_pct_mean)}% · mem ${num(g.mem_pct_mean)}% · ${num(g.power_w_mean)} W · peak VRAM ${num(g.vram_mib_peak)} MiB</div>`+
+    (v.output_head?`<div class="mut" style="margin-top:6px;font-family:var(--mono);font-size:11px">out: ${E(v.output_head).replace(/</g,'&lt;')}</div>`:'')+
+    `</td></tr>`;
+}
 const E=(s)=> (s==null?"":String(s));
 const num=(v)=> (v==null?"&mdash;":(typeof v==="number"?(Math.round(v*100)/100):v));
 function provChip(p){p=E(p).toUpperCase(); if(p.startsWith("MEAS"))return '<span class="chip m">measured</span>';
@@ -78,8 +103,8 @@ function vLadder(){const lad=M.ladder; if(!lad||!Object.keys(lad).length)return 
   return `<h2>Decode ladder</h2><div class="tscroll"><table><thead><tr><th>board</th><th>model</th><th class="num">decode t/s</th><th class="num">prefill t/s</th><th>backend</th><th>prov</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
 
 function vResource(){const res=M.resource; if(!res||!res.tasks)return '<h2>Workload — per-task resource</h2><div class="skip">not run this pass (Skippy down?)</div>';
-  let rows=Object.entries(res.tasks).map(([t,v])=>{const g=v.gpu||{};return `<tr><td>${tLink(t)}</td><td class="num">${num(v.wall_s)}</td><td class="num">${num(v.decode_tok_s)}</td><td class="num">${num(v.prefill_tok_s)}</td><td class="num">${num(g.sm_pct_mean)}</td><td class="num">${num(g.mem_pct_mean)}</td><td class="num">${num(g.power_w_mean)}</td></tr>`;}).join('');
-  return `<h2>Workload — per-task resource <span class="chip m">measured</span></h2><div class="tscroll"><table><thead><tr><th>task</th><th class="num">wall s</th><th class="num">decode t/s</th><th class="num">prefill t/s</th><th class="num">sm%</th><th class="num">mem%</th><th class="num">power W</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
+  let rows=Object.entries(res.tasks).map(([t,v])=>{const g=v.gpu||{};return `<tr class="clk" onclick="tog('det-${t}')"><td>${tLink(t)} <span class="caret">▸ phases</span></td><td class="num">${num(v.wall_s)}</td><td class="num">${num(v.decode_tok_s)}</td><td class="num">${num(v.prefill_tok_s)}</td><td class="num">${num(g.sm_pct_mean)}</td><td class="num">${num(g.mem_pct_mean)}</td><td class="num">${num(g.power_w_mean)}</td></tr>`+detailRow(t,v);}).join('');
+  return `<h2>Workload — per-task resource <span class="chip m">measured</span></h2><div class="mut" style="margin-bottom:6px">Click any row for its phase breakdown — <b>comprehend → work → compose</b> — and the <b>agent overhead</b> (the LLM's share of the time vs. the actual work). <span style="font-size:11px">Caveat: phase split comes from /generate telemetry; tasks that run the LLM via the agent-loop or an upload endpoint (multi-tool chain, meeting-summary) don't emit it, so their LLM time falls into work+orchestrate (shows as 0% — a telemetry gap, not truly 0).</span></div><div class="tscroll"><table><thead><tr><th>task</th><th class="num">wall s</th><th class="num">decode t/s</th><th class="num">prefill t/s</th><th class="num">sm%</th><th class="num">mem%</th><th class="num">power W</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
 
 function vAccuracy(){const acc=M.accuracy; if(!acc||!acc.results)return '<h2>Task-success — two-judge</h2><div class="skip">not graded this pass (no API keys?)</div>';
   let rows=Object.entries(acc.results).map(([t,v])=>{const s=(v.sonnet||{}).verdict,g=(v.gpt4o||{}).verdict;return `<tr><td>${tLink(t)}</td><td>${E(s)}</td><td>${E(g)}</td><td>${v.agree?'&check;':'<b style="color:var(--accent-ink)">split</b>'}</td></tr>`;}).join('');

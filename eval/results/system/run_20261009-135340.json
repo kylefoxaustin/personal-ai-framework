@@ -28,7 +28,14 @@
           "sm_pct_peak": 95.0,
           "vram_mib_peak": 9681.0
         },
-        "output_head": "- **i.MX 95 Specifications:**\n  - **CPU:** 6x Cortex-A55 cores\n  - **NPU:** eIQ Neutron NPU 2.0 TOPS\n  - **GPU:** Mali G"
+        "output_head": "- **i.MX 95 Specifications:**\n  - **CPU:** 6x Cortex-A55 cores\n  - **NPU:** eIQ Neutron NPU 2.0 TOPS\n  - **GPU:** Mali G",
+        "prefill_ms": 22.95,
+        "decode_ms": 804.59,
+        "extra": {
+          "read_ok": true,
+          "write_result": "Wrote 658 chars to /root/.personal-ai/users/kyle/skippy-workspace/imx95_summary.",
+          "file_ops_total_s": 1.377
+        }
       },
       "ocr": {
         "ts": "2026-10-09T13:54:02",
@@ -43,7 +50,13 @@
           "sm_pct_peak": 5.0,
           "vram_mib_peak": 9681.0
         },
-        "output_head": "AN14721\n\nHow to Understand and Use TRDC in i.MX Devices\n\nRev. 1.0 \u2014 30 June 2025 Application note\n\nDocument information\n"
+        "output_head": "AN14721\n\nHow to Understand and Use TRDC in i.MX Devices\n\nRev. 1.0 \u2014 30 June 2025 Application note\n\nDocument information\n",
+        "prefill_ms": null,
+        "decode_ms": null,
+        "extra": {
+          "engine": "tesseract",
+          "image": "ocr_imx_datasheet-01.png"
+        }
       },
       "doc_brief": {
         "ts": "2026-10-09T13:54:25",
@@ -58,7 +71,10 @@
           "sm_pct_peak": 99.0,
           "vram_mib_peak": 9807.0
         },
-        "output_head": "NXP i.MX 95 Overview\n\n- ARMv8.2-A architecture with Cortex-A55, Cortex-M7, and Cortex-M33 cores\n- Supports up to 10Gbps "
+        "output_head": "NXP i.MX 95 Overview\n\n- ARMv8.2-A architecture with Cortex-A55, Cortex-M7, and Cortex-M33 cores\n- Supports up to 10Gbps ",
+        "prefill_ms": 1247.38,
+        "decode_ms": 4448.44,
+        "extra": {}
       },
       "spec_rag": {
         "ts": "2026-10-09T13:53:55",
@@ -73,7 +89,10 @@
           "sm_pct_peak": 99.0,
           "vram_mib_peak": 9681.0
         },
-        "output_head": "The i.MX 95 Neutron NPU is a hardware accelerator designed to efficiently process machine-learning workloads. Here's a s"
+        "output_head": "The i.MX 95 Neutron NPU is a hardware accelerator designed to efficiently process machine-learning workloads. Here's a s",
+        "prefill_ms": 474.83,
+        "decode_ms": 1069.95,
+        "extra": {}
       },
       "transcribe": {
         "ts": "2026-10-09T13:54:00",
@@ -88,7 +107,12 @@
           "sm_pct_peak": 95.0,
           "vram_mib_peak": 9681.0
         },
-        "output_head": "Thunderstorms could produce large hail, isolated tornadoes and heavy rain."
+        "output_head": "Thunderstorms could produce large hail, isolated tornadoes and heavy rain.",
+        "prefill_ms": null,
+        "decode_ms": null,
+        "extra": {
+          "engine": "whisper-base"
+        }
       },
       "web_summarize": {
         "ts": "2026-10-09T13:53:52",
@@ -103,7 +127,14 @@
           "sm_pct_peak": 96.0,
           "vram_mib_peak": 9667.0
         },
-        "output_head": "NXP Semiconductors is a global semiconductor company that specializes in creating solutions for secure connections in a "
+        "output_head": "NXP Semiconductors is a global semiconductor company that specializes in creating solutions for secure connections in a ",
+        "prefill_ms": 41.06,
+        "decode_ms": 425.72,
+        "extra": {
+          "web_search_s": 0.595,
+          "web_status": "ok",
+          "n_results": 5
+        }
       },
       "email": {
         "ts": "2026-10-09T13:53:50",
@@ -118,7 +149,10 @@
           "sm_pct_peak": 94.0,
           "vram_mib_peak": 9667.0
         },
-        "output_head": "Hi Rajeev!\n\nHope your new year is off to a great start.  I had a quick question for you:  I\u2019m working on a new edge-AI p"
+        "output_head": "Hi Rajeev!\n\nHope your new year is off to a great start.  I had a quick question for you:  I\u2019m working on a new edge-AI p",
+        "prefill_ms": 433.74,
+        "decode_ms": 1213.65,
+        "extra": {}
       },
       "multi_tool_chain": {
         "ts": "2026-10-09T13:54:18",
@@ -133,7 +167,10 @@
           "sm_pct_peak": 95.0,
           "vram_mib_peak": 9681.0
         },
-        "output_head": "I'd like to run `write_file()`. Please approve or deny below."
+        "output_head": "I'd like to run `write_file()`. Please approve or deny below.",
+        "prefill_ms": null,
+        "decode_ms": null,
+        "extra": {}
       },
       "run_script": {
         "ts": "2026-10-09T13:54:05",
@@ -148,7 +185,12 @@
           "sm_pct_peak": 4.0,
           "vram_mib_peak": 9681.0
         },
-        "output_head": "stdout:\nNeutron: 1024 MACs x 1.0 GHz x 2 OPS/MAC = 2.0 TOPS (spec 2.0)\ncores=6xA55; mem=LPDDR5X; pcie=Gen3\n\nexit code: 0"
+        "output_head": "stdout:\nNeutron: 1024 MACs x 1.0 GHz x 2 OPS/MAC = 2.0 TOPS (spec 2.0)\ncores=6xA55; mem=LPDDR5X; pcie=Gen3\n\nexit code: 0",
+        "prefill_ms": null,
+        "decode_ms": null,
+        "extra": {
+          "run_script_s": 0.091
+        }
       },
       "meeting_summarize": {
         "ts": "2026-10-09T13:54:05",
@@ -163,7 +205,12 @@
           "sm_pct_peak": 6.0,
           "vram_mib_peak": 9681.0
         },
-        "output_head": "{\"summary\": \"The meeting discusses a thunderstorm event that could produce large hail, isolated tornadoes and heavy rain"
+        "output_head": "{\"summary\": \"The meeting discusses a thunderstorm event that could produce large hail, isolated tornadoes and heavy rain",
+        "prefill_ms": null,
+        "decode_ms": null,
+        "extra": {
+          "engine": "whisper->llm"
+        }
       }
     }
   },
