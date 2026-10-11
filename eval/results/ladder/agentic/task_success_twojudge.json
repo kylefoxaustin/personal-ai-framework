@@ -6,117 +6,117 @@
   },
   "rule": "two judges, different families; both must be read; splits are flagged not averaged",
   "agreement": {
-    "agree": 7,
-    "split": 3
+    "agree": 9,
+    "split": 1
   },
   "results": {
     "email": {
       "sonnet": {
-        "verdict": "PARTIAL",
-        "reason": "The email is coherent and covers the right topics, but fabricates the NPU spec as '256 MACs/cycle' instead of the correct 1024 MACs, and omits the 2.0 TOPS rating, making a material factual error in the core NPU specification."
+        "verdict": "FAIL",
+        "reason": "The assistant did not draft a coherent email; it only produced a partial, incomplete code snippet with no actual email content covering the i.MX 95, Neutron NPU, or edge AI suitability."
       },
       "gpt4o": {
         "verdict": "FAIL",
-        "reason": "The email incorrectly refers to 'Neutron' NPU instead of eIQ Neutron NPU and fabricates performance details like '256 MACs/cycle.'"
+        "reason": "The output does not draft an email introducing the i.MX 95 or cover its features and suitability for edge AI."
       },
-      "agree": false
+      "agree": true
     },
     "spec_rag": {
       "sonnet": {
-        "verdict": "PASS",
-        "reason": "The answer accurately states 2.0 TOPS, 1024 MACs at 1.0 GHz, and 2 OPS/MAC, matching the ground truth, with no fabricated core claims."
+        "verdict": "PARTIAL",
+        "reason": "The answer correctly identifies the Neutron NPU as a machine-learning accelerator with MAC compute blocks, but fails to state the key quantitative specs required for PASS (2.0 TOPS, 1024 MACs @ 1GHz), making it incomplete though not fabricated."
       },
       "gpt4o": {
-        "verdict": "PARTIAL",
-        "reason": "Correct performance details for the Neutron NPU are provided, but additional features such as support for specific neural networks and layers are potentially fabricated."
+        "verdict": "FAIL",
+        "reason": "The response does not mention the NPU's 2.0 TOPS performance or 1024 MACs at 1 GHz, which are core specifications."
       },
       "agree": false
     },
     "file_ops": {
       "sonnet": {
         "verdict": "PASS",
-        "reason": "All three bullets accurately reflect the i.MX 95 specs from the ground truth with no fabricated details."
+        "reason": "The three bullets accurately summarize the i.MX 95 specs including the correct core count, NPU name and TOPS rating, GPU, memory type, peripherals, and target markets with no fabricated details."
       },
       "gpt4o": {
         "verdict": "PASS",
-        "reason": "The summary accurately conveys the i.MX 95's specifications without any fabrication."
+        "reason": "The summary accurately reflects the i.MX 95 specs without fabrication."
       },
       "agree": true
     },
     "transcribe": {
       "sonnet": {
         "verdict": "PASS",
-        "reason": "The transcript matches the weather-forecast content describing thunderstorms, large hail, isolated tornadoes, and heavy rain."
+        "reason": "The transcript matches the weather-forecast content mentioning thunderstorms, large hail, isolated tornadoes, and heavy rain."
       },
       "gpt4o": {
         "verdict": "PASS",
-        "reason": "The transcript matches the weather-forecast content regarding thunderstorms, large hail, isolated tornadoes, and heavy rain."
+        "reason": "The transcript matches the weather-forecast content specified."
       },
       "agree": true
     },
     "ocr": {
       "sonnet": {
         "verdict": "PASS",
-        "reason": "The assistant successfully extracted coherent and accurate text from the application note page, correctly identifying the document number AN14721, title, revision information, and abstract content about TRDC resource isolation in i.MX devices."
+        "reason": "The output coherently extracts text from the AN14721 application note page, accurately capturing the document number, title, revision date, keywords, and abstract content."
       },
       "gpt4o": {
         "verdict": "PASS",
-        "reason": "The assistant accurately extracted the text from the specified datasheet page image."
+        "reason": "The extracted text is coherent and accurately reflects the content of the AN14721 TRDC application note."
       },
       "agree": true
     },
     "run_script": {
       "sonnet": {
         "verdict": "PASS",
-        "reason": "Script output correctly shows 2.0 TOPS computation (1024 MACs x 1.0 GHz x 2 OPS/MAC), 6xA55 cores, LPDDR5X memory, and PCIe Gen3 with exit code 0."
+        "reason": "Script correctly outputs 2.0 TOPS with correct computation, 6xA55, LPDDR5X, Gen3, and exits with code 0."
       },
       "gpt4o": {
         "verdict": "PASS",
-        "reason": "The script output correctly calculates the NPU TOPS as 2.0 and matches the other specified datasheet details."
+        "reason": "The script correctly computed the NPU TOPS as 2.0 and included correct details about cores, memory, and PCIe."
       },
       "agree": true
     },
     "doc_brief": {
       "sonnet": {
-        "verdict": "PARTIAL",
-        "reason": "The brief is mostly grounded with correct NPU specs (2.0 TOPS, 1024 MACs, 1.0 GHz) and PCIe Gen3/TSN mentions, but contains fabrications including 'LPDDR4X' support (ground truth says LPDDR5X only), incorrect PCIe spec '2x PCIe Gen 3.0 x12', omits the 6x Cortex-A55 count and Cortex-M7 core, and fails to mention Mali GPU or eIQ Neutron NPU branding correctly (calls it just 'Neutron N3-1024S' which is acceptable but incomplete)."
+        "verdict": "FAIL",
+        "reason": "The brief fabricates the NPU as 'Ethos-U65 microNPU' (an Arm product, not NXP's eIQ Neutron NPU N3-1024S), incorrectly states LPDDR4X memory (ground truth specifies LPDDR5X), and omits the correct CPU configuration (6x Cortex-A55 + Cortex-M33 + Cortex-M7), making the core specifications fabricated or wrong."
       },
       "gpt4o": {
         "verdict": "FAIL",
-        "reason": "The brief incorrectly states support for LPDDR4X memory, which is not true according to the datasheet."
+        "reason": "The brief incorrectly mentions Ethos-U65 microNPU and LPDDR4X, which are not part of the i.MX 95 specifications."
       },
-      "agree": false
+      "agree": true
     },
     "web_summarize": {
       "sonnet": {
-        "verdict": "PARTIAL",
-        "reason": "The summary is coherent but entirely generic with no i.MX95-specific content (no mention of Cortex-A55/M33/M7 cores, eIQ Neutron NPU, Mali GPU, LPDDR5X, PCIe Gen3, TSN, or Energy Flex architecture)."
+        "verdict": "FAIL",
+        "reason": "The assistant provided no actual i.MX 95 content, only stating that search results were empty and offering no summarization of the device's specifications or capabilities."
       },
       "gpt4o": {
-        "verdict": "PARTIAL",
-        "reason": "The summary is coherent but lacks specific factual details about the i.MX 95, such as its architecture, components, and targeted applications."
+        "verdict": "FAIL",
+        "reason": "The assistant did not provide any summary or specific content about the i.MX 95."
       },
       "agree": true
     },
     "meeting_summarize": {
       "sonnet": {
         "verdict": "PARTIAL",
-        "reason": "The assistant correctly identified the weather forecast content but fabricated named attendees (John, Sarah) assigned to action items, which did not exist in the recording."
+        "reason": "The assistant correctly identified weather forecast content (hail, tornadoes, heavy rain) without fabricating attendees or decisions, but incorrectly framed it as a 'meeting transcript' rather than a weather forecast, which is a minor structural mischaracterization."
       },
       "gpt4o": {
         "verdict": "PARTIAL",
-        "reason": "The summary captures the gist of the weather forecast, but the action-items and attendee names are fabricated."
+        "reason": "The summary correctly reflects the weather forecast content but fabricates a meeting structure with action items and decisions."
       },
       "agree": true
     },
     "multi_tool_chain": {
       "sonnet": {
         "verdict": "FAIL",
-        "reason": "The assistant only narrated/described writing to a file without actually performing the tool step, and fabricated multiple incorrect specs (Neutrino NPU, dual-A55-only, two Cortex-M7 cores, LPDDR4X, 16GB) that contradict the ground truth."
+        "reason": "The assistant only requested approval to write the file rather than actually performing the tool steps, and did not complete the full chain of noting specs, writing to file, and drafting an email."
       },
       "gpt4o": {
         "verdict": "FAIL",
-        "reason": "The assistant fabricated specs, referencing a 'Neutrino NPU' and 'dual Cortex-A55 only', which are incorrect according to the ground truth."
+        "reason": "The assistant only narrated the step without actually performing the file write."
       },
       "agree": true
     }

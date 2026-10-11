@@ -1,0 +1,353 @@
+{
+  "run": {
+    "ts": "20261010-194056",
+    "boards": [
+      "5090",
+      "thor",
+      "orin"
+    ],
+    "scope": "5090/thor/orin (iq9+i.MX95 deferred to port phase)",
+    "path": "/home/kyle/Documents/GitHub/personal-ai-framework/eval/results/system/run_20261010-194056.json"
+  },
+  "resource": {
+    "model": "qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf",
+    "tasks": {
+      "file_ops": {
+        "ts": "2026-10-10T19:41:19",
+        "wall_s": 1.492,
+        "decode_tok_s": 130.1,
+        "prefill_tok_s": 4816.5,
+        "prefill_ms": 29.69,
+        "decode_ms": 883.83,
+        "extra": {
+          "read_ok": true,
+          "write_result": "Wrote 467 chars to /root/.personal-ai/users/kyle/skippy-workspace/imx95_summary.",
+          "file_ops_total_s": 1.492
+        },
+        "gpu": {
+          "samples": 12,
+          "sm_pct_mean": 56.8,
+          "mem_pct_mean": 43.2,
+          "power_w_mean": 361.2,
+          "sm_pct_peak": 96.0,
+          "vram_mib_peak": 18913.0
+        },
+        "output_head": "- Skippy\nSure, here's a concise summary of the notes in three bullet points:\n\n- The i.MX 95 features 6 Cortex-A55 cores,"
+      },
+      "ocr": {
+        "ts": "2026-10-10T19:41:23",
+        "wall_s": 0.439,
+        "decode_tok_s": null,
+        "prefill_tok_s": null,
+        "prefill_ms": null,
+        "decode_ms": null,
+        "extra": {
+          "engine": "tesseract",
+          "image": "ocr_imx_datasheet-01.png"
+        },
+        "gpu": {
+          "samples": 7,
+          "sm_pct_mean": 0.4,
+          "mem_pct_mean": 0.0,
+          "power_w_mean": 76.1,
+          "sm_pct_peak": 1.0,
+          "vram_mib_peak": 18909.0
+        },
+        "output_head": "AN14721\n\nHow to Understand and Use TRDC in i.MX Devices\n\nRev. 1.0 \u2014 30 June 2025 Application note\n\nDocument information\n"
+      },
+      "doc_brief": {
+        "ts": "2026-10-10T19:41:40",
+        "wall_s": 7.796,
+        "decode_tok_s": 101.0,
+        "prefill_tok_s": 3818.1,
+        "prefill_ms": 2213.9,
+        "decode_ms": 4108.7,
+        "extra": {},
+        "gpu": {
+          "samples": 43,
+          "sm_pct_mean": 86.0,
+          "mem_pct_mean": 58.8,
+          "power_w_mean": 501.5,
+          "sm_pct_peak": 99.0,
+          "vram_mib_peak": 19069.0
+        },
+        "output_head": "### NXP i.MX 95 Product Brief\n\n**Overview:**\nThe NXP i.MX 95 is a high-performance application processor designed for ad"
+      },
+      "meeting_summarize": {
+        "ts": "2026-10-10T19:41:27",
+        "wall_s": 2.436,
+        "decode_tok_s": null,
+        "prefill_tok_s": null,
+        "prefill_ms": null,
+        "decode_ms": null,
+        "extra": {
+          "engine": "whisper->llm"
+        },
+        "gpu": {
+          "samples": 17,
+          "sm_pct_mean": 1.6,
+          "mem_pct_mean": 0.0,
+          "power_w_mean": 100.2,
+          "sm_pct_peak": 3.0,
+          "vram_mib_peak": 18909.0
+        },
+        "output_head": "{\"summary\": \"The meeting transcript describes potential severe weather conditions including large hail, isolated tornado"
+      },
+      "spec_rag": {
+        "ts": "2026-10-10T19:41:17",
+        "wall_s": 4.467,
+        "decode_tok_s": 117.2,
+        "prefill_tok_s": 4891.0,
+        "prefill_ms": 862.19,
+        "decode_ms": 1884.97,
+        "extra": {},
+        "gpu": {
+          "samples": 27,
+          "sm_pct_mean": 61.6,
+          "mem_pct_mean": 44.7,
+          "power_w_mean": 450.1,
+          "sm_pct_peak": 99.0,
+          "vram_mib_peak": 18909.0
+        },
+        "output_head": "Based on the excerpts from the i.MX 95 Applications Processor Reference Manual, the i.MX 95 Neutron NPU is an on-chip ha"
+      },
+      "multi_tool_chain": {
+        "ts": "2026-10-10T19:41:31",
+        "wall_s": 2.684,
+        "decode_tok_s": null,
+        "prefill_tok_s": null,
+        "prefill_ms": null,
+        "decode_ms": null,
+        "extra": {},
+        "gpu": {
+          "samples": 18,
+          "sm_pct_mean": 40.6,
+          "mem_pct_mean": 25.3,
+          "power_w_mean": 310.0,
+          "sm_pct_peak": 97.0,
+          "vram_mib_peak": 18909.0
+        },
+        "output_head": "I'd like to run `write_file(path='chain_notes.txt', content=[169 chars])`. Please approve or deny below."
+      },
+      "transcribe": {
+        "ts": "2026-10-10T19:41:22",
+        "wall_s": 1.952,
+        "decode_tok_s": null,
+        "prefill_tok_s": null,
+        "prefill_ms": null,
+        "decode_ms": null,
+        "extra": {
+          "engine": "whisper-base"
+        },
+        "gpu": {
+          "samples": 14,
+          "sm_pct_mean": 15.1,
+          "mem_pct_mean": 10.6,
+          "power_w_mean": 160.6,
+          "sm_pct_peak": 96.0,
+          "vram_mib_peak": 18909.0
+        },
+        "output_head": "Thunderstorms could produce large hail, isolated tornadoes and heavy rain."
+      },
+      "web_summarize": {
+        "ts": "2026-10-10T19:41:12",
+        "wall_s": 5.688,
+        "decode_tok_s": 130.5,
+        "prefill_tok_s": 4662.5,
+        "prefill_ms": 27.02,
+        "decode_ms": 513.37,
+        "extra": {
+          "web_search_s": 4.299,
+          "web_status": "ok",
+          "n_results": null
+        },
+        "gpu": {
+          "samples": 33,
+          "sm_pct_mean": 24.3,
+          "mem_pct_mean": 18.6,
+          "power_w_mean": 181.3,
+          "sm_pct_peak": 97.0,
+          "vram_mib_peak": 18809.0
+        },
+        "output_head": "It seems that the provided search results are empty, as there are no returned documents or web pages to summarize regard"
+      },
+      "email": {
+        "ts": "2026-10-10T19:41:05",
+        "wall_s": 8.751,
+        "decode_tok_s": null,
+        "prefill_tok_s": null,
+        "prefill_ms": null,
+        "decode_ms": null,
+        "extra": {},
+        "gpu": {
+          "samples": 48,
+          "sm_pct_mean": 30.1,
+          "mem_pct_mean": 21.1,
+          "power_w_mean": 181.8,
+          "sm_pct_peak": 97.0,
+          "vram_mib_peak": 18809.0
+        },
+        "output_head": "I'd like to run `send_email(to='colleague@example.com', subject='Introducing the NXP i.MX 95 for Edge AI', body=\"Hi [Col"
+      },
+      "run_script": {
+        "ts": "2026-10-10T19:41:28",
+        "wall_s": 0.058,
+        "decode_tok_s": null,
+        "prefill_tok_s": null,
+        "prefill_ms": null,
+        "decode_ms": null,
+        "extra": {
+          "run_script_s": 0.058
+        },
+        "gpu": {
+          "samples": 5,
+          "sm_pct_mean": 1.8,
+          "mem_pct_mean": 0.0,
+          "power_w_mean": 276.6,
+          "sm_pct_peak": 2.0,
+          "vram_mib_peak": 18909.0
+        },
+        "output_head": "stdout:\nNeutron: 1024 MACs x 1.0 GHz x 2 OPS/MAC = 2.0 TOPS (spec 2.0)\ncores=6xA55; mem=LPDDR5X; pcie=Gen3\n\nexit code: 0"
+      }
+    }
+  },
+  "ladder": null,
+  "accuracy": {
+    "ts": "2026-10-07",
+    "judges": {
+      "anthropic": "claude-sonnet-4-6",
+      "openai": "gpt-4o"
+    },
+    "rule": "two judges, different families; both must be read; splits are flagged not averaged",
+    "agreement": {
+      "agree": 9,
+      "split": 1
+    },
+    "results": {
+      "email": {
+        "sonnet": {
+          "verdict": "FAIL",
+          "reason": "The assistant did not draft a coherent email; it only produced a partial, incomplete code snippet with no actual email content covering the i.MX 95, Neutron NPU, or edge AI suitability."
+        },
+        "gpt4o": {
+          "verdict": "FAIL",
+          "reason": "The output does not draft an email introducing the i.MX 95 or cover its features and suitability for edge AI."
+        },
+        "agree": true
+      },
+      "spec_rag": {
+        "sonnet": {
+          "verdict": "PARTIAL",
+          "reason": "The answer correctly identifies the Neutron NPU as a machine-learning accelerator with MAC compute blocks, but fails to state the key quantitative specs required for PASS (2.0 TOPS, 1024 MACs @ 1GHz), making it incomplete though not fabricated."
+        },
+        "gpt4o": {
+          "verdict": "FAIL",
+          "reason": "The response does not mention the NPU's 2.0 TOPS performance or 1024 MACs at 1 GHz, which are core specifications."
+        },
+        "agree": false
+      },
+      "file_ops": {
+        "sonnet": {
+          "verdict": "PASS",
+          "reason": "The three bullets accurately summarize the i.MX 95 specs including the correct core count, NPU name and TOPS rating, GPU, memory type, peripherals, and target markets with no fabricated details."
+        },
+        "gpt4o": {
+          "verdict": "PASS",
+          "reason": "The summary accurately reflects the i.MX 95 specs without fabrication."
+        },
+        "agree": true
+      },
+      "transcribe": {
+        "sonnet": {
+          "verdict": "PASS",
+          "reason": "The transcript matches the weather-forecast content mentioning thunderstorms, large hail, isolated tornadoes, and heavy rain."
+        },
+        "gpt4o": {
+          "verdict": "PASS",
+          "reason": "The transcript matches the weather-forecast content specified."
+        },
+        "agree": true
+      },
+      "ocr": {
+        "sonnet": {
+          "verdict": "PASS",
+          "reason": "The output coherently extracts text from the AN14721 application note page, accurately capturing the document number, title, revision date, keywords, and abstract content."
+        },
+        "gpt4o": {
+          "verdict": "PASS",
+          "reason": "The extracted text is coherent and accurately reflects the content of the AN14721 TRDC application note."
+        },
+        "agree": true
+      },
+      "run_script": {
+        "sonnet": {
+          "verdict": "PASS",
+          "reason": "Script correctly outputs 2.0 TOPS with correct computation, 6xA55, LPDDR5X, Gen3, and exits with code 0."
+        },
+        "gpt4o": {
+          "verdict": "PASS",
+          "reason": "The script correctly computed the NPU TOPS as 2.0 and included correct details about cores, memory, and PCIe."
+        },
+        "agree": true
+      },
+      "doc_brief": {
+        "sonnet": {
+          "verdict": "FAIL",
+          "reason": "The brief fabricates the NPU as 'Ethos-U65 microNPU' (an Arm product, not NXP's eIQ Neutron NPU N3-1024S), incorrectly states LPDDR4X memory (ground truth specifies LPDDR5X), and omits the correct CPU configuration (6x Cortex-A55 + Cortex-M33 + Cortex-M7), making the core specifications fabricated or wrong."
+        },
+        "gpt4o": {
+          "verdict": "FAIL",
+          "reason": "The brief incorrectly mentions Ethos-U65 microNPU and LPDDR4X, which are not part of the i.MX 95 specifications."
+        },
+        "agree": true
+      },
+      "web_summarize": {
+        "sonnet": {
+          "verdict": "FAIL",
+          "reason": "The assistant provided no actual i.MX 95 content, only stating that search results were empty and offering no summarization of the device's specifications or capabilities."
+        },
+        "gpt4o": {
+          "verdict": "FAIL",
+          "reason": "The assistant did not provide any summary or specific content about the i.MX 95."
+        },
+        "agree": true
+      },
+      "meeting_summarize": {
+        "sonnet": {
+          "verdict": "PARTIAL",
+          "reason": "The assistant correctly identified weather forecast content (hail, tornadoes, heavy rain) without fabricating attendees or decisions, but incorrectly framed it as a 'meeting transcript' rather than a weather forecast, which is a minor structural mischaracterization."
+        },
+        "gpt4o": {
+          "verdict": "PARTIAL",
+          "reason": "The summary correctly reflects the weather forecast content but fabricates a meeting structure with action items and decisions."
+        },
+        "agree": true
+      },
+      "multi_tool_chain": {
+        "sonnet": {
+          "verdict": "FAIL",
+          "reason": "The assistant only requested approval to write the file rather than actually performing the tool steps, and did not complete the full chain of noting specs, writing to file, and drafting an email."
+        },
+        "gpt4o": {
+          "verdict": "FAIL",
+          "reason": "The assistant only narrated the step without actually performing the file write."
+        },
+        "agree": true
+      }
+    }
+  },
+  "provenance": {
+    "harness": "MEASURED (5090 full-stack telemetry)",
+    "ladder": "MEASURED (llama-bench)",
+    "accuracy": "MEASURED (two-judge, Sonnet+GPT-4o)"
+  },
+  "log": [
+    "\n\u25b6 agentic-edge benchmark \u00b7 boards=['5090', 'thor', 'orin'] \u00b7 20261010-194051",
+    "  \u21bb swapping model -> qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf (restarting llm-server; GPU free 22181 MiB)",
+    "    model loaded",
+    "  \u25b6 WORKLOAD \u2014 10-task harness on the 5090 (model: ?)",
+    "    captured 10 tasks",
+    "  \u25b6 GRADE \u2014 two-judge (Sonnet + GPT-4o)",
+    "    agreement: {'agree': 9, 'split': 1}"
+  ]
+}
