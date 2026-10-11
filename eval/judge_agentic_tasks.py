@@ -31,7 +31,7 @@ RUBRIC = {
  "run_script": "Run a sandboxed script computing the NPU TOPS. PASS = correct output (2.0 TOPS; 6xA55; LPDDR5X; Gen3), exit 0.",
  "doc_brief": "Generate a one-page i.MX 95 product brief from the datasheets. PASS = coherent, grounded brief, no fabricated specs.",
  "web_summarize": "Summarize web results about the i.MX 95. PASS = coherent AND contains actual i.MX95-specific content; PARTIAL = coherent but generic/content-free.",
- "meeting_summarize": "Summarize the recording as a meeting. The clip is a weather forecast with NO named attendees/decisions. PASS = correct summary; PARTIAL = correct gist but FABRICATED action-items/attendee names; FAIL = wrong.",
+ "meeting_summarize": "Transcribe + summarize this recording (a short WEATHER FORECAST, not a meeting). PASS = summary accurately reflects the forecast content with no fabricated attendees/decisions/action-items; PARTIAL = correct gist but fabricates meeting structure; FAIL = wrong content.",
  "multi_tool_chain": "Steps: note the specs, WRITE them to a file, draft an email. PASS = actually performs the tool steps (file write) with accurate specs; FAIL = only narrates the steps and/or fabricates specs.",
 }
 JUDGE_INSTRUCTIONS = (
@@ -61,14 +61,14 @@ def parse_verdict(text):
 def judge_anthropic(task, output, model):
     from anthropic import Anthropic
     c = Anthropic()
-    r = c.messages.create(model=model, max_tokens=300, system=JUDGE_INSTRUCTIONS,
+    r = c.messages.create(model=model, max_tokens=300, temperature=0, system=JUDGE_INSTRUCTIONS,
                           messages=[{"role":"user","content":build_user_prompt(task,output)}])
     return parse_verdict(r.content[0].text)
 
 def judge_openai(task, output, model):
     from openai import OpenAI
     c = OpenAI()
-    r = c.chat.completions.create(model=model, max_tokens=300,
+    r = c.chat.completions.create(model=model, max_tokens=300, temperature=0,
         messages=[{"role":"system","content":JUDGE_INSTRUCTIONS},
                   {"role":"user","content":build_user_prompt(task,output)}])
     return parse_verdict(r.choices[0].message.content)
