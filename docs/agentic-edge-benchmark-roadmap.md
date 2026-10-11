@@ -134,3 +134,18 @@ qualcomm_smolvla_obj tenants) AND Qwen2.5-VL-7B measured (prefill 197.5 / decode
 protocol. Resource story these complete: VL/VLA prefill is TOPS/compute-bound (the NPU's job), decode
 still DDR-bound — i.e. the accelerator pays off on the perception front-end, not the generation loop.
 Co-design the frame-sampling + output schema with splat-vla (VL) and qualcomm (VLA/robot/drone).
+
+### Next port after the telemetry-gap fixes: x86/AMD pure-CPU demo (Kyle, 2026-10-10)
+Goal: "git clone + run it on a laptop/desktop, no GPU, nothing fancy." Broadest-reach demo; proves
+the thesis on commodity silicon (CPU decode = DDR-bandwidth-bound, no accelerator). Must run on
+Linux AND Windows (x86). Design decisions:
+- **Two tiers.** (a) DECODE/resource ladder = llama.cpp CPU build only → genuinely pull-and-run,
+  cross-platform, the demo. (b) Full 10-task agentic harness needs the Skippy server (FastAPI +
+  ChromaDB + RAG) → ships as an optional `docker-compose up` (heavier). Lead with (a).
+- **Windows:** the stack is Linux (bash/ssh/docker). For local x86-CPU there's no ssh/reserve
+  (it's the user's own machine). v1: WSL2 (the Linux path just works, one doc line). Native Windows
+  (python + llama.cpp.exe, no bash) later if the demo needs it.
+- **Reuse:** add a `localhost-x86` board to model_registry.json (CPU llama.cpp, no ssh, no reserve);
+  the feasibility gate (RAM fit) + provisioner (hf download a CPU GGUF) carry over unchanged.
+- Expected result: a desktop (dual-channel DDR5 ~70 GB/s) out-decodes a laptop (~50 GB/s) on the
+  same model — a live demonstration that decode tracks achievable bandwidth, runnable by anyone.
