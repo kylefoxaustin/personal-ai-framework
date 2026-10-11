@@ -94,6 +94,8 @@ def phase_harness(log):
             te = d.get("telemetry", {})
             tasks[t] = {"ts": d["ts"], "wall_s": d.get("wall_s"),
                         "decode_tok_s": te.get("decode_tok_per_s"), "prefill_tok_s": te.get("prefill_tok_per_s"),
+                        "prefill_ms": te.get("prefill_ms"), "decode_ms": te.get("decode_ms"),
+                        "extra": {k: v for k, v in (d.get("extra") or {}).items()},
                         "gpu": d.get("gpu", {}), "output_head": (d.get("output") or "")[:120]}
     log(f"    captured {len(tasks)} tasks")
     return {"model": current_model(), "tasks": tasks}
