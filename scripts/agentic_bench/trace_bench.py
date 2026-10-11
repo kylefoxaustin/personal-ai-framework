@@ -47,7 +47,7 @@ H = {}
 MODEL = "?"
 def gen(prompt, rag=False, rag_k=3, mt=256, skip_loop=False):
     body = {"prompt": prompt, "use_rag": rag, "rag_k": rag_k, "max_tokens": mt,
-            "include_telemetry": True, "skip_agent_loop": skip_loop}
+            "include_telemetry": True, "skip_agent_loop": skip_loop, "temperature": 0}
     d = requests.post(f"{BASE}/generate", json=body, headers=H, timeout=600).json()
     return {"text": d.get("text", ""), "telemetry": d.get("telemetry") or {},
             "rag_docs": (d.get("telemetry") or {}).get("rag_docs_used")}
