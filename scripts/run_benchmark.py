@@ -92,11 +92,12 @@ def phase_harness(log):
         # keep the most recent per task
         if t not in tasks or d["ts"] > tasks[t]["ts"]:
             te = d.get("telemetry", {})
-            tasks[t] = {"ts": d["ts"], "wall_s": d.get("wall_s"),
+            tasks[t] = {"ts": d["ts"], "wall_s": d.get("wall_s"), "work_ms": d.get("work_ms"),
                         "decode_tok_s": te.get("decode_tok_per_s"), "prefill_tok_s": te.get("prefill_tok_per_s"),
                         "prefill_ms": te.get("prefill_ms"), "decode_ms": te.get("decode_ms"),
+                        "host_ms": te.get("host_ms"), "retrieval_ms": te.get("retrieval_ms"), "tool_ms": te.get("tool_ms"),
                         "extra": {k: v for k, v in (d.get("extra") or {}).items()},
-                        "gpu": d.get("gpu", {}), "output_head": (d.get("output") or "")[:120]}
+                        "gpu": d.get("gpu", {}), "cpu": d.get("cpu", {}), "output_head": (d.get("output") or "")[:120]}
     log(f"    captured {len(tasks)} tasks")
     return {"model": current_model(), "tasks": tasks}
 

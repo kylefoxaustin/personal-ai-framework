@@ -55,8 +55,10 @@ TEMPLATE = r"""<title>Benchmark Report</title>
   .det td{background:color-mix(in srgb,var(--accent) 4%,var(--panel));padding:14px 16px}
   .bar{display:flex;height:24px;border-radius:6px;overflow:hidden;margin:4px 0 8px;font-family:var(--mono);font-size:10px;font-weight:700}
   .seg{display:flex;align-items:center;justify-content:center;color:#0b0f14;white-space:nowrap;overflow:hidden}
-  .s-comp{background:#8a7fd6} .s-compose{background:var(--accent)} .s-rest{background:#39c288}
+  .s-comp{background:#8a7fd6} .s-compose{background:var(--accent)} .s-orch{background:#7a8794} .s-work{background:#39c288}
   .ovh{font-family:var(--mono);font-weight:800;color:var(--accent-ink)}
+  .leg{display:inline-flex;align-items:center;gap:5px;margin-right:12px;font-size:11px;color:var(--muted)}
+  .sw{width:10px;height:10px;border-radius:2px;display:inline-block}
 </style>
 <div class="wrap"><div id="app"></div></div>
 <script>
@@ -66,18 +68,32 @@ function tLabel(id){const c=CAT[id]; return c?("Test "+c.n+": "+c.name):id;}
 function tLink(id){return CAT[id]?('<a href="#test-'+id+'" style="color:inherit;text-decoration:none;border-bottom:1px dotted var(--muted)">'+tLabel(id)+'</a>'):id;}
 function tog(id){const e=document.getElementById(id); if(e) e.style.display=(e.style.display==='none'?'table-row':'none');}
 function phases(v){
-  const wall=(v.wall_s||0)*1000, comp=v.prefill_ms||0, compose=v.decode_ms||0;
-  const rest=Math.max(0, wall-comp-compose), llm=comp+compose;
-  let tool=''; const ex=v.extra||{};
-  for(const k in ex){ if(k.endsWith('_s') && typeof ex[k]==='number') tool+=`${k.replace(/_s$/,'')} ${(ex[k]*1000).toFixed(0)}ms · `; }
-  return {wall, comp, compose, rest, pct: wall?Math.round(100*llm/wall):0, tool: tool.replace(/ · $/,'')};
+  // 4 phases. WORK (engine: retrieval / Whisper / Tesseract / web / file / script) is the value;
+  // everything else — comprehend (prefill) + compose (decode or a summarize step) + orchestrate
+  // (prompt build, agent loop, routing) — is AGENT OVERHEAD. overhead% = (wall - work)/wall.
+  const ex=v.extra||{};
+  const wall=(v.wall_s||0)*1000, comp=v.prefill_ms||0;
+  const compose=(v.decode_ms!=null?v.decode_ms:(ex.compose_ms||0))||0;
+  const work=(v.work_ms!=null?v.work_ms:(ex.work_ms||0))||0;
+  const orch=Math.max(0, wall-comp-compose-work);
+  const over=Math.max(0, wall-work);
+  const c=v.cpu||{};
+  return {wall, comp, compose, work, orch, over, pct: wall?Math.round(100*over/wall):0,
+          cores: c.cores_busy_mean, coresPk: c.cores_busy_peak, cpuPct: c.cpu_pct_mean};
 }
 function detailRow(id,v){
-  const p=phases(v), w=p.wall||1, g=v.gpu||{};
-  const seg=(c,ms,l)=> ms>0?`<div class="seg ${c}" style="width:${(100*ms/w).toFixed(1)}%">${100*ms/w>11?l:''}</div>`:'';
-  return `<tr class="det" id="det-${id}" style="display:none"><td colspan="7">`+
-    `<div class="bar">${seg('s-comp',p.comp,'comprehend')}${seg('s-compose',p.compose,'compose')}${seg('s-rest',p.rest,'work + orchestrate')}</div>`+
-    `<div class="mut">comprehend (analyze prompt+context, prefill) <b>${p.comp.toFixed(0)}ms</b> · compose (write answer, decode) <b>${p.compose.toFixed(0)}ms</b> · work + orchestrate (tool run, loop glue) <b>${p.rest.toFixed(0)}ms</b> &nbsp;—&nbsp; <span class="ovh">LLM overhead ${p.pct}%</span>${p.tool?' · measured tool time: '+p.tool:''}</div>`+
+  const p=phases(v), w=p.wall||1, g=v.gpu||{}, c=v.cpu||{};
+  const seg=(cl,ms,l)=> ms>0?`<div class="seg ${cl}" style="width:${(100*ms/w).toFixed(1)}%">${100*ms/w>12?l:''}</div>`:'';
+  const legend=`<div style="margin:2px 0 8px">`+
+    `<span class="leg"><span class="sw s-comp"></span>comprehend (prefill)</span>`+
+    `<span class="leg"><span class="sw s-orch"></span>orchestrate (loop/routing)</span>`+
+    `<span class="leg"><span class="sw s-compose"></span>compose (decode)</span>`+
+    `<span class="leg"><span class="sw s-work"></span>work (engine)</span></div>`;
+  return `<tr class="det" id="det-${id}" style="display:none"><td colspan="6">`+
+    `<div class="bar">${seg('s-comp',p.comp,'comprehend')}${seg('s-orch',p.orch,'orchestrate')}${seg('s-compose',p.compose,'compose')}${seg('s-work',p.work,'work')}</div>`+
+    legend+
+    `<div class="mut">comprehend <b>${p.comp.toFixed(0)}ms</b> · orchestrate <b>${p.orch.toFixed(0)}ms</b> · compose <b>${p.compose.toFixed(0)}ms</b> · <span style="color:var(--meas)">work <b>${p.work.toFixed(0)}ms</b></span> &nbsp;—&nbsp; <span class="ovh">agent overhead ${p.pct}%</span> <span style="font-size:11px">(= everything but work)</span></div>`+
+    `<div class="mut" style="margin-top:6px"><b>CPU cost</b> (system-wide, even with the GPU doing the matmuls): <span class="ovh">${num(c.cores_busy_mean)} cores</span> mean · ${num(c.cores_busy_peak)} peak · ${num(c.cpu_pct_mean)}% of all cores &nbsp;—&nbsp; the host budget an accelerator does <i>not</i> remove (tokenize / sample / detokenize / retrieve / tool glue).</div>`+
     `<div class="mut" style="margin-top:6px">GPU footprint: sm ${num(g.sm_pct_mean)}% · mem ${num(g.mem_pct_mean)}% · ${num(g.power_w_mean)} W · peak VRAM ${num(g.vram_mib_peak)} MiB</div>`+
     (v.output_head?`<div class="mut" style="margin-top:6px;font-family:var(--mono);font-size:11px">out: ${E(v.output_head).replace(/</g,'&lt;')}</div>`:'')+
     `</td></tr>`;
@@ -92,9 +108,11 @@ function vHeader(){const r=M.run||{};return `<header class="hero"><p class="kick
   <h1>Run ${E(r.ts)}</h1><div class="meta">model: ${E((M.resource||{}).model||"&mdash;")} &nbsp;·&nbsp; boards: ${(r.boards||[]).join(", ")} &nbsp;·&nbsp; scope: ${E(r.scope||"")}</div></header>`;}
 
 function vHeadline(){const res=M.resource||{},lad=M.ladder||{},acc=M.accuracy||{};let c=[];
-  const sr=(res.tasks||{}).spec_rag; if(sr)c.push(['5090 decode',num(sr.decode_tok_s)+' t/s','spec_rag, harness']);
-  if(Object.keys(lad).length)c.push(['boards on ladder',Object.keys(lad).length,'decode measured']);
-  if(res.tasks)c.push(['tasks profiled',Object.keys(res.tasks).length,'10-task harness']);
+  const tasks=res.tasks||{}; const ovs=[],cpus=[];
+  for(const t in tasks){const p=phases(tasks[t]); if(p.wall>0)ovs.push(p.pct); if(p.cores!=null)cpus.push(p.cores);}
+  if(ovs.length)c.push(['agent overhead',Math.min(...ovs)+'–'+Math.max(...ovs)+'%','LLM share of wall-time']);
+  if(cpus.length)c.push(['peak CPU',Math.max(...cpus)+' cores','host cores, even w/ GPU busy']);
+  const sr=tasks.spec_rag; if(sr)c.push(['5090 decode',num(sr.decode_tok_s)+' t/s','spec_rag, harness']);
   const ag=(acc.agreement||{}); if(ag.agree!=null)c.push(['two-judge agree',ag.agree+' / '+(ag.agree+(ag.split||0)),'Sonnet + GPT-4o']);
   if(!c.length)return ''; return `<div class="cards">`+c.map(x=>`<div class="card"><div class="big">${x[1]}</div><div class="lbl">${x[0]}</div><div class="mut" style="font-size:11px">${x[2]}</div></div>`).join('')+`</div>`;}
 
@@ -102,9 +120,13 @@ function vLadder(){const lad=M.ladder; if(!lad||!Object.keys(lad).length)return 
   let rows=Object.entries(lad).map(([b,v])=>`<tr><td>${b}</td><td>${E(v.model||'7B')}</td><td class="num hl">${num(v.decode_tok_s)}</td><td class="num">${num(v.prefill_tok_s)}</td><td>${E(v.backend)}</td><td>${provChip(v.prov)}</td></tr>`).join('');
   return `<h2>Decode ladder</h2><div class="tscroll"><table><thead><tr><th>board</th><th>model</th><th class="num">decode t/s</th><th class="num">prefill t/s</th><th>backend</th><th>prov</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
 
-function vResource(){const res=M.resource; if(!res||!res.tasks)return '<h2>Workload — per-task resource</h2><div class="skip">not run this pass (Skippy down?)</div>';
-  let rows=Object.entries(res.tasks).map(([t,v])=>{const g=v.gpu||{};return `<tr class="clk" onclick="tog('det-${t}')"><td>${tLink(t)} <span class="caret">▸ phases</span></td><td class="num">${num(v.wall_s)}</td><td class="num">${num(v.decode_tok_s)}</td><td class="num">${num(v.prefill_tok_s)}</td><td class="num">${num(g.sm_pct_mean)}</td><td class="num">${num(g.mem_pct_mean)}</td><td class="num">${num(g.power_w_mean)}</td></tr>`+detailRow(t,v);}).join('');
-  return `<h2>Workload — per-task resource <span class="chip m">measured</span></h2><div class="mut" style="margin-bottom:6px">Click any row for its phase breakdown — <b>comprehend → work → compose</b> — and the <b>agent overhead</b> (the LLM's share of the time vs. the actual work). <span style="font-size:11px">Caveat: phase split comes from /generate telemetry; tasks that run the LLM via the agent-loop or an upload endpoint (multi-tool chain, meeting-summary) don't emit it, so their LLM time falls into work+orchestrate (shows as 0% — a telemetry gap, not truly 0).</span></div><div class="tscroll"><table><thead><tr><th>task</th><th class="num">wall s</th><th class="num">decode t/s</th><th class="num">prefill t/s</th><th class="num">sm%</th><th class="num">mem%</th><th class="num">power W</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
+function vOverhead(){const res=M.resource; if(!res||!res.tasks)return '<h2>Agent overhead — per task</h2><div class="skip">not run this pass (Skippy down?)</div>';
+  // lead with OVERHEAD and CPU — the point; rates/GPU are the subsets beneath (in the drill-down).
+  let rows=Object.entries(res.tasks).map(([t,v])=>{const p=phases(v);
+    return `<tr class="clk" onclick="tog('det-${t}')"><td>${tLink(t)} <span class="caret">▸ phases</span></td><td class="num"><span class="ovh">${p.pct}%</span></td><td class="num hl">${num(p.cores)}</td><td class="num">${num(v.wall_s)}</td><td class="num">${num(v.decode_tok_s)}</td><td class="num">${num(v.prefill_tok_s)}</td></tr>`+detailRow(t,v);}).join('');
+  return `<h2>Agent overhead — per task <span class="chip m">measured</span></h2>`+
+    `<div class="mut" style="margin-bottom:6px">The point: how much of each task is the agent <b>being an agent</b> (comprehend + orchestrate + compose) vs. the <b>actual work</b> (the tool/engine doing the job — retrieval, Whisper, Tesseract, web, file, script). <b>Overhead = everything but the work.</b> And the <b>CPU cost</b> — how many host cores the task needs <i>even when the GPU/accelerator does the matmuls</i>. Click any row for the phase breakdown; decode/prefill rates are the subset beneath.</div>`+
+    `<div class="tscroll"><table><thead><tr><th>task</th><th class="num">overhead</th><th class="num">CPU cores</th><th class="num">wall s</th><th class="num">decode t/s</th><th class="num">prefill t/s</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
 
 function vAccuracy(){const acc=M.accuracy; if(!acc||!acc.results)return '<h2>Task-success — two-judge</h2><div class="skip">not graded this pass (no API keys?)</div>';
   let rows=Object.entries(acc.results).map(([t,v])=>{const s=(v.sonnet||{}).verdict,g=(v.gpt4o||{}).verdict;return `<tr><td>${tLink(t)}</td><td>${E(s)}</td><td>${E(g)}</td><td>${v.agree?'&check;':'<b style="color:var(--accent-ink)">split</b>'}</td></tr>`;}).join('');
@@ -120,7 +142,7 @@ function vCatalog(){const ids=Object.keys(CAT).sort((a,b)=>CAT[a].n-CAT[b].n); i
 
 function vLog(){if(!M.log)return '';return `<details><summary>run log (${M.log.length} lines)</summary><pre>${M.log.map(E).join("\n").replace(/</g,"&lt;")}</pre></details>`;}
 
-document.getElementById('app').innerHTML = [vHeader(),vHeadline(),vLadder(),vResource(),vAccuracy(),vProvenance(),vCatalog(),vLog()].join('');
+document.getElementById('app').innerHTML = [vHeader(),vHeadline(),vOverhead(),vLadder(),vAccuracy(),vProvenance(),vCatalog(),vLog()].join('');
 </script>
 """
 

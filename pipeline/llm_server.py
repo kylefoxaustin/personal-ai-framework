@@ -327,13 +327,16 @@ User question: {prompt}"""
             return {"name": tool_name, "params": params, "pending": True}
 
         print(f"  🔧 Executing tool: {tool_name}({params})")
+        import time as _t
+        _tt0 = _t.time()
         result = execute_tool(tool_name, params)
+        _tool_ms = round((_t.time() - _tt0) * 1000, 1)  # the tool's execution = "work"
         print(f"  [agent] Tool result: {len(result)} chars")
 
         outcome = "error" if result.startswith("Error:") else "executed"
         metrics.tool_calls_total.labels(tool=tool_name, outcome=outcome).inc()
 
-        return {"name": tool_name, "params": params, "result": result}
+        return {"name": tool_name, "params": params, "result": result, "tool_ms": _tool_ms}
 
     except Exception as e:
         print(f"  [agent] Tool detection error: {e}")
@@ -381,20 +384,23 @@ def _run_agent_loop(prompt: str, conversation_history: Optional[List] = None, ma
         }
     """
     steps: list = []
+    tool_ms_total = 0.0  # cumulative tool-execution time across the chain = the loop's "work"
     for i in range(max_steps):
         result = _check_for_tool_use(prompt, conversation_history, tool_history=steps)
         if result is None:
             break
         if result.get("pending"):
-            return {"steps": steps, "pending": {"name": result["name"], "params": result["params"]}}
+            return {"steps": steps, "pending": {"name": result["name"], "params": result["params"]},
+                    "tool_ms": round(tool_ms_total, 1)}
         # Safe tool — record and continue
+        tool_ms_total += result.get("tool_ms") or 0
         steps.append({
             "name": result["name"],
             "params": result["params"],
             "result": result.get("result", ""),
         })
         print(f"  [agent] Loop step {i+1}/{max_steps} done: {result['name']}")
-    return {"steps": steps, "pending": None}
+    return {"steps": steps, "pending": None, "tool_ms": round(tool_ms_total, 1)}
 
 
 def _build_tool_context(tool_result: dict) -> str:
@@ -828,8 +834,12 @@ def generate(request: GenerationRequest):
                 retrieval_query = f"{retrieval_query} {' '.join(topics[:5])}"
                 print(f"  📎 Topic-boosted query: \"{retrieval_query}\"")
 
-    # Auto-retrieve context from RAG if enabled and no manual context provided
+    # Auto-retrieve context from RAG if enabled and no manual context provided.
+    # Timed separately (retrieval = the "work" the retriever does, vs the orchestration
+    # overhead around it) so the benchmark can split work from orchestrate in host_ms.
+    _retrieval_s = 0.0
     if request.use_rag and not context_docs:
+        _retr_start = _time.time()
         try:
             # Search conversation memory
             try:
@@ -859,6 +869,7 @@ def generate(request: GenerationRequest):
         except Exception as e:
             print(f"RAG retrieval failed: {e}")
             context_docs = []
+        _retrieval_s = _time.time() - _retr_start
 
     # Build system context (personality, facts, memory, RAG)
     system_context = ""
@@ -941,11 +952,25 @@ def generate(request: GenerationRequest):
             preview_parts.append(f"content=[{len(str(params['content']))} chars]")
         prefix = f"After running {len(agent['steps'])} prior step(s), " if agent["steps"] else ""
         msg = f"{prefix}I'd like to run `{name}({', '.join(preview_parts)})`. Please approve or deny below."
+        # Telemetry for the pending path: no generation ran, so this time is ALL host-side —
+        # the agent loop's tool-detection LLM passes (orchestrate) + retrieval + any executed
+        # tools (work). Emitting it keeps the benchmark honest instead of returning nothing.
+        _pending_tele = None
+        if request.include_telemetry:
+            _host_s = _time.time() - _gen_start
+            _pending_tele = {
+                "host_ms": round(_host_s * 1000, 2),
+                "retrieval_ms": round(_retrieval_s * 1000, 2),
+                "tool_ms": round(agent.get("tool_ms", 0) or 0, 2),
+                "prefill_ms": 0.0, "decode_ms": 0.0,  # no final generation on the pending path
+                "pending": True, "agent_steps": len(agent["steps"]),
+            }
         return GenerationResponse(
             text=msg,
             tokens_used=0,
             model=_active_model_label(),
             pending_action={"name": name, "params": params, "meta": _pending_action_metadata(name, params)},
+            telemetry=_pending_tele,
         )
     if agent["steps"]:
         system_context += _build_tool_chain_context(agent["steps"])
@@ -998,6 +1023,8 @@ def generate(request: GenerationRequest):
             "prompt_tokens": _prompt_tokens,
             "completion_tokens": _completion_tokens,
             "host_ms": round(_host_s * 1000, 2),
+            "retrieval_ms": round(_retrieval_s * 1000, 2),  # retrieval "work" portion of host_ms
+            "tool_ms": round(agent.get("tool_ms", 0) or 0, 2),  # agent-loop tool-execution "work"
             "prefill_ms": round(_prefill_s * 1000, 2),
             "decode_ms": round(_decode_s * 1000, 2),
             "total_ms": round(_elapsed * 1000, 2),
@@ -2794,7 +2821,7 @@ async def voice_transcribe(file: UploadFile = File(...)):
 @app.post("/upload/transcribe")
 async def upload_and_transcribe(file: UploadFile = File(...), title: str = Form("Untitled Recording"), summarize: bool = Form(False)):
     """Upload audio/video and transcribe with Whisper"""
-    import tempfile
+    import tempfile, time as _time
     from pathlib import Path
     
     # Check file type
@@ -2817,9 +2844,11 @@ async def upload_and_transcribe(file: UploadFile = File(...), title: str = Form(
         from meeting_summarizer import MeetingSummarizer
         
         summarizer = MeetingSummarizer(whisper_model="base", device="cpu")
-        
-        # Transcribe
+
+        # Transcribe  (timed: this is the engine "work" — Whisper on CPU)
+        _tx_start = _time.time()
         transcript_text, segments = summarizer.transcribe(tmp_path)
+        _transcribe_ms = round((_time.time() - _tx_start) * 1000, 1)
         
         # Save transcript to knowledge base
         transcript_dir = Path.home() / "knowledge" / "transcripts"
@@ -2853,14 +2882,17 @@ async def upload_and_transcribe(file: UploadFile = File(...), title: str = Form(
         # Clean up temp file
         os.unlink(tmp_path)
         
-        # Summarize if requested
+        # Summarize if requested  (timed: the LLM "compose" step, separate from the engine work)
         summary_data = None
+        _summarize_ms = 0.0
         if summarize:
             try:
+                _sum_start = _time.time()
                 summary_data = summarize_transcript_direct(transcript_text, title)
+                _summarize_ms = round((_time.time() - _sum_start) * 1000, 1)
             except Exception as e:
                 summary_data = {"error": str(e)}
-        
+
         return {
             "status": "ok",
             "filename": file.filename,
@@ -2869,7 +2901,8 @@ async def upload_and_transcribe(file: UploadFile = File(...), title: str = Form(
             "chunks_added": chunks_added,
             "transcript_preview": transcript_text[:500] + "..." if len(transcript_text) > 500 else transcript_text,
             "full_transcript": transcript_text,
-            "summary": summary_data
+            "summary": summary_data,
+            "timing_ms": {"transcribe": _transcribe_ms, "summarize": _summarize_ms},
         }
         
     except Exception as e:
@@ -2886,7 +2919,7 @@ async def upload_and_transcribe(file: UploadFile = File(...), title: str = Form(
 @app.post("/upload/ocr")
 async def upload_and_ocr(file: UploadFile = File(...), title: str = Form("Screenshot"), summarize: bool = Form(False)):
     """Upload image and extract text with OCR"""
-    import tempfile
+    import tempfile, time as _time
     from pathlib import Path
     
     # Check file type
@@ -2908,8 +2941,10 @@ async def upload_and_ocr(file: UploadFile = File(...), title: str = Form("Screen
         from PIL import Image
         
         img = Image.open(tmp_path)
-        extracted_text = pytesseract.image_to_string(img)
-        
+        _ocr_start = _time.time()
+        extracted_text = pytesseract.image_to_string(img)  # the engine "work" — Tesseract on CPU
+        _ocr_ms = round((_time.time() - _ocr_start) * 1000, 1)
+
         if not extracted_text.strip():
             os.unlink(tmp_path)
             return {"status": "error", "error": "No text found in image"}
@@ -2968,7 +3003,8 @@ async def upload_and_ocr(file: UploadFile = File(...), title: str = Form("Screen
             "chunks_added": chunks_added,
             "text_preview": extracted_text[:500] + "..." if len(extracted_text) > 500 else extracted_text,
             "full_text": extracted_text,
-            "summary": summary_data
+            "summary": summary_data,
+            "timing_ms": {"ocr": _ocr_ms},
         }
         
     except Exception as e:
