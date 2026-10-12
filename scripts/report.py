@@ -113,7 +113,10 @@ function vHeadline(){const res=M.resource||{},lad=M.ladder||{},acc=M.accuracy||{
   if(ovs.length)c.push(['agent overhead',Math.min(...ovs)+'–'+Math.max(...ovs)+'%','LLM share of wall-time']);
   if(cpus.length)c.push(['peak CPU',Math.max(...cpus)+' cores','host cores, even w/ GPU busy']);
   const sr=tasks.spec_rag; if(sr)c.push(['5090 decode',num(sr.decode_tok_s)+' t/s','spec_rag, harness']);
-  const ag=(acc.agreement||{}); if(ag.agree!=null)c.push(['two-judge agree',ag.agree+' / '+(ag.agree+(ag.split||0)),'Sonnet + GPT-4o']);
+  const sc=acc.scores||{}, ag=(acc.agreement||{});
+  if(sc.claude){const f=Math.max(sc.claude.fabrications||0,sc.gpt4o.fabrications||0),n=Object.keys(acc.results||{}).length;
+    c.push(['fabrications',f+' / '+n,'tasks that invented facts']);}
+  else if(ag.agree!=null)c.push(['two-judge agree',ag.agree+' / '+(ag.agree+(ag.split||0)),'Sonnet + GPT-4o']);
   if(!c.length)return ''; return `<div class="cards">`+c.map(x=>`<div class="card"><div class="big">${x[1]}</div><div class="lbl">${x[0]}</div><div class="mut" style="font-size:11px">${x[2]}</div></div>`).join('')+`</div>`;}
 
 function vLadder(){const lad=M.ladder; if(!lad||!Object.keys(lad).length)return '<h2>Decode ladder</h2><div class="skip">not run this pass</div>';
@@ -128,10 +131,21 @@ function vOverhead(){const res=M.resource; if(!res||!res.tasks)return '<h2>Agent
     `<div class="mut" style="margin-bottom:6px">The point: how much of each task is the agent <b>being an agent</b> (comprehend + orchestrate + compose) vs. the <b>actual work</b> (the tool/engine doing the job — retrieval, Whisper, Tesseract, web, file, script). <b>Overhead = everything but the work.</b> And the <b>CPU cost</b> — how many host cores the task needs <i>even when the GPU/accelerator does the matmuls</i>. Click any row for the phase breakdown; decode/prefill rates are the subset beneath.</div>`+
     `<div class="tscroll"><table><thead><tr><th>task</th><th class="num">overhead</th><th class="num">CPU cores</th><th class="num">wall s</th><th class="num">decode t/s</th><th class="num">prefill t/s</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
 
-function vAccuracy(){const acc=M.accuracy; if(!acc||!acc.results)return '<h2>Task-success — two-judge</h2><div class="skip">not graded this pass (no API keys?)</div>';
-  let rows=Object.entries(acc.results).map(([t,v])=>{const s=(v.sonnet||{}).verdict,g=(v.gpt4o||{}).verdict;return `<tr><td>${tLink(t)}</td><td>${E(s)}</td><td>${E(g)}</td><td>${v.agree?'&check;':'<b style="color:var(--accent-ink)">split</b>'}</td></tr>`;}).join('');
-  const ag=acc.agreement||{};
-  return `<h2>Task-success — two-judge (Sonnet + GPT-4o) <span class="chip m">measured</span></h2><div class="mut">agree ${ag.agree} / split ${ag.split} &nbsp;·&nbsp; splits flagged, never averaged</div><div class="tscroll" style="margin-top:8px"><table><thead><tr><th>task</th><th>sonnet</th><th>gpt-4o</th><th>agree?</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
+function vclr(v){v=E(v).toUpperCase(); if(v==='CORRECT')return 'color:var(--meas);font-weight:700';
+  if(v==='WRONG')return 'color:#e0484d;font-weight:700'; if(v==='ABSTAINED')return 'color:var(--src)'; return 'color:var(--muted)';}
+function vAccuracy(){const acc=M.accuracy; if(!acc||!acc.results)return '<h2>Correctness — two-judge</h2><div class="skip">not graded this pass (no API keys?)</div>';
+  // support both the new {claude,gpt4o} shape and the old {sonnet,gpt4o}
+  let rows=Object.entries(acc.results).map(([t,v])=>{const c=v.claude||v.sonnet||{},g=v.gpt4o||{};
+    const fab=(c.fabricated||g.fabricated)?'<span title="invented a fact" style="color:#e0484d;font-weight:700">⚠ fabricated</span>':'';
+    return `<tr><td>${tLink(t)}</td><td style="${vclr(c.verdict)}">${E(c.verdict)}</td><td style="${vclr(g.verdict)}">${E(g.verdict)}</td><td>${v.agree?'&check;':'<b style="color:var(--accent-ink)">split</b>'}</td><td>${fab}</td></tr>`;}).join('');
+  const ag=acc.agreement||{}, sc=acc.scores||{}, cl=sc.claude||{}, gp=sc.gpt4o||{};
+  const scoreline=(cl.net_correctness!=null)?
+    `<div class="mut" style="margin-bottom:6px">Net correctness (−1…+1, higher=better): <span class="ovh">claude ${cl.net_correctness>=0?'+':''}${cl.net_correctness} · gpt4o ${gp.net_correctness>=0?'+':''}${gp.net_correctness}</span> &nbsp;·&nbsp; <b style="color:#e0484d">fabrications: ${cl.fabrications}–${gp.fabrications} of ${Object.keys(acc.results).length}</b> (invented facts — the load-bearing safety number) &nbsp;·&nbsp; agree ${ag.agree}/split ${ag.split}</div>`
+    :`<div class="mut">agree ${ag.agree} / split ${ag.split}</div>`;
+  return `<h2>Correctness — two-judge, abstention-aware <span class="chip m">measured</span></h2>`+
+    `<div class="mut" style="margin-bottom:6px"><b>CORRECT</b> (+1, grounded) · <b>ABSTAINED</b> (0, declined without fabricating — safe) · <b>WRONG</b> (−1, fabricated or failed). Confident fabrication is penalized; abstaining is rewarded. Two judges from different families, temp 0, splits flagged not averaged.</div>`+
+    scoreline+
+    `<div class="tscroll" style="margin-top:4px"><table><thead><tr><th>task</th><th>claude</th><th>gpt-4o</th><th>agree?</th><th>flag</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
 
 function vProvenance(){const p=M.provenance||{};return `<h2>Provenance</h2><div class="legend"><span class="chip m">measured</span> ran it on a censused box &nbsp; <span class="chip d">derived</span> computed from measurements &nbsp; <span class="chip s">sourced</span> another team / vendor</div>`+
   `<div class="tscroll"><table><tbody>`+Object.entries(p).map(([k,v])=>`<tr><td>${k}</td><td class="mut">${E(v)}</td></tr>`).join('')+`</tbody></table></div>`;}
