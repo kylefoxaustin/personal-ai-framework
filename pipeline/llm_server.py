@@ -902,16 +902,19 @@ def generate(request: GenerationRequest):
     # Add RAG context (knowledge base) - skip for conversational queries
     if context_docs and not _is_conversational(request.prompt):
         rag_directive = (
-            "Excerpts retrieved from your knowledge base follow. Use them like this:\n"
-            "- When the user is asking about YOUR DOCUMENTS (datasheet specifics, past "
-            "emails, blog archives, personal notes), treat the excerpts as authoritative. "
-            "Don't invent specifics (numbers, part names, configuration bits) that aren't "
-            "in the excerpts — if they don't contain the answer, say so (e.g. \"the "
-            "retrieved excerpts don't cover that\") rather than guessing.\n"
-            "- For general-knowledge questions (concepts, code, math, widely-known topics), "
-            "answer from your training normally even if the excerpts are tangential.\n"
-            "- When citing a specific fact from an excerpt, prefer quoting the relevant "
-            "phrase verbatim.\n\n"
+            "Excerpts retrieved from your knowledge base follow. For questions about YOUR "
+            "DOCUMENTS (datasheet specifics, past emails, notes), follow these STRICT grounding "
+            "rules — they override any instinct to sound complete:\n"
+            "- Every specific fact you state — every number, part name, spec, configuration bit, "
+            "date, quantity — MUST appear in the excerpts below. If it is not in the excerpts, you "
+            "MUST NOT state it. Do not fill gaps from memory, and do not guess a plausible value.\n"
+            "- If the excerpts do not contain the answer, SAY SO plainly (e.g. \"the retrieved "
+            "datasheets don't specify that\") and stop there. Abstaining when the excerpts fall "
+            "short is CORRECT and expected — it is far better than inventing a plausible-sounding "
+            "fact. A short, grounded answer beats a complete-looking one with one made-up spec.\n"
+            "- Prefer quoting the relevant phrase verbatim from an excerpt over paraphrasing a number.\n"
+            "- For general-knowledge questions (concepts, code, math, widely-known topics), answer "
+            "from your training normally even if the excerpts are tangential.\n\n"
         )
         if _is_synthesis_query(request.prompt) and citations:
             # Group chunks by source for cross-document synthesis
@@ -1161,16 +1164,19 @@ def generate_stream(request: StreamingRequest):
     # Add RAG context (knowledge base) - skip for conversational queries
     if context_docs and not _is_conversational(request.prompt):
         rag_directive = (
-            "Excerpts retrieved from your knowledge base follow. Use them like this:\n"
-            "- When the user is asking about YOUR DOCUMENTS (datasheet specifics, past "
-            "emails, blog archives, personal notes), treat the excerpts as authoritative. "
-            "Don't invent specifics (numbers, part names, configuration bits) that aren't "
-            "in the excerpts — if they don't contain the answer, say so (e.g. \"the "
-            "retrieved excerpts don't cover that\") rather than guessing.\n"
-            "- For general-knowledge questions (concepts, code, math, widely-known topics), "
-            "answer from your training normally even if the excerpts are tangential.\n"
-            "- When citing a specific fact from an excerpt, prefer quoting the relevant "
-            "phrase verbatim.\n\n"
+            "Excerpts retrieved from your knowledge base follow. For questions about YOUR "
+            "DOCUMENTS (datasheet specifics, past emails, notes), follow these STRICT grounding "
+            "rules — they override any instinct to sound complete:\n"
+            "- Every specific fact you state — every number, part name, spec, configuration bit, "
+            "date, quantity — MUST appear in the excerpts below. If it is not in the excerpts, you "
+            "MUST NOT state it. Do not fill gaps from memory, and do not guess a plausible value.\n"
+            "- If the excerpts do not contain the answer, SAY SO plainly (e.g. \"the retrieved "
+            "datasheets don't specify that\") and stop there. Abstaining when the excerpts fall "
+            "short is CORRECT and expected — it is far better than inventing a plausible-sounding "
+            "fact. A short, grounded answer beats a complete-looking one with one made-up spec.\n"
+            "- Prefer quoting the relevant phrase verbatim from an excerpt over paraphrasing a number.\n"
+            "- For general-knowledge questions (concepts, code, math, widely-known topics), answer "
+            "from your training normally even if the excerpts are tangential.\n\n"
         )
         if _is_synthesis_query(request.prompt) and citations:
             # Group chunks by source for cross-document synthesis
