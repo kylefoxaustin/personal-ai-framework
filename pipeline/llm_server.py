@@ -868,6 +868,7 @@ def generate(request: GenerationRequest):
             metrics.rag_docs_returned.observe(len(context_docs) if context_docs else 0)
         except Exception as e:
             print(f"RAG retrieval failed: {e}")
+            import traceback; traceback.print_exc()
             context_docs = []
         _retrieval_s = _time.time() - _retr_start
 
@@ -1128,6 +1129,7 @@ def generate_stream(request: StreamingRequest):
             metrics.rag_docs_returned.observe(len(context_docs) if context_docs else 0)
         except Exception as e:
             print(f"RAG retrieval failed: {e}")
+            import traceback; traceback.print_exc()
             context_docs = []
 
     # Build system context (personality, facts, memory, RAG)

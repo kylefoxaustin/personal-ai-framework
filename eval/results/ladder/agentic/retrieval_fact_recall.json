@@ -1,0 +1,99 @@
+{
+  "facts_in_kb_imx95_chunks": {
+    "Neutron NPU": 29,
+    "2.0 TOPS": 13,
+    "1024 MACs": 160,
+    "Cortex-A55": 112,
+    "Cortex-M33": 119,
+    "Cortex-M7": 146,
+    "Mali GPU": 11,
+    "LPDDR5": 93,
+    "PCIe Gen3": 199,
+    "Ethernet TSN": 11,
+    "Energy Flex": 2
+  },
+  "per_query": {
+    "email": {
+      "k": 4,
+      "seconds": 1.33,
+      "n_chunks": 4,
+      "chunks_mentioning_imx95": 4,
+      "sources": [
+        "datasheets/IMX95RM.pdf",
+        "datasheets/IMX95RM.pdf",
+        "datasheets/IMX95IEC.pdf",
+        "datasheets/IMX95IEC.pdf"
+      ],
+      "facts_retrieved": {
+        "Neutron NPU": true,
+        "2.0 TOPS": false,
+        "1024 MACs": false,
+        "Cortex-A55": true,
+        "Cortex-M33": true,
+        "Cortex-M7": true,
+        "Mali GPU": true,
+        "LPDDR5": true,
+        "PCIe Gen3": true,
+        "Ethernet TSN": true,
+        "Energy Flex": true
+      },
+      "recall": 0.818
+    },
+    "spec_rag": {
+      "k": 4,
+      "seconds": 1.14,
+      "n_chunks": 4,
+      "chunks_mentioning_imx95": 4,
+      "sources": [
+        "datasheets/IMX95RM.pdf",
+        "datasheets/IMX95RM.pdf",
+        "datasheets/IMX95IEC.pdf",
+        "datasheets/IMX95RM.pdf"
+      ],
+      "facts_retrieved": {
+        "Neutron NPU": true,
+        "2.0 TOPS": false,
+        "1024 MACs": true,
+        "Cortex-A55": true,
+        "Cortex-M33": false,
+        "Cortex-M7": false,
+        "Mali GPU": false,
+        "LPDDR5": false,
+        "PCIe Gen3": false,
+        "Ethernet TSN": false,
+        "Energy Flex": false
+      },
+      "recall": 0.273
+    },
+    "doc_brief": {
+      "k": 8,
+      "seconds": 1.99,
+      "n_chunks": 8,
+      "chunks_mentioning_imx95": 7,
+      "sources": [
+        "datasheets/IMX95RM.pdf",
+        "datasheets/IMX95IEC.pdf",
+        "datasheets/IMX95RM.pdf",
+        "datasheets/IMX95RM.pdf",
+        "datasheets/IMX95RM.pdf",
+        "datasheets/TP-CONNECTS2021-ENT455.pdf",
+        "datasheets/IMX95IEC.pdf",
+        "datasheets/IMX95RM.pdf"
+      ],
+      "facts_retrieved": {
+        "Neutron NPU": true,
+        "2.0 TOPS": false,
+        "1024 MACs": false,
+        "Cortex-A55": true,
+        "Cortex-M33": true,
+        "Cortex-M7": true,
+        "Mali GPU": true,
+        "LPDDR5": true,
+        "PCIe Gen3": true,
+        "Ethernet TSN": true,
+        "Energy Flex": false
+      },
+      "recall": 0.727
+    }
+  }
+}
