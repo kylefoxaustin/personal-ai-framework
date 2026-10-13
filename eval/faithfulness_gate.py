@@ -92,8 +92,8 @@ def gated_answer(answer, context, threshold=0.5):
 
 if __name__ == "__main__":
     ctx = ("NXP i.MX 95: 6x Cortex-A55; eIQ Neutron NPU 2.0 TOPS (1024 MACs x 1.0 GHz x 2); "
-           "Mali GPU; LPDDR5X; PCIe Gen3; GbE-TSN.")
-    ans = "The i.MX 95 has 6 Cortex-A55 cores and a 2.0 TOPS Neutron NPU. It uses LPDDR4X and 16GB RAM."
+           "Mali GPU; LPDDR5/LPDDR4X; PCIe Gen3; GbE-TSN.")
+    ans = "The i.MX 95 has 6 Cortex-A55 cores and a 2.0 TOPS Neutron NPU. It uses LPDDR5X and 16GB of on-package HBM."
     out, g = gated_answer(ans, ctx)
     print("verdict:", g)
     print("gated output:", out)

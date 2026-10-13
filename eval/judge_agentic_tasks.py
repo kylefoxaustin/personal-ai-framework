@@ -26,18 +26,19 @@ import argparse, glob, json, os, re, sys
 OUT = "eval/results/ladder/agentic"
 GROUND_TRUTH = (
     "NXP i.MX 95 datasheet facts: 6x Arm Cortex-A55 + Cortex-M33 + Cortex-M7; eIQ Neutron NPU "
-    "(N3-1024S) rated 2.0 TOPS = 1024 MACs x 1.0 GHz x 2 OPS/MAC; Mali GPU; ISP; LPDDR5X memory; "
+    "(N3-1024S) rated 2.0 TOPS = 1024 MACs x 1.0 GHz x 2 OPS/MAC, which NXP's datasheet states as "
+    "'8 eTOPS at 1 GHz' — 2.0 TOPS and 8 eTOPS are EQUIVALENT ratings; either is correct; Mali GPU; ISP; x32 LPDDR5 or LPDDR4X memory (both supported per the datasheet); "
     "PCIe Gen3; Gigabit-Ethernet TSN; Energy Flex architecture. Targets automotive/industrial/"
-    "consumer edge AI. NOT true: 'Neutrino' NPU, dual-A55-only, Cortex-M7-pair-only, LPDDR4X, 16GB."
+    "consumer edge AI. NOT true: 'Neutrino' NPU, dual-A55-only, Cortex-M7-pair-only, 16GB, Arm Ethos-U65 / 256 MACs (that is the i.MX 93's NPU)."
 )
 # per-task intent; the audio clip is a weather forecast, NOT a meeting with named attendees.
 RUBRIC = {
  "email": "Draft a coherent, friendly email introducing the i.MX 95 for an edge-AI product, covering what it is, the Neutron NPU, and why it suits edge. CORRECT = coherent email, specifics grounded in the facts, no fabricated specs.",
- "spec_rag": "Answer what the i.MX 95 Neutron NPU does and its key features, from the datasheets. CORRECT = accurate (2.0 TOPS / 1024 MAC@1GHz) and grounded, no fabrication.",
+ "spec_rag": "Answer what the i.MX 95 Neutron NPU does and its key features, from the datasheets. CORRECT = accurate (2.0 TOPS or the equivalent 8 eTOPS / 1024 MAC@1GHz) and grounded, no fabrication.",
  "file_ops": "Read notes and summarize them in 3 bullets. CORRECT = accurate bullet summary of the i.MX95 specs, no fabrication.",
  "transcribe": "Transcribe the audio clip. CORRECT = transcript matches the weather-forecast content (thunderstorms/large hail/isolated tornadoes/heavy rain).",
  "ocr": "Extract text from a datasheet page image. CORRECT = coherent, accurate extraction of the page text (AN14721 TRDC application note).",
- "run_script": "Run a sandboxed script computing the NPU TOPS. CORRECT = correct output (2.0 TOPS; 6xA55; LPDDR5X; Gen3), exit 0.",
+ "run_script": "Run a sandboxed script computing the NPU TOPS. CORRECT = correct output (2.0 TOPS; 6xA55; LPDDR5 or LPDDR4X (NOT LPDDR5X); Gen3), exit 0.",
  "doc_brief": "Generate a one-page i.MX 95 product brief from the datasheets. CORRECT = coherent, grounded brief, no fabricated specs.",
  "web_summarize": "Summarize web results about the i.MX 95. CORRECT = coherent AND contains actual i.MX95-specific content; ABSTAINED = coherent but generic/content-free (didn't invent specifics).",
  "meeting_summarize": "Transcribe + summarize this recording (a short WEATHER FORECAST, not a meeting). CORRECT = summary accurately reflects the forecast content with no fabricated attendees/decisions/action-items; ABSTAINED = correct gist but thin; WRONG = fabricates meeting structure or wrong content.",
@@ -57,6 +58,10 @@ JUDGE_INSTRUCTIONS = (
  "Confident fabrication is the worst outcome; prefer ABSTAINED over WRONG when unsure which applies."
 )
 SCORE = {"CORRECT": 1, "ABSTAINED": 0, "WRONG": -1}
+# RAG tasks whose output is only gradeable if retrieval actually returned context. A swallowed
+# retrieval exception makes /generate answer from memory with ZERO chunks (seen 2026-10-12); grading
+# that would score an outage as fabrication, so such runs are excluded, not graded.
+RAG_TASKS = ("email", "spec_rag", "doc_brief", "multi_tool_chain")
 
 def latest(task):
     fs = sorted(glob.glob(f"{OUT}/bench_{task}_*.json"))
@@ -123,6 +128,9 @@ def main():
     for t in tasks:
         r = latest(t)
         if not r: print(f"  {t}: no bench json, skip"); continue
+        if t in RAG_TASKS and (r.get("telemetry") or {}).get("rag_docs_used") == 0:
+            print(f"  {t:18s} RETRIEVAL_FAILED (rag_docs_used=0) — not graded; re-run trace_bench")
+            tally.setdefault("retrieval_failed", []).append(t); continue
         out = r.get("output", "")
         try: sv = judge_anthropic(t, out, a.anthropic_model)
         except Exception as e: sv = {"verdict": "ERR", "score": 0, "fabricated": None, "reason": str(e)[:120]}

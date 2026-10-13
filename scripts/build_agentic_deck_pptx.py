@@ -167,7 +167,7 @@ para(tf,"Two independent cross-family judges (Claude Sonnet + GPT-4o). Agreed: 4
 tf=tb(s,Inches(0.7),Inches(2.9),Inches(6),Inches(3.5))
 para(tf,"4 PASS · 2 PARTIAL · 1 FAIL · 3 split",17,ACC,True,first=True,font="Consolas")
 para(tf,"Clean passes: grounded/perception/tool tasks (file I/O, transcribe, OCR, run-script). Clean fail: multi-tool chain (narrates instead of calling tools). Partials: web-summarize (generic), meeting-summarize (fabricated attendees).",13,INK,space=8)
-para(tf,"Both judges caught spec fabrication even when fluent — '256 MACs' (it's 1024), 'LPDDR4X' (it's LPDDR5X). Two splits PARTIAL-vs-FAIL; one PASS-vs-PARTIAL.",13,MUT)
+para(tf,"Both judges caught spec fabrication even when fluent — e.g. '256 MACs' (it's 1024). Two splits PARTIAL-vs-FAIL; one PASS-vs-PARTIAL.",13,MUT)
 box=s.shapes.add_shape(1,Inches(7.1),Inches(2.9),Inches(5.5),Inches(3.2)); box.fill.solid(); box.fill.fore_color.rgb=PANEL; box.line.color.rgb=ACC; box.shadow.inherit=False
 tf=box.text_frame; tf.word_wrap=True; tf.margin_left=Inches(0.25); tf.margin_top=Inches(0.2)
 para(tf,"the size fix · single-reader, two-judge pending",13,MUT,bold=True,first=True)

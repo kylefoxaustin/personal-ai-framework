@@ -110,7 +110,7 @@ def run_file_ops():
     # calls separately from the LLM summary — the file I/O is the "work".
     tt = time.time()
     _agent("write_file", {"path": "imx95_notes.txt", "content":
-        "i.MX 95: 6x Cortex-A55, eIQ Neutron NPU 2.0 TOPS, Mali GPU, ISP, LPDDR5X, "
+        "i.MX 95: 6x Cortex-A55, eIQ Neutron NPU 2.0 TOPS, Mali GPU, ISP, LPDDR5/LPDDR4X, "
         "PCIe Gen3, GbE-TSN. Targets automotive/industrial/consumer edge AI."})
     # read_file needs the FULL path (known bug: read_file doesn't resolve the workspace)
     rd = _agent("read_file", {"path": f"{WS}/imx95_notes.txt"})
@@ -197,6 +197,8 @@ def main():
                "telemetry": {k: te.get(k) for k in ("prefill_ms","decode_ms","host_ms","retrieval_ms","tool_ms","prefill_tok_per_s","decode_tok_per_s","rag_docs_used") if k in te},
                "gpu": sampler_summ(tp), "cpu": cpu_summ, "extra": ex, "output": (r.get("text") or "")[:1600]}
         json.dump(rec, open(os.path.join(OUT, f"bench_{name}_{datetime.now():%Y%m%d-%H%M%S}.json"), "w"), indent=2)
+        if te.get("rag_docs_used") == 0:
+            print(f"  ⚠ {name}: RAG returned ZERO chunks — retrieval failed; the judge will skip this run")
         pf, dc = te.get("prefill_ms") or 0, te.get("decode_ms") or 0
         print(f"[{name:18s}] wall={wall:6.2f}s  pf={pf:7.1f} dc={dc:7.1f}  cpu={cpu_summ.get('cores_busy_mean')}cores sm%={rec['gpu'].get('sm_pct_mean')} mem%={rec['gpu'].get('mem_pct_mean')} pwr={rec['gpu'].get('power_w_mean')}  :: {rec['output'][:60].replace(chr(10),' ')}")
 

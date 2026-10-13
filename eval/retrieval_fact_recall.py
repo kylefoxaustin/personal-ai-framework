@@ -19,7 +19,7 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results/ladder/a
 # fact -> (regex over retrieved text, literal for the KB-wide $contains probe)
 FACTS = {
     "Neutron NPU":      (r"Neutron", "Neutron"),
-    "2.0 TOPS":         (r"\b2(\.0)?\s*TOPS", "TOPS"),
+    "2.0 TOPS/8 eTOPS": (r"\b2(\.0)?\s*TOPS|\b8\s*eTOPS", "TOPS"),  # equivalent ratings
     "1024 MACs":        (r"\b1024\b", "1024"),
     "Cortex-A55":       (r"Cortex[- ]?A55", "Cortex-A55"),
     "Cortex-M33":       (r"Cortex[- ]?M33", "Cortex-M33"),
