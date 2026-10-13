@@ -1,0 +1,181 @@
+{
+  "threshold": 0.5,
+  "model": "vectara/hallucination_evaluation_model (HHEM-2.1-Open)",
+  "summary": {
+    "raw_fab": 5,
+    "gated_fab": 2,
+    "raw_wrong": 3,
+    "gated_wrong": 1
+  },
+  "rows": [
+    {
+      "task": "email",
+      "gate": {
+        "n_claims": 11,
+        "n_unsupported": 3,
+        "min_score": 0.011,
+        "mean_score": 0.686,
+        "unsupported": [
+          {
+            "claim": "It includes a dedicated instruction set to accelerate machine learning models and is the first in the industry to implement ARM's Ethos-U65 ",
+            "score": 0.011
+          },
+          {
+            "claim": "These documents provide detailed information on the i.MX 95's features, specifications, and programming model.",
+            "score": 0.447
+          },
+          {
+            "claim": "If you have any questions or need further information, please don't hesitate to contact me.",
+            "score": 0.067
+          }
+        ],
+        "faithful": false
+      },
+      "raw": {
+        "claude": "WRONG",
+        "gpt4o": "WRONG",
+        "fabricated": true
+      },
+      "gated": {
+        "claude": "WRONG",
+        "gpt4o": "ABSTAINED",
+        "fabricated": true
+      }
+    },
+    {
+      "task": "spec_rag",
+      "gate": {
+        "n_claims": 10,
+        "n_unsupported": 0,
+        "min_score": 0.833,
+        "mean_score": 0.918,
+        "unsupported": [],
+        "faithful": true
+      },
+      "raw": {
+        "claude": "CORRECT",
+        "gpt4o": "WRONG",
+        "fabricated": true
+      },
+      "gated": {
+        "claude": "CORRECT",
+        "gpt4o": "WRONG",
+        "fabricated": true
+      }
+    },
+    {
+      "task": "doc_brief",
+      "gate": {
+        "n_claims": 12,
+        "n_unsupported": 7,
+        "min_score": 0.011,
+        "mean_score": 0.438,
+        "unsupported": [
+          {
+            "claim": "ARMv8.2-A architecture with Cortex-A55 and Cortex-M33 cores",
+            "score": 0.034
+          },
+          {
+            "claim": "1.7GHz max clock speed",
+            "score": 0.015
+          },
+          {
+            "claim": "4x MIPI-CSI, 1x MIPI-DSI, 2x MIPI-SD/SDIO, 1x MIPI-SSP",
+            "score": 0.039
+          },
+          {
+            "claim": "1x USB 3.0, 2x USB 2.0, 2x Ethernet, 2x PCIe Gen3",
+            "score": 0.187
+          },
+          {
+            "claim": "16x16mm and 19x19mm 12x12mm POP packages",
+            "score": 0.011
+          },
+          {
+            "claim": "16x16mm: 1x PCIe, 2x Ethernet",
+            "score": 0.056
+          },
+          {
+            "claim": "19x19mm: 2x PCIe, 2x Ethernet",
+            "score": 0.071
+          }
+        ],
+        "faithful": false
+      },
+      "raw": {
+        "claude": "WRONG",
+        "gpt4o": "WRONG",
+        "fabricated": true
+      },
+      "gated": {
+        "claude": "ABSTAINED",
+        "gpt4o": "ABSTAINED",
+        "fabricated": false
+      }
+    },
+    {
+      "task": "web_summarize",
+      "gate": {
+        "n_claims": 4,
+        "n_unsupported": 4,
+        "min_score": 0.008,
+        "mean_score": 0.01,
+        "unsupported": [
+          {
+            "claim": "The NXP i.MX 95 applications processor is designed for edge AI and IoT applications.",
+            "score": 0.008
+          },
+          {
+            "claim": "It features Arm Cortex-A72 and Cortex-M7 cores, as well as a Vmeta video accelerator.",
+            "score": 0.01
+          },
+          {
+            "claim": "The processor supports up to 4K display and multiple camera interfaces, making it suitable for use in smartphones, tablets, and other mobile",
+            "score": 0.009
+          },
+          {
+            "claim": "The i.MX 95 is also designed to be energy-efficient, with low power consumption and support for multiple power modes.",
+            "score": 0.011
+          }
+        ],
+        "faithful": false
+      },
+      "raw": {
+        "claude": "WRONG",
+        "gpt4o": "WRONG",
+        "fabricated": true
+      },
+      "gated": {
+        "claude": "ABSTAINED",
+        "gpt4o": "ABSTAINED",
+        "fabricated": false
+      }
+    },
+    {
+      "task": "meeting_summarize",
+      "gate": {
+        "n_claims": 1,
+        "n_unsupported": 1,
+        "min_score": 0.281,
+        "mean_score": 0.281,
+        "unsupported": [
+          {
+            "claim": "{\"summary\": \"Thunderstorms could produce large hail, isolated tornadoes and heavy rain.\", \"key_points\": [\"Thunderstorms could produce large ",
+            "score": 0.281
+          }
+        ],
+        "faithful": false
+      },
+      "raw": {
+        "claude": "ABSTAINED",
+        "gpt4o": "WRONG",
+        "fabricated": true
+      },
+      "gated": {
+        "claude": "ABSTAINED",
+        "gpt4o": "ABSTAINED",
+        "fabricated": false
+      }
+    }
+  ]
+}
