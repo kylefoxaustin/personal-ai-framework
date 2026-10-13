@@ -1,0 +1,31 @@
+{
+  "task": "transcribe",
+  "ts": "2026-10-13T13:51:13",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 2.723,
+  "work_ms": 1652.6,
+  "telemetry": {},
+  "gpu": {
+    "samples": 18,
+    "sm_pct_mean": 15.7,
+    "mem_pct_mean": 12.5,
+    "power_w_mean": 132.6,
+    "sm_pct_peak": 94.0,
+    "vram_mib_peak": 26666.0
+  },
+  "cpu": {
+    "samples": 17,
+    "ncores": 32,
+    "cpu_pct_mean": 19.2,
+    "cpu_pct_peak": 75.0,
+    "cores_busy_mean": 6.15,
+    "cores_busy_peak": 24.0
+  },
+  "extra": {
+    "engine": "whisper-base",
+    "work_ms": 1652.6
+  },
+  "output": "Thunderstorms could produce large hail, isolated tornadoes and heavy rain.",
+  "context": ""
+}

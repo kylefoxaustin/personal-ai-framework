@@ -1,0 +1,31 @@
+{
+  "task": "run_script",
+  "ts": "2026-10-13T13:51:19",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 0.227,
+  "work_ms": 227.4,
+  "telemetry": {},
+  "gpu": {
+    "samples": 6,
+    "sm_pct_mean": 62.7,
+    "mem_pct_mean": 50.0,
+    "power_w_mean": 147.3,
+    "sm_pct_peak": 94.0,
+    "vram_mib_peak": 26666.0
+  },
+  "cpu": {
+    "samples": 5,
+    "ncores": 32,
+    "cpu_pct_mean": 1.7,
+    "cpu_pct_peak": 3.9,
+    "cores_busy_mean": 0.54,
+    "cores_busy_peak": 1.25
+  },
+  "extra": {
+    "run_script_s": 0.227,
+    "work_ms": 227.4
+  },
+  "output": "stdout:\nNeutron: 1024 MACs x 1.0 GHz x 2 OPS/MAC = 2.0 TOPS (spec 2.0)\ncores=6xA55; mem=LPDDR5/LPDDR4X; pcie=Gen3\n\nexit code: 0",
+  "context": ""
+}

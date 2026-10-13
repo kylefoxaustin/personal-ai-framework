@@ -82,7 +82,10 @@ def gen(prompt, rag=False, rag_k=3, mt=256, skip_loop=False):
             "include_telemetry": True, "skip_agent_loop": skip_loop, "temperature": 0}
     d = requests.post(f"{BASE}/generate", json=body, headers=H, timeout=600).json()
     return {"text": d.get("text", ""), "telemetry": d.get("telemetry") or {},
-            "rag_docs": (d.get("telemetry") or {}).get("rag_docs_used")}
+            "rag_docs": (d.get("telemetry") or {}).get("rag_docs_used"),
+            # the retrieved chunks the model was given — the judges need them to tell a grounded
+            # datasheet detail from an invented one (the 5-line GROUND_TRUTH alone can't)
+            "context": "\n\n".join(d.get("context_used") or [])}
 
 def run_email():  return gen("Write a clear, friendly email to a colleague introducing the NXP i.MX 95 for a new edge-AI product. Cover what it is, its Neutron NPU, and why it suits edge inference. Ground the specifics in the datasheets.", rag=True, rag_k=4, mt=600)
 def run_spec_rag(): return gen("Using the datasheets, what does the i.MX 95 Neutron NPU do, and what are its key features?", rag=True, rag_k=4, mt=220)
@@ -99,6 +102,7 @@ def run_web_summarize():
     g["extra"] = {"web_search_s": round(web_s, 3), "web_status": web.get("status", "?"),
                   "n_results": len(results) if isinstance(results, list) else None,
                   "work_ms": round(web_s * 1000, 1)}  # the web fetch is the "work"
+    g["context"] = snippet
     return g
 
 def _agent(name, params):
@@ -123,6 +127,7 @@ def run_file_ops():
     g["extra"] = {"read_ok": not str(rd.get("result","")).startswith("Error"),
                   "write_result": str(wr.get("result",""))[:80], "file_ops_total_s": round(time.time()-t0,3),
                   "work_ms": tool_ms}  # file read+write = the work
+    g["context"] = content
     return g
 def run_run_script():
     t0 = time.time(); d = _agent("run_script", {"path": "specsum.py"}); s = time.time()-t0
@@ -143,6 +148,7 @@ def run_meeting_summarize():
     summ = d.get("summary") or d.get("text") or json.dumps(d)[:800]
     tm = d.get("timing_ms") or {}
     return {"text": (summ if isinstance(summ,str) else json.dumps(summ))[:1600], "telemetry": {},
+            "context": d.get("full_transcript", ""),
             "extra": {"engine": "whisper->llm", "work_ms": tm.get("transcribe"), "compose_ms": tm.get("summarize")}}
 def run_ocr():
     d = _upload(IMAGE, "/upload/ocr", {})
@@ -195,9 +201,10 @@ def main():
         rec = {"task": name, "ts": datetime.now().isoformat(timespec="seconds"), "board": "rtx5090", "model": MODEL,
                "wall_s": round(wall, 3), "work_ms": work_ms,
                "telemetry": {k: te.get(k) for k in ("prefill_ms","decode_ms","host_ms","retrieval_ms","tool_ms","prefill_tok_per_s","decode_tok_per_s","rag_docs_used") if k in te},
-               "gpu": sampler_summ(tp), "cpu": cpu_summ, "extra": ex, "output": (r.get("text") or "")[:1600]}
+               "gpu": sampler_summ(tp), "cpu": cpu_summ, "extra": ex, "output": (r.get("text") or "")[:1600],
+               "context": (r.get("context") or "")[:12000]}
         json.dump(rec, open(os.path.join(OUT, f"bench_{name}_{datetime.now():%Y%m%d-%H%M%S}.json"), "w"), indent=2)
-        if te.get("rag_docs_used") == 0:
+        if name in ("email", "spec_rag", "doc_brief", "multi_tool_chain") and te.get("rag_docs_used") == 0:
             print(f"  ⚠ {name}: RAG returned ZERO chunks — retrieval failed; the judge will skip this run")
         pf, dc = te.get("prefill_ms") or 0, te.get("decode_ms") or 0
         print(f"[{name:18s}] wall={wall:6.2f}s  pf={pf:7.1f} dc={dc:7.1f}  cpu={cpu_summ.get('cores_busy_mean')}cores sm%={rec['gpu'].get('sm_pct_mean')} mem%={rec['gpu'].get('mem_pct_mean')} pwr={rec['gpu'].get('power_w_mean')}  :: {rec['output'][:60].replace(chr(10),' ')}")

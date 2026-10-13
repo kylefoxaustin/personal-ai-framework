@@ -1,0 +1,42 @@
+{
+  "task": "file_ops",
+  "ts": "2026-10-13T13:51:10",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 1.53,
+  "work_ms": 631.7,
+  "telemetry": {
+    "prefill_ms": 21.15,
+    "decode_ms": 504.0,
+    "host_ms": 172.95,
+    "retrieval_ms": 0.0,
+    "tool_ms": 0,
+    "prefill_tok_per_s": 6950.6,
+    "decode_tok_per_s": 242.1,
+    "rag_docs_used": 0
+  },
+  "gpu": {
+    "samples": 12,
+    "sm_pct_mean": 15.7,
+    "mem_pct_mean": 12.5,
+    "power_w_mean": 244.5,
+    "sm_pct_peak": 94.0,
+    "vram_mib_peak": 26666.0
+  },
+  "cpu": {
+    "samples": 11,
+    "ncores": 32,
+    "cpu_pct_mean": 2.4,
+    "cpu_pct_peak": 5.2,
+    "cores_busy_mean": 0.78,
+    "cores_busy_peak": 1.65
+  },
+  "extra": {
+    "read_ok": true,
+    "write_result": "Wrote 315 chars to /root/.personal-ai/users/kyle/skippy-workspace/imx95_summary.",
+    "file_ops_total_s": 1.53,
+    "work_ms": 631.7
+  },
+  "output": "- i.MX 95 features 6x Cortex-A55 cores, eIQ Neutron NPU 2.0 TOPS, Mali GPU, ISP, LPDDR5/LPDDR4X, PCIe Gen3, GbE-TSN. \n- It is designed for automotive, industrial, and consumer edge AI applications.\n- Key components include: 6x Cortex-A55, eIQ Neutron NPU 2.0 TOPS, Mali GPU, ISP, LPDDR5/LPDDR4X, PCIe Gen3, GbE-TSN.",
+  "context": "i.MX 95: 6x Cortex-A55, eIQ Neutron NPU 2.0 TOPS, Mali GPU, ISP, LPDDR5/LPDDR4X, PCIe Gen3, GbE-TSN. Targets automotive/industrial/consumer edge AI."
+}

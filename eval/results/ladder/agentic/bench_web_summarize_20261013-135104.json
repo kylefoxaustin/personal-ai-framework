@@ -1,0 +1,42 @@
+{
+  "task": "web_summarize",
+  "ts": "2026-10-13T13:51:04",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 7.326,
+  "work_ms": 4149.9,
+  "telemetry": {
+    "prefill_ms": 61.32,
+    "decode_ms": 584.28,
+    "host_ms": 2115.79,
+    "retrieval_ms": 0.0,
+    "tool_ms": 0,
+    "prefill_tok_per_s": 10160.3,
+    "decode_tok_per_s": 246.5,
+    "rag_docs_used": 0
+  },
+  "gpu": {
+    "samples": 41,
+    "sm_pct_mean": 13.7,
+    "mem_pct_mean": 11.0,
+    "power_w_mean": 124.4,
+    "sm_pct_peak": 95.0,
+    "vram_mib_peak": 26666.0
+  },
+  "cpu": {
+    "samples": 40,
+    "ncores": 32,
+    "cpu_pct_mean": 2.5,
+    "cpu_pct_peak": 7.2,
+    "cores_busy_mean": 0.81,
+    "cores_busy_peak": 2.3
+  },
+  "extra": {
+    "web_search_s": 4.15,
+    "web_status": "ok",
+    "n_results": 5,
+    "work_ms": 4149.9
+  },
+  "output": "The NXP i.MX 95 applications processor family offers secure, safety enabled platforms with ML acceleration for automotive, industrial and other applications. It is designed for intelligent edge systems that demand performance, security, and advanced processing capabilities. The i.MX 95 is the highest performance microprocessing unit (MPU) in the i.MX applications processor portfolio, providing real-time AI and vision performance for edge computing in industrial, automotive, and other sectors. The processor family includes features such as secure boot, trusted boot, and secure memory protection to ensure data security. The NXP i.MX 95 is ideal for use in applications such as autonomous vehicles, industrial automation, and smart cities.",
+  "context": "[{\"title\": \"i.MX 95 Applications Processors Family | NXP Semiconductors\", \"url\": \"https://www.nxp.com/products/i.MX95\", \"snippet\": \"The i.MX 95 applications processor family offers secure, safety enabled platforms with ML acceleration for automotive, industrial and \\u2026\"}, {\"title\": \"i.MX 95 Applications Processor: Powering ... - NXP Semiconductors\", \"url\": \"https://www.nxp.com/company/about-nxp/smarter-world-blog/BL-IMX-95-APPS-PROCESSOR-INNOVATION-EDGE\", \"snippet\": \"Apr 27, 2026 \\u00b7 As the highest performance microprocessing unit (MPU) in the i.MX applications processor portfolio, the i.MX 95 \\u2026\"}, {\"title\": \"i.MX 95 App Processors - NXP Semiconductors | DigiKey\", \"url\": \"https://www.digikey.com/en/product-highlight/n/nxp-semi/i-mx-95-applications-processor?msockid=18dce7f811ba6d101140f00910016c95\", \"snippet\": \"Apr 7, 2026 \\u00b7 The NXP i.MX 95 application processor family is designed for intelligent edge systems that demand performance, \\u2026\"}, {\"title\": \"NXP i.MX 95: Edge AI and Vision Processor Explained\", \"url\": \"https://www.toradex.com/blog/imx95-npu-next-gen-ai-performance\", \"snippet\": \"Jul 2, 2025 \\u00b7 Explore how NXP's i.MX 95 processor delivers real-time AI and vision performance for edge computing in industrial, \\u2026\"}, {\"title\": \"NXP i.MX 95 for Edge AI: Features, Benefits, and Applications\", \"url\": \"https://www.silextechnology.com/unwired/imx-95-edge-ai-features-benefits\", \"snippet\": \"NXP i.MX 95 for Edge AI: Features, Benefits, and Applications The NXP i.MX 95 is an applications processor family that combines \\u2026\"}]"
+}

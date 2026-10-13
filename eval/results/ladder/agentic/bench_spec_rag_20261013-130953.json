@@ -1,0 +1,36 @@
+{
+  "task": "spec_rag",
+  "ts": "2026-10-13T13:09:53",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 8.008,
+  "work_ms": 2076.28,
+  "telemetry": {
+    "prefill_ms": 3570.82,
+    "decode_ms": 1847.38,
+    "host_ms": 2374.21,
+    "retrieval_ms": 2076.28,
+    "tool_ms": 0,
+    "prefill_tok_per_s": 1205.0,
+    "decode_tok_per_s": 119.6,
+    "rag_docs_used": 4
+  },
+  "gpu": {
+    "samples": 44,
+    "sm_pct_mean": 22.5,
+    "mem_pct_mean": 13.2,
+    "power_w_mean": 167.4,
+    "sm_pct_peak": 95.0,
+    "vram_mib_peak": 9802.0
+  },
+  "cpu": {
+    "samples": 44,
+    "ncores": 32,
+    "cpu_pct_mean": 5.7,
+    "cpu_pct_peak": 67.6,
+    "cores_busy_mean": 1.82,
+    "cores_busy_peak": 21.62
+  },
+  "extra": {},
+  "output": "The i.MX 95 Neutron NPU is a hardware accelerator designed to efficiently process machine learning workloads. Here are its key features and capabilities:\n\n1. **Performance**: The NPU can achieve up to 2.0 TOP/s (Tera Operations Per Second) performance, with 1024 MACs (Multiply-Accumulate units) operating at up to 1.0 GHz and 2 OPS/MAC.\n\n2. **Memory**: It includes a 1 MB local SRAM, which is available to the system outside of the NPU complex when not in use by the NPU.\n\n3. **Activation Functions**: The NPU supports various activation functions, including ReLU, PreLU, LeakyReLU, and others, which are essential for neural network inference.\n\n4. **Sampling and Reshaping**: The NPU can handle sampling and reshaping functions, which are useful for adjusting the dimensions of data tensors.\n\n5. **Element-wise Operations**: It supports element-wise operations, which are fundamental for many machine learning algorithms.\n\n6. **"
+}

@@ -48,11 +48,16 @@ def collect():
                           data={"title": "Sample", "summarize": "true"}, headers=H, timeout=600).json()
     summ = d.get("summary"); summ = summ if isinstance(summ, str) else json.dumps(summ)
     items["meeting_summarize"] = (summ or "", d.get("full_transcript", ""))
+    # file_ops: context = the notes (same text trace_bench writes to imx95_notes.txt)
+    notes = ("i.MX 95: 6x Cortex-A55, eIQ Neutron NPU 2.0 TOPS, Mali GPU, ISP, LPDDR5/LPDDR4X, "
+             "PCIe Gen3, GbE-TSN. Targets automotive/industrial/consumer edge AI.")
+    t, _ = gen(f"Summarize these notes in 3 bullet points:\n{notes}", rag=False, mt=180)
+    items["file_ops"] = (t, notes)
     return items
 
-def grade(task, output):
-    sv = judge_anthropic(task, output, "claude-sonnet-4-6")
-    gv = judge_openai(task, output, "gpt-4o")
+def grade(task, output, context=""):
+    sv = judge_anthropic(task, output, "claude-sonnet-4-6", context)
+    gv = judge_openai(task, output, "gpt-4o", context)
     return sv, gv
 
 def main():
@@ -64,16 +69,20 @@ def main():
     print("collecting raw outputs + context…")
     items = collect()
     print("priming HHEM gate…"); fg._model()
-    rows, agg = [], {"raw_fab": 0, "gated_fab": 0, "raw_wrong": 0, "gated_wrong": 0}
+    rows, agg = [], {"raw_fab": 0, "gated_fab": 0, "raw_wrong": 0, "gated_wrong": 0,
+                     "raw_correct": 0, "damaged": 0}  # damaged = a judge's CORRECT that the gate un-did
     for task, (raw, ctx) in items.items():
         gated, verdict = fg.gated_answer(raw, ctx, threshold=0.5)
-        rs, rg = grade(task, raw)
-        gs, gg = grade(task, gated)
+        rs, rg = grade(task, raw, ctx)
+        gs, gg = grade(task, gated, ctx)
         raw_fab = bool(rs.get("fabricated") or rg.get("fabricated"))
         gated_fab = bool(gs.get("fabricated") or gg.get("fabricated"))
         agg["raw_fab"] += raw_fab; agg["gated_fab"] += gated_fab
         agg["raw_wrong"] += (rs["verdict"] == "WRONG"); agg["gated_wrong"] += (gs["verdict"] == "WRONG")
-        rows.append({"task": task, "gate": verdict,
+        for r_, g_ in ((rs, gs), (rg, gg)):
+            agg["raw_correct"] += (r_["verdict"] == "CORRECT")
+            agg["damaged"] += (r_["verdict"] == "CORRECT" and g_["verdict"] != "CORRECT")
+        rows.append({"task": task, "gate": verdict, "raw_output": raw, "gated_output": gated,
                      "raw": {"claude": rs["verdict"], "gpt4o": rg["verdict"], "fabricated": raw_fab},
                      "gated": {"claude": gs["verdict"], "gpt4o": gg["verdict"], "fabricated": gated_fab}})
         print(f"\n  [{task}]  gate: {verdict['n_unsupported']}/{verdict['n_claims']} claims unsupported "
@@ -84,6 +93,7 @@ def main():
     print(f"\n  ===== HHEM gate A/B ({n} fabricating tasks) =====")
     print(f"  fabrications (either judge):  RAW {agg['raw_fab']}/{n}  ->  GATED {agg['gated_fab']}/{n}")
     print(f"  WRONG (claude):               RAW {agg['raw_wrong']}/{n}  ->  GATED {agg['gated_wrong']}/{n}")
+    print(f"  CORRECT verdicts the gate un-did (both judges): {agg['damaged']}/{agg['raw_correct']}")
     out = os.path.join(REPO, "eval/results/ladder/agentic/faithfulness_gate_ab.json")
     json.dump({"threshold": 0.5, "model": "vectara/hallucination_evaluation_model (HHEM-2.1-Open)",
                "summary": agg, "rows": rows}, open(out, "w"), indent=2)

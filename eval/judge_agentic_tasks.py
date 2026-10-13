@@ -49,7 +49,10 @@ JUDGE_INSTRUCTIONS = (
  "FAITHFULNESS (not style). Return STRICT JSON only: "
  '{"verdict": "CORRECT"|"ABSTAINED"|"WRONG", "fabricated": true|false, "reason": "<one sentence>"}. '
  "CORRECT = task accomplished accurately and every factual claim is grounded in the ground truth / "
- "provided context; no invented specs. "
+ "provided context; no invented specs. A claim is GROUNDED if the GROUND TRUTH or the SOURCE CONTEXT "
+ "(the documents the assistant was actually given) supports it — a detail found in the source context is "
+ "NOT a fabrication just because the short ground truth omits it. A claim that CONTRADICTS the ground "
+ "truth is still wrong. "
  "ABSTAINED = did NOT fabricate but did not fully succeed — it declined, said the info wasn't "
  "available, hedged, or gave a partial-but-accurate answer. Abstaining when it cannot ground an "
  "answer is GOOD, not a failure. "
@@ -67,8 +70,9 @@ def latest(task):
     fs = sorted(glob.glob(f"{OUT}/bench_{task}_*.json"))
     return json.load(open(fs[-1])) if fs else None
 
-def build_user_prompt(task, output):
-    return (f"GROUND TRUTH: {GROUND_TRUTH}\n\nTASK: {task}\nWHAT COUNTS: {RUBRIC[task]}\n\n"
+def build_user_prompt(task, output, context=""):
+    src = f"SOURCE CONTEXT (what the assistant was given):\n\"\"\"\n{context[:12000]}\n\"\"\"\n\n" if context else ""
+    return (f"GROUND TRUTH: {GROUND_TRUTH}\n\n{src}TASK: {task}\nWHAT COUNTS: {RUBRIC[task]}\n\n"
             f"ASSISTANT OUTPUT:\n\"\"\"\n{output[:2500]}\n\"\"\"\n\nGrade it. STRICT JSON only.")
 
 def parse_verdict(text):
@@ -83,19 +87,19 @@ def parse_verdict(text):
     except Exception as e:
         return {"verdict": "?", "score": 0, "fabricated": None, "reason": f"parse error: {e}"}
 
-def judge_anthropic(task, output, model):
+def judge_anthropic(task, output, model, context=""):
     from anthropic import Anthropic
     c = Anthropic()
     r = c.messages.create(model=model, max_tokens=300, temperature=0, system=JUDGE_INSTRUCTIONS,
-                          messages=[{"role": "user", "content": build_user_prompt(task, output)}])
+                          messages=[{"role": "user", "content": build_user_prompt(task, output, context)}])
     return parse_verdict(r.content[0].text)
 
-def judge_openai(task, output, model):
+def judge_openai(task, output, model, context=""):
     from openai import OpenAI
     c = OpenAI()
     r = c.chat.completions.create(model=model, max_tokens=300, temperature=0,
         messages=[{"role": "system", "content": JUDGE_INSTRUCTIONS},
-                  {"role": "user", "content": build_user_prompt(task, output)}])
+                  {"role": "user", "content": build_user_prompt(task, output, context)}])
     return parse_verdict(r.choices[0].message.content)
 
 def _agg(results, key):
@@ -131,10 +135,10 @@ def main():
         if t in RAG_TASKS and (r.get("telemetry") or {}).get("rag_docs_used") == 0:
             print(f"  {t:18s} RETRIEVAL_FAILED (rag_docs_used=0) — not graded; re-run trace_bench")
             tally.setdefault("retrieval_failed", []).append(t); continue
-        out = r.get("output", "")
-        try: sv = judge_anthropic(t, out, a.anthropic_model)
+        out, ctx = r.get("output", ""), r.get("context", "")
+        try: sv = judge_anthropic(t, out, a.anthropic_model, ctx)
         except Exception as e: sv = {"verdict": "ERR", "score": 0, "fabricated": None, "reason": str(e)[:120]}
-        try: gv = judge_openai(t, out, a.openai_model)
+        try: gv = judge_openai(t, out, a.openai_model, ctx)
         except Exception as e: gv = {"verdict": "ERR", "score": 0, "fabricated": None, "reason": str(e)[:120]}
         agree = sv.get("verdict") == gv.get("verdict")
         tally["agree" if agree else "split"] += 1

@@ -1,0 +1,31 @@
+{
+  "task": "ocr",
+  "ts": "2026-10-13T13:10:06",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 1.855,
+  "work_ms": 1475.9,
+  "telemetry": {},
+  "gpu": {
+    "samples": 14,
+    "sm_pct_mean": 0.3,
+    "mem_pct_mean": 0.0,
+    "power_w_mean": 59.6,
+    "sm_pct_peak": 1.0,
+    "vram_mib_peak": 9802.0
+  },
+  "cpu": {
+    "samples": 13,
+    "ncores": 32,
+    "cpu_pct_mean": 11.0,
+    "cpu_pct_peak": 72.3,
+    "cores_busy_mean": 3.51,
+    "cores_busy_peak": 23.13
+  },
+  "extra": {
+    "engine": "tesseract",
+    "image": "ocr_imx_datasheet-01.png",
+    "work_ms": 1475.9
+  },
+  "output": "AN14721\n\nHow to Understand and Use TRDC in i.MX Devices\n\nRev. 1.0 \u2014 30 June 2025 Application note\n\nDocument information\n\n \n\n \n\nInformation Content\nKeywords AN14721, i.MX, TRDC, resource isolation, security\nAbstract\n\n \n\nResource isolation plays an important role in functional safety and security. In terms of functional\nsafety, resource isolation can reduce the failure impact between different domains. In terms of\nsecurity, resource isolation can protect sensitive data.\n\n \n\f"
+}

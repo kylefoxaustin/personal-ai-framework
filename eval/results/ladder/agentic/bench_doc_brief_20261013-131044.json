@@ -1,0 +1,36 @@
+{
+  "task": "doc_brief",
+  "ts": "2026-10-13T13:10:44",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 17.116,
+  "work_ms": 2935.8,
+  "telemetry": {
+    "prefill_ms": 8899.52,
+    "decode_ms": 4810.79,
+    "host_ms": 3275.22,
+    "retrieval_ms": 2935.8,
+    "tool_ms": 0,
+    "prefill_tok_per_s": 1005.2,
+    "decode_tok_per_s": 159.8,
+    "rag_docs_used": 8
+  },
+  "gpu": {
+    "samples": 90,
+    "sm_pct_mean": 29.1,
+    "mem_pct_mean": 19.6,
+    "power_w_mean": 212.2,
+    "sm_pct_peak": 99.0,
+    "vram_mib_peak": 9802.0
+  },
+  "cpu": {
+    "samples": 89,
+    "ncores": 32,
+    "cpu_pct_mean": 5.9,
+    "cpu_pct_peak": 72.6,
+    "cores_busy_mean": 1.89,
+    "cores_busy_peak": 23.22
+  },
+  "extra": {},
+  "output": "**NXP i.MX 95 Applications Processor**\n\n**Overview**\n\nThe NXP i.MX 95 is a high-performance, secure, and energy-efficient applications processor designed for industrial and IoT applications. It features a dual-core Arm Cortex-A55 and a single-core Arm Cortex-M7, providing a powerful combination for complex tasks. The processor includes a dedicated eIQ Neutron N3-1024S NPU, which accelerates machine learning workloads, and supports advanced security features like the EdgeLock Secure Enclave.\n\n**NPU**\n\nThe eIQ Neutron N3-1024S NPU is a hardware accelerator that provides efficient processing of machine-learning workloads. It works in conjunction with the chip's CPU to deliver higher performance and lower power consumption for neural network (NN) inference. The NPU is designed to optimize the arrangement of weights, manage memory accesses, and provide rescaling, activation, and pooling functions. The NPU is an on-chip hardware accelerator that provides efficient processing of machine-learning workloads. It works in conjunction with the chip's CPU to deliver higher performance and lower power consumption for neural network (NN) inference. In addition to managing Multiply-Accumulate (MAC) compute blocks throughput, NPU also: \u2022 Optimizes arrangement of weights \u2022 Manages memory accesses \u2022 Provides rescaling, activation, and pooling functions\n\n**Memory/Connectivity**\n\nThe i.MX 95 supports LPDDR5/LPDDR4X memory, providing a high-speed, low-power solution for memory-intensive applications. The processor includes a wide range of interfaces, including MIPI DSI, LVDS, UARTs, SPI, QSPI, I"
+}

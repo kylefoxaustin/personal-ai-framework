@@ -1,0 +1,36 @@
+{
+  "task": "email",
+  "ts": "2026-10-13T13:09:38",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 13.345,
+  "work_ms": 2155.62,
+  "telemetry": {
+    "prefill_ms": 7535.52,
+    "decode_ms": 2402.77,
+    "host_ms": 3130.21,
+    "retrieval_ms": 2155.62,
+    "tool_ms": 0,
+    "prefill_tok_per_s": 539.4,
+    "decode_tok_per_s": 158.2,
+    "rag_docs_used": 4
+  },
+  "gpu": {
+    "samples": 70,
+    "sm_pct_mean": 14.5,
+    "mem_pct_mean": 9.6,
+    "power_w_mean": 144.2,
+    "sm_pct_peak": 93.0,
+    "vram_mib_peak": 9802.0
+  },
+  "cpu": {
+    "samples": 70,
+    "ncores": 32,
+    "cpu_pct_mean": 4.4,
+    "cpu_pct_peak": 74.0,
+    "cores_busy_mean": 1.41,
+    "cores_busy_peak": 23.68
+  },
+  "extra": {},
+  "output": "Hi John,\n\nI wanted to give you a quick overview of the NXP i.MX 95 and its Neutron NPU. The i.MX 95 is a powerful applications processor that features advanced graphics and video cores, powerful vision and machine learning acceleration, efficient CPU performance, real-time processing, and advanced security with the integrated EdgeLock\u00ae secure enclave to support energy-efficient edge computing. A rich set of peripherals and processor cores support these features.\n\nOne of the key features of the i.MX 95 is its Neutron NPU, which is an on-chip hardware accelerator that provides efficient processing of machine-learning workloads. It works in conjunction with the chip's CPU to deliver higher performance and lower power consumption for neural network (NN) inference. In addition to managing Multiply-Accumulate (MAC) compute blocks throughput, NPU also:\n\n- Optimizes arrangement of weights\n- Manages memory accesses\n- Provides rescaling, activation, and pooling functions\n\nEnablement support for the eIQ\u00ae Neutron N3-1024S NPU is provided with the eIQ Toolkit and eIQ Machine Learning (ML) Software Development Environment. Some of the features and operators listed in this chapter may not be enabled in eIQ software. See References for links to eIQ documentation that lists the features and operators enabled in the latest eIQ software.\n\nYou can import your trained and quantized NN into eIQ Toolkit. The eIQ tooling generates an NPU-optimized model that can be integrated into an ML application running on the target device.\n\n \n\n \n\nProduct Marketing Manager\n\nMarvell Semiconductor, Inc\n\n1601 Sou"
+}

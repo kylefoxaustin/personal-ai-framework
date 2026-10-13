@@ -1,0 +1,32 @@
+{
+  "task": "meeting_summarize",
+  "ts": "2026-10-13T13:51:18",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 2.17,
+  "work_ms": 1614.9,
+  "telemetry": {},
+  "gpu": {
+    "samples": 15,
+    "sm_pct_mean": 6.6,
+    "mem_pct_mean": 5.0,
+    "power_w_mean": 63.6,
+    "sm_pct_peak": 94.0,
+    "vram_mib_peak": 26666.0
+  },
+  "cpu": {
+    "samples": 14,
+    "ncores": 32,
+    "cpu_pct_mean": 22.1,
+    "cpu_pct_peak": 73.5,
+    "cores_busy_mean": 7.06,
+    "cores_busy_peak": 23.52
+  },
+  "extra": {
+    "engine": "whisper->llm",
+    "work_ms": 1614.9,
+    "compose_ms": 247.9
+  },
+  "output": "{\"summary\": \"The meeting discussed the potential for thunderstorms to produce large hail, isolated tornadoes, and heavy rain.\", \"key_points\": [\"Thunderstorms could produce large hail, isolated tornadoes, and heavy rain\"], \"action_items\": [], \"decisions\": []}",
+  "context": "Thunderstorms could produce large hail, isolated tornadoes and heavy rain."
+}

@@ -1,0 +1,41 @@
+{
+  "task": "web_summarize",
+  "ts": "2026-10-13T13:09:44",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 5.27,
+  "work_ms": 4250.5,
+  "telemetry": {
+    "prefill_ms": 19.69,
+    "decode_ms": 647.03,
+    "host_ms": 179.81,
+    "retrieval_ms": 0.0,
+    "tool_ms": 0,
+    "prefill_tok_per_s": 6399.4,
+    "decode_tok_per_s": 153.0,
+    "rag_docs_used": 0
+  },
+  "gpu": {
+    "samples": 31,
+    "sm_pct_mean": 13.9,
+    "mem_pct_mean": 9.7,
+    "power_w_mean": 106.6,
+    "sm_pct_peak": 95.0,
+    "vram_mib_peak": 9802.0
+  },
+  "cpu": {
+    "samples": 30,
+    "ncores": 32,
+    "cpu_pct_mean": 1.4,
+    "cpu_pct_peak": 5.6,
+    "cores_busy_mean": 0.46,
+    "cores_busy_peak": 1.81
+  },
+  "extra": {
+    "web_search_s": 4.25,
+    "web_status": "ok",
+    "n_results": null,
+    "work_ms": 4250.5
+  },
+  "output": "The NXP i.MX 95 applications processor is designed for edge AI and IoT applications. It features Arm Cortex-A72 and Cortex-M7 cores, as well as a Vmeta video accelerator. The processor supports up to 4K display and multiple camera interfaces, making it suitable for use in smartphones, tablets, and other mobile devices. The i.MX 95 is also designed to be energy-efficient, with low power consumption and support for multiple power modes."
+}

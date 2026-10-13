@@ -1,0 +1,34 @@
+{
+  "task": "multi_tool_chain",
+  "ts": "2026-10-13T13:51:31",
+  "board": "rtx5090",
+  "model": "?",
+  "wall_s": 11.53,
+  "work_ms": 964.24,
+  "telemetry": {
+    "prefill_ms": 0.0,
+    "decode_ms": 0.0,
+    "host_ms": 11397.28,
+    "retrieval_ms": 964.24,
+    "tool_ms": 0
+  },
+  "gpu": {
+    "samples": 62,
+    "sm_pct_mean": 65.0,
+    "mem_pct_mean": 52.4,
+    "power_w_mean": 401.8,
+    "sm_pct_peak": 93.0,
+    "vram_mib_peak": 26666.0
+  },
+  "cpu": {
+    "samples": 61,
+    "ncores": 32,
+    "cpu_pct_mean": 7.2,
+    "cpu_pct_peak": 75.8,
+    "cores_busy_mean": 2.3,
+    "cores_busy_peak": 24.26
+  },
+  "extra": {},
+  "output": "I'd like to run `write_file()`. Please approve or deny below.",
+  "context": ""
+}
