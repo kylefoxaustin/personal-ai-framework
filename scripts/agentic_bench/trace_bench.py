@@ -202,7 +202,7 @@ def main():
                "wall_s": round(wall, 3), "work_ms": work_ms,
                "telemetry": {k: te.get(k) for k in ("prefill_ms","decode_ms","host_ms","retrieval_ms","tool_ms","prefill_tok_per_s","decode_tok_per_s","rag_docs_used") if k in te},
                "gpu": sampler_summ(tp), "cpu": cpu_summ, "extra": ex, "output": (r.get("text") or "")[:1600],
-               "context": (r.get("context") or "")[:12000]}
+               "context": r.get("context") or ""}
         json.dump(rec, open(os.path.join(OUT, f"bench_{name}_{datetime.now():%Y%m%d-%H%M%S}.json"), "w"), indent=2)
         if name in ("email", "spec_rag", "doc_brief", "multi_tool_chain") and te.get("rag_docs_used") == 0:
             print(f"  ⚠ {name}: RAG returned ZERO chunks — retrieval failed; the judge will skip this run")

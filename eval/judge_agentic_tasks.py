@@ -71,7 +71,7 @@ def latest(task):
     return json.load(open(fs[-1])) if fs else None
 
 def build_user_prompt(task, output, context=""):
-    src = f"SOURCE CONTEXT (what the assistant was given):\n\"\"\"\n{context[:12000]}\n\"\"\"\n\n" if context else ""
+    src = f"SOURCE CONTEXT (what the assistant was given):\n\"\"\"\n{context[:60000]}\n\"\"\"\n\n" if context else ""
     return (f"GROUND TRUTH: {GROUND_TRUTH}\n\n{src}TASK: {task}\nWHAT COUNTS: {RUBRIC[task]}\n\n"
             f"ASSISTANT OUTPUT:\n\"\"\"\n{output[:2500]}\n\"\"\"\n\nGrade it. STRICT JSON only.")
 

@@ -83,6 +83,7 @@ def main():
             agg["raw_correct"] += (r_["verdict"] == "CORRECT")
             agg["damaged"] += (r_["verdict"] == "CORRECT" and g_["verdict"] != "CORRECT")
         rows.append({"task": task, "gate": verdict, "raw_output": raw, "gated_output": gated,
+                     "context": ctx,
                      "raw": {"claude": rs["verdict"], "gpt4o": rg["verdict"], "fabricated": raw_fab},
                      "gated": {"claude": gs["verdict"], "gpt4o": gg["verdict"], "fabricated": gated_fab}})
         print(f"\n  [{task}]  gate: {verdict['n_unsupported']}/{verdict['n_claims']} claims unsupported "

@@ -17,7 +17,7 @@ any torch/transformers/tensorflow import.
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = ""   # force CPU — never contend with the llm-server GPU
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")  # quiet TensorFlow's CUDA-registration spam
-import re
+import json, re
 
 _MODEL = None
 
@@ -29,15 +29,61 @@ def _model():
             "vectara/hallucination_evaluation_model", trust_remote_code=True)
     return _MODEL
 
-def split_claims(text, min_words=4):
-    """Split an answer into checkable sentences; drop trivial fragments and greetings."""
+GREETINGS = ("hi ", "hi,", "hello", "dear ", "best,", "regards", "thanks", "cheers")
+
+def _structural(s):
+    """Headers, list numerals and greetings: formatting, not claims."""
+    bare = s.strip("*_# ").rstrip(":").strip()
+    return (not re.search(r"[A-Za-z]", bare) or s.lstrip().startswith("#") or s.rstrip().endswith(":")
+            or re.fullmatch(r"\*\*[^*]+\*\*:?", s.strip()) is not None or s.lower().startswith(GREETINGS))
+
+def _json_text(text):
+    """Structured answers (e.g. the meeting summarizer's JSON) are scored on their string values;
+    NLI on raw JSON syntax scores a faithful summary as unsupported."""
+    try:
+        obj = json.loads(text)
+    except (TypeError, ValueError):
+        return text
+    vals = []
+    def walk(o):
+        if isinstance(o, str): vals.append(o)
+        elif isinstance(o, dict): [walk(v) for v in o.values()]
+        elif isinstance(o, list): [walk(v) for v in o]
+    walk(obj)
+    return "\n".join(dict.fromkeys(vals)) if vals else text  # dedupe: summary often repeats a key point
+
+def split_claims(text):
+    """Split an answer into checkable sentences/lines. Short lines are claims too: an email
+    signature ('Marvell Semiconductor, Inc') or a phone number is exactly where the fine-tune
+    leaks memorized specifics, and a word-count floor let those through unchecked."""
+    text = _json_text(text)
     sents = re.split(r"(?<=[.!?])\s+|\n+", (text or "").strip())
     out = []
     for s in sents:
-        s = s.strip(" -*•\t")
-        if len(s.split()) >= min_words and not s.lower().startswith(("hi ", "hello", "dear ", "best,", "regards")):
-            out.append(s)
+        if _structural(s.strip(" -•\t")):
+            continue
+        c = s.strip(" -*•\t")
+        if c and (len(c.split()) >= SHORT_WORDS or _entities(c)):  # a bare short phrase names nothing to check
+            out.append(c)
     return out
+
+# NLI is unreliable on a 1-3 word fragment, so short lines that name something (a digit, an
+# '@', a capitalised non-initial word, an acronym) are checked lexically instead: every such
+# token must appear in the context. Short lines that name nothing carry no checkable specific.
+SHORT_WORDS = 4
+
+def _entities(claim):
+    toks = re.findall(r"[\w@.+/-]+", claim)
+    titled = sum(t[:1].isupper() for t in toks) >= 2  # a name/title line: 'Marvell Semiconductor, Inc'
+    return [t.strip(".,/-").lower() for i, t in enumerate(toks)
+            if re.search(r"\d|@", t) or ((i > 0 or titled) and t[:1].isupper()) or (len(t) > 1 and t.isupper())]
+
+def _lexical(context, claim):
+    ents = _entities(claim)
+    if len(claim.split()) >= SHORT_WORDS or not ents:
+        return None
+    ctx = (context or "").lower()  # whole-token match: 'inc' must not pass on 'include'
+    return 1.0 if all(re.search(rf"(?<![\w]){re.escape(e)}(?![\w])", ctx) for e in ents) else 0.0
 
 # HHEM's predict() batches every pair with NO truncation, and T5 attention is O(batch x L^2):
 # a full rag_k=8 context or meeting transcript x ~25 claims in one call hit ~90 GB RSS and got
@@ -55,8 +101,15 @@ def _windows(context):
 def score(context, claims):
     if not claims:
         return []
-    wins = _windows(context)
-    return [max(float(_model().predict([(w, c)])[0]) for w in wins) for c in claims]
+    wins = None
+    out = []
+    for c in claims:
+        lex = _lexical(context, c)
+        if lex is None:
+            wins = wins or _windows(context)
+            lex = max(float(_model().predict([(w, c)])[0]) for w in wins)
+        out.append(lex)
+    return out
 
 def _score_answer(answer, context):
     claims = split_claims(answer)
