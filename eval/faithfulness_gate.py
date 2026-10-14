@@ -53,6 +53,13 @@ _META = [re.compile(p, re.I) for p in (
     r"\b(feel free|let me know|if you (have|need|provide|want|can)|i'?d recommend|i recommend|recommend (checking|consulting|contacting)"
     r"|you (would|may|might|can) need to|consult (the|a|your)|refer to the|contact(ing)? (nxp|their|the vendor|support))",
     r"\b(may|might) be fictional\b|\bi'?m an? (ai|artificial)",
+    # absence claims with the source as subject ("the excerpts don't state X", "the datasheet specifies no X"):
+    # a statement about what the context lacks can't be entailed by the context, so HHEM always fails it
+    r"\b(excerpts?|sources?|documents?|context|datasheets?|knowledge base|manual|guide|table)s?\b.{0,40}"
+    r"\b(don'?t|do not|doesn'?t|does not|didn'?t|did not|never|say nothing|give no|gives no)\b.{0,25}"
+    r"\b(state|give|say|specif|list|mention|includ|contain|cover|provide|describe|document|define|name)\w*",
+    r"\b(specifies|states|gives|lists|provides|names|defines) no\b",
+    r"^(that|this|these) (is|are|was|were) (an? |only )?(example|illustration|general|not a)",
 )]
 
 def _meta(sentence):

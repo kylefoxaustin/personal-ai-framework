@@ -193,6 +193,15 @@ def run_orchestrator():
     global _interrupted
     _interrupted = False
 
+    # Disabled 2026-10-13. This pipeline trains the obsolete v1 recipe (14B, no system turn) on raw
+    # conversation logs, which hold personal data (addresses, email addresses, calendar). The
+    # email-trained models it fed were archived after they leaked Kyle's phone number. Rebuild it on
+    # training/build_grounded_dataset.py + train_lora_v5_clean.py before re-enabling.
+    if os.environ.get("SKIPPY_ALLOW_LEGACY_AUTOTRAIN") != "1":
+        print("Auto-retraining is disabled: legacy pipeline trains on raw personal conversation logs. "
+              "See training/train_lora_v5_clean.py.")
+        return
+
     # Persist orchestrator output to disk immediately so a terminal kill
     # (e.g. systemd-oomd taking out the vte-spawn scope) leaves a forensic
     # trail instead of vanishing with the tab.

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Personal AI Framework - a fully local AI assistant with a large document knowledge base. Runs a fine-tuned Qwen 2.5 7B (Kyle v4, Q4 GGUF — `models/qwen2.5-7b-kyle/kyle-qwen25-7b-v4-q4_k_m.gguf`) via llama-cpp-python on NVIDIA GPU, with ChromaDB for RAG and SQLite for conversation storage. The AI persona is named "Skippy." (Production moved from Qwen 2.5 14B Instruct to the fine-tuned 7B v4 in the v5.10.0 campaign — see README's version table; the actual loaded model is always derived from `pipeline/config.yaml`'s `model.path`.)
+Personal AI Framework - a fully local AI assistant with a large document knowledge base. Runs a fine-tuned Qwen 2.5 7B (v5-clean, Q4 GGUF — `models/qwen2.5-7b-skippy-v5-clean/skippy-qwen25-7b-v5-clean-q4_k_m.gguf`; trained with NO personal email — the email-trained v1-v4 line was archived 2026-10-14 to `~/skippy-archive/`, never retrain on `knowledge/emails`) via llama-cpp-python on NVIDIA GPU, with ChromaDB for RAG and SQLite for conversation storage. The AI persona is named "Skippy." (Production moved from Qwen 2.5 14B Instruct to the fine-tuned 7B v4 in the v5.10.0 campaign — see README's version table; the actual loaded model is always derived from `pipeline/config.yaml`'s `model.path`.)
 
 ## Architecture
 

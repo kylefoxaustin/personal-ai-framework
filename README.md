@@ -255,6 +255,8 @@ Tested on RTX 5090 (32GB VRAM) running **Qwen 2.5 7B v4** (production fine-tune)
 
 Production model upgraded from Qwen 2.5 14B to Qwen 2.5 7B v4 in the v5.10.0 methodology campaign — full reasoning at [docs/skippy-white-paper.md](docs/skippy-white-paper.md) and [docs/recipe-taxonomy.md](docs/recipe-taxonomy.md). 14B candidate scored higher on headline (76.2% vs 73.8%) but fabricated fictional peripherals; production trades headline for safety calibration.
 
+**2026-10-14: production is now `skippy-qwen25-7b-v5-clean`** (same Qwen 2.5 7B base, recipe and Q4_K_M quant; the speed figures above were measured on v4). The v1–v4 fine-tunes were trained partly on the author's personal email and could reproduce a real signature block, so they were retired and archived locally. v5-clean is trained only on public datasheet material: grounded answers and explicit "the excerpts don't cover that" abstentions written by a teacher model through Skippy's real RAG prompt, plus general-knowledge answers and refusals (`training/build_grounded_dataset.py`, `training/train_lora_v5_clean.py`). On the 117-answer two-judge faithfulness sweep (`eval/faithfulness_sweep.py`, temperature 0.7, MEASURED), answers flagged as fabricated by either judge went from 36 (v4) to 12 (v5-clean), with net score +0.39/+0.28 → +0.56/+0.56 (Sonnet/GPT-4o); stock Qwen 2.5 7B Instruct on the same sweep: 22 fabricated, net +0.50/+0.47. One sweep run (3 samples per item), so treat differences of a few answers as noise.
+
 ## 🏷️ Versions
 
 | Version | Highlights |

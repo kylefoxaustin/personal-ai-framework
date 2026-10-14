@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO, "training"))
 from scrub_signatures import redact  # results are committed to a PUBLIC repo; the fine-tune emits a real phone/email
-OUT = os.path.join(REPO, "eval/results/ladder/agentic/faithfulness_sweep.json")
+OUT = os.environ.get("SWEEP_OUT") or os.path.join(REPO, "eval/results/ladder/agentic/faithfulness_sweep.json")
 BASE = "http://localhost:8080"
 USER, PASSWORD = os.environ.get("SKIPPY_USER", "kyle"), os.environ.get("SKIPPY_PASSWORD", "REDACTED")
 THRESHOLDS = (0.3, 0.5, 0.7)

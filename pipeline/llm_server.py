@@ -929,8 +929,8 @@ def generate(request: GenerationRequest):
     if context_docs and not _is_conversational(request.prompt):
         rag_directive = (
             "Excerpts retrieved from your knowledge base follow. Use them like this:\n"
-            "- When the user is asking about YOUR DOCUMENTS (datasheet specifics, past "
-            "emails, blog archives, personal notes), treat the excerpts as authoritative. "
+            "- When the user is asking about YOUR DOCUMENTS (datasheet specifics, "
+            "documents, blog archives, personal notes), treat the excerpts as authoritative. "
             "Don't invent specifics (numbers, part names, configuration bits) that aren't "
             "in the excerpts — if they don't contain the answer, say so (e.g. \"the "
             "retrieved excerpts don't cover that\") rather than guessing.\n"
@@ -1192,8 +1192,8 @@ def generate_stream(request: StreamingRequest):
     if context_docs and not _is_conversational(request.prompt):
         rag_directive = (
             "Excerpts retrieved from your knowledge base follow. Use them like this:\n"
-            "- When the user is asking about YOUR DOCUMENTS (datasheet specifics, past "
-            "emails, blog archives, personal notes), treat the excerpts as authoritative. "
+            "- When the user is asking about YOUR DOCUMENTS (datasheet specifics, "
+            "documents, blog archives, personal notes), treat the excerpts as authoritative. "
             "Don't invent specifics (numbers, part names, configuration bits) that aren't "
             "in the excerpts — if they don't contain the answer, say so (e.g. \"the "
             "retrieved excerpts don't cover that\") rather than guessing.\n"
