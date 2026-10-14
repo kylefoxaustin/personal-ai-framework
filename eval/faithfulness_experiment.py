@@ -11,14 +11,15 @@ point: an edge model that fabricates 5-6/10 can be made SAFE with a 110M gate, n
 import json, os, sys, requests
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import faithfulness_gate as fg
+from _keys import skippy_password
 from judge_agentic_tasks import judge_anthropic, judge_openai, GROUND_TRUTH, RUBRIC
 
-BASE = "http://localhost:8080"; USER, PASSWORD = "kyle", "REDACTED"
+BASE = "http://localhost:8080"; USER = "kyle"
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 AUDIO = os.path.join(REPO, "knowledge/recordings/resources_sample1.wav")
 
 def tok():
-    return requests.post(f"{BASE}/auth/login", json={"username": USER, "password": PASSWORD}, timeout=15).json()["token"]
+    return requests.post(f"{BASE}/auth/login", json={"username": USER, "password": skippy_password()}, timeout=15).json()["token"]
 
 H = {}
 

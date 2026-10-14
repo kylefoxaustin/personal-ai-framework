@@ -12,14 +12,16 @@ import json, os, subprocess, sys, time, statistics, threading, urllib.request
 from datetime import datetime
 import requests
 
-BASE = "http://localhost:8080"; USER, PASSWORD = "kyle", "REDACTED"
+BASE = "http://localhost:8080"; USER = "kyle"
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../eval"))
+from _keys import skippy_password
 REPO = "/home/kyle/Documents/GitHub/personal-ai-framework"
 OUT = os.environ.get("AGENTIC_OUT") or os.path.join(REPO, "eval/results/ladder/agentic")
 AUDIO = os.path.join(REPO, "knowledge/recordings/resources_sample1.wav")
 IMAGE = None  # picked at runtime (newest screenshot)
 
 def tok():
-    return requests.post(f"{BASE}/auth/login", json={"username": USER, "password": PASSWORD}, timeout=15).json()["token"]
+    return requests.post(f"{BASE}/auth/login", json={"username": USER, "password": skippy_password()}, timeout=15).json()["token"]
 
 # ---- GPU sampler (sm%=compute, mem%=bandwidth proxy, power) ----
 def sampler_start(path):

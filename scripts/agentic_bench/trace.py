@@ -21,7 +21,9 @@ import json, os, subprocess, sys, time, urllib.request, statistics
 from datetime import datetime
 
 BASE = "http://localhost:8080"
-USER, PASSWORD = "kyle", "REDACTED"
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../eval"))
+from _keys import skippy_password
+USER = "kyle"
 
 # In-domain tasks: things Skippy is actually FOR (embedded/i.MX domain + its voice, grounded on
 # the 31.9K-chunk datasheet KB). Coherent output AND a real resource-profile spread.
@@ -57,7 +59,7 @@ TASKS = {
 
 def login():
     req = urllib.request.Request(f"{BASE}/auth/login",
-        data=json.dumps({"username": USER, "password": PASSWORD}).encode(),
+        data=json.dumps({"username": USER, "password": skippy_password()}).encode(),
         headers={"Content-Type": "application/json"})
     return json.loads(urllib.request.urlopen(req, timeout=15).read())["token"]
 

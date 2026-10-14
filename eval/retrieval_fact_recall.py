@@ -10,10 +10,11 @@ fact exists ANYWHERE in the knowledge base, so a miss reads as either:
 Facts mirror GROUND_TRUTH in judge_agentic_tasks.py.
 """
 import json, os, re, sys, time, requests
+from _keys import skippy_password
 
 BASE = "http://localhost:8080"
 CHROMA = "http://localhost:8000/api/v1"
-USER, PASSWORD = os.environ.get("SKIPPY_USER", "kyle"), os.environ.get("SKIPPY_PASSWORD", "REDACTED")
+USER = os.environ.get("SKIPPY_USER", "kyle")  # password: _keys.skippy_password(), never hard-coded (public repo)
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results/ladder/agentic/retrieval_fact_recall.json")
 
 # fact -> (regex over retrieved text, literal for the KB-wide $contains probe)
@@ -41,7 +42,7 @@ QUERIES = {
 }
 
 def token():
-    return requests.post(f"{BASE}/auth/login", json={"username": USER, "password": PASSWORD},
+    return requests.post(f"{BASE}/auth/login", json={"username": USER, "password": skippy_password()},
                          timeout=15).json()["token"]
 
 def retrieve(h, prompt, k):

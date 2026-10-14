@@ -22,9 +22,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO, "training"))
 from scrub_signatures import redact  # results are committed to a PUBLIC repo; the fine-tune emits a real phone/email
+from _keys import skippy_password
 OUT = os.environ.get("SWEEP_OUT") or os.path.join(REPO, "eval/results/ladder/agentic/faithfulness_sweep.json")
 BASE = "http://localhost:8080"
-USER, PASSWORD = os.environ.get("SKIPPY_USER", "kyle"), os.environ.get("SKIPPY_PASSWORD", "REDACTED")
+USER = os.environ.get("SKIPPY_USER", "kyle")  # password: _keys.skippy_password(), never hard-coded (public repo)
 THRESHOLDS = (0.3, 0.5, 0.7)
 SAMPLES, TEMPERATURE = 3, 0.7
 CATEGORIES = ("rag_datasheet", "faithfulness", "numerical_precision", "multihop", "refusal", "rag_blog")
@@ -83,7 +84,7 @@ def gen():
                        "model": "vectara/hallucination_evaluation_model (HHEM-2.1-Open)",
                        "judges": ["claude-sonnet-4-6", "gpt-4o"], "items_source": "eval/prompts_v2_1.json + 3 agentic RAG tasks"}
     done = {(r["id"], r["sample"]) for r in state["rows"]}
-    h = {"Authorization": "Bearer " + requests.post(f"{BASE}/auth/login", json={"username": USER, "password": PASSWORD},
+    h = {"Authorization": "Bearer " + requests.post(f"{BASE}/auth/login", json={"username": USER, "password": skippy_password()},
                                                      timeout=15).json()["token"]}
     for it in items():
         for s in range(SAMPLES):

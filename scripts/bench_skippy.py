@@ -3,17 +3,18 @@ Run a distribution benchmark against local Skippy for the Keyhole sizer cross-re
 Drives /generate/stream across 5 workload categories and collects per-call TTFT + tok/s,
 then emits p50/p95 per category.
 """
-import json, time, statistics, subprocess, urllib.request, urllib.error, sys
+import json, os, time, statistics, subprocess, urllib.request, urllib.error, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "../eval"))
+from _keys import skippy_password
 
 BASE = "http://localhost:8080"
 USER = "kyle"
-PASSWORD = "REDACTED"
 
 
 def login():
     req = urllib.request.Request(
         f"{BASE}/auth/login",
-        data=json.dumps({"username": USER, "password": PASSWORD}).encode(),
+        data=json.dumps({"username": USER, "password": skippy_password()}).encode(),
         headers={"Content-Type": "application/json"},
     )
     with urllib.request.urlopen(req, timeout=10) as r:

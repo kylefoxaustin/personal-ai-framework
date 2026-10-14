@@ -12,7 +12,7 @@ global. Populate it once; it then works for every eval script, every session, fo
 FILE: ~/.personal-ai/keys.env   (KEY=VALUE lines; see docs/api-keys-setup.md)
 It is outside the git tree entirely, so it cannot be committed by accident.
 """
-import os
+import os, sys
 from pathlib import Path
 
 KEYS_FILE = Path.home() / ".personal-ai" / "keys.env"
@@ -33,3 +33,12 @@ def ensure_keys(required=()):
             if k and k not in os.environ:
                 os.environ[k] = v
     return [k for k in required if not os.environ.get(k)]
+
+def skippy_password():
+    """Local Skippy login password: SKIPPY_PASSWORD from the environment or keys.env. Never hard-code it
+    in a script; this repo is public."""
+    ensure_keys()
+    pw = os.environ.get("SKIPPY_PASSWORD")
+    if not pw:
+        sys.exit("set SKIPPY_PASSWORD (local Skippy login) in the environment or ~/.personal-ai/keys.env")
+    return pw

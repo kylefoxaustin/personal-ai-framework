@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Diagnose the i.MX 95 NPU retrieval miss: does phrasing (naming 'Neutron') matter?"""
-import json, urllib.request
+import json, os, sys, urllib.request
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../eval"))
+from _keys import skippy_password
 BASE="http://localhost:8080"
 tok=json.loads(urllib.request.urlopen(urllib.request.Request(f"{BASE}/auth/login",
-    data=json.dumps({"username":"kyle","password":"REDACTED"}).encode(),
+    data=json.dumps({"username":"kyle","password":skippy_password()}).encode(),
     headers={"Content-Type":"application/json"}),timeout=15).read())["token"]
 H={"Content-Type":"application/json","Authorization":f"Bearer {tok}"}
 

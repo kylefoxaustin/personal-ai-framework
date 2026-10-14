@@ -27,9 +27,9 @@ NUM_RUNS="${2:-5}"
 TEMPERATURE="${TEMPERATURE:-0.3}"
 SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-3}"
 
-# Auth (kyle/REDACTED admin)
+# Auth (kyle admin; password from $SKIPPY_PASSWORD or ~/.personal-ai/keys.env)
 SKIPPY_USER="${SKIPPY_USER:-kyle}"
-SKIPPY_PASSWORD="${SKIPPY_PASSWORD:-REDACTED}"
+SKIPPY_PASSWORD="${SKIPPY_PASSWORD:-$(sed -n 's/^SKIPPY_PASSWORD=//p' ~/.personal-ai/keys.env 2>/dev/null)}"
 export SKIPPY_USER SKIPPY_PASSWORD
 
 cd "$(dirname "$0")/.."

@@ -63,7 +63,7 @@ Apples-to-apples — same v2 prompts at temp=0, RAG-on, 132-sample basis.
 ```bash
 python eval/run_accuracy_eval.py \
   --base-url http://localhost:8080 \
-  --auth kyle:REDACTED \
+  --auth "kyle:$SKIPPY_PASSWORD" \
   --output eval/results/acc_baseline-phi-3-mini-4k_$(date +%Y%m%d-%H%M%S).json
 ```
 
