@@ -20,13 +20,16 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")  # quiet TensorFlow's CUDA-re
 import json, re
 
 _MODEL = None
+# trust_remote_code runs the repo's Python, so pin the revision we validated: an upstream push
+# could otherwise change scores or execute new code on the next cold start.
+HHEM_REVISION = "de9a5e6ba9ba49531a022dba17e35ffeb2a6fad8"
 
 def _model():
     global _MODEL
     if _MODEL is None:
         from transformers import AutoModelForSequenceClassification
         _MODEL = AutoModelForSequenceClassification.from_pretrained(
-            "vectara/hallucination_evaluation_model", trust_remote_code=True)
+            "vectara/hallucination_evaluation_model", trust_remote_code=True, revision=HHEM_REVISION)
     return _MODEL
 
 GREETINGS = ("hi ", "hi,", "hello", "dear ", "best,", "regards", "thanks", "cheers")
@@ -36,6 +39,24 @@ def _structural(s):
     bare = s.strip("*_# ").rstrip(":").strip()
     return (not re.search(r"[A-Za-z]", bare) or s.lstrip().startswith("#") or s.rstrip().endswith(":")
             or re.fullmatch(r"\*\*[^*]+\*\*:?", s.strip()) is not None or s.lower().startswith(GREETINGS))
+
+# Sentences ABOUT the sources or the conversation, not about the world: "I don't have that
+# information", "the excerpts don't mention it", "feel free to ask", "consult the datasheet".
+# NLI can't verify them against the context (they score ~0.0-0.3), so checking them turned
+# honest refusals into gate firings (2026-10-13 sweep: most refusal-probe firings were these).
+_SOURCE_WORDS = r"(excerpt|source|document|datasheet|knowledge base|context|provided|documentation|manual|information|details|data)"
+_META = [re.compile(p, re.I) for p in (
+    r"\b(i|i'm|i am|we)\b.{0,25}\b(don'?t|do not|can'?t|cannot|couldn'?t|could not|not sure|unable|have no|haven'?t|didn'?t|not aware)\b",
+    r"\b(no|not any|isn'?t|is not|aren'?t|are not|doesn'?t|does not|don'?t|do not|nothing)\b.{0,80}\b(mention|specif|includ|contain|reference|cover|provide|available)\w*\b.{0,60}" + _SOURCE_WORDS,
+    r"^(there'?s|there is|there are) no (mention|reference|information|data|record)",
+    r"\b(no|not|isn'?t|aren'?t)\b.{0,60}\b(in|from) (my|the|these|those)( provided| retrieved| available)? (knowledge base|excerpts?|sources?|documents?|context|datasheets?)\b",
+    r"\b(feel free|let me know|if you (have|need|provide|want|can)|i'?d recommend|i recommend|recommend (checking|consulting|contacting)"
+    r"|you (would|may|might|can) need to|consult (the|a|your)|refer to the|contact(ing)? (nxp|their|the vendor|support))",
+    r"\b(may|might) be fictional\b|\bi'?m an? (ai|artificial)",
+)]
+
+def _meta(sentence):
+    return any(p.search(sentence) for p in _META)
 
 def _json_text(text):
     """Structured answers (e.g. the meeting summarizer's JSON) are scored on their string values;
@@ -63,7 +84,7 @@ def split_claims(text):
         if _structural(s.strip(" -•\t")):
             continue
         c = s.strip(" -*•\t")
-        if c and (len(c.split()) >= SHORT_WORDS or _entities(c)):  # a bare short phrase names nothing to check
+        if c and not _meta(c) and (len(c.split()) >= SHORT_WORDS or _entities(c)):  # a bare short phrase names nothing to check
             out.append(c)
     return out
 
@@ -75,8 +96,11 @@ SHORT_WORDS = 4
 def _entities(claim):
     toks = re.findall(r"[\w@.+/-]+", claim)
     titled = sum(t[:1].isupper() for t in toks) >= 2  # a name/title line: 'Marvell Semiconductor, Inc'
-    return [t.strip(".,/-").lower() for i, t in enumerate(toks)
+    ents = [t.strip(".,/-").lower() for i, t in enumerate(toks)
             if re.search(r"\d|@", t) or ((i > 0 or titled) and t[:1].isupper()) or (len(t) > 1 and t.isupper())]
+    # a value with a glued unit ("0.84V", "22.5oC/W") is checked by its number: the context may space it
+    return [re.match(r"[\d.]+", e).group(0).rstrip(".") if re.match(r"\d[\d.]*[a-z%]", e) and "@" not in e else e
+            for e in ents]
 
 def _lexical(context, claim):
     ents = _entities(claim)
@@ -96,9 +120,20 @@ def _windows(context):
     ids = tok(context or "", add_special_tokens=False)["input_ids"]
     if len(ids) <= WINDOW_TOKENS:
         return [context or ""]
-    return [tok.decode(ids[i:i + WINDOW_TOKENS]) for i in range(0, len(ids) - STRIDE_TOKENS, STRIDE_TOKENS)]
+    # the last window must reach the end: range(0, len - STRIDE) silently dropped the tail
+    # (a 1441-token context got one window, 0-1024, and tokens 1024-1441 were never checked)
+    return [tok.decode(ids[i:i + WINDOW_TOKENS])
+            for i in range(0, len(ids) - WINDOW_TOKENS + STRIDE_TOKENS, STRIDE_TOKENS)]
 
-def score(context, claims):
+def _overlap(window, claim):
+    w = set(re.findall(r"\w+", window.lower()))
+    return sum(t in w for t in re.findall(r"\w+", claim.lower()))
+
+def score(context, claims, threshold=None):
+    """Best NLI score over the context windows for each claim. With a threshold, windows are tried
+    in order of word overlap with the claim and scoring stops at the first window that supports
+    it, so a supported claim usually costs one model call; the score is then the first passing
+    window's (>= threshold), not necessarily the max."""
     if not claims:
         return []
     wins = None
@@ -107,17 +142,22 @@ def score(context, claims):
         lex = _lexical(context, c)
         if lex is None:
             wins = wins or _windows(context)
-            lex = max(float(_model().predict([(w, c)])[0]) for w in wins)
+            best = 0.0
+            for w in sorted(wins, key=lambda w: -_overlap(w, c)) if threshold is not None else wins:
+                best = max(best, float(_model().predict([(w, c)])[0]))
+                if threshold is not None and best >= threshold:
+                    break
+            lex = best
         out.append(lex)
     return out
 
-def _score_answer(answer, context):
+def _score_answer(answer, context, threshold=None):
     claims = split_claims(answer)
-    return claims, score(context, claims)
+    return claims, score(context, claims, threshold)
 
 def gate(answer, context, threshold=0.5, _scored=None):
     """Faithfulness verdict for an answer against its context."""
-    claims, scores = _scored or _score_answer(answer, context)
+    claims, scores = _scored or _score_answer(answer, context, threshold)
     unsupported = [(c, s) for c, s in zip(claims, scores) if s < threshold]
     n = len(claims) or 1
     return {
@@ -135,7 +175,7 @@ ABSTAIN = ("I can't give a fully confident answer — the retrieved sources don'
 def gated_answer(answer, context, threshold=0.5):
     """Return (output, verdict). If unfaithful, drop the unsupported sentences and return an
     abstention that keeps only the grounded ones — a safe partial instead of a confident fabrication."""
-    claims, scores = _score_answer(answer, context)
+    claims, scores = _score_answer(answer, context, threshold)
     g = gate(answer, context, threshold, _scored=(claims, scores))
     if g["faithful"]:
         return answer, g

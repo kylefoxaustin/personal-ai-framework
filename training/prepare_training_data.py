@@ -11,6 +11,9 @@ from pathlib import Path
 from typing import List, Dict
 from datetime import datetime
 import re
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from scrub_signatures import scrub
 
 # Senders to exclude from training data (case-insensitive)
 EXCLUDE_SENDERS = [
@@ -99,6 +102,9 @@ class TrainingDataPreparator:
         
         body = '\n'.join(cleaned_lines)
         
+        # Signature blocks + contact details: the fine-tune memorizes and reproduces them verbatim
+        body = scrub(body)
+
         # Remove excessive whitespace
         body = re.sub(r'\n{3,}', '\n\n', body)
         body = body.strip()

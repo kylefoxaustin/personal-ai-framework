@@ -576,6 +576,7 @@ class GenerationRequest(BaseModel):
     conversation_history: Optional[List[ConversationMessage]] = None  # Previous messages
     include_telemetry: Optional[bool] = False  # Sizer bake-off mode: return timing breakdown
     skip_agent_loop: Optional[bool] = False  # Sizer bake-off mode: bypass tool-detection LLM calls
+    faithfulness_gate: Optional[bool] = None  # override the faithfulness_gate setting for this request
 
 class GenerationResponse(BaseModel):
     text: str
@@ -585,6 +586,7 @@ class GenerationResponse(BaseModel):
     citations: Optional[List[dict]] = None  # Source citations with scores
     pending_action: Optional[dict] = None  # {name, params} — write tool awaiting user approval
     telemetry: Optional[dict] = None  # Sizer bake-off timing breakdown (when include_telemetry=True)
+    faithfulness: Optional[dict] = None  # gate verdict when the faithfulness gate ran
 
 class StreamingRequest(BaseModel):
     prompt: str
@@ -595,6 +597,29 @@ class StreamingRequest(BaseModel):
     use_rag: Optional[bool] = True
     rag_k: Optional[int] = 3
     conversation_history: Optional[List[ConversationMessage]] = None
+    faithfulness_gate: Optional[bool] = None  # override the faithfulness_gate setting for this request
+
+FAITHFULNESS_URL = os.environ.get("FAITHFULNESS_URL", "http://faithfulness:8090")
+
+def _apply_faithfulness_gate(text, context_docs, override=None, cfg=None):
+    """Run the HHEM gate (faithfulness sidecar) on a RAG answer. Returns (text, verdict or None).
+    Fail-open: if the sidecar is down the answer is returned unchanged and the error logged.
+    Pass cfg when calling from a stream generator, which runs outside the request's user context."""
+    if cfg is None:
+        cfg = load_settings().get("faithfulness_gate") or {}
+    enabled = cfg.get("enabled", False) if override is None else override
+    if not enabled or not context_docs or not text:
+        return text, None
+    import requests
+    try:
+        r = requests.post(f"{FAITHFULNESS_URL}/gate", timeout=180, json={
+            "answer": text, "context": context_docs, "threshold": cfg.get("threshold", 0.5)})
+        r.raise_for_status()
+        d = r.json()
+        return d["output"], d["verdict"]
+    except Exception as e:
+        print(f"Faithfulness gate unavailable, answer returned ungated: {e}")
+        return text, {"error": str(e)}
 
 class IngestRequest(BaseModel):
     content: str
@@ -1053,6 +1078,8 @@ def generate(request: GenerationRequest):
     if _elapsed > 0 and _tokens > 0:
         metrics.generation_tokens_per_second.observe(_tokens / _elapsed)
 
+    _response_text, _faithfulness = _apply_faithfulness_gate(_response_text, context_docs, request.faithfulness_gate)
+
     return GenerationResponse(
         text=_response_text,
         tokens_used=_tokens,
@@ -1060,6 +1087,7 @@ def generate(request: GenerationRequest):
         context_used=context_docs if context_docs else None,
         citations=citations,
         telemetry=_telemetry,
+        faithfulness=_faithfulness,
     )
 
 
@@ -1234,6 +1262,8 @@ def generate_stream(request: StreamingRequest):
     if _maintenance_mode or llm is None:
         raise HTTPException(status_code=503, detail="Model is retraining. Please wait — this usually takes ~2.5 hours.")
 
+    _gate_cfg = load_settings().get("faithfulness_gate") or {}
+
     def generate_tokens():
         import time
 
@@ -1294,8 +1324,13 @@ def generate_stream(request: StreamingRequest):
         if throughput > 0:
             metrics.generation_tokens_per_second.observe(throughput)
 
+        # Tokens are already on screen, so the gate result replaces the text in the 'done' event
+        final_text, verdict = _apply_faithfulness_gate(full_response.strip(), context_docs, request.faithfulness_gate, _gate_cfg)
+        if verdict is not None:
+            yield f"data: {json.dumps({'type': 'faithfulness', 'verdict': verdict})}\n\n"
+
         # Send completion signal with stats and metrics
-        yield f"data: {json.dumps({'type': 'done', 'text': full_response.strip(), 'metrics': {'ttft': round(ttft, 2), 'tokens': token_count, 'total_time': round(total_time, 2), 'throughput': round(throughput, 1)}})}\n\n"
+        yield f"data: {json.dumps({'type': 'done', 'text': final_text, 'metrics': {'ttft': round(ttft, 2), 'tokens': token_count, 'total_time': round(total_time, 2), 'throughput': round(throughput, 1)}})}\n\n"
     
     return StreamingResponse(
         generate_tokens(),

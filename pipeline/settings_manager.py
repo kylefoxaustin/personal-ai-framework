@@ -40,6 +40,12 @@ DEFAULT_SETTINGS = {
     "web_search": {
         "enabled": False
     },
+    # HHEM faithfulness gate (faithfulness sidecar): drops RAG-answer claims the retrieved
+    # context doesn't support, returning a safe partial answer instead of a fabrication.
+    "faithfulness_gate": {
+        "enabled": False,
+        "threshold": 0.5
+    },
     "email_providers": {
         "gmail": {"configured": False, "authenticated": False},
         "outlook": {"configured": False, "authenticated": False}

@@ -96,6 +96,11 @@ def main():
     print(f"  WRONG (claude):               RAW {agg['raw_wrong']}/{n}  ->  GATED {agg['gated_wrong']}/{n}")
     print(f"  CORRECT verdicts the gate un-did (both judges): {agg['damaged']}/{agg['raw_correct']}")
     out = os.path.join(REPO, "eval/results/ladder/agentic/faithfulness_gate_ab.json")
+    sys.path.insert(0, os.path.join(REPO, "training"))
+    from scrub_signatures import redact  # committed to a PUBLIC repo; the fine-tune emits a real phone/email
+    for r in rows:
+        for k in ("raw_output", "gated_output", "context"):
+            r[k] = redact(r[k])
     json.dump({"threshold": 0.5, "model": "vectara/hallucination_evaluation_model (HHEM-2.1-Open)",
                "summary": agg, "rows": rows}, open(out, "w"), indent=2)
     print(f"  wrote {os.path.relpath(out, REPO)}")

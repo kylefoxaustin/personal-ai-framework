@@ -27,6 +27,26 @@ services:
     ports:
       - "8080:8080"
 
+  # HHEM faithfulness gate (CPU only, no GPU). Off unless the faithfulness_gate setting is on.
+  faithfulness:
+    build:
+      context: .
+      dockerfile: docker/faithfulness/Dockerfile
+    restart: unless-stopped
+    mem_limit: 6g          # HHEM peaks ~2.3 GB; an unbounded run once hit ~90 GB (2026-10-11)
+    memswap_limit: 6g
+    cpus: 8
+    environment:
+      - CUDA_VISIBLE_DEVICES=
+      # match torch's thread pool to the cpus limit: the default 24 threads on 8 CPUs thrashes
+      - OMP_NUM_THREADS=8
+    volumes:
+      - ./pipeline:/app/pipeline:ro
+      - ./eval:/app/eval:ro
+      - hf-cache:/root/.cache/huggingface
+    ports:
+      - "127.0.0.1:8090:8090"
+
   vectordb:
     image: chromadb/chroma:0.5.0
     restart: unless-stopped
@@ -37,3 +57,6 @@ services:
       - ./vectordb:/data
     ports:
       - "8000:8000"
+
+volumes:
+  hf-cache:

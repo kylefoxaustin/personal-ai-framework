@@ -70,10 +70,12 @@ def latest(task):
     fs = sorted(glob.glob(f"{OUT}/bench_{task}_*.json"))
     return json.load(open(fs[-1])) if fs else None
 
-def build_user_prompt(task, output, context=""):
+# Output cap: was 2500 chars, which hid the tail of long emails/briefs (where a memorized
+# signature block sits) from the judges.
+def build_user_prompt(task, output, context="", rubric=None):
     src = f"SOURCE CONTEXT (what the assistant was given):\n\"\"\"\n{context[:60000]}\n\"\"\"\n\n" if context else ""
-    return (f"GROUND TRUTH: {GROUND_TRUTH}\n\n{src}TASK: {task}\nWHAT COUNTS: {RUBRIC[task]}\n\n"
-            f"ASSISTANT OUTPUT:\n\"\"\"\n{output[:2500]}\n\"\"\"\n\nGrade it. STRICT JSON only.")
+    return (f"GROUND TRUTH: {GROUND_TRUTH}\n\n{src}TASK: {task}\nWHAT COUNTS: {rubric or RUBRIC[task]}\n\n"
+            f"ASSISTANT OUTPUT:\n\"\"\"\n{output[:8000]}\n\"\"\"\n\nGrade it. STRICT JSON only.")
 
 def parse_verdict(text):
     m = re.search(r'\{.*\}', text, re.S)
@@ -87,19 +89,19 @@ def parse_verdict(text):
     except Exception as e:
         return {"verdict": "?", "score": 0, "fabricated": None, "reason": f"parse error: {e}"}
 
-def judge_anthropic(task, output, model, context=""):
+def judge_anthropic(task, output, model, context="", rubric=None):
     from anthropic import Anthropic
     c = Anthropic()
     r = c.messages.create(model=model, max_tokens=300, temperature=0, system=JUDGE_INSTRUCTIONS,
-                          messages=[{"role": "user", "content": build_user_prompt(task, output, context)}])
+                          messages=[{"role": "user", "content": build_user_prompt(task, output, context, rubric)}])
     return parse_verdict(r.content[0].text)
 
-def judge_openai(task, output, model, context=""):
+def judge_openai(task, output, model, context="", rubric=None):
     from openai import OpenAI
     c = OpenAI()
     r = c.chat.completions.create(model=model, max_tokens=300, temperature=0,
         messages=[{"role": "system", "content": JUDGE_INSTRUCTIONS},
-                  {"role": "user", "content": build_user_prompt(task, output, context)}])
+                  {"role": "user", "content": build_user_prompt(task, output, context, rubric)}])
     return parse_verdict(r.choices[0].message.content)
 
 def _agg(results, key):
