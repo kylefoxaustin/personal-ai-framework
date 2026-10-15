@@ -2,7 +2,7 @@
 
 Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
 
-![Version](https://img.shields.io/badge/version-5.10.0-blue)
+![Version](https://img.shields.io/badge/version-5.11.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
@@ -261,6 +261,7 @@ Production model upgraded from Qwen 2.5 14B to Qwen 2.5 7B v4 in the v5.10.0 met
 
 | Version | Highlights |
 |---------|------------|
+| **v5.11.0** | Email-free brain — production model is now `skippy-qwen25-7b-v5-clean`, a fresh Qwen 2.5 7B LoRA trained only on public datasheet material (grounded answers, explicit abstentions, general knowledge, refusals; `training/build_grounded_dataset.py`, `training/train_lora_v5_clean.py`). The email-trained v1–v4 line is retired and archived locally; email chunks removed from search; legacy email auto-retraining disabled. Two-judge 117-answer faithfulness sweep (MEASURED): fabricated answers v4 36 → stock 22 → v5-clean 12. Opt-in HHEM faithfulness-gate sidecar (`faithfulness` service, off by default). Eval scripts read the local login from `~/.personal-ai/keys.env`; personal data scrubbed from repo history. |
 | **v5.10.0** | Methodology + research checkpoint — gotcha-#7 closure with N=7 two-factor recipe predictor (ceiling reasoning OR family-match); cross-family v4 campaign (Gemma 9B, Mistral 7B, Llama 3.1 8B, Yi-1.5-9B, Phi-4 14B); Qwen-family substring-grader bias finding + `eval/regrade_semantic.py` semantic-regrade tooling; voice-metrics tooling (`eval/voice_metrics.py`); recipe-taxonomy framework (`docs/recipe-taxonomy.md`); Skippy white paper (`docs/skippy-white-paper.md`); private-anchor secrets spec for cross-app NPU measurement architecture (`docs/private_anchor_secrets_spec.md`); 29-slide use-case deck + presenter script for tech-mgmt audiences; cross-deck reference pattern with Keyhole. Production = Qwen 2.5 7B v4 (73.8% pass / voice ✓ / safety ✓); 14B v4 candidate documented but not shipped (fabrication). No application-feature changes — engine is unchanged. |
 | **v5.9.2** | Auth middleware bypasses CORS preflight (`OPTIONS`) — browser was getting 401 on every cross-origin preflight, silently hiding per-user data |
 | **v5.9.1** | Multi-user polish — `/health` is public (no more spurious session wipes), header wraps cleanly when buttons don't fit, 401 handler only logs out when a token was actually sent |
