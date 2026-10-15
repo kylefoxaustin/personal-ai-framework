@@ -16,6 +16,7 @@ Stages (resumable; state in training/data/clean_v5/):
   questions Claude writes an answerable + an unanswerable-but-related question per chunk
   retrieve  Skippy retrieval for each question (answerable: target chunk spliced in if missed)
   answers   Claude writes the ideal grounded response
+  tidy      (v5.1) rewrite abstentions: extra facts only if they partly answer the question
   general   general-knowledge questions with tangential excerpts (guards against over-refusal)
   build     HHEM consistency filter + PII scan + refusals -> train/val messages JSON
 
@@ -209,7 +210,7 @@ User question: {q}
 Write Skippy's reply. Rules:
 - Every specific (number, unit, register, pin, part name, feature) must be stated in the excerpts. Quote values verbatim with units. Use no outside knowledge for specifics.
 - If the excerpts answer it: answer directly in 1-5 sentences (or a short list), no preamble.
-- If the excerpts do NOT answer it: say so plainly in the first sentence (e.g. "The retrieved excerpts don't state ..."). Then, only if useful, add one sentence of closely related information that IS in the excerpts, clearly labelled as related. Never guess.
+- If the excerpts do NOT answer it: say so plainly in the first sentence (e.g. "The retrieved excerpts don't state ..."). Add more ONLY if it partly answers the actual question (a value, limit or condition the user could use for what they asked); otherwise stop there. Never add loosely related facts, never use a "Related:" label, never guess.
 - If an excerpt describes a different part than the one asked about, say which part it describes; don't transfer specs between parts.
 - No greetings, sign-offs, apologies, or "As an AI". Don't mention excerpt numbers; say "the datasheet" / "the reference manual" if needed.
 Return STRICT JSON: {{"reply": "...", "answered": true|false}}"""
@@ -241,6 +242,47 @@ User question: {q}
 
 Write Skippy's reply: answer from general engineering knowledge, correct and concise (code in fenced blocks if asked). Don't invent datasheet specifics for any particular part; don't refer to the excerpts unless they genuinely help. No greetings or sign-offs.
 Return STRICT JSON: {{"reply": "..."}}"""
+
+T_USER = """Retrieved excerpts Skippy was given:
+\"\"\"
+{ctx}
+\"\"\"
+
+User question: {q}
+
+Skippy's current reply (the excerpts don't answer the question):
+\"\"\"
+{reply}
+\"\"\"
+
+Rewrite the reply. Rules:
+- First sentence: say plainly what the excerpts don't state (keep the current wording if it's fine).
+- Keep any further information ONLY if it partly answers the actual question: a value, limit or condition the user could directly use for what they asked. Drop loosely related facts (neighbouring parameters, other peripherals, register trivia) entirely.
+- Never use a "Related:" label or a stock lead-in. If you keep something, work it into plain prose and vary the phrasing.
+- Copy any kept value verbatim from the current reply; add nothing new.
+- No greetings, sign-offs, apologies or suggestions to consult other documents.
+Return STRICT JSON: {{"reply": "..."}}"""
+
+def tidy():
+    """v5.1: v5 abstentions carried a 'Related:' fact ~89% of the time (the A_USER rule asked for one), and
+    v5 learned it as a template. Rewrite them so extra facts appear only when they partly answer the
+    question. Originals are kept in reply_v1."""
+    items = load("items.json", [])
+    todo = [i for i, it in enumerate(items) if it.get("kind") == "unanswerable" and it.get("reply")
+            and not it.get("answered") and "reply_v1" not in it]
+    def work(i):
+        it = items[i]
+        return i, claude_json(A_SYSTEM, T_USER.format(ctx="\n\n".join(it["context"]), q=it["question"], reply=it["reply"]), 3000)
+    with cf.ThreadPoolExecutor(8) as ex:
+        for n, (i, j) in enumerate(ex.map(work, todo)):
+            if j and j.get("reply"):
+                items[i]["reply_v1"], items[i]["reply"] = items[i]["reply"], j["reply"].strip()
+            if n % 50 == 0:
+                save("items.json", items); print(f"  tidy {n}/{len(todo)}", flush=True)
+    save("items.json", items)
+    una = [it for it in items if it.get("kind") == "unanswerable" and it.get("reply") and not it.get("answered")]
+    rel = sum(bool(re.search(r"\bRelated\b[^.:]{0,40}:", it["reply"])) for it in una)
+    print(f"tidy: {sum('reply_v1' in it for it in items)} rewritten; 'Related:' now in {rel}/{len(una)}")
 
 def general():
     g = load("general.json", [])
@@ -306,7 +348,7 @@ def build():
 
 if __name__ == "__main__":
     stages = {"holdout": holdout, "sample": sample, "questions": questions, "retrieve": retrieve,
-              "answers": answers, "general": general, "build": build}
+              "answers": answers, "tidy": tidy, "general": general, "build": build}
     from _keys import ensure_keys
     ensure_keys(("ANTHROPIC_API_KEY",))
     for s in (list(stages) if sys.argv[1:] == ["all"] else sys.argv[1:]):

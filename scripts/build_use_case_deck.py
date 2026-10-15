@@ -523,7 +523,7 @@ def slide1_title():
              "A fully-local AI assistant — use-case architecture",
              size=22, color=MUTED, align=PP_ALIGN.CENTER)
     add_text(s, Inches(0.5), Inches(4.4), Inches(12.3), Inches(0.5),
-             "Qwen 2.5 7B v4 (fine-tuned, production)  |  61K-doc RAG  |  hybrid retrieval  |  tool-using agent  |  recipe-template PoC",
+             "Qwen 2.5 7B v5-clean (fine-tuned, production)  |  61K-doc RAG  |  hybrid retrieval  |  tool-using agent  |  recipe-template PoC",
              size=14, color=ACCENT, align=PP_ALIGN.CENTER)
     add_text(s, Inches(0.5), Inches(6.3), Inches(12.3), Inches(0.5),
              "Measured on RTX 5090 @ 32GB  •  Projected to 200-TOPS edge NPU",
@@ -583,7 +583,7 @@ def slide2_exec_summary():
             size=11, bold=True)
     model_rows = [
         ("Capability (raw correctness)",      "Qwen 2.5 14B v4",          "76.2% (+5.6pp)",  "Highest pass — fabricates peripherals → blocked"),
-        ("★ Ships (3-gate clear)",            "Qwen 2.5 7B v4 (prod)",     "73.8% (+3.1pp)",  "Only model clearing all three gates"),
+        ("★ Ships today",                     "Qwen 2.5 7B v5-clean",      "12 fab / 117",     "Email-free; v4 (36 fab) retired 2026-10"),
         ("Per-token efficiency",              "Qwen3-30B-A3B router-v4",  "~37 tok/s on Mid", "3B active params · best decode-density"),
         ("Voice fidelity",                    "Qwen 2.5 7B v4",           "Qwen-family only", "Cross-family v4 (Mistral/Llama/Yi) breaks voice"),
         ("Smallest viable footprint",         "Qwen 2.5 3B Instruct",     "1.9 GB · 53 tok/s","Fits Low-LP5X; weak reasoning"),
@@ -597,7 +597,7 @@ def slide2_exec_summary():
             "Bottom line",
             fill=INK, border=ACCENT, size=11, bold=True)
     add_text(s, Inches(0.7), Inches(6.55), Inches(11.95), Inches(0.5), [
-        "Skippy ships today on NPU Mid running Qwen 2.5 7B v4 — the only model clearing capability + voice + safety. NPU High is the upsell for FP recipes, CNN coexistence, and prefill-latency-sensitive workloads. Decode ceiling is identical on both at stock memory.",
+        "Skippy ships today on NPU Mid running Qwen 2.5 7B v5-clean — email-free, fewest fabrications measured (12/117 vs stock 22). NPU High is the upsell for FP recipes, CNN coexistence, and prefill-latency-sensitive workloads. Decode ceiling is identical on both at stock memory.",
     ], size=11)
 SLIDES.append(slide2_exec_summary)
 
@@ -770,7 +770,7 @@ SLIDES.append(slide6_memory_rlhf)
 def slide7_kpis():
     s = add_blank()
     add_title(s, "Measured KPIs — what the RTX 5090 actually does",
-              "Per-turn observability from Prometheus /metrics (v5.8+) · Qwen 2.5 7B v4 (production)")
+              "Per-turn observability from Prometheus /metrics (v5.8+) · Qwen 2.5 7B v4 (production when measured; v5-clean is the same arch/quant)")
 
     rows = [
         ("Time to first token (TTFT)",        "30–120 ms",       "p50 / p95",    "7B prefill is faster than 14B (smaller weight read)"),
@@ -825,7 +825,7 @@ def slide8_bw_math():
     add_text(s, Inches(0.5), Inches(5.4), Inches(12.3), Inches(1.9), [
         "Rule-of-thumb tok/s ceiling on the target (100.8 GB/s usable):",
         "• Qwen 2.5 3B Q4 (1.9 GB)  →  ~53 tok/s",
-        "• Qwen 2.5 7B v4 Q4 (4.7 GB)  →  ~21 tok/s   ← our current production model (5090: 184 tok/s)",
+        "• Qwen 2.5 7B v4 Q4 (4.7 GB)  →  ~21 tok/s   ← production through 2026-10; v5-clean is the same size (5090: 184 tok/s, measured on v4)",
         "• Qwen 2.5 14B Q4 (8.7 GB)  →  ~12 tok/s   ← v4 candidate; not shipped (fabrication failure)",
         "• Qwen 3 30B-A3B Q4 (16 GB total / 1.5 GB active)  →  ~37 tok/s measured on Edge NPU 2",
         "• Mixtral 8x7B Q4 (26 GB)  →  won't fit in RAM on most edge SKUs",
@@ -843,7 +843,7 @@ def slide9_model_comparison():
         ("Qwen 2.5 3B Instruct",             "Dense", "1.9 GB",   "53 tok/s",   "Fits",        "Good trade for edge QA"),
         ("Mistral 7B v0.3 Instruct Q4",      "Dense", "4.4 GB",   "23 tok/s",   "Fits",        "Cross-family baseline (Skippy eval: 63.5%)"),
         ("Llama-3.1 8B Instruct Q4",         "Dense", "4.9 GB",   "21 tok/s",   "Fits",        "Cross-family baseline (Skippy eval: 59.5%)"),
-        ("★ Qwen 2.5 7B v4 (production)",     "Dense", "4.7 GB",   "21 tok/s",   "Fits",        "Production fine-tune; 73.8% Skippy eval"),
+        ("★ Qwen 2.5 7B v4 / v5-clean (prod)",     "Dense", "4.7 GB",   "21 tok/s",   "Fits",        "Production fine-tune; 73.8% Skippy eval"),
         ("Qwen 2.5 14B Instruct Q4",         "Dense", "8.7 GB",   "12 tok/s",   "Fits (tight)", "v4 candidate not shipped (fabrication failure)"),
         ("Qwen 2.5 32B Instruct Q4",         "Dense", "19 GB",    "5 tok/s",    "16GB: No",    "Recipe overruns this corpus at 32B"),
         ("Qwen 3 30B-A3B (MoE, 8/128)",       "MoE",   "16 GB",    "~37 tok/s", "16GB: Tight", "Active 1.5 GB; recipe needs router LoRA"),
@@ -1158,7 +1158,7 @@ def slide_skippy_moe_upgrade():
         ("Q4_K_M pure decode (5090, no RAG/tools)",     "250 tok/s  ‡",   "synthetic upper bound — isolates kernel speed"),
         ("Q4_K_M prefill @ 2K tokens (5090)",            "10,200 tok/s ‡", "prefill is compute-bound and ample on 5090"),
         ("Q4_K_M decode on NPU Mid (134.4 GB/s peak)",  "~16.5 tok/s ‡",  "Keyhole BW-math projection to edge"),
-        ("7B v4 Skippy prod decode on 5090 (RAG)",      "183.9 tok/s ★",  "current production — Qwen 2.5 7B v4"),
+        ("7B v4 Skippy prod decode on 5090 (RAG)",      "183.9 tok/s ★",  "measured on Qwen 2.5 7B v4 (v5-clean: same arch/quant)"),
     ]
     add_table(s, Inches(0.5), Inches(5.3), Inches(12.3), Inches(1.3),
               ["Cross-reference (Keyhole benchmark ‡ vs Skippy prod ★)", "Measurement", "Note"],
@@ -1393,11 +1393,11 @@ SLIDES.append(slide_engine_extraction_anchor_bug)
 def slide_v4_campaign_final():
     s = add_blank()
     add_title(s, "v4 campaign final — recipe transfer is architecture- and family-coupled",
-              "Qwen gains scale 7B–14B. MoE needs router. Cross-family v4 N=4 corroborates two-factor predictor (see slide 20/21).")
+              "Qwen gains scale 7B–14B. MoE needs router. Cross-family v4 N=4 corroborates two-factor predictor (see slides 23/24).")
 
     headline_rows = [
         ("Qwen2.5-7B Instruct (stock)",          "Dense / 7B",      "70.6%",  "—",        "base reference"),
-        ("Qwen2.5-7B v4 ★ PRODUCTION",           "Dense / 7B",      "73.8%",  "+3.1pp",   "voice ✓ safety ✓ — ships"),
+        ("Qwen2.5-7B v4 (prod. to 2026-10)",     "Dense / 7B",      "73.8%",  "+3.1pp",   "voice ✓ safety ✓ — shipped; retired for PII"),
         ("Qwen2.5-14B v4",                        "Dense / 14B",     "76.2%",  "+5.6pp",   "best headline; fabricates fictional peripherals 0/3"),
         ("Qwen2.5-32B Instruct (stock)",          "Dense / 32B",     "71.4%",  "—",        "base reference"),
         ("Qwen2.5-32B v4 (clean, 2 ep)",          "Dense / 32B",     "66.7%",  "−4.7pp",   "recipe overruns corpus at 32B (param:data ratio)"),
@@ -1434,7 +1434,7 @@ def slide_v4_campaign_final():
             fill=SURFACE, border=ACCENT3, size=10, bold=True)
     add_text(s, Inches(8.75), Inches(6.40), Inches(3.95), Inches(0.55), [
         "• Lift = ceiling reasoning (6/6) OR family-match",
-        "• Corroborated at N=7 cross-judge (see slide 20/21)",
+        "• Corroborated at N=7 cross-judge (see slides 23/24)",
     ], size=9)
 
     add_text(s, Inches(0.5), Inches(7.05), Inches(12.3), Inches(0.35), [
@@ -1598,7 +1598,7 @@ def slide_fabrication_problem():
         ("Qwen 3 30B-A3B Instruct-2507 (stock, MoE)",     "9 / 9",   "✅ no fabrication",   "instruction-tuned MoE refuses cleanly"),
         ("Llama-3.1 8B Instruct (stock)",                "6 / 9",   "❌ fabricates 3/9",   "cross-family — same failure mode as Qwen 32B"),
         ("Mistral 7B v0.3 Instruct (stock)",             "6 / 9",   "❌ fabricates 3/9",   "cross-family — same failure mode again"),
-        ("★ Skippy 7B v4 (production)",                   "9 / 9",   "✅ recipe FIXES",     "small base + 100 refusal exemplars = clean"),
+        ("★ Skippy 7B v4 (prod. to 2026-10)",                   "9 / 9",   "✅ recipe FIXES",     "small base + 100 refusal exemplars = clean"),
         ("Skippy 14B v4 (not shipped)",                  "6 / 9",   "❌ inherits failure", "large base; recipe shifts but doesn't override"),
         ("Skippy 32B v4",                                 "9 / 9",   "✅ recipe FIXES",     "but recipe damages capability elsewhere — net regression"),
     ]
@@ -1664,11 +1664,11 @@ SLIDES.append(slide_fabrication_options)
 def slide_fabrication_skippy_choice():
     s = add_blank()
     add_title(s, "What we shipped — layered defense by deployment choice",
-              "Skippy production stacks Option #6 (ship-smaller) + #3 (system grounding). 14B v4 is documented as a candidate gated on #1 + #3.")
+              "Skippy production stacks Option #6 (ship-smaller) + #3 (system grounding). 14B v4 is documented as a candidate gated on #1 + #3. (Superseded 2026-10 by v5-clean — next slide.)")
 
     # Two columns: production state + 14B unblock condition
     add_box(s, Inches(0.5), Inches(1.4), Inches(6.0), Inches(2.8),
-            "Production today: Qwen 2.5 7B v4",
+            "Production May–Oct 2026: Qwen 2.5 7B v4",
             fill=SURFACE, border=ACCENT2, size=13, bold=True)
     add_text(s, Inches(0.7), Inches(1.95), Inches(5.6), Inches(2.2), [
         "• Pass rate: 73.8% (vs 14B v4's 76.2%)",
@@ -1709,11 +1709,61 @@ def slide_fabrication_skippy_choice():
         "Tier 2 (capability-ceiling allows): Add Layer #6 — ship the smaller model. Headline cost is minor; safety cost vanishes.",
         "Tier 3 (high-stakes deployment): Add Layer #5 — RLHF/DPO for grounding. ~$100-1K+ but production-grade.",
         "",
-        "Skippy chose Tier 1 + Tier 2: 7B v4 in production, system grounding via citation-required RAG, layered #1 work documented as future when 14B promotion becomes desirable.",
+        "Skippy chose Tier 1 + Tier 2: 7B v4 in production (May–Oct 2026), system grounding via citation-required RAG, layered #1 work documented as future when 14B promotion becomes desirable.",
         "",
         "What you DON'T do: rely on a single layer. System prompt disclaimers (#7) alone fail at 14B+ scale. Adversarial-only training (#2 alone) doesn't generalize.",
     ], size=12, color=ACCENT2)
 SLIDES.append(slide_fabrication_skippy_choice)
+
+
+def slide_v5_privacy_rebuild():
+    s = add_blank()
+    add_title(s, "v5-clean — the training corpus is a disclosure surface",
+              "v4 reproduced the author's real signature block (phone included) in eval output that reached a public repo. Fix = rebuild, not patch.")
+
+    add_box(s, Inches(0.5), Inches(1.4), Inches(6.0), Inches(0.45),
+            "What leaked, and how",
+            fill=SURFACE, border=ACCENT3, size=13, bold=True)
+    add_text(s, Inches(0.7), Inches(1.95), Inches(5.6), Inches(2.0), [
+        "• v1–v4 corpus was mostly the author's sent email",
+        "• Model learned the voice AND the signature block",
+        "• Eval runs save every answer → committed to a public repo",
+        "• Path: corpus → weights → eval artifact → internet",
+        "• No one ever chose to publish it",
+        "",
+        "Output regexes catch a phone number; they can't make",
+        "weights forget it, or catch the next unknown detail.",
+    ], size=11)
+
+    add_box(s, Inches(6.8), Inches(1.4), Inches(6.0), Inches(0.45),
+            "The rebuild (same 7B base + recipe, public data only)",
+            fill=SURFACE, border=ACCENT2, size=13, bold=True)
+    add_text(s, Inches(7.0), Inches(1.95), Inches(5.6), Inches(2.0), [
+        "• Teacher writes answers through Skippy's REAL prompt + retrieval",
+        "• 634 grounded · ~300 'excerpts don't cover it' · 137 general · 150 refusals",
+        "• Eval-retrieved chunks held out (no contamination)",
+        "• HHEM consistency + PII filters on every training answer",
+        "• Email models archived offline; email removed from search",
+        "• Repo history scrubbed (every commit + tag)",
+    ], size=11)
+
+    add_table(s, Inches(0.5), Inches(4.15), Inches(12.3), Inches(1.6),
+              ["Model", "Fabricated (either judge)", "Fabricated (both)", "Net score Sonnet / GPT-4o"],
+              [("Qwen2.5-7B v4 — email-trained (retired)", "36", "21", "+0.39 / +0.28"),
+               ("Qwen2.5-7B Instruct (stock)",             "22", "11", "+0.50 / +0.47"),
+               ("★ Qwen2.5-7B v5-clean (production)",      "12", "8",  "+0.56 / +0.56")],
+              font_size=11, highlight_rows={3})
+
+    add_text(s, Inches(0.5), Inches(5.85), Inches(12.3), Inches(1.0), [
+        "Customer rule: scrub the corpus BEFORE training; scan outputs before they leave the building. "
+        "v5-clean wins on fewer WRONG answers, not more right ones. The retired v4 grounded worse than its own stock base.",
+        "Repeat before you 'fix': v5.1 removed v5's 'Related:' tails → fabrication tie (30 vs 28 /234) but fewer correct (net +0.50 vs +0.56). Not shipped.",
+    ], size=11, color=ACCENT2)
+    add_text(s, Inches(0.5), Inches(6.9), Inches(12.3), Inches(0.45), [
+        "MEASURED: 117 answers per run (39 KB items × 3 samples, temp 0.7), two LLM judges with source context (eval/faithfulness_sweep.py). "
+        "Table = run 1; v5 repeat run 16 / 9. Different instrument from the 126-sample substring headline; not comparable.",
+    ], size=9, color=MUTED)
+SLIDES.append(slide_v5_privacy_rebuild)
 
 
 def slide_recipe_taxonomy():
@@ -1778,7 +1828,7 @@ def slide_voice_gate():
     rows = [
         ("Stock Qwen2.5-7B Instruct",          "672 chars",   "1.5",   "0.8",   "0.4",   "62%",   "default chatty"),
         ("Stock Qwen3-30B-A3B Instruct-2507",  "335 chars",   "1.65",  "1.65",  "0.05",  "68%",   "headline-winning, voice off"),
-        ("★ Skippy 7B v4 (production)",         "157 chars",   "0.05",  "0.07",  "0.02",  "5%",    "target voice — terse, no boilerplate"),
+        ("★ Skippy 7B v4 (prod. to 2026-10)",         "157 chars",   "0.05",  "0.07",  "0.02",  "5%",    "target voice — terse, no boilerplate"),
         ("Skippy 14B v4",                       "157 chars",   "0.07",  "0.05",  "0.02",  "5%",    "voice transferred up the size axis"),
         ("Skippy MoE v4 (Qwen3-30B-A3B)",       "131 chars",   "0.04",  "0.04",  "0.0",   "3%",    "voice transferred across architectures"),
         ("Skippy MoE v4 + router",              "141 chars",   "0.05",  "0.05",  "0.02",  "4%",    "voice held even with capability recovery"),

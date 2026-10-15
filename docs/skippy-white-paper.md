@@ -7,6 +7,10 @@ A worked example across nine fine-tunes, four base models, and ~$140 of cloud GP
 > substring-incompatible per `eval/EVAL_SET_CHANGELOG.md`). Original
 > 132-sample numbers are preserved in each eval JSON's `summary_v1_legacy`
 > block. Methodology version: `2026-05-08-post-remediation`.
+>
+> **Updated 2026-10-14**: the production model changed. The email-trained v1–v4 line
+> was retired after it reproduced the author's real contact details. See
+> [Iteration v5: the privacy rebuild](#iteration-v5-the-privacy-rebuild).
 
 ---
 
@@ -131,7 +135,7 @@ That's lower than v1's 78.6%. But:
 - No over-refusal on real questions ✓
 - 12.5× shorter average response than v1 (157 chars vs 1,912)
 
-**v4 is the model that ships.** Lower number, much better product. The 4.5-point headline gap vs v1 is real, but it's almost entirely the substring grader rewarding v1's verbosity. If we had a semantic grader (cosine similarity, LLM-as-judge), v4 would lead.
+**v4 is the model that ships** (until 2026-10; see [v5](#iteration-v5-the-privacy-rebuild)). Lower number, much better product. The 4.5-point headline gap vs v1 is real, but it's almost entirely the substring grader rewarding v1's verbosity. If we had a semantic grader (cosine similarity, LLM-as-judge), v4 would lead.
 
 **Cost so far: $0 / 4.9 hours, 4 fine-tunes, 1 production-shippable model.**
 
@@ -156,6 +160,47 @@ The recipe that won at 7B and 14B did NOT extend cleanly. The MoE base failed ca
 **Total iteration cost: ~$140 cloud GPU time across all six fine-tunes** (the dense ones were free local; MoE and 32B dense each needed an H100 rental at ~$3/hour for 4-7 hours).
 
 The iteration ledger: 4.9 free hours of dense training + ~$140 of cloud GPU = the cost of producing one shippable production model and four valuable failure-data points.
+
+### Iteration v5: the privacy rebuild
+
+Five months after v4 shipped, a routine check found the production model writing the author's **real email signature**, old cell number included, into answers that had nothing to do with email. The v1–v4 training corpus was mostly the author's own sent mail. The model learned the voice, and it also learned the signature block. Worse, eval runs save every model answer to disk, and those files had been committed to a public repository. So the leak went from training data, to model weights, to eval artifacts, to the public internet. No one ever chose to publish that number.
+
+**The fix was a rebuild, not a patch.** Output filters can catch a phone number. They can't make weights forget it, and the next leak might be a colleague's name or a customer detail that no regex knows about. So we:
+
+1. **Retired the email-trained models.** v1–v4, their training data and the email chunks in the search index were archived offline. Nothing was deleted, because the failure data is still evidence.
+2. **Retrained from public material only.**
+   - A teacher model wrote ideal answers to datasheet questions using Skippy's *real* serving prompt and *real* retrieved excerpts. v4 had been trained without the context it would see in production.
+   - The training mix: 634 grounded answers, ~300 explicit "the excerpts don't cover that" answers, 137 general-knowledge answers and 150 refusals.
+   - Every excerpt the eval questions retrieve was held out, so the eval can't be contaminated.
+   - A consistency checker (HHEM) and a PII scan gate every training answer.
+3. **Scrubbed the public history.** The contact details came out of every commit and tag, and the remote was force-updated.
+
+**Result** (117 answers: 39 knowledge-base questions × 3 samples at temperature 0.7, each graded by two independent LLM judges that see the source excerpts; all MEASURED):
+
+| Model | Fabricated (either judge) | Fabricated (both judges) | Net score (Sonnet / GPT-4o) |
+|---|---:|---:|---:|
+| v4, email-trained (retired) | 36 | 21 | +0.39 / +0.28 |
+| Qwen2.5-7B Instruct (stock) | 22 | 11 | +0.50 / +0.47 |
+| **v5-clean** | **12** | **8** | **+0.56 / +0.56** |
+
+Three things a decision-maker should take from this:
+
+- **The retired model was worse than the stock base on grounding.** The +3.1pp "capability lift" v4 showed on the substring grader didn't survive a grader that checks claims against the sources. (This is a different instrument from the 126-sample substring headline above, so the numbers aren't comparable.)
+- **The win is fewer wrong answers, not more right ones.** v5-clean's correct count is about flat against stock. It says "the sources don't cover that" instead of inventing an answer.
+- **Your training data is a disclosure surface.** Anything in the corpus can come out of the model, and anything the model says can land in a log, an eval file or a demo. Scrub the corpus *before* training, and scan model outputs before they leave the building.
+
+A repeat sweep of v5-clean gave 16 / 9 / +0.56 / +0.53. Across the two runs that's 28 fabrications in 234 answers flagged by either judge, and 17 flagged by both. The v4 and stock rows are single runs.
+
+**A useful negative result: v5.1.** v5-clean had a visible quirk. ~89% of its training abstentions ended with a "Related: ..." fact, and the model learned that as a template, so 34 of 117 answers carried one. We had the teacher rewrite every abstention to keep extra facts only when they partly answer the question, then retrained (v5.1). The quirk vanished (0 of 117) and answers got 14% shorter. We ran two sweeps per model (234 answers each, MEASURED):
+
+| Model | Fabricated (either) | Fabricated (both) | Correct (Sonnet / GPT-4o) | Net (Sonnet / GPT-4o) |
+|---|---:|---:|---:|---:|
+| **v5-clean** (ships) | 28 | 17 | 153 / 154 | **+0.56 / +0.55** |
+| v5.1-clean (not shipped) | 30 | 15 | 145 / 148 | +0.50 / +0.52 |
+
+Fabrication was a tie. v5.1 simply got fewer answers right. Many of those "loosely related" facts were partial answers the judges scored as useful, so cutting them made the model more cautious, not more accurate. One run alone said v5.1 fabricated more (18 vs 12). The repeat showed that gap was noise. **Run the repeat before you act on a single sweep, and before you "fix" something that looks like a cosmetic flaw.**
+
+Caveats: voice metrics were not re-measured for v5-clean, and its tone now comes from the teacher, not the author.
 
 ---
 
