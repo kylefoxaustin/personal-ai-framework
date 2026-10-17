@@ -4,6 +4,7 @@ Your private AI assistant that knows your emails, projects, writing style, and *
 
 ![Version](https://img.shields.io/badge/version-5.11.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
+[![x86 demo (Windows + Linux)](https://github.com/kylefoxaustin/personal-ai-framework/actions/workflows/x86-demo.yml/badge.svg)](https://github.com/kylefoxaustin/personal-ai-framework/actions/workflows/x86-demo.yml)
 
 ## ✨ Features
 
@@ -36,7 +37,8 @@ Your private AI assistant that knows your emails, projects, writing style, and *
 - **GPU**: NVIDIA RTX 3080+ (16GB+ VRAM recommended)
 - **RAM**: 32GB+
 - **Storage**: 50GB+ for models and knowledge base
-- **OS**: Ubuntu 22.04+ (or similar Linux)
+- **OS**: Ubuntu 22.04+ (or similar Linux) for the full assistant
+- **Windows**: the CPU-only x86 demo runs natively (see below). The full assistant (Docker + NVIDIA GPU) is tested on Linux only.
 
 ## 🚀 Quick Start
 ```bash
@@ -56,6 +58,21 @@ cd personal-ai-framework
 # Open web UI
 xdg-open http://localhost:8765
 ```
+
+## 🪟 Try It on Windows (x86 CPU demo)
+
+You don't need a GPU, Docker or the server for this. The demo downloads a small model (Qwen2.5-3B, 2 GB) and benchmarks it on your CPU. It shows that token generation is limited by memory bandwidth, not compute. It also runs three model-only agentic tasks: drafting an email, summarizing a file, and answering spec questions from facts in the prompt.
+
+In PowerShell (Python 3.9+ from python.org or `winget install Python.Python.3.12`):
+```powershell
+git clone https://github.com/kylefoxaustin/personal-ai-framework.git
+cd personal-ai-framework
+py -m pip install --prefer-binary llama-cpp-python huggingface-hub --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
+py scripts\x86_demo.py --tasks
+```
+The prebuilt wheel means you don't need a compiler. Use `py`, not `python3`, which on Windows often opens the Microsoft Store. The same demo runs on Linux and WSL2 with `python3 scripts/x86_demo.py`. Every change to the demo runs it on fresh Windows and Linux machines (badge above).
+
+Options, output explained, and troubleshooting: [docs/RUN_X86_DEMO.md](docs/RUN_X86_DEMO.md).
 
 ## 🎭 AI Personality
 
