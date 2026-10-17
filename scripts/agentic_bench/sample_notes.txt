@@ -1,0 +1,11 @@
+Meeting notes — NXP i.MX 95 edge-AI platform evaluation
+
+- Application cores: 6x Arm Cortex-A55 (up to ~1.8 GHz), plus a Cortex-M33 and a Cortex-M7
+  for real-time / low-power domains.
+- AI accelerator: eIQ Neutron NPU (N3-1024S), rated 2.0 TOPS (1024 MACs x 1.0 GHz x 2 OPS/MAC).
+  Targets perception / prefill offload, not the token-generation loop.
+- Graphics / vision: Arm Mali GPU, plus an on-chip ISP for camera pipelines.
+- Memory: LPDDR5X. Expansion over PCIe Gen3. Networking: Gigabit Ethernet with TSN.
+- Power: "Energy Flex" architecture — independent power/clock domains for the compute islands.
+- Positioning: automotive, industrial, and consumer edge-AI; a single SoC spanning
+  real-time control, connectivity, and on-device inference.

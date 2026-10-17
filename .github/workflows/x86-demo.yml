@@ -1,0 +1,44 @@
+# Runs the pure-CPU x86 demo (docs/RUN_X86_DEMO.md) end to end on fresh Windows and Linux
+# runners, using the exact install commands from the doc. Proves "clone + one command" works.
+name: x86 demo
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/x86_demo.py
+      - scripts/agentic_bench/sample_notes.txt
+      - eval/model_registry.json
+      - docs/RUN_X86_DEMO.md
+      - .github/workflows/x86-demo.yml
+
+jobs:
+  demo:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Cache Hugging Face model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-qwen2.5-3b-q4km
+      - name: Install (Windows, prebuilt CPU wheel)
+        if: runner.os == 'Windows'
+        run: py -m pip install --prefer-binary llama-cpp-python huggingface-hub --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
+      - name: Install (Linux)
+        if: runner.os == 'Linux'
+        run: python -m pip install --prefer-binary llama-cpp-python huggingface-hub --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
+      - name: Run demo
+        run: python scripts/x86_demo.py --reps 1 --tasks
+      - uses: actions/upload-artifact@v4
+        with:
+          name: localhost-x86-${{ matrix.os }}
+          path: eval/results/ladder/board_runs/localhost-x86.json
