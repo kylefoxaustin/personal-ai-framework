@@ -166,7 +166,8 @@ def load_llm(repo_id, filename, n_threads):
         from llama_cpp import Llama
         import huggingface_hub  # noqa: F401  (Llama.from_pretrained needs it; not a llama-cpp dependency)
     except ImportError as e:
-        sys.exit(f"missing package: {e.name}\n"
+        sys.exit(f"missing package: {e.name}  ({e})\n"
+                 f"  this interpreter: {sys.executable}  (install into THIS one: <it> -m pip install ...)\n"
                  "  Linux/WSL2:  pip install llama-cpp-python huggingface-hub\n"
                  "  Windows:     pip install --prefer-binary llama-cpp-python huggingface-hub "
                  "--extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu\n"
@@ -240,8 +241,12 @@ def run_quick_tasks(llm, rates):
 
 def main():
     # Windows consoles/pipes can be cp1252: never crash printing model output.
+    # Piped/redirected output is written as UTF-8 so logs and files don't mangle the dashes.
     for st in (sys.stdout, sys.stderr):
-        try: st.reconfigure(errors="replace")
+        try:
+            st.reconfigure(errors="replace")
+            if os.name == "nt" and not st.isatty():
+                st.reconfigure(encoding="utf-8")
         except Exception: pass
     ap = argparse.ArgumentParser(description="x86/AMD pure-CPU decode-ladder demo")
     ap.add_argument("--model", default="3b", help="3b (default) | 7b | 14b")

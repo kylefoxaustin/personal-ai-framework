@@ -32,10 +32,12 @@ jobs:
           key: hf-qwen2.5-3b-q4km
       - name: Install (Windows, prebuilt CPU wheel)
         if: runner.os == 'Windows'
-        run: py -m pip install --prefer-binary llama-cpp-python huggingface-hub --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
+        run: python -m pip install --prefer-binary llama-cpp-python huggingface-hub --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
       - name: Install (Linux)
         if: runner.os == 'Linux'
         run: python -m pip install --prefer-binary llama-cpp-python huggingface-hub --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
+      - name: Interpreter check
+        run: python -c "import sys, llama_cpp, huggingface_hub; print(sys.executable, llama_cpp.__version__)"
       - name: Run demo
         run: python scripts/x86_demo.py --reps 1 --tasks
       - uses: actions/upload-artifact@v4
