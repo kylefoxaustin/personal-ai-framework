@@ -20,10 +20,12 @@ This brief is fully self-contained — assume zero project context.
 
 ## Bundle (do this first, on the pod)
 
-The training data (gitignored, private) and v4-updated pod scripts live in a Google Drive shareable link.
+> **Retired 2026-10-19.** This bundle held the email-trained v4 training data. That data is retired and is no longer shared; the Drive link was removed. Kept for the historical record only.
+
+The training data (gitignored, private) and v4-updated pod scripts lived in a Google Drive bundle (link removed).
 
 ```
-URL:    https://drive.google.com/open?id=1p4lJsDrV1Aqm5cPGCrpAJsKmOBGE3LPY
+URL:    (removed — private)
 SHA256: d8058c013c6b2bccc1601b911d1082f289af47ffa8ae339947209e7450c00430
 SIZE:   2,993,902 bytes (2.9 MB compressed)
 ```
@@ -33,7 +35,7 @@ On the pod, after SSH:
 ```bash
 cd /workspace
 pip install gdown -q
-gdown 1p4lJsDrV1Aqm5cPGCrpAJsKmOBGE3LPY -O pod-bundle-moe-v4.tar.gz
+gdown <REMOVED> -O pod-bundle-moe-v4.tar.gz
 echo "d8058c013c6b2bccc1601b911d1082f289af47ffa8ae339947209e7450c00430  pod-bundle-moe-v4.tar.gz" | sha256sum -c -
 tar -xzf pod-bundle-moe-v4.tar.gz
 ls pod-bundle-moe-v4/training/pod/ pod-bundle-moe-v4/training/data/
