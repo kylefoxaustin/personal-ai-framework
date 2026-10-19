@@ -277,7 +277,8 @@ def main():
                "host": {"os": platform.platform(), "cpu": cpu, "ram_gb": ram, "threads": threads}}
         _write(rec); sys.exit(2)
 
-    llm, load_s = load_llm(spec["hf_repo"], spec["glob"], threads)
+    # Single-file mirror where the official repo splits the GGUF (7B, 14B): from_pretrained needs one file.
+    llm, load_s = load_llm(spec.get("demo_hf_repo", spec["hf_repo"]), spec.get("demo_file", spec["glob"]), threads)
     res = bench_decode(llm, a.reps)
     res["load_s"] = load_s
 

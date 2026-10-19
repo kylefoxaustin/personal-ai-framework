@@ -102,8 +102,8 @@ echo "📥 Model Selection"
 echo "=============================================="
 echo ""
 echo "Choose a base model:"
-echo -e "${BLUE}1)${NC} Mistral 7B Instruct (~4.4GB) - Fast, good for most uses"
-echo -e "${BLUE}2)${NC} Mixtral 8x7B Instruct (~26GB) - More capable, needs 24GB+ VRAM"
+echo -e "${BLUE}1)${NC} Qwen 2.5 7B Instruct (~4.7GB) - Recommended; same base as the Skippy fine-tune, 8GB+ VRAM"
+echo -e "${BLUE}2)${NC} Qwen 2.5 14B Instruct (~9.0GB) - Larger, needs 12GB+ VRAM"
 echo -e "${BLUE}3)${NC} Skip - I'll provide my own model"
 echo ""
 read -p "Select [1/2/3]: " -n 1 -r MODEL_CHOICE
@@ -111,14 +111,14 @@ echo ""
 
 case $MODEL_CHOICE in
     1)
-        MODEL_URL="https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
-        MODEL_FILE="models/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
-        MODEL_SIZE="4.4GB"
+        MODEL_URL="https://huggingface.co/bartowski/Qwen2.5-7B-Instruct-GGUF/resolve/main/Qwen2.5-7B-Instruct-Q4_K_M.gguf"
+        MODEL_FILE="models/Qwen2.5-7B-Instruct-Q4_K_M.gguf"
+        MODEL_SIZE="4.7GB"
         ;;
     2)
-        MODEL_URL="https://huggingface.co/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/resolve/main/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
-        MODEL_FILE="models/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
-        MODEL_SIZE="26GB"
+        MODEL_URL="https://huggingface.co/bartowski/Qwen2.5-14B-Instruct-GGUF/resolve/main/Qwen2.5-14B-Instruct-Q4_K_M.gguf"
+        MODEL_FILE="models/Qwen2.5-14B-Instruct-Q4_K_M.gguf"
+        MODEL_SIZE="9.0GB"
         ;;
     3)
         echo "Skipping model download."
@@ -139,11 +139,11 @@ if [ -n "$MODEL_FILE" ]; then
         echo "   This may take a while depending on your connection."
         wget -c "$MODEL_URL" -O "$MODEL_FILE" --show-progress
         echo -e "${GREEN}✅ Model downloaded${NC}"
-        
-        # Update config with correct model path
-        if [ -f "pipeline/config.yaml" ]; then
-            sed -i "s|path:.*\.gguf|path: \"/app/$(basename $MODEL_FILE)\"|" pipeline/config.yaml
-        fi
+    fi
+    # Point the config at it (./models is mounted at /app/models in the container)
+    if [ -f "pipeline/config.yaml" ]; then
+        sed -i "s|path:.*\.gguf\".*|path: \"/app/models/$(basename $MODEL_FILE)\"|" pipeline/config.yaml
+        echo -e "${GREEN}✅ pipeline/config.yaml model.path -> /app/models/$(basename $MODEL_FILE)${NC}"
     fi
 fi
 
@@ -176,8 +176,7 @@ echo "3. ${BLUE}Ingest your documents:${NC}"
 echo "   ./run.sh ingest"
 echo ""
 echo "4. ${BLUE}Open the web UI:${NC}"
-echo "   cd web && python3 -m http.server 8765"
-echo "   Then visit: http://localhost:8765"
+echo "   http://localhost:3000   (./run.sh start serves it)"
 echo ""
 echo "5. ${BLUE}(Optional) Train on your writing style:${NC}"
 echo "   See docs/FRESH_INSTALL_GUIDE.md"

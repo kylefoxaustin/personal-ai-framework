@@ -1,23 +1,12 @@
 #!/bin/bash
-
-echo "======================================="
-echo "Personal AI Framework - Model Setup"
-echo "======================================="
-
-# Create model directory
-mkdir -p models/mixtral
-
-cd models/mixtral
-
-# Download Mixtral 8x7B Instruct (4-bit quantized for your RTX 5090)
-echo "Downloading Mixtral 8x7B Instruct (Q4_K_M - about 23GB)..."
-wget https://huggingface.co/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/resolve/main/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf
-
-# Download the config files
-echo "Downloading configuration files..."
-wget https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1/raw/main/config.json
-wget https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1/raw/main/tokenizer.json
-wget https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1/raw/main/tokenizer_config.json
-
-echo "✅ Model download complete!"
-ls -lh *.gguf
+# Download the public base model a fresh install runs on: Qwen 2.5 7B Instruct, Q4_K_M GGUF (~4.7 GB).
+# The fine-tuned Skippy model is NOT distributed (kept local by policy); this is the stock base it was
+# trained from. setup.sh offers the same download plus a 14B option and updates pipeline/config.yaml.
+set -e
+cd "$(dirname "$0")/.."
+mkdir -p models
+FILE=models/Qwen2.5-7B-Instruct-Q4_K_M.gguf
+echo "Downloading Qwen 2.5 7B Instruct (Q4_K_M, ~4.7 GB) -> $FILE"
+wget -c "https://huggingface.co/bartowski/Qwen2.5-7B-Instruct-GGUF/resolve/main/Qwen2.5-7B-Instruct-Q4_K_M.gguf" -O "$FILE" --show-progress
+echo "✅ Done. Set pipeline/config.yaml model.path to: /app/$FILE"
+ls -lh "$FILE"

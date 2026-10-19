@@ -46,18 +46,18 @@ Your private AI assistant that knows your emails, projects, writing style, and *
 git clone https://github.com/kylefoxaustin/personal-ai-framework.git
 cd personal-ai-framework
 
-# Run setup (installs dependencies, creates config)
+# Run setup (checks GPU/Docker, installs dependencies, downloads a model, builds images)
+#   choose 1) Qwen 2.5 7B Instruct (recommended); setup points pipeline/config.yaml at it
 ./setup.sh
 
-# Download model (Qwen 2.5 14B Q4)
-./run.sh download-model
-
-# Start services
+# Start services (LLM server :8080, vector DB, web UI :3000)
 ./run.sh start
 
 # Open web UI
-xdg-open http://localhost:8765
+xdg-open http://localhost:3000
 ```
+
+> **About the model.** A fresh install runs **stock Qwen 2.5 7B Instruct**, which is public on Hugging Face. The fine-tuned Skippy model (v5-clean, built on that same base) is **not distributed** and never will be. It stays on the author's machine. To build your own fine-tune on your own data, use the scripts in `training/` (`training/build_grounded_dataset.py`, `training/train_lora_v5_clean.py`). On the faithfulness sweep below, stock 7B fabricated in 22 of 117 answers and v5-clean in 12 (MEASURED), so the fine-tune mainly makes the model more careful.
 
 ## 🪟 Try It on Windows (x86 CPU demo)
 
@@ -202,7 +202,7 @@ personal-ai-framework/
 
 ## 🌐 Web UI
 
-Access at `http://localhost:8765`
+Access at `http://localhost:3000`
 
 ### Main Features
 - **Conversation Sidebar**: All your chats, with save/delete options
@@ -234,8 +234,8 @@ Access at `http://localhost:8765`
 ## 📊 Architecture
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   Web UI    │────▶│  LLM Server │────▶│  Mixtral    │
-│  :3000      │     │  :8080      │     │  8x7B Q4    │
+│   Web UI    │────▶│  LLM Server │────▶│ Qwen 2.5 7B │
+│  :3000      │     │  :8080      │     │  Q4 GGUF    │
 └─────────────┘     └──────┬──────┘     └─────────────┘
                           │
               ┌───────────┼───────────┐
