@@ -1,10 +1,64 @@
 # 🧠 Personal AI Framework
 
-Your private AI assistant that knows your emails, projects, writing style, and **remembers your conversations**. Runs 100% locally on your hardware.
+A private AI assistant that runs **100% on your own hardware**. It answers from your documents, uses tools (files, web, email, calendar), remembers your conversations, and can be fine-tuned on your own data. The model and your data stay on the machine; web search and Gmail are opt-in.
+
+It is also a **measured reference workload for agentic AI on edge silicon**. The same agent runs a 10-task benchmark from an RTX 5090 down to Jetson, Qualcomm and NXP i.MX boards, and every number it reports carries its provenance.
 
 ![Version](https://img.shields.io/badge/version-5.11.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 [![x86 demo (Windows + Linux)](https://github.com/kylefoxaustin/personal-ai-framework/actions/workflows/x86-demo.yml/badge.svg)](https://github.com/kylefoxaustin/personal-ai-framework/actions/workflows/x86-demo.yml)
+
+## 🔬 What we found
+
+All numbers below are **MEASURED** (we ran them) unless tagged otherwise. Model: Qwen 2.5 7B, Q4_K_M.
+
+**1. Agent speed tracks memory bandwidth, not TOPS.** Decode speed, same 7B model, across six hardware configs:
+
+| Hardware | Decode tok/s | Notes |
+|---|--:|---|
+| RTX 5090 (desktop) | 217.9 | full Skippy stack, n=3 |
+| Jetson AGX Thor | 40.85 | llama-bench |
+| Jetson AGX Orin | 27.92 | llama-bench |
+| Qualcomm IQ-9075 (Hexagon NPU) | 9.45 | Genie runtime; NPU path caps prompts at ~256 tokens |
+| NXP i.MX95 + Kinara ARA240 | 6.3 | July 2026 run, within 3% of NXP's published 6.51 |
+| NXP i.MX95, A55 CPU only | 1.85 | llama-bench |
+
+On the GPU and Jetson tiers that works out to **57–70% of each chip's rated memory bandwidth** (DERIVED: tok/s × model size). Moving from 7B to 14B costs **1.9×** on the 5090, Thor and Orin alike, matching the parameter ratio.
+
+**2. Agents pay a tax outside the model.** On the 5090, every document-grounded task spends a **fixed 0.8–1.0 s** in retrieval, prompt building and the agent loop (it repeats to ~1% between runs). That's 15–38% of the task. Projected onto Thor's ARM cores it is ~5 s, about 39% of a RAG task (DERIVED). A cold first call takes **89 s vs ~2 s warm**, almost all of it loading the retrieval stack (n=1).
+
+**3. Fine-tuning made the model more careful.** On a 117-answer faithfulness sweep graded by two independent judges, answers flagged as fabricated:
+
+| Model | Fabricated (of 117) |
+|---|--:|
+| Old fine-tune v4 (retired) | 36 |
+| Stock Qwen 2.5 7B Instruct | 22 |
+| **v5-clean fine-tune (production)** | **12** (repeat run: 16) |
+
+**4. Small models still invent specs.** Two judges (Claude Sonnet + GPT-4o) graded the stock 7B on the 10 agentic tasks: they agreed on 4 clean passes (file ops, transcription, OCR, script running). Open-ended writing tasks fabricated hardware details even when fluent, so we report cost per *successful* task, not cost per task.
+
+Full write-ups: [agentic findings](eval/results/ladder/agentic/FINDINGS.md) · [benchmark runbook](docs/RUN_BENCHMARKS.md) · [white paper](docs/skippy-white-paper.md)
+
+## 🧪 What we test
+
+| Suite | What it checks | Run it |
+|---|---|---|
+| **Agentic benchmark** (10 tasks) | Email drafting, web search + summarize, datasheet Q&A, file read→summarize→write, Whisper transcription, OCR, meeting transcribe→summarize, sandboxed script, multi-tool chain, long-context doc brief. Records wall time, prefill/decode split, host overhead and GPU/CPU load per task. Outputs must be coherent to count. | `python3 scripts/agentic_bench/trace_bench.py` |
+| **Full system run** | The benchmark + the board ladder + two-judge grading, rolled into one report. | `python3 scripts/run_benchmark.py` |
+| **Board ladder** | Reserves a board, checks the model fits, stages it, runs decode/prefill, writes a standard result. Thor, Orin, i.MX95 (CPU and ARA240), iq9. | `python3 scripts/bench_board.py <board>` |
+| **Task success** | Two judges from different model families grade each agentic output (correct / partial / fabricated). Splits are flagged, never averaged. | `python3 eval/judge_agentic_tasks.py` |
+| **Faithfulness sweep** | 117 grounded answers at production temperature (0.7), with repeats; two judges check every answer against its source. | `python3 eval/faithfulness_sweep.py gen` |
+| **Accuracy eval** | 44 prompts × 3 samples: datasheet RAG, multi-hop, numerical precision, refusal, reasoning, coding, persona. | `python3 eval/run_accuracy_eval.py --name <run> --prompts eval/prompts_v2_1.json --with-rag` |
+| **Retrieval** | Recall@k measured on its own, never through the model or a judge; checks whether each ground-truth fact is in the index at all vs not retrieved. | `python3 eval/bench_retrieval.py` · `python3 eval/retrieval_fact_recall.py` |
+| **Standard benchmarks** | TruthfulQA, MMLU, HellaSwag against the live server (RAG off by default). | `python3 eval/run_standard_benchmarks.py --name <run>` |
+| **Integration tests** (39) | Server health, generation, stop tokens, personality, facts, RAG (product-ID tokenizing, alias routing, persona not hijacked), and the full LoRA retrain cycle: maintenance mode, 503 blocking, recovery, dedup, no fact leakage. | `python3 tests/test_integration.py --phase 1` (`--all` ≈ 2.5 h) |
+| **x86 CPU demo, CI** | Every change to the demo runs it on fresh Windows and Linux machines. | badge above |
+
+**How we keep the numbers honest**
+- Every number is tagged **MEASURED**, **DERIVED** or **SOURCED**, and the tiers are never compared against each other.
+- Anything leaving the repo is graded by **two judges from different model families**. One judge, or a judge reading the same gold strings as a substring check, doesn't count as confirmation.
+- Each layer is measured directly. Retrieval is benchmarked on its own because a retriever miss once showed up as a fake "INT8 accuracy loss".
+- A broken output is cheaper to compute, so its timing doesn't count.
 
 ## ✨ Features
 
@@ -19,8 +73,8 @@ Your private AI assistant that knows your emails, projects, writing style, and *
 | **Web Search** | Search the internet with "search: query" (toggle in Settings) |
 | **Image/Screenshot OCR** | Extract text from images with Tesseract OCR |
 | **Export/Import** | Backup and restore all conversations and settings |
-| **Personal Knowledge Base** | 61,000+ documents from emails, transcripts, blogs, datasheets |
-| **Your Writing Style** | LoRA fine-tuned on your emails - writes like you |
+| **Personal Knowledge Base** | Index your documents, transcripts, notes and datasheets; tested on a 31,939-chunk datasheet corpus |
+| **Your Own Fine-Tune** | LoRA pipeline in `training/` to fine-tune the model on your own data |
 | **Performance Metrics** | TTFT, tokens/sec, and total time on every response |
 | **Gmail Integration** | OAuth-based Send & Draft buttons - email directly from the UI |
 | **Streaming Responses** | Real-time word-by-word output |
@@ -243,7 +297,7 @@ Access at `http://localhost:3000`
        ┌───────────┐ ┌─────────┐ ┌─────────┐
        │ ChromaDB  │ │ SQLite  │ │  Gmail  │
        │  (RAG)    │ │ (Chats) │ │  API    │
-       │ 61K docs  │ │ Memory  │ │         │
+       │ your docs │ │ Memory  │ │         │
        └───────────┘ └─────────┘ └─────────┘
 ```
 
@@ -260,19 +314,19 @@ Key settings:
 - **Auto-Sync**: Enable, interval (1/4/12/24 hours)
 - **Context Window**: 8K/16K/32K tokens
 
-## 📈 Performance
+## 📈 Performance & model
 
-Tested on RTX 5090 (32GB VRAM) running **Qwen 2.5 7B v4** (production fine-tune):
-- **TTFT**: ~0.03-0.12s (time to first token)
-- **Throughput**: 180-215 tokens/sec sustained (183.9 median)
-- **Peak VRAM**: ~5.5 GB at 16K context
-- **Context**: 16K tokens default (32K max)
-- **Knowledge Base**: 61,500+ documents
-- **Datasheet Ingestion**: 37 PDFs (6,129 chunks) in ~5 min
+**Speed on an RTX 5090 (32 GB), Qwen 2.5 7B Q4_K_M (MEASURED on the v4 fine-tune; speed is set by the architecture, so v5-clean and stock 7B match):**
+- **Time to first token:** ~0.03–0.12 s
+- **Decode:** 180–215 tok/s sustained (183.9 median); 217.9 on the agentic benchmark
+- **Peak VRAM:** ~5.5 GB at 16K context (16K default, 32K max)
+- **Datasheet ingestion:** 37 PDFs (6,129 chunks) in ~5 min
 
-Production model upgraded from Qwen 2.5 14B to Qwen 2.5 7B v4 in the v5.10.0 methodology campaign — full reasoning at [docs/skippy-white-paper.md](docs/skippy-white-paper.md) and [docs/recipe-taxonomy.md](docs/recipe-taxonomy.md). 14B candidate scored higher on headline (76.2% vs 73.8%) but fabricated fictional peripherals; production trades headline for safety calibration.
+**Production model: `skippy-qwen25-7b-v5-clean`** (since 2026-10-14). It is trained only on public datasheet material: grounded answers, explicit "the excerpts don't cover that" abstentions, general knowledge and refusals (`training/build_grounded_dataset.py`, `training/train_lora_v5_clean.py`). The earlier v1–v4 fine-tunes were partly trained on personal email and are retired.
 
-**2026-10-14: production is now `skippy-qwen25-7b-v5-clean`** (same Qwen 2.5 7B base, recipe and Q4_K_M quant; the speed figures above were measured on v4). The v1–v4 fine-tunes were trained partly on the author's personal email and could reproduce a real signature block, so they were retired and archived locally. v5-clean is trained only on public datasheet material: grounded answers and explicit "the excerpts don't cover that" abstentions written by a teacher model through Skippy's real RAG prompt, plus general-knowledge answers and refusals (`training/build_grounded_dataset.py`, `training/train_lora_v5_clean.py`). On the 117-answer two-judge faithfulness sweep (`eval/faithfulness_sweep.py`, temperature 0.7, MEASURED), answers flagged as fabricated by either judge went from 36 (v4) to 12 (v5-clean), with net score +0.39/+0.28 → +0.56/+0.56 (Sonnet/GPT-4o); stock Qwen 2.5 7B Instruct on the same sweep: 22 fabricated, net +0.50/+0.47. A repeat v5-clean sweep gave 16 fabricated (28 of 234 across both runs). A v5.1 retrain that removed the "Related:" tails from abstentions tied on fabrication but scored lower net (+0.50/+0.52 vs +0.56/+0.55 over 234 answers), so v5-clean stays in production.
+**Why 7B and not 14B:** the 14B scored higher on the accuracy eval (76.2% vs 73.8%) but invented peripherals that don't exist, and it decodes 1.9× slower. Production trades the headline score for calibration. Reasoning: [white paper](docs/skippy-white-paper.md) · [recipe taxonomy](docs/recipe-taxonomy.md).
+
+**Faithfulness detail** (`eval/faithfulness_sweep.py`, 117 answers, temperature 0.7, Sonnet + GPT-4o, MEASURED): fabricated answers 36 (v4) → 22 (stock 7B) → 12 (v5-clean); a repeat v5-clean run gave 16. Net score (Sonnet/GPT-4o): v4 +0.39/+0.28, stock +0.50/+0.47, v5-clean +0.56/+0.56. A v5.1 retrain tied on fabrication but scored lower net (+0.50/+0.52 vs +0.56/+0.55 over 234 answers), so v5-clean stays.
 
 ## 🏷️ Versions
 
